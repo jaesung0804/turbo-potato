@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>서울 아파트 핫/콜드존 지도</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-p4NxAoJBhIINfQqq8p9SzrgGeyfqqCWe6N+zCw0sZ9o="
+      crossorigin=""
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <section class="map-pane">
+        <div id="map" aria-label="서울 아파트 실거래가 핫/콜드존 지도"></div>
+        <div class="legend">
+          <div class="legend-title" id="legend-title">동별 평균 거래가</div>
+          <div class="legend-gradient"></div>
+          <div class="legend-scale">
+            <span id="legend-min">낮음</span>
+            <span id="legend-mid">중간</span>
+            <span id="legend-max">높음</span>
+          </div>
+        </div>
+      </section>
+
+      <aside class="detail-pane">
+        <header class="panel-header">
+          <div>
+            <p class="eyebrow">Seoul apartment intelligence</p>
+            <h1>서울 아파트 핫/콜드존</h1>
+          </div>
+        </header>
+
+        <section class="control-grid">
+          <label>
+            <span>연도</span>
+            <select id="year-select"></select>
+          </label>
+          <label>
+            <span>지표</span>
+            <select id="metric-select">
+              <option value="price_billion">거래가_억원</option>
+              <option value="price_per_pyeong">평단가_만원</option>
+              <option value="land_pyeong">대지지분_평</option>
+              <option value="land_ratio">대지지분율</option>
+              <option value="land_efficiency">토지효율지표</option>
+              <option value="area_pyeong">전용평수</option>
+            </select>
+          </label>
+        </section>
+
+        <section class="stats-grid">
+          <div>
+            <span>분석 거래</span>
+            <strong id="total-used">-</strong>
+          </div>
+          <div>
+            <span>표시 동</span>
+            <strong id="total-regions">-</strong>
+          </div>
+          <div>
+            <span>선택 기준</span>
+            <strong id="active-filter">-</strong>
+          </div>
+        </section>
+
+        <section class="zone-lists">
+          <div>
+            <h2>Hot</h2>
+            <ol id="hot-list"></ol>
+          </div>
+          <div>
+            <h2>Cold</h2>
+            <ol id="cold-list"></ol>
+          </div>
+        </section>
+
+        <section id="selected-region" class="selected-region">
+          <p class="empty-state">동을 클릭하면 상세 지표, 주소별 거래 스택, 최근 거래가 표시됩니다.</p>
+        </section>
+      </aside>
+    </main>
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"
+      integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+      crossorigin=""
+    ></script>
+    <script src="https://cdn.jsdelivr.net/npm/topojson-client@3"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
