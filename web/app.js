@@ -1428,14 +1428,27 @@ async function init() {
 }
 
 function fitDefaultMapView() {
+  const isMobile = window.matchMedia("(max-width: 980px)").matches;
   map.fitBounds(
-    [
-      [37.33, 126.49],
-      [37.81, 127.18],
-    ],
-    { padding: [12, 12], maxZoom: 10.6 },
+    isMobile
+      ? [
+          [37.28, 126.43],
+          [37.86, 127.26],
+        ]
+      : [
+          [37.33, 126.49],
+          [37.81, 127.18],
+        ],
+    { padding: isMobile ? [8, 8] : [12, 12], maxZoom: isMobile ? 10.2 : 10.6 },
   );
 }
+
+window.addEventListener("resize", () => {
+  window.clearTimeout(state.resizeTimer);
+  state.resizeTimer = window.setTimeout(() => {
+    map.invalidateSize();
+  }, 120);
+});
 
 init().catch((error) => {
   document.getElementById("selected-region").innerHTML =
