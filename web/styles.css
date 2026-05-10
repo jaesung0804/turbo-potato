@@ -1137,6 +1137,11 @@ ol {
     gap: 4px;
   }
 
+  #growth-min-input,
+  #ai-score-min-input {
+    display: none;
+  }
+
   .growth-ranking select,
   .growth-ranking input {
     min-height: 32px;
@@ -1147,7 +1152,7 @@ ol {
   .growth-ranking-list,
   .ai-score-ranking .growth-ranking-list {
     max-height: none;
-    height: calc(100% - 78px);
+    height: calc(100% - 64px);
     overflow-y: auto;
   }
 
@@ -1155,6 +1160,12 @@ ol {
     grid-template-columns: 1fr;
     gap: 2px;
     padding: 6px;
+  }
+
+  .growth-rank-row span {
+    overflow: visible;
+    text-overflow: clip;
+    white-space: normal;
   }
 
   .growth-rank-row span,
@@ -1310,6 +1321,7 @@ ol {
 
   .ai-panel {
     min-height: 0;
+    flex: 0 0 190px;
     max-height: none;
     overflow: hidden;
     padding: 8px;
@@ -1325,6 +1337,11 @@ ol {
     padding: 8px;
   }
 
+  .ai-row {
+    min-height: 68px;
+    align-items: center;
+  }
+
   .ai-main strong,
   .asset-row span {
     font-size: 12px;
@@ -1334,6 +1351,11 @@ ol {
   .asset-row small,
   .asset-row strong {
     font-size: 10px;
+  }
+
+  .ai-row small {
+    line-height: 1.35;
+    white-space: normal;
   }
 
   .ai-score {
