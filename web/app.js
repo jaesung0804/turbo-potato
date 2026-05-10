@@ -90,6 +90,12 @@ function applyDarkMode(enabled) {
   }
 }
 
+function setElementaryFilterChecked(checked) {
+  document.querySelectorAll("#elementary-filter, #elementary-filter-mobile").forEach((input) => {
+    input.checked = checked;
+  });
+}
+
 function bucketFor(region) {
   if (!region) return null;
   return state.year === "all" ? region.all : region.years[state.year] || null;
@@ -1208,11 +1214,14 @@ function wireEvents() {
     refresh();
   });
 
-  document.getElementById("elementary-filter").addEventListener("change", (event) => {
-    state.elementary500mOnly = event.target.checked;
-    state.selectedGroupId = null;
-    state.selectedTypeId = null;
-    refresh();
+  document.querySelectorAll("#elementary-filter, #elementary-filter-mobile").forEach((input) => {
+    input.addEventListener("change", (event) => {
+      state.elementary500mOnly = event.target.checked;
+      setElementaryFilterChecked(state.elementary500mOnly);
+      state.selectedGroupId = null;
+      state.selectedTypeId = null;
+      refresh();
+    });
   });
 
   document.getElementById("subway-line-select").addEventListener("change", (event) => {
@@ -1320,7 +1329,7 @@ function wireEvents() {
     document.getElementById("price-input").value = "";
     document.getElementById("households-input").value = "";
     document.getElementById("trade-count-input").value = "";
-    document.getElementById("elementary-filter").checked = false;
+    setElementaryFilterChecked(false);
     document.getElementById("subway-line-select").value = "all";
     document.getElementById("subway-walk-select").value = "all";
     document.getElementById("search-input").value = "";

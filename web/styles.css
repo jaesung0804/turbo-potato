@@ -63,6 +63,10 @@ button {
   cursor: pointer;
 }
 
+.mobile-elementary-filter {
+  display: none;
+}
+
 .app-shell {
   display: grid;
   grid-template-columns: minmax(0, 1fr) 660px;
@@ -1058,7 +1062,7 @@ ol {
     overflow-y: auto;
     border-right: 1px solid var(--line);
     background: var(--panel);
-    padding: 6px;
+    padding: 46px 6px 6px;
   }
 
   #map,
@@ -1082,6 +1086,10 @@ ol {
 
   .growth-summary {
     flex: 0 0 auto;
+  }
+
+  .growth-summary-row:not(:first-of-type) {
+    display: none;
   }
 
   .growth-ranking,
@@ -1156,13 +1164,14 @@ ol {
   }
 
   .detail-pane {
-    display: grid;
-    grid-template-rows: auto auto auto auto minmax(112px, 0.72fr) minmax(220px, 1fr);
+    display: flex;
+    flex-direction: column;
     min-width: 0;
     height: 100dvh;
     max-height: none;
     overflow-x: hidden;
-    overflow-y: hidden;
+    overflow-y: auto;
+    overscroll-behavior: contain;
     border-top: 0;
     border-left: 0;
     padding: 8px;
@@ -1194,10 +1203,27 @@ ol {
     align-content: start;
   }
 
-  .control-grid label:nth-child(3),
+  .control-grid label:nth-child(3) {
+    grid-column: 1 / -1;
+  }
+
+  .control-grid label:nth-child(6),
+  .mobile-elementary-filter {
+    grid-column: auto;
+  }
+
   .search-row label:first-child,
   .metric-card:nth-child(8) {
     grid-column: 1 / -1;
+  }
+
+  .mobile-elementary-filter {
+    display: flex;
+    align-items: center;
+  }
+
+  .search-row .checkbox-filter {
+    display: none;
   }
 
   label {
@@ -1217,6 +1243,15 @@ ol {
 
   #clear-filter,
   .dark-mode-toggle {
+    position: fixed;
+    top: 6px;
+    left: 6px;
+    z-index: 950;
+    width: calc(30vw - 12px);
+    box-shadow: none;
+  }
+
+  #clear-filter {
     position: static;
     box-shadow: none;
   }
@@ -1312,7 +1347,7 @@ ol {
 
   .market-board {
     display: block;
-    overflow: hidden;
+    overflow: visible;
     min-height: 0;
   }
 
@@ -1322,22 +1357,23 @@ ol {
   }
 
   .all-market-panel {
-    height: 45%;
+    height: auto;
+    max-height: 42vh;
     min-height: 0;
     margin-bottom: 6px;
   }
 
   .heat-panel {
     display: grid;
-    height: calc(55% - 6px);
+    height: auto;
     min-height: 0;
-    grid-template-rows: repeat(2, minmax(0, 1fr));
+    grid-template-rows: repeat(2, minmax(190px, auto));
     gap: 6px;
   }
 
   .asset-list,
   .heat-panel .asset-list {
-    max-height: none;
+    max-height: 30vh;
     min-height: 0;
   }
 
