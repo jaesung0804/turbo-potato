@@ -1,9 +1,23 @@
+﻿<!--
+  Web Run:
+    cd C:\code
+    python run_real_estate_dashboard.py
+  This starts the web server and opens http://127.0.0.1:8000
+  Fast web-only run:
+    python run_real_estate_dashboard.py --skip-build
+-->
 <!doctype html>
+<!--
+  이 파일의 의도:
+  - 대시보드의 정적 HTML 뼈대를 정의합니다.
+  - 실제 데이터 계산과 렌더링은 app.js가 맡고, 이 파일은 필터/지도/목록 영역의 자리만 제공합니다.
+  - GitHub Pages 배포를 위해 별도 백엔드 없이 CDN Leaflet과 로컬 JSON만 사용합니다.
+-->
 <html lang="ko">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>서울 아파트 핫/콜드존 지도</title>
+    <title>수도권 아파트 매물 선택 대시보드</title>
     <link
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css"
@@ -15,9 +29,9 @@
   <body>
     <main class="app-shell">
       <section class="map-pane">
-        <div id="map" aria-label="서울 아파트 실거래가 핫/콜드존 지도"></div>
+        <div id="map" aria-label="수도권 아파트 실거래가 Hot Cold 지도"></div>
         <div class="legend">
-          <div class="legend-title" id="legend-title">동별 평균 거래가</div>
+          <div class="legend-title" id="legend-title">전체연도 · 수도권 전체 · 거래가_억원</div>
           <div class="legend-gradient"></div>
           <div class="legend-scale">
             <span id="legend-min">낮음</span>
@@ -25,14 +39,52 @@
             <span id="legend-max">높음</span>
           </div>
         </div>
+        <div class="map-scope">
+          <button type="button" class="scope-button selected" data-map-mode="global">수도권 전체</button>
+          <button type="button" class="scope-button" data-map-mode="sido">선택 시도</button>
+          <button type="button" class="scope-button" data-map-mode="gu">선택 시군구</button>
+          <button type="button" class="scope-button" data-map-mode="dong">선택 읍면동</button>
+        </div>
+        <button type="button" class="map-reset" id="map-reset">전체 보기</button>
+        <div class="growth-summary" id="growth-summary"></div>
+        <section class="growth-ranking">
+          <div class="growth-ranking-head">
+            <strong>상승률 랭킹</strong>
+            <select id="growth-level-select" aria-label="상승률 랭킹 단위">
+              <option value="gu">시군구</option>
+              <option value="dong">읍면동</option>
+            </select>
+            <select id="growth-period-select" aria-label="상승률 랭킹 기간">
+              <option value="all">전체기간</option>
+            </select>
+          </div>
+          <div class="growth-ranking-filters">
+            <input id="growth-search-input" type="search" placeholder="지역 검색" />
+            <input id="growth-min-input" type="number" step="0.1" placeholder="상승률 하한" />
+          </div>
+          <ol id="growth-ranking-list" class="growth-ranking-list"></ol>
+        </section>
+        <section class="growth-ranking ai-score-ranking">
+          <div class="growth-ranking-head">
+            <strong>AI SCORE 랭킹</strong>
+            <select id="ai-score-level-select" aria-label="AI SCORE 랭킹 단위">
+              <option value="gu">시군구</option>
+              <option value="dong">읍면동</option>
+            </select>
+            <span>추천점수</span>
+          </div>
+          <div class="growth-ranking-filters">
+            <input id="ai-score-search-input" type="search" placeholder="지역 검색" />
+            <input id="ai-score-min-input" type="number" step="0.1" placeholder="SCORE 하한" />
+          </div>
+          <ol id="ai-score-ranking-list" class="growth-ranking-list"></ol>
+        </section>
       </section>
 
       <aside class="detail-pane">
         <header class="panel-header">
-          <div>
-            <p class="eyebrow">Seoul apartment intelligence</p>
-            <h1>서울 아파트 핫/콜드존</h1>
-          </div>
+          <p class="eyebrow">Capital apartment intelligence</p>
+          <h1>수도권 아파트 매물 선택 대시보드</h1>
         </header>
 
         <section class="control-grid">
@@ -41,46 +93,131 @@
             <select id="year-select"></select>
           </label>
           <label>
-            <span>지표</span>
+            <span>대표 지표</span>
             <select id="metric-select">
               <option value="price_billion">거래가_억원</option>
               <option value="price_per_pyeong">평단가_만원</option>
-              <option value="land_pyeong">대지지분_평</option>
-              <option value="land_ratio">대지지분율</option>
-              <option value="land_efficiency">토지효율지표</option>
-              <option value="area_pyeong">전용평수</option>
+              <option value="count">거래횟수</option>
+              <option value="yoy_rate">전년 대비 상승률</option>
+              <option value="ai_score">AI SCORE</option>
             </select>
           </label>
+          <label>
+            <span>평형 구간</span>
+            <select id="area-range-select">
+              <option value="all">전체</option>
+              <option value="lte14">14평 이하</option>
+              <option value="gt14_lte26">14평 초과 26평 이하</option>
+              <option value="gt26_lte34">26평 초과 34평 이하</option>
+              <option value="gt34">34평 초과</option>
+            </select>
+          </label>
+          <label>
+            <span>시도</span>
+            <select id="sido-select"></select>
+          </label>
+          <label>
+            <span>시군구</span>
+            <select id="gu-select"></select>
+          </label>
+          <label>
+            <span>읍면동</span>
+            <select id="dong-select"></select>
+          </label>
+        </section>
+
+        <section class="search-row">
+          <label>
+            <span>검색</span>
+            <input id="search-input" type="search" placeholder="시군구, 읍면동, 건물명 검색" />
+          </label>
+          <label>
+            <span>가격 하한(억)</span>
+            <input id="min-price-input" type="number" min="0" step="0.1" placeholder="전체" />
+          </label>
+          <label>
+            <span>가격 상한(억)</span>
+            <input id="price-input" type="number" min="0" step="0.1" placeholder="전체" />
+          </label>
+          <label>
+            <span>최소 세대수</span>
+            <input id="households-input" type="number" min="0" step="50" placeholder="전체" />
+          </label>
+          <label>
+            <span>최소 거래수</span>
+            <input id="trade-count-input" type="number" min="0" step="1" placeholder="전체" />
+          </label>
+          <label class="checkbox-filter">
+            <span>초품아</span>
+            <input id="elementary-filter" type="checkbox" />
+          </label>
+          <label>
+            <span>호선</span>
+            <select id="subway-line-select">
+              <option value="all">전체</option>
+            </select>
+          </label>
+          <label>
+            <span>역세권</span>
+            <select id="subway-walk-select">
+              <option value="all">전체</option>
+              <option value="5">도보 5분</option>
+              <option value="10">도보 10분</option>
+              <option value="15">도보 15분</option>
+            </select>
+          </label>
+          <button type="button" id="dark-mode-toggle" class="dark-mode-toggle" aria-label="다크모드 전환">Dark</button>
+          <button type="button" id="clear-filter">초기화</button>
         </section>
 
         <section class="stats-grid">
           <div>
-            <span>분석 거래</span>
+            <span>거래횟수</span>
             <strong id="total-used">-</strong>
           </div>
           <div>
-            <span>표시 동</span>
-            <strong id="total-regions">-</strong>
+            <span>건물</span>
+            <strong id="total-buildings">-</strong>
           </div>
           <div>
             <span>선택 기준</span>
-            <strong id="active-filter">-</strong>
           </div>
         </section>
 
-        <section class="zone-lists">
-          <div>
-            <h2>Hot</h2>
-            <ol id="hot-list"></ol>
+        <section id="selected-region" class="selected-region"></section>
+
+        <section class="ai-panel">
+          <div class="list-title">
+            <h2>AI 추천 후보 <small class="score-note">* SCORE는 정식 모델 점수이며, 모델 미산출 대상은 지도/정렬용 보조 SCORE로 표시</small></h2>
+            <span id="ai-count">0</span>
           </div>
-          <div>
-            <h2>Cold</h2>
-            <ol id="cold-list"></ol>
-          </div>
+          <ol id="ai-list" class="ai-list"></ol>
         </section>
 
-        <section id="selected-region" class="selected-region">
-          <p class="empty-state">동을 클릭하면 상세 지표, 주소별 거래 스택, 최근 거래가 표시됩니다.</p>
+        <section class="market-board">
+          <div class="all-market-panel">
+            <div class="list-title">
+              <h2>전체 매물</h2>
+              <span id="all-count">0</span>
+            </div>
+            <ol id="all-list" class="asset-list"></ol>
+          </div>
+          <div class="heat-panel">
+            <div>
+              <div class="list-title">
+                <h2>Hot 상위 30%</h2>
+                <span id="hot-count">0</span>
+              </div>
+              <ol id="hot-list" class="asset-list compact"></ol>
+            </div>
+            <div>
+              <div class="list-title">
+                <h2>Cold 하위 30%</h2>
+                <span id="cold-count">0</span>
+              </div>
+              <ol id="cold-list" class="asset-list compact"></ol>
+            </div>
+          </div>
         </section>
       </aside>
     </main>
