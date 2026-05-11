@@ -7,7 +7,7 @@
 
 const SUMMARY_URL = "data/seoul_real_estate_summary.json";
 const MAP_URL = "data/capital_area_adm_dong_light.geojson";
-const RECOMMENDATIONS_URL = "data/house_match_recommendations.json";
+const RECOMMENDATIONS_URL = "data/house_match_recommendations_full.json";
 const LIST_LIMITS = {
   all: 350,
   edge: 120,
