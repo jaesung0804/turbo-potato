@@ -3,7 +3,7 @@
 #   python train_house_match_model.py
 #
 # Full external-data training:
-#   python train_house_match_model.py --data-dir data --external-mode full
+#   python train_house_match_model.py --data-dir data --external-mode full --model-profile full --output web/data/house_match_recommendations_full.json
 #
 # Fast training without very large commercial-store files:
 #   python train_house_match_model.py --external-mode light
@@ -84,6 +84,8 @@ NUMERIC_FEATURES = [
     "store_medical",
     "store_real_estate",
     "store_density_score",
+    "latitude",
+    "longitude",
 ]
 
 CATEGORICAL_FEATURES = [
@@ -118,6 +120,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--output", default=str(DEFAULT_OUTPUT), help="Recommendation JSON output path.")
     parser.add_argument("--data-dir", default=str(DEFAULT_DATA_DIR), help="Directory containing optional external data files.")
     parser.add_argument("--external-mode", choices=["full", "light", "off"], default="full")
+    parser.add_argument("--model-profile", choices=["fast", "full"], default="fast", help="fast keeps the lightweight ensemble; full runs the deeper overnight ensemble.")
     parser.add_argument("--top-n", type=int, default=50000, help="Maximum recommendations to write.")
     parser.add_argument("--min-trade-count", type=int, default=2, help="Minimum type-level trades for training/recommendation.")
     return parser.parse_args()
@@ -397,6 +400,8 @@ def build_dataset(
                     "region_trade_count": safe_float(region_count),
                     "region_yoy_rate": region_yoy,
                     "region_period_rate": period_rate,
+                    "latitude": safe_float(building.get("latitude")),
+                    "longitude": safe_float(building.get("longitude")),
                     "sido_name": region.get("sido_name") or "unknown",
                     "gu_name": region.get("gu_name") or "unknown",
                     "dong_name": region.get("dong_name") or "unknown",
@@ -432,6 +437,8 @@ def build_dataset(
                         "bus_stop_distance_m": building.get("bus_stop_distance_m"),
                         "education_facilities": building.get("education_facilities"),
                         "education_facility_count": building.get("education_facility_count"),
+                        "latitude": building.get("latitude"),
+                        "longitude": building.get("longitude"),
                         "yoy_rate": type_yoy_rate(region, year, building, years),
                         "period_rate": type_period_rate(region, building, years),
                         "external_features": {key: round(value, 4) for key, value in extra.items() if value is not None},
@@ -473,7 +480,18 @@ def ordinal_model(estimator: Any) -> Pipeline:
     return Pipeline(steps=[("preprocess", preprocess), ("model", estimator)])
 
 
-def make_models(row_count: int) -> list[tuple[str, Pipeline]]:
+def make_models(row_count: int, profile: str) -> list[tuple[str, Pipeline]]:
+    if profile == "full":
+        estimators = max(180, min(420, row_count // 120))
+        return [
+            ("ridge", onehot_model(Ridge(alpha=1.0))),
+            ("elastic_net", onehot_model(ElasticNet(alpha=0.0007, l1_ratio=0.12, random_state=RANDOM_STATE, max_iter=7000))),
+            ("extra_trees", ordinal_model(ExtraTreesRegressor(n_estimators=estimators, min_samples_leaf=1, max_features=0.85, random_state=RANDOM_STATE, n_jobs=-1))),
+            ("random_forest", ordinal_model(RandomForestRegressor(n_estimators=max(140, estimators // 2), min_samples_leaf=2, max_features=0.8, random_state=RANDOM_STATE, n_jobs=-1))),
+            ("gradient_boosting", ordinal_model(GradientBoostingRegressor(n_estimators=260, learning_rate=0.045, max_depth=3, random_state=RANDOM_STATE))),
+            ("hist_gradient", ordinal_model(HistGradientBoostingRegressor(learning_rate=0.045, max_iter=350, l2_regularization=0.035, random_state=RANDOM_STATE))),
+            ("adaboost", ordinal_model(AdaBoostRegressor(n_estimators=160, learning_rate=0.035, random_state=RANDOM_STATE))),
+        ]
     estimators = max(30, min(70, row_count // 700))
     return [
         ("ridge", onehot_model(Ridge(alpha=1.5))),
@@ -508,7 +526,7 @@ def normalize(values: list[float | None], default: float = 0.0) -> list[float]:
     return [default if value is None or not math.isfinite(value) else float(np.clip((value - low) / (high - low), 0, 1)) for value in values]
 
 
-def train_price_models(x_all: list[list[Any]], y: np.ndarray, years: list[int]) -> tuple[np.ndarray, list[dict[str, Any]]]:
+def train_price_models(x_all: list[list[Any]], y: np.ndarray, years: list[int], model_profile: str) -> tuple[np.ndarray, list[dict[str, Any]]]:
     latest = max(years)
     train_mask = np.array(years) < latest
     test_mask = np.array(years) == latest
@@ -521,7 +539,7 @@ def train_price_models(x_all: list[list[Any]], y: np.ndarray, years: list[int]) 
 
     predictions: dict[str, np.ndarray] = {}
     evaluations: list[dict[str, Any]] = []
-    for name, model in make_models(len(x_train)):
+    for name, model in make_models(len(x_train), model_profile):
         model.fit(x_train, y_train)
         predictions[name] = np.exp(model.predict(x_all))
         if x_test:
@@ -537,7 +555,7 @@ def train_price_models(x_all: list[list[Any]], y: np.ndarray, years: list[int]) 
     return weighted_prediction(predictions, evaluations, "mae_price_per_pyeong"), evaluations
 
 
-def train_growth_models(x_all: list[list[Any]], targets: list[float | None], years: list[int]) -> tuple[np.ndarray, list[dict[str, Any]]]:
+def train_growth_models(x_all: list[list[Any]], targets: list[float | None], years: list[int], model_profile: str) -> tuple[np.ndarray, list[dict[str, Any]]]:
     valid = np.array([target is not None and math.isfinite(target) for target in targets])
     if valid.sum() < 100:
         return np.zeros(len(x_all)), []
@@ -554,7 +572,7 @@ def train_growth_models(x_all: list[list[Any]], targets: list[float | None], yea
 
     predictions: dict[str, np.ndarray] = {}
     evaluations: list[dict[str, Any]] = []
-    for name, model in make_models(len(x_train)):
+    for name, model in make_models(len(x_train), model_profile):
         model.fit(x_train, y_train)
         predictions[name] = model.predict(x_all)
         if x_test:
@@ -590,8 +608,8 @@ def main() -> None:
     forecast_target_year = latest_year + 1
     x_all = row_matrix(rows)
 
-    fair_price, price_evals = train_price_models(x_all, price_y, years)
-    next_growth, growth_evals = train_growth_models(x_all, next_year_targets, years)
+    fair_price, price_evals = train_price_models(x_all, price_y, years, args.model_profile)
+    next_growth, growth_evals = train_growth_models(x_all, next_year_targets, years, args.model_profile)
     actual_pp = np.exp(price_y)
     undervalue_pct = ((fair_price - actual_pp) / actual_pp) * 100
     forecast_pp = np.maximum(actual_pp * (1 + next_growth / 100), 0)
@@ -659,6 +677,7 @@ def main() -> None:
         "summary_source": str(args.summary),
         "data_dir": str(args.data_dir),
         "external_mode": args.external_mode,
+        "model_profile": args.model_profile,
         "target_year": str(latest_year),
         "forecast_target_year": str(forecast_target_year),
         "method": "Robust ensemble: fair-value price model plus next-year growth model, blended with liquidity, scale, income, workplace, commercial, school, subway, bus, and education-facility signals.",
@@ -681,6 +700,7 @@ def main() -> None:
 
     print(f"Trained fair-value ensemble on {len(rows):,} rows.")
     print(f"External mode: {args.external_mode}")
+    print(f"Model profile: {args.model_profile}")
     print(f"Wrote {min(len(recommendations), args.top_n):,} recommendations to {output_path}")
 
 

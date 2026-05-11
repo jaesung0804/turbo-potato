@@ -408,6 +408,8 @@ def load_apt_school_info(
             nearest = nearest_elementary(lat, lon, school_grid)
             key = (cgg_code, name)
             info = mapping.setdefault(key, {})
+            info.setdefault("latitude", lat)
+            info.setdefault("longitude", lon)
             school_info = merge_school_match(
                 {
                     "name": info["nearest_elementary_name"],
@@ -590,6 +592,8 @@ def build_dashboard_data(
             row_bus_stop_distance = school_match.get("bus_stop_distance_m") if school_match else None
             row_education_facilities = school_match.get("education_facilities") if school_match else None
             row_education_count = school_match.get("education_facility_count") if school_match else None
+            row_latitude = school_match.get("latitude") if school_match else None
+            row_longitude = school_match.get("longitude") if school_match else None
             region = regions.setdefault(
                 code,
                 {
@@ -634,6 +638,8 @@ def build_dashboard_data(
                         "bus_stop_distance_m": row_bus_stop_distance,
                         "education_facilities": row_education_facilities,
                         "education_facility_count": row_education_count,
+                        "latitude": row_latitude,
+                        "longitude": row_longitude,
                         "metrics": blank_metric_bucket(),
                     },
                 )
@@ -672,6 +678,10 @@ def build_dashboard_data(
                     or row_education_count > addr_bucket["education_facility_count"]
                 ):
                     addr_bucket["education_facility_count"] = row_education_count
+                if row_latitude is not None and addr_bucket.get("latitude") is None:
+                    addr_bucket["latitude"] = row_latitude
+                if row_longitude is not None and addr_bucket.get("longitude") is None:
+                    addr_bucket["longitude"] = row_longitude
 
                 bucket["recent"].append(
                     {
@@ -686,6 +696,8 @@ def build_dashboard_data(
                         "land_pyeong": round_metric(metrics.get("land_pyeong"), 1),
                         "price_per_pyeong": round_metric(metrics.get("price_per_pyeong"), 0),
                         "land_efficiency": round_metric(metrics.get("land_efficiency"), 2),
+                        "latitude": round_metric(row_latitude, 6),
+                        "longitude": round_metric(row_longitude, 6),
                     }
                 )
 
@@ -761,6 +773,8 @@ def finalize_bucket(
                 "bus_stop_distance_m": round_metric(address.get("bus_stop_distance_m"), 0),
                 "education_facilities": address.get("education_facilities"),
                 "education_facility_count": address.get("education_facility_count"),
+                "latitude": round_metric(address.get("latitude"), 6),
+                "longitude": round_metric(address.get("longitude"), 6),
                 "metrics": {key: summarize(address["metrics"][key]) for key in METRIC_KEYS},
             }
         )

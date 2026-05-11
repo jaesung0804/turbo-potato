@@ -50,6 +50,12 @@ AI 추천만 빠르게 다시 생성하려면:
 python train_house_match_model.py --external-mode light
 ```
 
+상권 데이터와 깊은 7개 모델 앙상블까지 쓰는 overnight full 학습:
+
+```powershell
+python train_house_match_model.py --data-dir data --external-mode full --model-profile full --output web\data\house_match_recommendations_full.json
+```
+
 검증 리포트를 다시 생성하려면:
 
 ```powershell
