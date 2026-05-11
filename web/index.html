@@ -151,10 +151,30 @@
             <span>최소 거래수</span>
             <input id="trade-count-input" type="number" min="0" step="1" placeholder="전체" />
           </label>
-          <label class="checkbox-filter">
-            <span>초품아</span>
-            <input id="elementary-filter" type="checkbox" />
+          <label>
+            <span>연식</span>
+            <select id="age-range-select">
+              <option value="all">전체</option>
+              <option value="new">신축 0~5년</option>
+              <option value="semi_new">준신축 5~15년</option>
+              <option value="middle">중간 15~20년</option>
+              <option value="old">구축 20~30년</option>
+              <option value="very_old">노후 30년+</option>
+            </select>
           </label>
+          <button type="button" id="dark-mode-toggle" class="dark-mode-toggle" aria-label="다크모드 전환">Dark</button>
+          <button type="button" id="clear-filter">초기화</button>
+        </section>
+
+        <section class="stats-grid">
+          <div>
+            <span>거래횟수</span>
+            <strong id="total-used">-</strong>
+          </div>
+          <div>
+            <span>표시후보</span>
+            <strong id="total-buildings">-</strong>
+          </div>
           <label>
             <span>호선</span>
             <select id="subway-line-select">
@@ -170,57 +190,33 @@
               <option value="15">도보 15분</option>
             </select>
           </label>
-          <button type="button" id="dark-mode-toggle" class="dark-mode-toggle" aria-label="다크모드 전환">Dark</button>
-          <button type="button" id="clear-filter">초기화</button>
-        </section>
-
-        <section class="stats-grid">
-          <div>
-            <span>거래횟수</span>
-            <strong id="total-used">-</strong>
-          </div>
-          <div>
-            <span>건물</span>
-            <strong id="total-buildings">-</strong>
-          </div>
-          <div>
-            <span>선택 기준</span>
-          </div>
+          <label class="checkbox-filter">
+            <span>초품아</span>
+            <input id="elementary-filter" type="checkbox" />
+          </label>
         </section>
 
         <section id="selected-region" class="selected-region"></section>
 
-        <section class="ai-panel">
-          <div class="list-title">
-            <h2>AI 추천 후보 <small class="score-note">* SCORE는 정식 모델 점수이며, 모델 미산출 대상은 지도/정렬용 보조 SCORE로 표시</small></h2>
-            <span id="ai-count">0</span>
+        <section class="market-tabs">
+          <div class="tab-buttons" role="tablist" aria-label="매물 목록">
+            <button type="button" class="tab-button active" data-market-tab="ai">AI 추천 <span id="ai-count">0</span></button>
+            <button type="button" class="tab-button" data-market-tab="all">전체 매물 <span id="all-count">0</span></button>
+            <button type="button" class="tab-button" data-market-tab="hot">Hot <span id="hot-count">0</span></button>
+            <button type="button" class="tab-button" data-market-tab="cold">Cold <span id="cold-count">0</span></button>
           </div>
-          <ol id="ai-list" class="ai-list"></ol>
-        </section>
-
-        <section class="market-board">
-          <div class="all-market-panel">
-            <div class="list-title">
-              <h2>전체 매물</h2>
-              <span id="all-count">0</span>
-            </div>
+          <p class="score-note">SCORE는 정식 모델 점수이며, 모델 미산출 대상은 지도/정렬용 보조 SCORE로 표시됩니다.</p>
+          <div class="tab-panel active" data-market-panel="ai">
+            <ol id="ai-list" class="ai-list"></ol>
+          </div>
+          <div class="tab-panel" data-market-panel="all">
             <ol id="all-list" class="asset-list"></ol>
           </div>
-          <div class="heat-panel">
-            <div>
-              <div class="list-title">
-                <h2>Hot 상위 30%</h2>
-                <span id="hot-count">0</span>
-              </div>
-              <ol id="hot-list" class="asset-list compact"></ol>
-            </div>
-            <div>
-              <div class="list-title">
-                <h2>Cold 하위 30%</h2>
-                <span id="cold-count">0</span>
-              </div>
-              <ol id="cold-list" class="asset-list compact"></ol>
-            </div>
+          <div class="tab-panel" data-market-panel="hot">
+            <ol id="hot-list" class="asset-list compact"></ol>
+          </div>
+          <div class="tab-panel" data-market-panel="cold">
+            <ol id="cold-list" class="asset-list compact"></ol>
           </div>
         </section>
       </aside>

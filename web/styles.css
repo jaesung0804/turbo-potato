@@ -73,6 +73,28 @@ button {
   min-height: 100vh;
 }
 
+@media (min-width: 981px) and (max-width: 1180px) {
+  .app-shell {
+    grid-template-columns: minmax(0, 1fr) minmax(500px, 52vw);
+  }
+
+  .detail-pane {
+    padding: 10px 12px 12px;
+  }
+
+  .control-grid {
+    grid-template-columns: 0.72fr 0.9fr 1.1fr 0.82fr 0.92fr 1fr;
+  }
+
+  .search-row {
+    grid-template-columns: minmax(130px, 1fr) 70px 70px 64px 64px 104px;
+  }
+
+  .metric-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
 .map-pane {
   position: relative;
   overflow: hidden;
@@ -169,7 +191,7 @@ button:focus-visible {
 
 .search-row {
   display: grid;
-  grid-template-columns: minmax(110px, 0.65fr) 76px 76px 64px 64px 48px 76px 82px 66px;
+  grid-template-columns: minmax(150px, 1fr) 76px 76px 68px 68px 112px;
   gap: 6px;
   align-items: end;
 }
@@ -251,19 +273,14 @@ button:focus-visible {
 
 .stats-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: 74px 64px minmax(76px, 1fr) minmax(86px, 1fr) 54px;
   gap: 6px;
-}
-
-.stats-grid > div:nth-child(3) {
-  display: none;
+  align-items: end;
 }
 
 .stats-grid > div,
 .metric-card,
-.ai-panel,
-.market-board > div,
-.heat-panel > div {
+.market-tabs {
   border: 1px solid var(--line);
   border-radius: 8px;
   background: var(--panel);
@@ -271,7 +288,7 @@ button:focus-visible {
 
 .stats-grid > div {
   min-width: 0;
-  padding: 8px;
+  padding: 7px 6px;
 }
 
 .stats-grid span,
@@ -285,7 +302,16 @@ button:focus-visible {
   display: block;
   margin-top: 3px;
   overflow-wrap: anywhere;
-  font-size: 13px;
+  font-size: 12px;
+  line-height: 1.15;
+}
+
+.stats-grid label {
+  min-width: 0;
+}
+
+.stats-grid .checkbox-filter {
+  justify-content: end;
 }
 
 .selected-region {
@@ -294,15 +320,56 @@ button:focus-visible {
   gap: 6px;
 }
 
-.ai-panel {
+.market-tabs {
   display: flex;
-  min-height: 132px;
-  max-height: 210px;
+  min-height: 0;
+  flex: 1 1 auto;
   flex-direction: column;
-  padding: 10px 12px;
+  padding: 10px 12px 12px;
+}
+
+.tab-buttons {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 6px;
+}
+
+.tab-button {
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--soft);
+  color: var(--ink);
+  font-size: 12px;
+  font-weight: 800;
+  padding: 8px 7px;
+}
+
+.tab-button.active {
+  border-color: var(--focus);
+  background: color-mix(in srgb, var(--soft) 70%, var(--focus) 22%);
+}
+
+.tab-button span {
+  display: block;
+  margin-top: 2px;
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.tab-panel {
+  display: none;
+  min-height: 0;
+  flex: 1 1 auto;
+}
+
+.tab-panel.active {
+  display: flex;
+  flex-direction: column;
 }
 
 .ai-list {
+  flex: 1 1 auto;
+  min-height: 0;
   overflow-y: auto;
   padding-right: 4px;
 }
@@ -462,29 +529,6 @@ button:focus-visible {
   margin-left: 0;
 }
 
-.market-board {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  gap: 8px;
-  flex: 1 1 auto;
-  min-height: 0;
-}
-
-.market-board > div,
-.heat-panel > div {
-  display: flex;
-  min-height: 0;
-  flex-direction: column;
-  padding: 12px;
-}
-
-.heat-panel {
-  display: grid;
-  grid-template-rows: minmax(0, 1fr) minmax(0, 1fr);
-  gap: 8px;
-  min-height: 0;
-}
-
 .list-title {
   display: flex;
   align-items: center;
@@ -500,8 +544,7 @@ button:focus-visible {
 }
 
 .score-note {
-  display: inline-block;
-  margin-left: 4px;
+  margin: 7px 0 9px;
   color: var(--muted);
   font-size: 10px;
   font-weight: 600;
@@ -912,27 +955,28 @@ ol {
     padding: 7px 10px;
   }
 
-  .market-board {
-    min-height: 620px;
-  }
-
   .asset-list {
     max-height: 46vh;
-  }
-
-  .heat-panel .asset-list {
-    max-height: 28vh;
   }
 }
 
 @media (max-width: 560px) {
+  body {
+    overflow: auto;
+  }
+
+  .app-shell {
+    display: block;
+    min-height: auto;
+  }
+
   .control-grid,
-  .stats-grid,
-  .market-board {
+  .stats-grid {
     grid-template-columns: 1fr;
   }
 
   .map-pane {
+    display: grid;
     grid-template-columns: 1fr;
     padding: 6px;
   }
@@ -964,6 +1008,11 @@ ol {
     min-height: 218px;
   }
 
+  .growth-ranking,
+  .ai-score-ranking {
+    max-height: none;
+  }
+
   .growth-ranking-head {
     grid-template-columns: 1fr 76px 82px;
   }
@@ -976,6 +1025,15 @@ ol {
   .search-row,
   .metric-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .stats-grid {
+    grid-template-columns: 74px 64px minmax(0, 1fr);
+  }
+
+  .stats-grid label:nth-of-type(2),
+  .stats-grid .checkbox-filter {
+    grid-column: auto;
   }
 
   .control-grid label:nth-child(3),
@@ -992,10 +1050,6 @@ ol {
 
   .panel-header h1 {
     font-size: 16px;
-  }
-
-  .ai-panel {
-    max-height: none;
   }
 
   .ai-row {
@@ -1019,10 +1073,6 @@ ol {
     font-size: 13px;
   }
 
-  .heat-panel {
-    grid-template-rows: auto;
-  }
-
   .type-picker {
     width: 100%;
     flex-basis: auto;
@@ -1033,9 +1083,37 @@ ol {
     flex-basis: auto;
     grid-template-columns: 1fr;
   }
+
+  .tab-buttons {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .market-tabs {
+    min-height: 360px;
+  }
+
+  .asset-list,
+  .ai-list {
+    max-height: 52vh;
+  }
 }
 
-@media (max-width: 700px) {
+@media (min-width: 561px) and (max-width: 980px) {
+  .tab-buttons {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .market-tabs {
+    min-height: 480px;
+  }
+
+  .asset-list,
+  .ai-list {
+    max-height: 54vh;
+  }
+}
+
+@media (max-width: 900px) and (orientation: landscape) {
   html,
   body {
     height: 100%;
@@ -1044,7 +1122,7 @@ ol {
 
   .app-shell {
     display: grid;
-    grid-template-columns: 30% 70%;
+    grid-template-columns: minmax(190px, 32%) minmax(0, 1fr);
     width: 100%;
     height: 100dvh;
     min-height: 0;
@@ -1258,7 +1336,7 @@ ol {
     top: 6px;
     left: 6px;
     z-index: 950;
-    width: calc(30vw - 12px);
+    width: calc(32vw - 12px);
     box-shadow: none;
   }
 
@@ -1268,7 +1346,7 @@ ol {
   }
 
   .stats-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: 64px 58px minmax(70px, 1fr) minmax(78px, 1fr) 50px;
   }
 
   .stats-grid > div,
@@ -1319,16 +1397,10 @@ ol {
     font-size: 11px;
   }
 
-  .ai-panel {
+  .market-tabs {
     min-height: 0;
-    flex: 0 0 190px;
-    max-height: none;
-    overflow: hidden;
+    flex: 1 1 auto;
     padding: 8px;
-  }
-
-  .ai-list {
-    overflow-y: auto;
   }
 
   .ai-row,
@@ -1367,35 +1439,9 @@ ol {
     font-size: 13px;
   }
 
-  .market-board {
-    display: block;
-    overflow: visible;
-    min-height: 0;
-  }
-
-  .market-board > div,
-  .heat-panel > div {
-    padding: 8px;
-  }
-
-  .all-market-panel {
-    height: auto;
-    max-height: 42vh;
-    min-height: 0;
-    margin-bottom: 6px;
-  }
-
-  .heat-panel {
-    display: grid;
-    height: auto;
-    min-height: 0;
-    grid-template-rows: repeat(2, minmax(190px, auto));
-    gap: 6px;
-  }
-
   .asset-list,
-  .heat-panel .asset-list {
-    max-height: 30vh;
+  .ai-list {
+    max-height: none;
     min-height: 0;
   }
 
@@ -1416,7 +1462,7 @@ ol {
   }
 }
 
-@media (max-width: 380px) {
+@media (max-width: 380px) and (orientation: landscape) {
   .app-shell {
     grid-template-columns: 30% 70%;
   }

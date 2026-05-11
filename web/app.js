@@ -6,7 +6,7 @@
 //   python run_real_estate_dashboard.py --skip-build
 
 const SUMMARY_URL = "data/seoul_real_estate_summary.json";
-const MAP_URL = "data/capital_area_adm_dong.geojson";
+const MAP_URL = "data/capital_area_adm_dong_light.geojson";
 const RECOMMENDATIONS_URL = "data/house_match_recommendations.json";
 const LIST_LIMITS = {
   all: 350,
@@ -47,6 +47,7 @@ const state = {
   maxPriceBillion: null,
   minHouseholds: null,
   minTradeCount: null,
+  ageRange: "all",
   elementary500mOnly: false,
   subwayLine: "all",
   subwayWalkMinutes: "all",
@@ -79,6 +80,14 @@ const map = L.map("map", {
   zoomSnap: 0.1,
   zoomDelta: 0.25,
 });
+
+async function fetchJson(url, label) {
+  const response = await fetch(url, { cache: "no-store" });
+  if (!response.ok) {
+    throw new Error(`${label} 응답 오류 ${response.status}`);
+  }
+  return response.json();
+}
 
 function applyDarkMode(enabled) {
   document.body.classList.toggle("dark-mode", enabled);
@@ -153,6 +162,16 @@ function generatedYear() {
 
 function buildingAge(building) {
   return building.built_year ? Math.max(0, generatedYear() - building.built_year) : null;
+}
+
+function ageCategory(building) {
+  const age = buildingAge(building);
+  if (age === null) return "unknown";
+  if (age <= 5) return "new";
+  if (age <= 15) return "semi_new";
+  if (age <= 20) return "middle";
+  if (age < 30) return "old";
+  return "very_old";
 }
 
 function elementaryLabel(building) {
@@ -364,6 +383,18 @@ function tradeCountFilterLabel() {
   return state.minTradeCount === null ? "전체 거래수" : `${state.minTradeCount.toLocaleString("ko-KR")}건 이상`;
 }
 
+function ageFilterLabel() {
+  const labels = {
+    all: "전체 연식",
+    new: "신축 0~5년",
+    semi_new: "준신축 5~15년",
+    middle: "중간연식 15~20년",
+    old: "구축 20~30년",
+    very_old: "노후 구축 30년+",
+  };
+  return labels[state.ageRange] ?? labels.all;
+}
+
 function elementaryFilterLabel() {
   return state.elementary500mOnly ? "초품아만" : "초품아 전체";
 }
@@ -430,6 +461,10 @@ function tradeCountMatches(building) {
   return state.minTradeCount === null || building.count >= state.minTradeCount;
 }
 
+function ageMatches(building) {
+  return state.ageRange === "all" || ageCategory(building) === state.ageRange;
+}
+
 function elementaryMatches(building) {
   return !state.elementary500mOnly || building.elementary_500m === true;
 }
@@ -443,7 +478,7 @@ function subwayMatches(building) {
 }
 
 function buildingMatchesFilters(building) {
-  return areaMatches(building) && priceMatches(building) && householdsMatch(building) && tradeCountMatches(building) && elementaryMatches(building) && subwayMatches(building);
+  return areaMatches(building) && priceMatches(building) && householdsMatch(building) && tradeCountMatches(building) && ageMatches(building) && elementaryMatches(building) && subwayMatches(building);
 }
 
 function typeItems() {
@@ -736,8 +771,12 @@ function renderAiRecommendations() {
           const fairPrice = recommendation.fair_price_per_pyeong ?? recommendation.predicted_price_per_pyeong;
           const forecastPrice = recommendation.forecast_price_per_pyeong;
           const currentPrice = Number(building.metrics.price_per_pyeong.avg).toLocaleString("ko-KR", { maximumFractionDigits: 0 });
-          const fairText = Number(fairPrice).toLocaleString("ko-KR", { maximumFractionDigits: 0 });
-          const forecastText = Number(forecastPrice).toLocaleString("ko-KR", { maximumFractionDigits: 0 });
+          const fairText = Number.isFinite(Number(fairPrice))
+            ? Number(fairPrice).toLocaleString("ko-KR", { maximumFractionDigits: 0 })
+            : "-";
+          const forecastText = Number.isFinite(Number(forecastPrice)) && Number(forecastPrice) > 0
+            ? Number(forecastPrice).toLocaleString("ko-KR", { maximumFractionDigits: 0 })
+            : "-";
           const expectedGrowth = recommendation.expected_growth_pct;
           return `
             <li>
@@ -745,7 +784,7 @@ function renderAiRecommendations() {
                 <span class="ai-main">
                   <strong>${group.building_name}</strong>
                   <small>${region.gu_name ?? ""} ${region.dong_name ?? ""} · ${building.area_type}</small>
-                  <small>현재 ${currentPrice}만원/평 · 적정 ${fairText}만원/평 · ${targetYear}년 예상 ${forecastText}만원/평 (${formatHtml(expectedGrowth, "yoy_rate")})</small>
+                  <small>현재 ${currentPrice}만원/평 · 모델 적정 ${fairText}만원/평 · ${targetYear}년 예측 ${forecastText}만원/평 (${formatHtml(expectedGrowth, "yoy_rate")})</small>
                 </span>
                 <span class="ai-score">
                   <small>Score</small>
@@ -778,8 +817,11 @@ function renderGroupList(listId, countId, groups, limit) {
 }
 
 function renderSummary(groups = groupedBuildings()) {
-  const count = groups.reduce((sum, group) => sum + group.count, 0);
-  document.getElementById("total-used").textContent = count.toLocaleString("ko-KR");
+  const fullCount = filteredRegions().reduce((sum, region) => {
+    const bucket = bucketFor(region);
+    return sum + (bucket?.count || 0);
+  }, 0);
+  document.getElementById("total-used").textContent = fullCount.toLocaleString("ko-KR");
   document.getElementById("total-buildings").textContent = groups.length.toLocaleString("ko-KR");
 }
 function renderSelectedRegion(groups = groupedBuildings()) {
@@ -821,7 +863,7 @@ function renderSelectedRegion(groups = groupedBuildings()) {
         ${metricCard("거래횟수", building.count, "count")}
         ${metricCard("AI SCORE", aiScoreForItem(selected), "ai_score")}
         ${metricCard("전용평수", building.metrics.area_pyeong.avg, "area_pyeong")}
-        ${metricCard("연식", buildingAge(building), "age")}
+        ${metricCard("연식", `${format(buildingAge(building), "age")} · ${ageFilterText(ageCategory(building))}`, "text")}
         ${metricCard("세대수", building.households, "households")}
         ${metricCard("초품아/역세권", `${elementaryLabel(building)} · ${subwayLabel(building)}`, "text")}
       </div>
@@ -855,6 +897,18 @@ function renderSelectedRegion(groups = groupedBuildings()) {
       ${metricCard("AI SCORE", averageMetric(regions, "ai_score"), "ai_score")}
     </div>
   `;
+}
+
+function ageFilterText(category) {
+  const labels = {
+    new: "신축",
+    semi_new: "준신축",
+    middle: "중간연식",
+    old: "구축",
+    very_old: "노후 구축",
+    unknown: "-",
+  };
+  return labels[category] ?? "-";
 }
 function averageMetric(regions, metric) {
   const values = regions.map((region) => metricValue(region, metric)).filter((value) => value !== null);
@@ -1214,6 +1268,13 @@ function wireEvents() {
     refresh();
   });
 
+  document.getElementById("age-range-select").addEventListener("change", (event) => {
+    state.ageRange = event.target.value;
+    state.selectedGroupId = null;
+    state.selectedTypeId = null;
+    refresh();
+  });
+
   document.querySelectorAll("#elementary-filter, #elementary-filter-mobile").forEach((input) => {
     input.addEventListener("change", (event) => {
       state.elementary500mOnly = event.target.checked;
@@ -1313,6 +1374,7 @@ function wireEvents() {
     state.maxPriceBillion = null;
     state.minHouseholds = null;
     state.minTradeCount = null;
+    state.ageRange = "all";
     state.elementary500mOnly = false;
     state.subwayLine = "all";
     state.subwayWalkMinutes = "all";
@@ -1329,6 +1391,7 @@ function wireEvents() {
     document.getElementById("price-input").value = "";
     document.getElementById("households-input").value = "";
     document.getElementById("trade-count-input").value = "";
+    document.getElementById("age-range-select").value = "all";
     setElementaryFilterChecked(false);
     document.getElementById("subway-line-select").value = "all";
     document.getElementById("subway-walk-select").value = "all";
@@ -1349,6 +1412,18 @@ function wireEvents() {
 
   document.querySelectorAll("[data-map-mode]").forEach((button) => {
     button.addEventListener("click", () => setMapMode(button.dataset.mapMode));
+  });
+
+  document.querySelectorAll("[data-market-tab]").forEach((button) => {
+    button.addEventListener("click", () => {
+      const tab = button.dataset.marketTab;
+      document.querySelectorAll("[data-market-tab]").forEach((item) => {
+        item.classList.toggle("active", item.dataset.marketTab === tab);
+      });
+      document.querySelectorAll("[data-market-panel]").forEach((panel) => {
+        panel.classList.toggle("active", panel.dataset.marketPanel === tab);
+      });
+    });
   });
 
   document.body.addEventListener("click", (event) => {
@@ -1380,22 +1455,14 @@ function wireEvents() {
 async function init() {
   applyDarkMode(localStorage.getItem("realEstateDashboardDarkMode") === "1");
 
-  const [summary, mapData, recommendations] = await Promise.all([
-    fetch(SUMMARY_URL).then((response) => response.json()),
-    fetch(MAP_URL).then((response) => response.json()),
-    fetch(RECOMMENDATIONS_URL)
-      .then((response) => (response.ok ? response.json() : null))
-      .catch(() => null),
+  const [summary, mapData] = await Promise.all([
+    fetchJson(SUMMARY_URL, "요약 데이터"),
+    fetchJson(MAP_URL, "지도 경계 데이터"),
   ]);
 
   state.summary = summary;
-  state.recommendations = recommendations;
-  state.recommendationByType = new Map(
-    (recommendations?.recommendations ?? []).map((item) => [
-      recommendationKey(item.region_code, item.building_key),
-      item,
-    ]),
-  );
+  state.recommendations = null;
+  state.recommendationByType = new Map();
   state.regionByCode = new Map(summary.regions.map((region) => [region.code, region]));
   state.regionByMapCode = new Map();
   for (const region of summary.regions) {
@@ -1434,6 +1501,21 @@ async function init() {
   fitDefaultMapView();
   wireEvents();
   refresh();
+
+  fetchJson(RECOMMENDATIONS_URL, "AI 추천 데이터")
+    .then((recommendations) => {
+      state.recommendations = recommendations;
+      state.recommendationByType = new Map(
+        (recommendations?.recommendations ?? []).map((item) => [
+          recommendationKey(item.region_code, item.building_key),
+          item,
+        ]),
+      );
+      refresh();
+    })
+    .catch((error) => {
+      console.warn(error);
+    });
 }
 
 function fitDefaultMapView() {
@@ -1461,5 +1543,5 @@ window.addEventListener("resize", () => {
 
 init().catch((error) => {
   document.getElementById("selected-region").innerHTML =
-    `<p class="empty-state">지도 데이터를 불러오지 못했습니다. ${error.message}</p>`;
+    `<p class="empty-state">데이터를 불러오지 못했습니다. ${error.message}<br>반드시 http://localhost:8000/ 주소로 열어주세요.</p>`;
 });

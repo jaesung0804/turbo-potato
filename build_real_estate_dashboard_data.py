@@ -285,6 +285,67 @@ def normalize_subway_line(value: str) -> str:
     return f"{value}호선" if value and not value.endswith("호선") else value
 
 
+def parse_walk_distance_m(value: Any) -> int | None:
+    text = "" if value is None else str(value).strip()
+    if not text:
+        return None
+    normalized = (
+        text.replace("약", "")
+        .replace("이내", "")
+        .replace("거리", "")
+        .replace("도보", "")
+        .replace("분거리", "분")
+        .replace("ｍ", "m")
+        .replace("M", "m")
+    )
+    numbers = []
+    for token in normalized.replace("~", " ").replace("-", " ").split():
+        parsed = parse_float(token)
+        if parsed is not None:
+            numbers.append(parsed)
+    if not numbers:
+        parsed = parse_float(normalized)
+        numbers = [parsed] if parsed is not None else []
+    if not numbers:
+        return None
+    distance = max(numbers)
+    lowered = normalized.lower()
+    if "분" in normalized or "min" in lowered:
+        return int(distance * 80)
+    if "km" in lowered or "㎞" in normalized:
+        return int(distance * 1000)
+    return int(distance)
+
+
+def normalize_subway_line(value: str) -> str:
+    value = (value or "").strip().replace(" ", "")
+    if not value:
+        return ""
+    value = value.replace("수도권", "").replace("도시철도", "").replace("호선호선", "호선")
+    if value.endswith("선") and not value.endswith("호선"):
+        return value
+    value = value.replace("호선", "")
+    return f"{value}호선" if value else ""
+
+
+def normalize_station_name(value: Any) -> str | None:
+    text = "" if value is None else str(value).strip()
+    if not text:
+        return None
+    parts = [
+        part.strip()
+        for part in text.replace("/", ",").replace("|", ",").replace("ㆍ", ",").split(",")
+        if part.strip()
+    ]
+    if not parts:
+        return None
+    station = parts[0]
+    for suffix in ("지하철역", "전철역", "역"):
+        if station.endswith(suffix):
+            station = station[: -len(suffix)]
+    return station.strip() or None
+
+
 def load_apt_detail_info(path: Path = APT_DETAIL_PATH) -> dict[tuple[str, str], dict[str, Any]]:
     mapping: dict[tuple[str, str], dict[str, Any]] = {}
     if not path.exists():
@@ -304,7 +365,7 @@ def load_apt_detail_info(path: Path = APT_DETAIL_PATH) -> dict[tuple[str, str], 
             if not cgg_code or not apt_name:
                 continue
             subway_line = row.get("subway_line") or raw.get("subwayLine") or ""
-            subway_station = row.get("subway_station") or raw.get("subwayStation") or ""
+            subway_station = normalize_station_name(row.get("subway_station") or raw.get("subwayStation") or "")
             subway_distance = parse_float(row.get("subway_distance_m")) or parse_walk_distance_m(raw.get("kaptdWtimesub"))
             bus_distance = parse_float(row.get("bus_stop_distance_m")) or parse_walk_distance_m(raw.get("kaptdWtimebus"))
             education_facilities = row.get("education_facilities") or raw.get("educationFacility") or ""
@@ -315,7 +376,7 @@ def load_apt_detail_info(path: Path = APT_DETAIL_PATH) -> dict[tuple[str, str], 
             ]
             mapping[(cgg_code, apt_name)] = {
                 "subway_lines": sorted(set(lines)),
-                "subway_station": str(subway_station).strip() or None,
+                "subway_station": subway_station,
                 "subway_distance_m": subway_distance,
                 "bus_stop_distance_m": bus_distance,
                 "education_facilities": str(education_facilities).strip() or None,

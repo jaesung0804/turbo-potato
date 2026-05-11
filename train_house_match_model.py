@@ -42,6 +42,19 @@ DEFAULT_SUMMARY = Path("web/data/seoul_real_estate_summary.json")
 DEFAULT_OUTPUT = Path("web/data/house_match_recommendations.json")
 DEFAULT_DATA_DIR = Path("data")
 RANDOM_STATE = 42
+CONSENSUS_WEIGHTS = {
+    "undervalue": 21,
+    "next_year_growth": 16,
+    "yoy_momentum": 6,
+    "period_momentum": 4,
+    "liquidity": 13,
+    "households": 9,
+    "income": 5,
+    "workplace": 8,
+    "commercial": 4,
+    "infra": 14,
+}
+SCORE_WEIGHTS = CONSENSUS_WEIGHTS
 
 NUMERIC_FEATURES = [
     "year",
@@ -461,15 +474,11 @@ def ordinal_model(estimator: Any) -> Pipeline:
 
 
 def make_models(row_count: int) -> list[tuple[str, Pipeline]]:
-    estimators = max(70, min(180, row_count // 350))
+    estimators = max(30, min(70, row_count // 700))
     return [
         ("ridge", onehot_model(Ridge(alpha=1.5))),
-        ("elastic_net", onehot_model(ElasticNet(alpha=0.0008, l1_ratio=0.15, random_state=RANDOM_STATE, max_iter=5000))),
         ("extra_trees", ordinal_model(ExtraTreesRegressor(n_estimators=estimators, min_samples_leaf=2, random_state=RANDOM_STATE, n_jobs=-1))),
-        ("random_forest", ordinal_model(RandomForestRegressor(n_estimators=max(60, estimators // 2), min_samples_leaf=3, random_state=RANDOM_STATE, n_jobs=-1))),
-        ("gradient_boosting", ordinal_model(GradientBoostingRegressor(n_estimators=150, learning_rate=0.06, max_depth=3, random_state=RANDOM_STATE))),
-        ("hist_gradient", ordinal_model(HistGradientBoostingRegressor(learning_rate=0.06, max_iter=180, l2_regularization=0.05, random_state=RANDOM_STATE))),
-        ("adaboost", ordinal_model(AdaBoostRegressor(n_estimators=90, learning_rate=0.05, random_state=RANDOM_STATE))),
+        ("hist_gradient", ordinal_model(HistGradientBoostingRegressor(learning_rate=0.08, max_iter=70, l2_regularization=0.08, random_state=RANDOM_STATE))),
     ]
 
 
@@ -585,7 +594,7 @@ def main() -> None:
     next_growth, growth_evals = train_growth_models(x_all, next_year_targets, years)
     actual_pp = np.exp(price_y)
     undervalue_pct = ((fair_price - actual_pp) / actual_pp) * 100
-    forecast_pp = actual_pp * (1 + next_growth / 100)
+    forecast_pp = np.maximum(actual_pp * (1 + next_growth / 100), 0)
 
     discount_norm = normalize([float(value) for value in undervalue_pct])
     expected_growth_norm = normalize([float(value) for value in next_growth])
@@ -611,16 +620,16 @@ def main() -> None:
         if int(payload["year"]) != latest_year:
             continue
         score = (
-            discount_norm[idx] * 28
-            + expected_growth_norm[idx] * 22
-            + yoy_norm[idx] * 10
-            + period_norm[idx] * 10
-            + liquidity_norm[idx] * 8
-            + households_norm[idx] * 7
-            + income_norm[idx] * 6
-            + workplace_norm[idx] * 4
-            + store_norm[idx] * 3
-            + infra_norm[idx] * 2
+            discount_norm[idx] * SCORE_WEIGHTS["undervalue"]
+            + expected_growth_norm[idx] * SCORE_WEIGHTS["next_year_growth"]
+            + yoy_norm[idx] * SCORE_WEIGHTS["yoy_momentum"]
+            + period_norm[idx] * SCORE_WEIGHTS["period_momentum"]
+            + liquidity_norm[idx] * SCORE_WEIGHTS["liquidity"]
+            + households_norm[idx] * SCORE_WEIGHTS["households"]
+            + income_norm[idx] * SCORE_WEIGHTS["income"]
+            + workplace_norm[idx] * SCORE_WEIGHTS["workplace"]
+            + store_norm[idx] * SCORE_WEIGHTS["commercial"]
+            + infra_norm[idx] * SCORE_WEIGHTS["infra"]
         )
         item = {
             **payload,
@@ -662,18 +671,7 @@ def main() -> None:
             "fair_price": price_evals,
             "next_year_growth": growth_evals,
         },
-        "weights": {
-            "undervalue": 28,
-            "next_year_growth": 22,
-            "yoy_momentum": 10,
-            "period_momentum": 10,
-            "liquidity": 8,
-            "households": 7,
-            "income": 6,
-            "workplace": 4,
-            "commercial": 3,
-            "infra": 2,
-        },
+        "weights": SCORE_WEIGHTS,
         "recommendations": recommendations[: args.top_n],
     }
     output_path = Path(args.output)
