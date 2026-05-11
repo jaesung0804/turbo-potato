@@ -1486,3 +1486,41 @@ ol {
     padding: 6px;
   }
 }
+
+@media (max-width: 700px), (max-width: 900px) and (max-height: 560px) {
+  html,
+  body {
+    height: auto;
+    min-height: 100%;
+    overflow: auto;
+  }
+
+  .app-shell {
+    display: block;
+    width: 100%;
+    height: auto;
+    min-height: 100dvh;
+    overflow: visible;
+  }
+
+  .map-pane {
+    display: none !important;
+  }
+
+  .detail-pane {
+    display: flex;
+    width: 100%;
+    min-width: 0;
+    height: auto;
+    min-height: 100dvh;
+    max-height: none;
+    overflow: visible;
+    border: 0;
+    padding: 8px;
+    gap: 6px;
+  }
+
+  .market-tabs {
+    min-height: 420px;
+  }
+}
