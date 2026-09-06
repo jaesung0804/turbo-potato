@@ -4,7 +4,7 @@
 <body class="guide-page">
 <main class="guide-main">
   <header><a class="guide-link" href="index.html">← 전체 실거래 비교</a><p class="eyebrow">MODEL & DATA</p><h1>가격을 비교하고, 불확실성도 함께 보기</h1><p id="model-status" role="status">검증 결과를 불러오는 중입니다.</p></header>
-  <nav class="guide-nav" aria-label="도움말 목차"><a href="#usage">사용 순서</a><a href="#score">점수 읽기</a><a href="#validation">과거 검증</a><a href="#coverage">전체 자료</a><a href="#limits">해석 범위</a></nav>
+  <nav class="guide-nav" aria-label="도움말 목차"><a href="#usage">사용 순서</a><a href="#score">점수 읽기</a><a href="#validation">과거 검증</a><a href="#comparison">후보 모델 비교</a><a href="#coverage">전체 자료</a><a href="#limits">해석 범위</a></nav>
   <section id="usage"><h2>사용 순서</h2><ol>
     <li>처음에는 최신 연도의 <b>AI 비교·평형</b>이 열립니다. 지역·가격·면적을 좁히거나 단지명을 검색하세요.</li>
     <li>단지를 누르면 정확한 전용면적별로 거래수, 가격, 참고 정보를 볼 수 있습니다. 같은 이름이어도 지번이 다르면 따로 구분합니다.</li>
@@ -14,14 +14,21 @@
   <section id="score"><h2>검토점수와 기준가격</h2>
     <div class="guide-cards"><article><h3>50 부근</h3><p>관측가격이 모델 기준가격과 비슷하거나, 거래가 적어 차이를 확신하기 어렵습니다.</p></article><article><h3>50보다 높을수록</h3><p>관측가격이 기준가격보다 낮은 방향입니다. 층·향·수리 상태·권리관계처럼 자료에 없는 이유를 먼저 확인하세요.</p></article><article><h3>50보다 낮을수록</h3><p>관측가격이 기준가격보다 높은 방향입니다. 좋은 개별 세대 특성이나 새 시장 상황이 반영됐을 수 있습니다.</p></article></div>
     <p>점수는 <b>상승 확률이나 예상 수익률이 아닙니다.</b> 거래수가 적으면 50으로 더 강하게 조정합니다. 80점이 80% 상승 확률을 뜻하지 않습니다.</p>
-    <p>기준가격은 전년도까지의 동일 평형 가격, 주변 가격, 면적, 연식, 지역과 거래 이력으로 계산합니다. 가벼운 LightGBM과 단순 전년 가격 기준을 섞되, 섞는 비중은 이전 연도에서 선택합니다. 모델은 월별로 저장하며 같은 달에는 다시 학습하지 않습니다.</p>
+    <p id="reference-method">기준가격은 전년도까지의 동일 평형 가격, 주변 가격, 면적, 연식, 지역과 거래 이력으로 계산합니다. 가벼운 LightGBM과 단순 전년 가격 기준을 섞되, 섞는 비중은 이전 연도에서 선택합니다. 모델은 월별로 저장하며 같은 달에는 다시 학습하지 않습니다.</p>
     <p><b>참고 범위</b>는 과거 오차의 80%를 포함하도록 설정한 가격 구간입니다. 거래가 적으면 더 넓어집니다. 시장 변화가 크면 실제 포함률이 80%보다 낮을 수 있으므로 아래 검증값을 함께 보세요.</p>
   </section>
   <section id="validation"><h2>과거 검증</h2><p>시험 연도보다 앞선 완결 연도만 학습합니다. 그 직전 연도에서 혼합 비중과 오차 구간을 정하며, 두 계산에 쓰는 단지 집합도 나눕니다. 시험 연도의 정답으로 비중을 고르지 않습니다.</p>
-    <div class="table-scroll"><table><thead><tr><th>시험 연도</th><th>평형 표본</th><th>모델 MAE</th><th>전년 기준 MAE</th><th>모델 중앙 오차율</th><th>±20% 이내</th><th>구간 포함률</th></tr></thead><tbody id="validation-rows"></tbody></table></div>
-    <p class="score-note">MAE 단위: 만원/평. 오차는 낮을수록, ±20% 이내 비율과 구간 포함률은 높을수록 좋습니다. 평형 단위의 과거 가격 오차이며 매매 전략의 수익률이 아닙니다.</p>
+    <div class="table-scroll"><table><thead><tr><th>시험 연도</th><th>평형 표본</th><th>모델 MAE</th><th>비교 기준 MAE</th><th>모델 중앙 오차율</th><th>±20% 이내</th><th>구간 포함률</th></tr></thead><tbody id="validation-rows"></tbody></table></div>
+    <p class="score-note">MAE 단위: 만원/평. 오차는 낮을수록, ±20% 이내 비율은 높을수록 좋습니다. 구간 포함률은 목표 80%와 비교하세요. 지나치게 넓은 범위도 포함률만 높일 수 있습니다. 평형 단위의 과거 가격 오차이며 매매 전략의 수익률이 아닙니다.</p>
     <div id="validation-regions"></div>
     <p id="model-comparison"></p>
+  </section>
+  <section id="comparison"><h2>후보 모델 비교</h2>
+    <p id="comparison-status">비교 결과가 아직 없습니다.</p>
+    <p>v4 후보는 동일 평형의 최근 3년 거래 이력과 유사 면적의 주변 가격을 보완하고, 이 기준에서 벗어난 가격 차이를 학습합니다. 같은 연도·같은 전체 평형으로 v3와 비교하며 시험 연도의 가격은 학습에 넣지 않습니다.</p>
+    <div class="table-scroll"><table><thead><tr><th>시험 연도</th><th>평형 수</th><th>v3 MAE</th><th>v4 MAE</th><th>오차 변화</th><th>v4 구간 포함률</th></tr></thead><tbody id="comparison-rows"></tbody></table></div>
+    <div id="comparison-segments"></div>
+    <p class="score-note">과거 자료로 한 비교이며 미래 수익률 개선을 뜻하지 않습니다. 후보는 별도 월 모델로 저장하며 기존 월 모델과 예측을 덮어쓰지 않습니다. 가격 오차와 구간 포함률을 함께 확인하세요.</p>
   </section>
   <section id="coverage"><h2>어디까지 수집하고 보여주나요?</h2><p>국토부 아파트 매매 API의 서울·경기·인천 전 시군구와 2021년 이후 계약 월을 수집합니다. API의 모든 페이지를 저장한 뒤 응답 건수와 저장 건수를 비교합니다. 아래의 집계 거래는 취소·직거래·유효하지 않은 가격 및 날짜를 제외한 범위입니다. 원본에는 취소·직거래도 보관합니다.</p>
     <div class="table-scroll"><table><thead><tr><th>기간</th><th>집계 거래</th><th>목록에 보존된 거래</th><th>단지·평형</th><th>보존 확인</th></tr></thead><tbody id="coverage-rows"></tbody></table></div>

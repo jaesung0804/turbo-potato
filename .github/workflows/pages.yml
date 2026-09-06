@@ -40,6 +40,7 @@ jobs:
           node --check web/app.js
           node --check web/model.js
           node tests/test_ui.cjs
+          node tests/test_model_guide.cjs
       - name: Restore checksum-verified complete raw state
         run: |
           set -euo pipefail

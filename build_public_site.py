@@ -9,7 +9,7 @@ from pathlib import Path
 
 from build_real_estate_dashboard_data import build_dashboard_data
 from dashboard_bundle import build_bundle
-from estate_model import run as run_model
+from estate_model import run as run_model, VERSION, CANDIDATE_VERSION
 from estate_io import write_json
 from shapely.geometry import shape, mapping
 
@@ -47,7 +47,7 @@ def apply_amenities(summary, path=Path('metadata/amenities_snapshot.json.gz')):
 
 
 def light_map(path):
-    data = json.loads(path.read_text())
+    data = json.loads(path.read_text(encoding='utf-8'))
     features = []
     for f in data['features']:
         geometry = shape(f['geometry']).simplify(.0006, preserve_topology=True)
@@ -57,9 +57,9 @@ def light_map(path):
     return {'type': 'FeatureCollection', 'features': features}
 
 
-def build(source, output, model_dir=Path('models'), month=None, summary_path=None, require_complete=True):
+def build(source, output, model_dir=Path('models'), month=None, summary_path=None, require_complete=True, model_version=VERSION):
     if require_complete:
-        collection = json.loads(source.with_suffix('.manifest.json').read_text())
+        collection = json.loads(source.with_suffix('.manifest.json').read_text(encoding='utf-8'))
         if not collection.get('complete') or collection.get('normalizer_version')!=2 or hashlib.sha256(source.read_bytes()).hexdigest() != collection['sha256']:
             raise ValueError('A complete, verified raw collection is required for publication')
     else:
@@ -69,7 +69,7 @@ def build(source, output, model_dir=Path('models'), month=None, summary_path=Non
     if summary_path is None:
         summary_path = work/'summary.json'
         build_dashboard_data(source, summary_path, {'아파트'}, 0, 0, False)
-    summary = json.loads(summary_path.read_text())
+    summary = json.loads(summary_path.read_text(encoding='utf-8'))
     if not summary['years']:
         raise ValueError('No valid transactions')
     if require_complete and summary['total_rows'] != collection['rows']:
@@ -77,18 +77,19 @@ def build(source, output, model_dir=Path('models'), month=None, summary_path=Non
     amenities = apply_amenities(summary)
     write_json(summary_path, summary)
     del summary
-    model = run_model(summary_path, work/'recommendations.json', model_dir, month)
-    summary = json.loads(summary_path.read_text())
+    recommendation_name='recommendations.json' if model_version==VERSION else 'recommendations-'+model_version+'.json'
+    model = run_model(summary_path, work/recommendation_name, model_dir, month,version=model_version)
+    summary = json.loads(summary_path.read_text(encoding='utf-8'))
     output.mkdir(parents=True, exist_ok=True)
     for name in UI_FILES:
         shutil.copy2(Path('web')/name, output/name)
     # A returning browser must load matching UI scripts after an HTML release.
     for page in ['index.html', 'model.html']:
-        html = (output/page).read_text()
+        html = (output/page).read_text(encoding='utf-8')
         for name in ['app.js', 'data-store.js', 'result-pages.js', 'model.js', 'styles.css']:
             version = hashlib.sha256((output/name).read_bytes()).hexdigest()[:16]
             html = html.replace('"'+name+'"', '"'+name+'?v='+version+'"')
-        (output/page).write_text(html)
+        (output/page).write_text(html,encoding='utf-8',newline='\n')
     (output/'.nojekyll').touch()
     # Remove obsolete release payloads; they never belong to the new manifest.
     if (output/'data').exists():
@@ -102,11 +103,14 @@ def build(source, output, model_dir=Path('models'), month=None, summary_path=Non
     manifest['release_id'] = os.getenv('GITHUB_RUN_ID', 'local')+'-'+os.getenv('GITHUB_RUN_ATTEMPT', '1')
     manifest['amenities'] = amenities
     manifest['map_note'] = '2025-06-30 시군구 경계. 2026년 개편 지역은 전체 목록에서 조회합니다.'
+    comparison_path=Path('reports/estate_model_comparison.json')
+    if comparison_path.exists():
+        manifest['model_comparison']=json.loads(comparison_path.read_text(encoding='utf-8'))
     validation = {k: v for k, v in model.items() if k != 'recommendations'}
-    (output/'data/model_validation.json').write_text(json.dumps(validation, ensure_ascii=False, indent=2))
+    write_json(output/'data/model_validation.json',validation,indent=2)
     manifest['ui_assets'] = {name: hashlib.sha256((output/name).read_bytes()).hexdigest()
                              for name in UI_FILES + ['data/model_validation.json']}
-    (output/'data/dashboard_manifest.json').write_text(json.dumps(manifest, ensure_ascii=False, indent=2))
+    write_json(output/'data/dashboard_manifest.json',manifest,indent=2)
     print(json.dumps({'source_rows': summary['total_rows'], 'used_rows': summary['used_rows'],
           'coverage': manifest['coverage'], 'model_month': model['model_month'], 'validation': model['validation'],
           'gzip_bytes': sum(p.stat().st_size for p in (output/'data/bundle').glob('*.gz'))}, ensure_ascii=False))
@@ -119,5 +123,6 @@ if __name__ == '__main__':
     parser.add_argument('--output', type=Path, default=Path('.work/site'))
     parser.add_argument('--model-dir', type=Path, default=Path('models'))
     parser.add_argument('--model-month')
+    parser.add_argument('--model-version',choices=[VERSION,CANDIDATE_VERSION],default=VERSION)
     args = parser.parse_args()
-    build(args.input, args.output, args.model_dir, args.model_month)
+    build(args.input, args.output, args.model_dir, args.model_month,model_version=args.model_version)

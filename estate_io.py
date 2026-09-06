@@ -6,7 +6,7 @@ from pathlib import Path
 def write_json(path, value, indent=None):
     path = Path(path); path.parent.mkdir(parents=True, exist_ok=True)
     temp = path.with_name(path.name+'.tmp')
-    with temp.open('w', encoding='utf-8') as stream:
+    with temp.open('w', encoding='utf-8', newline='\n') as stream:
         json.dump(value, stream, ensure_ascii=False, allow_nan=False,
                   indent=indent, separators=(',', ':') if indent is None else None)
     temp.replace(path)

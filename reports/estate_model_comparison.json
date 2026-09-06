@@ -1,0 +1,584 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-09-06",
+  "source_sha256": "b0bc6e5f8a8d1200ef3839a46f346c0a97bf26cfa5b6ffd2413c5af5a86aa772",
+  "runtime": {
+    "python": "3.12.4",
+    "platform": "Windows",
+    "lightgbm": "4.6.0",
+    "numpy": "2.3.5",
+    "pandas": "2.2.3",
+    "sklearn": "1.8.0"
+  },
+  "data_through": "2026-09-05",
+  "baseline_version": "estate-reference-v3",
+  "candidate_version": "estate-reference-v4",
+  "status": "research_only",
+  "selection_note": "No automatic replacement. One fixed candidate; weights use only the preceding year. Repeated comparison of these years is retrospective research, not new prospective evidence.",
+  "pooled_mae": {
+    "v3": 437.75,
+    "v4": 400.96
+  },
+  "folds": [
+    {
+      "test_year": 2023,
+      "rows": 28753,
+      "mae_change_pct": -8.48,
+      "v3": {
+        "test_year": 2023,
+        "trained_through": 2022,
+        "weight_selected_on": 2022,
+        "ml_weight": 0,
+        "model": {
+          "rows": 28753,
+          "mae_price_per_pyeong": 548.88,
+          "median_absolute_pct_error": 17.31,
+          "within_20pct": 0.5698
+        },
+        "baseline": {
+          "rows": 28753,
+          "mae_price_per_pyeong": 548.88,
+          "median_absolute_pct_error": 17.31,
+          "within_20pct": 0.5698
+        },
+        "interval_target_coverage": 0.8,
+        "interval_actual_coverage": 0.8561,
+        "tuning_rows": 10627,
+        "calibration_rows": 10533,
+        "calibration_split": "disjoint apartment complexes in the preceding year",
+        "regions": {
+          "경기도": {
+            "rows": 15404,
+            "mae_price_per_pyeong": 395.47,
+            "median_absolute_pct_error": 17.07,
+            "within_20pct": 0.5793
+          },
+          "서울특별시": {
+            "rows": 9436,
+            "mae_price_per_pyeong": 900.07,
+            "median_absolute_pct_error": 17.25,
+            "within_20pct": 0.5682
+          },
+          "인천광역시": {
+            "rows": 3913,
+            "mae_price_per_pyeong": 305.92,
+            "median_absolute_pct_error": 18.44,
+            "within_20pct": 0.5362
+          }
+        },
+        "segments": {
+          "with_prior": {
+            "model": {
+              "rows": 15920,
+              "mae_price_per_pyeong": 379.37,
+              "median_absolute_pct_error": 15.38,
+              "within_20pct": 0.6405
+            },
+            "baseline": {
+              "rows": 15920,
+              "mae_price_per_pyeong": 379.37,
+              "median_absolute_pct_error": 15.38,
+              "within_20pct": 0.6405
+            },
+            "interval_actual_coverage": 0.93
+          },
+          "without_prior": {
+            "model": {
+              "rows": 12833,
+              "mae_price_per_pyeong": 759.16,
+              "median_absolute_pct_error": 21.0,
+              "within_20pct": 0.4821
+            },
+            "baseline": {
+              "rows": 12833,
+              "mae_price_per_pyeong": 759.16,
+              "median_absolute_pct_error": 21.0,
+              "within_20pct": 0.4821
+            },
+            "interval_actual_coverage": 0.7644
+          },
+          "under_3_trades": {
+            "model": {
+              "rows": 14332,
+              "mae_price_per_pyeong": 641.68,
+              "median_absolute_pct_error": 18.12,
+              "within_20pct": 0.5424
+            },
+            "baseline": {
+              "rows": 14332,
+              "mae_price_per_pyeong": 641.68,
+              "median_absolute_pct_error": 18.12,
+              "within_20pct": 0.5424
+            },
+            "interval_actual_coverage": 0.8467
+          }
+        }
+      },
+      "v4": {
+        "test_year": 2023,
+        "trained_through": 2022,
+        "weight_selected_on": 2022,
+        "ml_weight": 0,
+        "model": {
+          "rows": 28753,
+          "mae_price_per_pyeong": 502.31,
+          "median_absolute_pct_error": 15.71,
+          "within_20pct": 0.6245
+        },
+        "baseline": {
+          "rows": 28753,
+          "mae_price_per_pyeong": 502.31,
+          "median_absolute_pct_error": 15.71,
+          "within_20pct": 0.6245
+        },
+        "interval_target_coverage": 0.8,
+        "interval_actual_coverage": 0.774,
+        "tuning_rows": 10627,
+        "calibration_rows": 10533,
+        "calibration_split": "disjoint apartment complexes in the preceding year",
+        "regions": {
+          "경기도": {
+            "rows": 15404,
+            "mae_price_per_pyeong": 360.87,
+            "median_absolute_pct_error": 15.69,
+            "within_20pct": 0.6287
+          },
+          "서울특별시": {
+            "rows": 9436,
+            "mae_price_per_pyeong": 830.27,
+            "median_absolute_pct_error": 15.79,
+            "within_20pct": 0.6243
+          },
+          "인천광역시": {
+            "rows": 3913,
+            "mae_price_per_pyeong": 268.25,
+            "median_absolute_pct_error": 15.69,
+            "within_20pct": 0.6082
+          }
+        },
+        "segments": {
+          "with_prior": {
+            "model": {
+              "rows": 15920,
+              "mae_price_per_pyeong": 379.37,
+              "median_absolute_pct_error": 15.38,
+              "within_20pct": 0.6405
+            },
+            "baseline": {
+              "rows": 15920,
+              "mae_price_per_pyeong": 379.37,
+              "median_absolute_pct_error": 15.38,
+              "within_20pct": 0.6405
+            },
+            "interval_actual_coverage": 0.6735
+          },
+          "without_prior": {
+            "model": {
+              "rows": 12833,
+              "mae_price_per_pyeong": 654.82,
+              "median_absolute_pct_error": 16.11,
+              "within_20pct": 0.6046
+            },
+            "baseline": {
+              "rows": 12833,
+              "mae_price_per_pyeong": 654.82,
+              "median_absolute_pct_error": 16.11,
+              "within_20pct": 0.6046
+            },
+            "interval_actual_coverage": 0.8987
+          },
+          "under_3_trades": {
+            "model": {
+              "rows": 14332,
+              "mae_price_per_pyeong": 571.74,
+              "median_absolute_pct_error": 14.96,
+              "within_20pct": 0.6299
+            },
+            "baseline": {
+              "rows": 14332,
+              "mae_price_per_pyeong": 571.74,
+              "median_absolute_pct_error": 14.96,
+              "within_20pct": 0.6299
+            },
+            "interval_actual_coverage": 0.8592
+          }
+        }
+      }
+    },
+    {
+      "test_year": 2024,
+      "rows": 33380,
+      "mae_change_pct": -9.76,
+      "v3": {
+        "test_year": 2024,
+        "trained_through": 2023,
+        "weight_selected_on": 2023,
+        "ml_weight": 0.75,
+        "model": {
+          "rows": 33380,
+          "mae_price_per_pyeong": 366.76,
+          "median_absolute_pct_error": 8.23,
+          "within_20pct": 0.846
+        },
+        "baseline": {
+          "rows": 33380,
+          "mae_price_per_pyeong": 367.77,
+          "median_absolute_pct_error": 6.65,
+          "within_20pct": 0.8341
+        },
+        "interval_target_coverage": 0.8,
+        "interval_actual_coverage": 0.9631,
+        "tuning_rows": 14576,
+        "calibration_rows": 14177,
+        "calibration_split": "disjoint apartment complexes in the preceding year",
+        "regions": {
+          "경기도": {
+            "rows": 16883,
+            "mae_price_per_pyeong": 215.78,
+            "median_absolute_pct_error": 7.35,
+            "within_20pct": 0.8874
+          },
+          "서울특별시": {
+            "rows": 12161,
+            "mae_price_per_pyeong": 638.16,
+            "median_absolute_pct_error": 9.23,
+            "within_20pct": 0.797
+          },
+          "인천광역시": {
+            "rows": 4336,
+            "mae_price_per_pyeong": 193.45,
+            "median_absolute_pct_error": 9.11,
+            "within_20pct": 0.8226
+          }
+        },
+        "segments": {
+          "with_prior": {
+            "model": {
+              "rows": 23327,
+              "mae_price_per_pyeong": 252.43,
+              "median_absolute_pct_error": 6.68,
+              "within_20pct": 0.9465
+            },
+            "baseline": {
+              "rows": 23327,
+              "mae_price_per_pyeong": 195.73,
+              "median_absolute_pct_error": 4.91,
+              "within_20pct": 0.9725
+            },
+            "interval_actual_coverage": 0.9937
+          },
+          "without_prior": {
+            "model": {
+              "rows": 10053,
+              "mae_price_per_pyeong": 632.06,
+              "median_absolute_pct_error": 15.49,
+              "within_20pct": 0.613
+            },
+            "baseline": {
+              "rows": 10053,
+              "mae_price_per_pyeong": 766.99,
+              "median_absolute_pct_error": 19.42,
+              "within_20pct": 0.5128
+            },
+            "interval_actual_coverage": 0.8923
+          },
+          "under_3_trades": {
+            "model": {
+              "rows": 15130,
+              "mae_price_per_pyeong": 461.39,
+              "median_absolute_pct_error": 10.64,
+              "within_20pct": 0.7422
+            },
+            "baseline": {
+              "rows": 15130,
+              "mae_price_per_pyeong": 518.17,
+              "median_absolute_pct_error": 10.59,
+              "within_20pct": 0.7028
+            },
+            "interval_actual_coverage": 0.9412
+          }
+        }
+      },
+      "v4": {
+        "test_year": 2024,
+        "trained_through": 2023,
+        "weight_selected_on": 2023,
+        "ml_weight": 0.25,
+        "model": {
+          "rows": 33380,
+          "mae_price_per_pyeong": 330.98,
+          "median_absolute_pct_error": 6.81,
+          "within_20pct": 0.8772
+        },
+        "baseline": {
+          "rows": 33380,
+          "mae_price_per_pyeong": 332.84,
+          "median_absolute_pct_error": 6.35,
+          "within_20pct": 0.8673
+        },
+        "interval_target_coverage": 0.8,
+        "interval_actual_coverage": 0.9314,
+        "tuning_rows": 14576,
+        "calibration_rows": 14177,
+        "calibration_split": "disjoint apartment complexes in the preceding year",
+        "regions": {
+          "경기도": {
+            "rows": 16883,
+            "mae_price_per_pyeong": 192.52,
+            "median_absolute_pct_error": 6.13,
+            "within_20pct": 0.9064
+          },
+          "서울특별시": {
+            "rows": 12161,
+            "mae_price_per_pyeong": 581.49,
+            "median_absolute_pct_error": 7.92,
+            "within_20pct": 0.8434
+          },
+          "인천광역시": {
+            "rows": 4336,
+            "mae_price_per_pyeong": 167.53,
+            "median_absolute_pct_error": 6.94,
+            "within_20pct": 0.8584
+          }
+        },
+        "segments": {
+          "with_prior": {
+            "model": {
+              "rows": 23327,
+              "mae_price_per_pyeong": 215.33,
+              "median_absolute_pct_error": 5.6,
+              "within_20pct": 0.9714
+            },
+            "baseline": {
+              "rows": 23327,
+              "mae_price_per_pyeong": 195.73,
+              "median_absolute_pct_error": 4.91,
+              "within_20pct": 0.9725
+            },
+            "interval_actual_coverage": 0.9862
+          },
+          "without_prior": {
+            "model": {
+              "rows": 10053,
+              "mae_price_per_pyeong": 599.33,
+              "median_absolute_pct_error": 13.22,
+              "within_20pct": 0.6585
+            },
+            "baseline": {
+              "rows": 10053,
+              "mae_price_per_pyeong": 651.0,
+              "median_absolute_pct_error": 14.62,
+              "within_20pct": 0.6231
+            },
+            "interval_actual_coverage": 0.8043
+          },
+          "under_3_trades": {
+            "model": {
+              "rows": 15130,
+              "mae_price_per_pyeong": 438.62,
+              "median_absolute_pct_error": 8.91,
+              "within_20pct": 0.7833
+            },
+            "baseline": {
+              "rows": 15130,
+              "mae_price_per_pyeong": 461.71,
+              "median_absolute_pct_error": 9.09,
+              "within_20pct": 0.7659
+            },
+            "interval_actual_coverage": 0.8902
+          }
+        }
+      }
+    },
+    {
+      "test_year": 2025,
+      "rows": 36277,
+      "mae_change_pct": -7.22,
+      "v3": {
+        "test_year": 2025,
+        "trained_through": 2024,
+        "weight_selected_on": 2024,
+        "ml_weight": 0.25,
+        "model": {
+          "rows": 36277,
+          "mae_price_per_pyeong": 414.98,
+          "median_absolute_pct_error": 6.25,
+          "within_20pct": 0.8464
+        },
+        "baseline": {
+          "rows": 36277,
+          "mae_price_per_pyeong": 433.03,
+          "median_absolute_pct_error": 6.31,
+          "within_20pct": 0.8362
+        },
+        "interval_target_coverage": 0.8,
+        "interval_actual_coverage": 0.8817,
+        "tuning_rows": 16830,
+        "calibration_rows": 16550,
+        "calibration_split": "disjoint apartment complexes in the preceding year",
+        "regions": {
+          "경기도": {
+            "rows": 17698,
+            "mae_price_per_pyeong": 198.57,
+            "median_absolute_pct_error": 4.96,
+            "within_20pct": 0.8933
+          },
+          "서울특별시": {
+            "rows": 14114,
+            "mae_price_per_pyeong": 771.65,
+            "median_absolute_pct_error": 9.21,
+            "within_20pct": 0.7813
+          },
+          "인천광역시": {
+            "rows": 4465,
+            "mae_price_per_pyeong": 145.3,
+            "median_absolute_pct_error": 4.77,
+            "within_20pct": 0.8663
+          }
+        },
+        "segments": {
+          "with_prior": {
+            "model": {
+              "rows": 27043,
+              "mae_price_per_pyeong": 282.7,
+              "median_absolute_pct_error": 4.75,
+              "within_20pct": 0.9607
+            },
+            "baseline": {
+              "rows": 27043,
+              "mae_price_per_pyeong": 282.72,
+              "median_absolute_pct_error": 4.71,
+              "within_20pct": 0.9584
+            },
+            "interval_actual_coverage": 0.9621
+          },
+          "without_prior": {
+            "model": {
+              "rows": 9234,
+              "mae_price_per_pyeong": 802.38,
+              "median_absolute_pct_error": 19.34,
+              "within_20pct": 0.5116
+            },
+            "baseline": {
+              "rows": 9234,
+              "mae_price_per_pyeong": 873.22,
+              "median_absolute_pct_error": 21.18,
+              "within_20pct": 0.4786
+            },
+            "interval_actual_coverage": 0.6462
+          },
+          "under_3_trades": {
+            "model": {
+              "rows": 15662,
+              "mae_price_per_pyeong": 546.65,
+              "median_absolute_pct_error": 9.75,
+              "within_20pct": 0.7229
+            },
+            "baseline": {
+              "rows": 15662,
+              "mae_price_per_pyeong": 584.96,
+              "median_absolute_pct_error": 10.29,
+              "within_20pct": 0.7043
+            },
+            "interval_actual_coverage": 0.8192
+          }
+        }
+      },
+      "v4": {
+        "test_year": 2025,
+        "trained_through": 2024,
+        "weight_selected_on": 2024,
+        "ml_weight": 0.25,
+        "model": {
+          "rows": 36277,
+          "mae_price_per_pyeong": 385.02,
+          "median_absolute_pct_error": 5.74,
+          "within_20pct": 0.8733
+        },
+        "baseline": {
+          "rows": 36277,
+          "mae_price_per_pyeong": 408.63,
+          "median_absolute_pct_error": 6.02,
+          "within_20pct": 0.8627
+        },
+        "interval_target_coverage": 0.8,
+        "interval_actual_coverage": 0.8116,
+        "tuning_rows": 16830,
+        "calibration_rows": 16550,
+        "calibration_split": "disjoint apartment complexes in the preceding year",
+        "regions": {
+          "경기도": {
+            "rows": 17698,
+            "mae_price_per_pyeong": 181.26,
+            "median_absolute_pct_error": 4.62,
+            "within_20pct": 0.9138
+          },
+          "서울특별시": {
+            "rows": 14114,
+            "mae_price_per_pyeong": 721.28,
+            "median_absolute_pct_error": 8.46,
+            "within_20pct": 0.8159
+          },
+          "인천광역시": {
+            "rows": 4465,
+            "mae_price_per_pyeong": 129.74,
+            "median_absolute_pct_error": 4.36,
+            "within_20pct": 0.8938
+          }
+        },
+        "segments": {
+          "with_prior": {
+            "model": {
+              "rows": 27043,
+              "mae_price_per_pyeong": 265.51,
+              "median_absolute_pct_error": 4.49,
+              "within_20pct": 0.9638
+            },
+            "baseline": {
+              "rows": 27043,
+              "mae_price_per_pyeong": 282.72,
+              "median_absolute_pct_error": 4.71,
+              "within_20pct": 0.9584
+            },
+            "interval_actual_coverage": 0.8305
+          },
+          "without_prior": {
+            "model": {
+              "rows": 9234,
+              "mae_price_per_pyeong": 735.04,
+              "median_absolute_pct_error": 15.07,
+              "within_20pct": 0.6082
+            },
+            "baseline": {
+              "rows": 9234,
+              "mae_price_per_pyeong": 777.38,
+              "median_absolute_pct_error": 15.78,
+              "within_20pct": 0.5824
+            },
+            "interval_actual_coverage": 0.7566
+          },
+          "under_3_trades": {
+            "model": {
+              "rows": 15662,
+              "mae_price_per_pyeong": 508.49,
+              "median_absolute_pct_error": 8.59,
+              "within_20pct": 0.7696
+            },
+            "baseline": {
+              "rows": 15662,
+              "mae_price_per_pyeong": 539.6,
+              "median_absolute_pct_error": 8.96,
+              "within_20pct": 0.7536
+            },
+            "interval_actual_coverage": 0.8082
+          }
+        }
+      }
+    }
+  ],
+  "limitations": [
+    "Annual observed-price comparison, not a return forecast.",
+    "Historical records include later corrections; archived as-of observations are unavailable.",
+    "Past-year intervals do not guarantee future coverage."
+  ]
+}

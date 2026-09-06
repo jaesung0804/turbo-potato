@@ -26,6 +26,28 @@
 
 시설 자료는 이전 저장본에서 일치하는 이름·준공연도만 보수적으로 이어받았습니다. 같은 이름의 다른 지번이 있으면 자동 연결하지 않습니다. 실제 관측일이 없어 과거 학습에는 사용하지 않으며 미확인은 빈 값으로 남깁니다. 표시용 스냅샷의 출처는 `metadata/amenities_snapshot.json.gz`에 기록돼 있습니다.
 
+## v4 후보 모델 비교
+
+운영 기본값과 기존 월 모델은 `estate-reference-v3`로 유지합니다. `estate-reference-v4`는 별도 버전·월 파일에 저장하는 후보입니다. 동일 평형의 전년도 거래가 없을 때 최근 3년 이력을 찾고, 이력이 없으면 비슷한 면적의 동·구·시도 가격을 비교 기준으로 씁니다. LightGBM은 기준가격에서 벗어난 로그 가격 차이를 학습합니다. 거래 표본 수로 보정한 오차를 지역·전년도 이력 유무별로 나눠 가격 범위를 계산합니다.
+
+2026-09-05까지 복원된 전체 자료의 2023~2025년 시험 평형 98,410개에서 가중 평균 MAE는 **437.75 → 400.96만원/평(8.40% 감소)**였습니다. 연도별 감소율은 **8.48%, 9.76%, 7.22%**입니다. 서울·경기·인천의 각 시험 연도에서도 MAE가 감소했습니다. v3를 같은 Windows 환경에서 다시 학습한 전체 MAE는 기존 공개 검증값과 일치했습니다.
+
+가격 범위는 아직 주의해서 해석해야 합니다. v4의 연도별 포함률은 **77.40%, 93.14%, 81.16%**이며, 2023년 전년도 이력 보유 집단은 **67.35%**에 그쳤습니다. 2025년 전년도 이력이 없는 집단도 **75.66%**였습니다. 과거 가격 오차 개선이 미래 수익률이나 구간의 신뢰도를 보장하지 않습니다. 비교를 근거로 운영 모델을 자동 교체하지 않습니다.
+
+[전체 비교 JSON](reports/estate_model_comparison.json) · [저장소 점검 및 검증 기록](reports/estate_model_audit_20260906.md). 사용법 페이지의 **후보 모델 비교**에서 동일한 결과와 집단별 오차를 볼 수 있습니다. 보고서는 해당 자료 스냅샷의 결과이며 일 배치마다 새로 수행한 실험은 아닙니다.
+
+```bash
+# 전체 집계가 만들어진 뒤 동일 자료로 두 모델 재비교
+python compare_estate_models.py
+# 기존 v3 월 모델과 별개로 v4 월 모델 생성/재사용
+python train_house_match_model.py --model-version estate-reference-v4 --output .work/build/recommendations_v4.json
+# 후보의 전체 결과를 별도 로컬 사이트로 생성
+python build_public_site.py --model-version estate-reference-v4 --output .work/site-v4
+python run_real_estate_dashboard.py --skip-build --site-dir .work/site-v4
+```
+
+Windows/Python 3.12 환경에서 LightGBM 4.7.0의 최소 학습·추론 예제가 접근 위반으로 실패해 Windows만 4.6.0을 사용합니다. Linux의 4.7.0 고정은 유지합니다. 비교 JSON에는 실행 환경과 입력 SHA-256을 기록합니다. 한국어 JSON·HTML은 UTF-8로, 텍스트 줄바꿈은 LF로 저장합니다.
+
 ## 수집과 상태 보존
 
 `collect_estate_transactions.py`는 국토부 일반 아파트 매매 API의 모든 페이지를 읽습니다. 상세 API의 권한에 의존하지 않습니다. 2026년 9월 기준 83개 시군구와 2021년 이후 계약 월을 조회합니다. 부천·화성·인천 개편 지역의 과거 자료가 새 코드로 반환되는지 별도로 확인했습니다.
@@ -60,6 +82,7 @@ python run_real_estate_dashboard.py --skip-build
 pip install pytest
 python -m pytest -q tests
 node tests/test_ui.cjs
+node tests/test_model_guide.cjs
 ```
 
 CI는 상태 저장 후 Pages를 배포하고 **실제 공개 URL의 HTML·전체 연도 gzip·모델 메타데이터 해시**를 다시 확인합니다. 커밋 반영만으로 사이트 갱신을 성공 처리하지 않습니다.

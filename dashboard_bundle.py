@@ -37,5 +37,5 @@ def build_bundle(summary,model,root,map_data):
         'catalog':asset(root,'catalog',{'regions':regions,'addresses':catalog}),'history':asset(root,'history',history),
         'periods':{year:asset(root,'period-'+year,rows) for year,rows in periods.items()},
         'recommendations':asset(root,'recommendations',model),'map':asset(root,'map',map_data)}
-    (root.parent/'dashboard_manifest.json').write_text(json.dumps(manifest,ensure_ascii=False,indent=2))
+    (root.parent/'dashboard_manifest.json').write_text(json.dumps(manifest,ensure_ascii=False,indent=2),encoding='utf-8',newline='\n')
     return manifest

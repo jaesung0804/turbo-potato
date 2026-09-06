@@ -11,7 +11,9 @@ from estate_io import write_json
 from estate_calendar import today
 
 VERSION='estate-reference-v3'
+CANDIDATE_VERSION='estate-reference-v4'
 NUMERIC=['year','area','age','prior_price','prior_peer','momentum','prior_count','peer_count']
+EXTRA_NUMERIC=['reference_anchor','last_price','history_gap','matched_peer','matched_peer_count']
 CATEGORICAL=['sido','gu','dong','area_band']
 
 def number(value):
@@ -24,7 +26,7 @@ def price(b,metric='price_per_pyeong'):
     m=(b or {}).get('metrics',{}).get(metric,{})
     return number(m.get('median')) or number(m.get('avg'))
 
-def dataset(summary):
+def dataset(summary,enhanced=False):
     history={};peers={}
     for r in summary['regions']:
         loc=(r.get('sido_name',''),r.get('gu_name',''),r.get('dong_name',''))
@@ -59,11 +61,54 @@ def dataset(summary):
                     'area_type':b.get('area_type'),'price_billion':price(b,'price_billion'),'price_per_pyeong':pp,
                     'area_pyeong':area,'trade_count':b['count'],'prior_price_per_pyeong':p1,
                     **{k:b.get(k) for k in ['households','built_year','elementary_500m','subway_lines','subway_station','subway_distance_m','latitude','longitude']}})
-    return pd.DataFrame(rows),payload
+    frame=pd.DataFrame(rows)
+    if enhanced:
+        frame=reference_history(frame,payload)
+    return frame,payload
 
-def matrix(frame,categories):
-    x=frame[NUMERIC+CATEGORICAL].copy()
-    for name in NUMERIC:x[name]=pd.to_numeric(x[name],errors='coerce')
+
+def reference_history(frame,payload):
+    """Build comparable anchors exclusively from earlier calendar years.
+
+    An exact type's last observation is usable for at most three years. When
+    unavailable, compare similar areas in the dong, gu, then province. Small
+    peer pools fall back to a wider geography instead of a single apartment.
+    """
+    frame=frame.copy()
+    frame['type_key']=[p['building_key'] for p in payload]
+    additions={name:pd.Series(np.nan,index=frame.index) for name in EXTRA_NUMERIC}
+    history={}
+    for year in sorted(frame.year.unique()):
+        current=frame[frame.year==year]
+        previous=frame[frame.year==year-1]
+        peers=[]
+        for geography,minimum in [('dong',5),('gu',10),('sido',20)]:
+            stats=previous.groupby([geography,'area_band']).target.agg(['median','count'])
+            peers.append((geography,minimum,stats))
+        for idx,row in current.iterrows():
+            key=(row.dong,row.type_key)
+            last=history.get(key)
+            if last and year-last[0]<=3:
+                additions['last_price'].at[idx]=last[1]
+                additions['history_gap'].at[idx]=year-last[0]
+            for geography,minimum,stats in peers:
+                peer_key=(row[geography],row.area_band)
+                if peer_key in stats.index and stats.at[peer_key,'count']>=minimum:
+                    additions['matched_peer'].at[idx]=stats.at[peer_key,'median']
+                    additions['matched_peer_count'].at[idx]=stats.at[peer_key,'count']
+                    break
+        # Update after the entire year, so neither input order nor another
+        # current-year transaction can leak into a reference feature.
+        for row in current.itertuples():
+            history[(row.dong,row.type_key)]=(year,row.target)
+    for name,value in additions.items():frame[name]=value
+    frame['reference_anchor']=frame.prior_price.fillna(frame.last_price).fillna(frame.matched_peer).fillna(frame.prior_peer)
+    return frame.drop(columns='type_key')
+
+def matrix(frame,categories,numeric=None):
+    numeric=numeric or NUMERIC
+    x=frame[numeric+CATEGORICAL].copy()
+    for name in numeric:x[name]=pd.to_numeric(x[name],errors='coerce')
     for name in CATEGORICAL:x[name]=pd.Categorical(x[name],categories=categories[name])
     return x
 
@@ -72,22 +117,44 @@ def fit(frame):
     categories={name:sorted(frame[name].dropna().unique()) for name in CATEGORICAL}
     model=LGBMRegressor(objective='regression_l1',n_estimators=180,learning_rate=.045,num_leaves=15,
         min_child_samples=45,reg_lambda=8,colsample_bytree=.9,random_state=202609,n_jobs=2,verbosity=-1)
-    model.fit(matrix(frame,categories),frame.target)
-    return {'model':model,'categories':categories,'fallback':float(frame.target.median())}
+    residual='reference_anchor' in frame
+    numeric=NUMERIC+EXTRA_NUMERIC if residual else NUMERIC
+    fallback=float(frame.target.median())
+    target=frame.target.to_numpy()-baseline(frame,fallback) if residual else frame.target
+    model.fit(matrix(frame,categories,numeric),target)
+    return {'model':model,'categories':categories,'fallback':fallback,
+        'numeric_features':numeric,'residual':residual}
 
-def baseline(frame,fallback):return frame.prior_price.fillna(frame.prior_peer).fillna(fallback).to_numpy(float)
+def baseline(frame,fallback):
+    anchor=frame.reference_anchor if 'reference_anchor' in frame else frame.prior_price.fillna(frame.prior_peer)
+    return anchor.fillna(fallback).to_numpy(float)
 def predict(fitted,frame,weight):
-    return weight*fitted['model'].predict(matrix(frame,fitted['categories']))+(1-weight)*baseline(frame,fitted['fallback'])
+    anchor=baseline(frame,fitted['fallback'])
+    predicted=fitted['model'].predict(matrix(frame,fitted['categories'],fitted.get('numeric_features')))
+    if fitted.get('residual'):return anchor+weight*predicted
+    return weight*predicted+(1-weight)*anchor
 
 def metrics(actual,predicted):
     a,p=np.exp(actual),np.exp(predicted);error=np.abs(a-p);ape=error/a
     return {'rows':len(a),'mae_price_per_pyeong':round(float(error.mean()),2),
         'median_absolute_pct_error':round(float(np.median(ape)*100),2),'within_20pct':round(float((ape<=.2).mean()),4)}
 
-def quantile(errors):
+def quantile(errors,exact=False):
     if not len(errors):raise ValueError('Missing calibration observations')
+    if exact:
+        rank=min(len(errors),math.ceil((len(errors)+1)*.8))
+        return float(np.sort(errors)[rank-1])
     q=min(1,math.ceil((len(errors)+1)*.8)/len(errors))
     return float(np.quantile(errors,q,method='higher'))
+
+
+def sample_scale(counts):return np.sqrt(1+2/np.maximum(np.asarray(counts,float),1))
+
+
+def interval_errors(interval,frame):
+    groups=interval.get('by_history',{})
+    return np.array([groups.get(s+'|'+str(bool(has_prior)),interval['by_sido'].get(s,interval['global']))
+        for s,has_prior in zip(frame.sido,frame.prior_price.notna())])
 
 def tune(frame,year):
     training=frame[frame.year<year];validation=frame[frame.year==year]
@@ -98,9 +165,16 @@ def tune(frame,year):
     fitted=fit(training)
     choices=[(metrics(tuning.target.to_numpy(),predict(fitted,tuning,w))['mae_price_per_pyeong'],w) for w in [0,.25,.5,.75,1]]
     weight=min(choices)[1];errors=np.abs(calibration.target.to_numpy()-predict(fitted,calibration,weight))
-    interval={'global':quantile(errors),'by_sido':{s:quantile(errors[calibration.sido.to_numpy()==s])
+    enhanced='reference_anchor' in frame
+    if enhanced:errors=errors/sample_scale(calibration['count'])
+    interval={'global':quantile(errors,enhanced),'by_sido':{s:quantile(errors[calibration.sido.to_numpy()==s],enhanced)
         for s in calibration.sido.unique() if (calibration.sido==s).sum()>=100},
         'tuning_rows':len(tuning),'calibration_rows':len(calibration)}
+    if enhanced:
+        groups=calibration.sido+'|'+calibration.prior_price.notna().astype(str)
+        interval['by_history']={g:quantile(errors[(groups==g).to_numpy()],True)
+            for g in groups.unique() if (groups==g).sum()>=100}
+        interval['method']='sample-scaled order statistic by region and prior-history availability'
     return weight,interval
 
 def evaluate(frame,closed_year):
@@ -110,31 +184,37 @@ def evaluate(frame,closed_year):
         if min(len(training),len(test))<100:continue
         weight,interval=tune(training,year-1);fitted=fit(training)
         predicted=predict(fitted,test,weight);actual=test.target.to_numpy()
-        width=np.array([interval['by_sido'].get(s,interval['global']) for s in test.sido])*np.sqrt(1+2/np.maximum(test['count'].to_numpy(),1))
+        width=interval_errors(interval,test)*sample_scale(test['count'])
         folds.append({'test_year':int(year),'trained_through':int(year-1),'weight_selected_on':int(year-1),'ml_weight':weight,
             'model':metrics(actual,predicted),'baseline':metrics(actual,baseline(test,fitted['fallback'])),
             'interval_target_coverage':.8,'interval_actual_coverage':round(float((np.abs(actual-predicted)<=width).mean()),4),
             'tuning_rows':interval['tuning_rows'],'calibration_rows':interval['calibration_rows'],
             'calibration_split':'disjoint apartment complexes in the preceding year',
-            'regions':{s:metrics(actual[test.sido.to_numpy()==s],predicted[test.sido.to_numpy()==s]) for s in sorted(test.sido.unique())}})
+            'regions':{s:metrics(actual[test.sido.to_numpy()==s],predicted[test.sido.to_numpy()==s]) for s in sorted(test.sido.unique())},
+            'segments':{name:{'model':metrics(actual[mask],predicted[mask]),
+                'baseline':metrics(actual[mask],baseline(test,fitted['fallback'])[mask]),
+                'interval_actual_coverage':round(float((np.abs(actual-predicted)[mask]<=width[mask]).mean()),4)}
+                for name,mask in {'with_prior':test.prior_price.notna().to_numpy(),
+                    'without_prior':test.prior_price.isna().to_numpy(),'under_3_trades':(test['count']<3).to_numpy()}.items() if mask.any()}})
     return folds
 
-def run(summary_path,output_path,model_dir,month=None,mode='auto'):
-    summary=json.loads(Path(summary_path).read_text());frame,payload=dataset(summary)
+def run(summary_path,output_path,model_dir,month=None,mode='auto',version=VERSION):
+    if version not in (VERSION,CANDIDATE_VERSION):raise ValueError('Unsupported model version')
+    summary=json.loads(Path(summary_path).read_text(encoding='utf-8'));frame,payload=dataset(summary,version==CANDIDATE_VERSION)
     month=month or today().strftime('%Y-%m')
     if date.fromisoformat(month+'-01').strftime('%Y-%m')!=month:raise ValueError('Invalid model month')
-    artifact_path=Path(model_dir)/VERSION/(month+'.joblib')
+    artifact_path=Path(model_dir)/version/(month+'.joblib')
     if artifact_path.exists():
         if mode=='train':raise FileExistsError('Monthly models cannot be overwritten')
         artifact=joblib.load(artifact_path)
-        if artifact.get('version')!=VERSION or artifact['model_month']!=month:raise ValueError('Frozen model identity mismatch')
+        if artifact.get('version')!=version or artifact['model_month']!=month:raise ValueError('Frozen model identity mismatch')
     else:
         if mode=='infer':raise FileNotFoundError('Train the current model month first')
         cutoff=min(int(month[:4])-1,int(frame.year.max())-1)
         training=frame[frame.year<=cutoff];folds=evaluate(frame,cutoff)
         if not folds:raise ValueError('At least three completed years are required for independent validation')
         weight,interval=tune(training,cutoff)
-        artifact={**fit(training),'version':VERSION,'model_month':month,'created_at':today().isoformat(),
+        artifact={**fit(training),'version':version,'model_month':month,'created_at':today().isoformat(),
             'trained_through':f'{cutoff}-12-31','training_rows':len(training),'data_snapshot':summary['generated_at'],
             'training_sha256':hashlib.sha256(training.to_json().encode()).hexdigest(),'ml_weight':weight,'interval':interval,'validation':folds}
         artifact_path.parent.mkdir(parents=True,exist_ok=True);joblib.dump(artifact,artifact_path,compress=3)
@@ -142,8 +222,8 @@ def run(summary_path,output_path,model_dir,month=None,mode='auto'):
     if int(artifact['trained_through'][:4])>=latest:raise ValueError('Inference must follow training')
     prices=np.exp(predict(artifact,current,artifact['ml_weight']));results=[]
     current_payload=[p for p,keep in zip(payload,mask) if keep]
-    for p,fair in zip(current_payload,prices):
-        n=p['trade_count'];confidence=n/(n+5);error=artifact['interval']['by_sido'].get(p['sido_name'],artifact['interval']['global'])
+    for p,fair,error in zip(current_payload,prices,interval_errors(artifact['interval'],current)):
+        n=p['trade_count'];confidence=n/(n+5)
         width=error*math.sqrt(1+2/max(n,1));gap=math.log(fair/p['price_per_pyeong'])
         score=50+40*math.tanh(gap/max(error,.05))*confidence;flags=[]
         if n<3:flags.append('거래 표본 3건 미만')
@@ -153,13 +233,13 @@ def run(summary_path,output_path,model_dir,month=None,mode='auto'):
             'reference_high':round(fair*math.exp(width),1),'house_match_score':round(score,1),'sample_confidence':round(confidence,3),
             'undervalue_pct':round((fair/p['price_per_pyeong']-1)*100,1),'quality_flags':flags,'expected_growth_pct':None})
     results.sort(key=lambda p:(-p['house_match_score'],p['region_code'],p['building_key']))
-    result={'schema_version':2,'model_version':VERSION,'generated_at':today().isoformat(),
+    result={'schema_version':2,'model_version':version,'generated_at':today().isoformat(),
         'data_as_of':summary.get('data_through',summary['generated_at']),'target_year':str(latest),
         **{k:artifact[k] for k in ['model_month','created_at','trained_through','training_rows','ml_weight','validation']},
         'score_note':'검토점수는 기준가격과 관측가격의 차이를 거래수·과거 오차로 조정한 순서이며 수익률이나 상승 확률이 아닙니다.',
         'interval_note':'과거 검증 오차의 80% 목표 구간이며 실제 포함률은 연도별로 확인합니다.',
         'forecast_status':'보류: 미완결 연도를 다음 해 연간 수익률 정답으로 사용하지 않습니다.',
-        'features_used':NUMERIC+CATEGORICAL,'data_limitations':['과거 신고·해제 전 원본이 없어 당시 정보만의 완전한 재현은 아닙니다.',
+        'features_used':artifact.get('numeric_features',NUMERIC)+CATEGORICAL,'data_limitations':['과거 신고·해제 전 원본이 없어 당시 정보만의 완전한 재현은 아닙니다.',
             '연간 집계에는 거래된 층·세대 구성 차이가 남습니다. 매도 호가나 개별 세대 감정가가 아닙니다.',
             '시점이 없는 역·학교·세대수 자료는 과거 학습 입력에서 제외합니다.'],
         'recommendations':results}
