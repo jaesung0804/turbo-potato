@@ -9,23 +9,26 @@ permissions:
 jobs:
   access:
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 6
     steps:
       - uses: actions/checkout@v4
-      - name: Verify the live cancellation schema without exposing credentials
+      - name: Compare page sizes and the live cancellation schema
         env:
           MOLIT_API_KEY: ${{ secrets.MOLIT_API_KEY }}
         run: |
           python - <<'PY'
-          import json
-          from collect_estate_transactions import existing_key,request,validate
-          key=existing_key()
-          print('::add-mask::'+key,flush=True)
-          for code,month in [('11110','202501'),('11680','202101')]:
-              root=request(key,code,month,1)
-              items=root.findall('.//item')
-              fields=sorted({node.tag for item in items for node in item})
-              cancellation_fields=[f for f in fields if 'cancel' in f.lower() or 'cdeal' in f.lower()]
-              print(json.dumps({'district':code,'month':month,'total':validate(root),'fields':fields,
-                'cancellation_nonempty':{f:sum(bool((item.findtext(f) or '').strip()) for item in items) for f in cancellation_fields}},ensure_ascii=False),flush=True)
+          import json,time,urllib.request,urllib.parse,xml.etree.ElementTree as ET
+          from collect_estate_transactions import existing_key,validate,URL
+          key=existing_key();print('::add-mask::'+key,flush=True)
+          for month,size in [('202605',1),('202501',1),('202501',100),('202501',1000)]:
+              started=time.monotonic()
+              query=urllib.parse.urlencode({'serviceKey':urllib.parse.unquote(key),'LAWD_CD':'11110','DEAL_YMD':month,'pageNo':1,'numOfRows':size})
+              entry={'month':month,'page_size':size}
+              try:
+                  with urllib.request.urlopen(URL+'?'+query,timeout=15) as response:root=ET.fromstring(response.read())
+                  items=root.findall('.//item');fields=sorted({node.tag for item in items for node in item})
+                  cancellation=[f for f in fields if 'cancel' in f.lower() or 'cdeal' in f.lower()]
+                  entry.update(total=validate(root),fields=fields,cancellation_nonempty={f:sum(bool((i.findtext(f) or '').strip()) for i in items) for f in cancellation})
+              except Exception as error:entry['error']=type(error).__name__
+              entry['seconds']=round(time.monotonic()-started,2);print(json.dumps(entry,ensure_ascii=False),flush=True)
           PY
