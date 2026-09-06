@@ -2,7 +2,7 @@ name: Validate complete estate dashboard
 on:
   pull_request:
   push:
-    branches: [codex/estate-data-recovery, codex/estate-model-improvements]
+    branches: [codex/estate-data-recovery, codex/estate-model-improvements, codex/estate-amenity-experiment]
     paths-ignore: [.github/workflows/estate-access.yml, .github/workflows/estate-collect.yml]
   workflow_dispatch:
 permissions:
@@ -46,6 +46,9 @@ jobs:
         run: |
           python build_public_site.py
           node tests/check_bundle.cjs .work/site
+      - name: Reproduce the separate preference experiment
+        if: steps.raw.outputs.ready == 'true' && (github.ref == 'refs/heads/codex/estate-amenity-experiment' || github.head_ref == 'codex/estate-amenity-experiment')
+        run: python compare_preference_models.py
       - uses: actions/upload-artifact@v4
         if: steps.raw.outputs.ready == 'true'
         with:
@@ -53,4 +56,5 @@ jobs:
           path: |
             .work/site/
             models/
+            .work/preference-experiment/
           retention-days: 14

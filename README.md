@@ -4,6 +4,7 @@
 
 - [대시보드](https://jaesung0804.github.io/turbo-potato/)
 - [사용법·점수 해석·검증 결과](https://jaesung0804.github.io/turbo-potato/model.html)
+- [브랜드·세대수·학교·역 접근성 후보 실험](reports/preference_model_experiment.md): v4와 6개 구성 비교. 운영 모델 자동 교체 없음.
 
 ## 전체 결과 조회
 

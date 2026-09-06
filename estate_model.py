@@ -107,18 +107,18 @@ def reference_history(frame,payload):
 
 def matrix(frame,categories,numeric=None):
     numeric=numeric or NUMERIC
-    x=frame[numeric+CATEGORICAL].copy()
+    x=frame[numeric+list(categories)].copy()
     for name in numeric:x[name]=pd.to_numeric(x[name],errors='coerce')
-    for name in CATEGORICAL:x[name]=pd.Categorical(x[name],categories=categories[name])
+    for name in categories:x[name]=pd.Categorical(x[name],categories=categories[name])
     return x
 
 def fit(frame):
     if len(frame)<100:raise ValueError('Need at least 100 earlier-year observations; no overlapping fallback')
-    categories={name:sorted(frame[name].dropna().unique()) for name in CATEGORICAL}
+    categories={name:sorted(frame[name].dropna().unique()) for name in CATEGORICAL+frame.attrs.get('extra_categorical',[])}
     model=LGBMRegressor(objective='regression_l1',n_estimators=180,learning_rate=.045,num_leaves=15,
         min_child_samples=45,reg_lambda=8,colsample_bytree=.9,random_state=202609,n_jobs=2,verbosity=-1)
     residual='reference_anchor' in frame
-    numeric=NUMERIC+EXTRA_NUMERIC if residual else NUMERIC
+    numeric=(NUMERIC+EXTRA_NUMERIC if residual else NUMERIC)+frame.attrs.get('extra_numeric',[])
     fallback=float(frame.target.median())
     target=frame.target.to_numpy()-baseline(frame,fallback) if residual else frame.target
     model.fit(matrix(frame,categories,numeric),target)
