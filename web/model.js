@@ -4,6 +4,13 @@ async function loadGuide(){
  document.getElementById('model-status').textContent=`${m.model.model_version} · 모델 ${m.model.model_month} · 학습 ${m.model.trained_through}까지 · 거래자료 ${m.generated_at}`;
  if(m.model.model_version==='estate-reference-v4')document.getElementById('reference-method').textContent='v4 모델입니다. 동일 평형 전년도 가격 → 최근 3년 이력 → 유사 면적의 동·구·시도 가격 → 기존 주변 가격 순으로 비교 기준을 보완합니다. LightGBM은 이 기준에서의 가격 차이를 학습하고, 이전 연도에서 혼합 비중을 선택합니다. 모델은 버전·월별로 고정됩니다.';
  const folds=m.model.validation;
+ if(m.model.model_version==='estate-reference-v5')document.getElementById('reference-method').textContent='v5 모델입니다. 동일 면적 전년도 가격 → 동일 면적 최근 3년 이력 → 같은 단지의 비슷한 다른 면적 과거 거래 → 유사 면적 주변 단지 가격 순으로 비교 기준을 보완합니다. LightGBM은 이 기준과의 가격 차이를 학습합니다. 단지 상세에서 실제 사용한 비교 기준을 확인할 수 있습니다.';
+ const sibling=m.sibling_comparison;
+ if(sibling){
+  const a=sibling.results.v4,b=sibling.results.v5;
+  document.getElementById('sibling-status').textContent=`${sibling.data_through} 자료로 과거 3개 연도 비교 · 합산 MAE ${f(a.pooled_mae.toFixed(2))} → ${f(b.pooled_mae.toFixed(2))}만원/평. 2026년 비슷한 면적 간 총액 역전(큰 면적이 5% 이상 저렴) ${f(a.current_inversions.larger_total_at_least_5pct_lower)} → ${f(b.current_inversions.larger_total_at_least_5pct_lower)}쌍. 역전 자체가 모두 오류라는 뜻은 아닙니다.`;
+  document.getElementById('sibling-rows').innerHTML=b.folds.map((v,i)=>`<tr><th>${v.test_year}</th><td>${f(a.folds[i].model.mae_price_per_pyeong)}</td><td>${f(v.model.mae_price_per_pyeong)}</td><td>${f(a.folds[i].sibling_fallback_segment.mae_price_per_pyeong)}</td><td>${f(v.sibling_fallback_segment.mae_price_per_pyeong)}</td></tr>`).join('');
+ }
  document.getElementById('validation-rows').innerHTML=folds.map(v=>`<tr><th>${v.test_year}</th><td>${f(v.model.rows)}</td><td>${f(v.model.mae_price_per_pyeong)}</td><td>${f(v.baseline.mae_price_per_pyeong)}</td><td>${f(v.model.median_absolute_pct_error)}%</td><td>${pct(v.model.within_20pct)}</td><td>${pct(v.interval_actual_coverage)}</td></tr>`).join('');
  document.getElementById('validation-regions').innerHTML=folds.map(v=>`<details><summary>${v.test_year} 지역별 오차 · 학습 비중 ${pct(v.ml_weight)}</summary><div class="table-scroll"><table><thead><tr><th>지역</th><th>표본</th><th>MAE (만원/평)</th><th>중앙 오차율</th><th>±20% 이내</th></tr></thead><tbody>${Object.entries(v.regions).map(([s,x])=>`<tr><th>${esc(s)}</th><td>${f(x.rows)}</td><td>${f(x.mae_price_per_pyeong)}</td><td>${f(x.median_absolute_pct_error)}%</td><td>${pct(x.within_20pct)}</td></tr>`).join('')}</tbody></table></div></details>`).join('');
  const better=folds.filter(v=>v.model.mae_price_per_pyeong<v.baseline.mae_price_per_pyeong).length;

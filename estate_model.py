@@ -12,6 +12,7 @@ from estate_calendar import today
 
 VERSION='estate-reference-v3'
 CANDIDATE_VERSION='estate-reference-v4'
+SIBLING_VERSION='estate-reference-v5'
 NUMERIC=['year','area','age','prior_price','prior_peer','momentum','prior_count','peer_count']
 EXTRA_NUMERIC=['reference_anchor','last_price','history_gap','matched_peer','matched_peer_count']
 CATEGORICAL=['sido','gu','dong','area_band']
@@ -26,7 +27,7 @@ def price(b,metric='price_per_pyeong'):
     m=(b or {}).get('metrics',{}).get(metric,{})
     return number(m.get('median')) or number(m.get('avg'))
 
-def dataset(summary,enhanced=False):
+def dataset(summary,enhanced=False,siblings=False):
     history={};peers={}
     for r in summary['regions']:
         loc=(r.get('sido_name',''),r.get('gu_name',''),r.get('dong_name',''))
@@ -64,7 +65,42 @@ def dataset(summary,enhanced=False):
     frame=pd.DataFrame(rows)
     if enhanced:
         frame=reference_history(frame,payload)
+    if siblings:
+        if not enhanced:raise ValueError('Sibling anchors require reference history')
+        frame=sibling_history(frame,payload)
     return frame,payload
+
+
+def sibling_history(frame,payload):
+    """Prefer qualified earlier trades in the same complex over external peers.
+
+    Carry the sibling's price per exclusive pyeong, rather than its total price.
+    Never use current-year trades, unrelated lots, or very different unit sizes.
+    The model still has 17 inputs: this only improves reference_anchor.
+    """
+    frame=frame.copy()
+    frame['type_key']=[p['building_key'] for p in payload]
+    columns=['sibling_price','sibling_area_ratio','sibling_count','sibling_gap']
+    for name in columns:frame[name]=np.nan
+    history={}
+    for year in sorted(frame.year.unique()):
+        current=frame[frame.year==year]
+        for row in current.itertuples():
+            if not math.isfinite(row.age):continue
+            identity=(row.group,round(row.year-row.age))
+            eligible=[v for key,v in history.get(identity,{}).items()
+                if key!=row.type_key and 0<year-v[0]<=3 and
+                1/1.5<=row.area/v[1]<=1.5 and abs(row.area-v[1])>1e-6]
+            if not eligible:continue
+            chosen=min(eligible,key=lambda v:(-v[0],abs(math.log(row.area/v[1])),-v[3],v[4]))
+            frame.loc[row.Index,columns]=[chosen[2],row.area/chosen[1],chosen[3],year-chosen[0]]
+        # Only qualified source observations replace the previous qualified year.
+        for row in current.itertuples():
+            if not math.isfinite(row.age) or row.count<3:continue
+            identity=(row.group,round(row.year-row.age))
+            history.setdefault(identity,{})[row.type_key]=(year,row.area,row.target,row.count,row.type_key)
+    frame['reference_anchor']=frame.prior_price.fillna(frame.last_price).fillna(frame.sibling_price).fillna(frame.matched_peer).fillna(frame.prior_peer)
+    return frame.drop(columns='type_key')
 
 
 def reference_history(frame,payload):
@@ -199,8 +235,8 @@ def evaluate(frame,closed_year):
     return folds
 
 def run(summary_path,output_path,model_dir,month=None,mode='auto',version=VERSION):
-    if version not in (VERSION,CANDIDATE_VERSION):raise ValueError('Unsupported model version')
-    summary=json.loads(Path(summary_path).read_text(encoding='utf-8'));frame,payload=dataset(summary,version==CANDIDATE_VERSION)
+    if version not in (VERSION,CANDIDATE_VERSION,SIBLING_VERSION):raise ValueError('Unsupported model version')
+    summary=json.loads(Path(summary_path).read_text(encoding='utf-8'));frame,payload=dataset(summary,version!=VERSION,version==SIBLING_VERSION)
     month=month or today().strftime('%Y-%m')
     if date.fromisoformat(month+'-01').strftime('%Y-%m')!=month:raise ValueError('Invalid model month')
     artifact_path=Path(model_dir)/version/(month+'.joblib')
@@ -222,14 +258,23 @@ def run(summary_path,output_path,model_dir,month=None,mode='auto',version=VERSIO
     if int(artifact['trained_through'][:4])>=latest:raise ValueError('Inference must follow training')
     prices=np.exp(predict(artifact,current,artifact['ml_weight']));results=[]
     current_payload=[p for p,keep in zip(payload,mask) if keep]
-    for p,fair,error in zip(current_payload,prices,interval_errors(artifact['interval'],current)):
+    for p,row,fair,error in zip(current_payload,current.itertuples(),prices,interval_errors(artifact['interval'],current)):
         n=p['trade_count'];confidence=n/(n+5)
         width=error*math.sqrt(1+2/max(n,1));gap=math.log(fair/p['price_per_pyeong'])
         score=50+40*math.tanh(gap/max(error,.05))*confidence;flags=[]
         if n<3:flags.append('거래 표본 3건 미만')
         if p['prior_price_per_pyeong'] is None:flags.append('동일 평형 전년도 비교 없음')
         if abs(gap)>2*error:flags.append('가격 차이 큼: 층·상태·권리관계 확인')
-        results.append({**p,'fair_price_per_pyeong':round(float(fair),1),'reference_low':round(fair*math.exp(-width),1),
+        basis=None
+        if version==SIBLING_VERSION:
+            if pd.notna(row.prior_price):basis={'kind':'exact_prior','year':latest-1}
+            elif pd.notna(row.last_price):basis={'kind':'exact_history','year':latest-int(row.history_gap)}
+            elif pd.notna(row.sibling_price):
+                basis={'kind':'same_complex_area','year':latest-int(row.sibling_gap),
+                    'area_pyeong':round(row.area/row.sibling_area_ratio,3),'trade_count':int(row.sibling_count)}
+                flags.append('같은 단지 다른 면적의 과거 거래 참고')
+            else:basis={'kind':'external_peer' if pd.notna(row.reference_anchor) else 'training_median'}
+        results.append({**p,**({'reference_basis':basis} if basis else {}),'fair_price_per_pyeong':round(float(fair),1),'reference_low':round(fair*math.exp(-width),1),
             'neutral_price_billion':float(fair)*p['area_pyeong']/10000,
             'score_error_scale':max(float(error),.05),
             'reference_high':round(fair*math.exp(width),1),'house_match_score':round(score,1),'sample_confidence':round(confidence,3),
