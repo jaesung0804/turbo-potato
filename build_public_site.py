@@ -3,6 +3,7 @@ import argparse
 import gzip
 import hashlib
 import json
+import os
 import shutil
 from pathlib import Path
 
@@ -81,6 +82,13 @@ def build(source, output, model_dir=Path('models'), month=None, summary_path=Non
     output.mkdir(parents=True, exist_ok=True)
     for name in UI_FILES:
         shutil.copy2(Path('web')/name, output/name)
+    # A returning browser must load matching UI scripts after an HTML release.
+    for page in ['index.html', 'model.html']:
+        html = (output/page).read_text()
+        for name in ['app.js', 'data-store.js', 'result-pages.js', 'model.js', 'styles.css']:
+            version = hashlib.sha256((output/name).read_bytes()).hexdigest()[:16]
+            html = html.replace('"'+name+'"', '"'+name+'?v='+version+'"')
+        (output/page).write_text(html)
     (output/'.nojekyll').touch()
     # Remove obsolete release payloads; they never belong to the new manifest.
     if (output/'data').exists():
@@ -90,7 +98,8 @@ def build(source, output, model_dir=Path('models'), month=None, summary_path=Non
         raise ValueError('A source partition was truncated; publication refused')
     if len(model['recommendations']) != manifest['coverage'][model['target_year']]['available_types']:
         raise ValueError('The latest model output does not cover every observed type')
-    manifest['collection'] = {k: collection.get(k) for k in ['complete', 'normalizer_version', 'start', 'end', 'rows', 'partition_count', 'region_count', 'fetched_at']}
+    manifest['collection'] = {k: collection.get(k) for k in ['complete', 'normalizer_version', 'start', 'end', 'rows', 'partition_count', 'region_count', 'fetched_at', 'sha256']}
+    manifest['release_id'] = os.getenv('GITHUB_RUN_ID', 'local')+'-'+os.getenv('GITHUB_RUN_ATTEMPT', '1')
     manifest['amenities'] = amenities
     manifest['map_note'] = '2025-06-30 시군구 경계. 2026년 개편 지역은 전체 목록에서 조회합니다.'
     validation = {k: v for k, v in model.items() if k != 'recommendations'}

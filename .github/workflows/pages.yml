@@ -108,4 +108,6 @@ jobs:
       - name: Verify actual public HTML, all periods and model metadata
         env:
           PAGE_URL: ${{ steps.deployment.outputs.page_url }}
-        run: python verify_public_site.py --url "$PAGE_URL" --sha "$GITHUB_SHA"
+        run: |
+          python verify_public_site.py --url "$PAGE_URL" --sha "$GITHUB_SHA"
+          node tests/check_bundle.cjs .work/site "$PAGE_URL"

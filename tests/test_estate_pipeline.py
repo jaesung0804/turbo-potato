@@ -295,3 +295,13 @@ def test_legacy_amenities_do_not_cross_same_name_lots(tmp_path):
        'items':{'서울특별시|종로구|청운동|같은이름':{'households':900,'built_year':2001}}}).encode()))
     assert apply_amenities(s,path)['matched_types']==0
     assert all(a['households'] is None for a in s['regions'][0]['all']['addresses'])
+
+
+def test_same_code_cannot_hide_a_stale_public_data_release(tmp_path, monkeypatch):
+    import verify_public_site
+    expected=tmp_path/'manifest.json'
+    expected.write_text(json.dumps({'code_commit':'same','release_id':'today','generated_at':'2026-09-06'}))
+    previous=json.dumps({'code_commit':'same','release_id':'yesterday','generated_at':'2026-09-05'}).encode()
+    monkeypatch.setattr(verify_public_site,'fetch',lambda _:previous)
+    with pytest.raises(ValueError,match='exact data release'):
+        verify_public_site.verify('https://jaesung0804.github.io/turbo-potato/','same',expected)
