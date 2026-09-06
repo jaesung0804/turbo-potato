@@ -72,6 +72,19 @@ def test_unknown_school_is_not_false_and_dash_is_not_cancellation(tmp_path):
     assert s['regions'][0]['all']['addresses'][0]['elementary_500m'] is None
 
 
+def test_quality_counts_and_floor_statistics_exclude_noise(tmp_path):
+    s = make_summary(tmp_path, [trade(FLR='3'), trade(FLR='15', DCLR_SE=''),
+        trade(FLR='99', DCLR_SE='직거래'), trade(FLR='80', RTRCN_DAY='cancelled'),
+        trade(FLR='7', ARCH_AREA='59.9')])
+    q = s['data_quality']['monthly']['202501']
+    assert (q['raw'], q['used'], q['direct'], q['cancelled'], q['unknown_deal_type'], q['floor_observed']) == (5, 3, 1, 1, 1, 3)
+    assert q['raw'] == q['used'] + sum(q[k] for k in ['direct', 'cancelled', 'invalid', 'property_type'])
+    b = next(b for b in s['regions'][0]['years']['2025']['addresses'] if b['count'] == 2)
+    assert b['observed_floor']['median'] == 9
+    assert b['observed_floor']['max'] == 15
+    assert b['floor_sample_count'] == 2
+
+
 def test_no_built_year_propagation_between_different_lots(tmp_path):
     s = make_summary(tmp_path, [trade(MNO='1'), trade(MNO='2', ARCH_YR='')])
     assert sorted(a['built_year'] or 0 for a in s['regions'][0]['all']['addresses']) == [0, 2001]

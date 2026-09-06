@@ -563,6 +563,8 @@ def build_dashboard_data(
     used_rows = 0
     data_through = ""
     excluded_direct_rows = 0
+    exclusions={"cancelled":0,"property_type":0,"direct":0,"invalid":0}
+    monthly_quality={}
     admin_by_legal_code, admin_by_name = load_legal_admin_mapping()
     complex_info = load_complex_info()
     apt_school_info = load_apt_school_info()
@@ -571,21 +573,32 @@ def build_dashboard_data(
         reader = csv.DictReader(file)
         for row in reader:
             total_rows += 1
+            month=row.get('CTRT_DAY','')[:6]
+            quality=monthly_quality.setdefault(month,{"raw":0,"used":0,"cancelled":0,"direct":0,"invalid":0,"property_type":0,"unknown_deal_type":0,"floor_observed":0})
+            quality['raw']+=1
             if row.get("RTRCN_DAY", "").strip() not in {"", "-", "--"}:
+                exclusions['cancelled']+=1;quality['cancelled']+=1
                 continue
             if property_types and row.get("BLDG_USG", "").strip() not in property_types:
+                exclusions['property_type']+=1;quality['property_type']+=1
                 continue
             if not include_direct_trades and row.get("DCLR_SE", "").strip() == "직거래":
                 excluded_direct_rows += 1
+                exclusions['direct']+=1;quality['direct']+=1
                 continue
 
             metrics = calculate_metrics(row)
             code = legal_dong_code(row)
             year = contract_year(row)
             if not metrics or not code or not year:
+                exclusions['invalid']+=1;quality['invalid']+=1
                 continue
 
             used_rows += 1
+            quality['used']+=1
+            quality['unknown_deal_type']+=row.get('DCLR_SE','').strip() in {'','-','--'}
+            observed_floor=parse_float(row.get('FLR'))
+            quality['floor_observed']+=observed_floor is not None
             data_through = max(data_through, row.get("CTRT_DAY", "").strip())
             years_seen.add(year)
             map_codes = map_region_codes(row, admin_by_legal_code, admin_by_name)
@@ -652,9 +665,11 @@ def build_dashboard_data(
                         "latitude": row_latitude,
                         "longitude": row_longitude,
                         "metrics": blank_metric_bucket(),
+                        "floors": [],
                     },
                 )
                 addr_bucket["count"] += 1
+                if observed_floor is not None:addr_bucket['floors'].append(observed_floor)
                 update_metric_bucket(addr_bucket["metrics"], metrics)
                 if addr_bucket["households"] is None:
                     addr_bucket["households"] = row_households
@@ -751,6 +766,7 @@ def build_dashboard_data(
                 },
                 "total_rows": total_rows,
                 "used_rows": used_rows,
+                "data_quality":{"exclusions":exclusions,"monthly":monthly_quality},
                 "years": sorted(years_seen, reverse=True),
                 "metrics": METRIC_KEYS,
                 "region_key": "legal dong or CGG_CD + legal dong name",
@@ -780,6 +796,8 @@ def finalize_bucket(
                 "count": address["count"],
                 "households": address.get("households"),
                 "built_year": address.get("built_year"),
+                "observed_floor": summarize(address.get('floors',[])),
+                "floor_sample_count": len(address.get('floors',[])),
                 "elementary_500m": address.get("elementary_500m"),
                 "nearest_elementary_name": address.get("nearest_elementary_name"),
                 "nearest_elementary_m": round_metric(address.get("nearest_elementary_m"), 0),

@@ -15,6 +15,9 @@ const ResultPages=(()=>{
       <label><input type="number" min="1" max="${r.pageCount}" value="${r.page}" data-page-input="${id}" aria-label="이동할 페이지"> / ${r.pageCount}</label>
       <button data-page-list="${id}" data-page="${r.page+1}" ${r.page===r.pageCount?"disabled":""}>다음</button>
       <button data-page-list="${id}" data-page="${r.pageCount}" ${r.page===r.pageCount?"disabled":""}>마지막</button>`;
+    let top=document.getElementById(id+'-pages-top');
+    if(!top){top=document.createElement('nav');top.id=id+'-pages-top';top.className='result-pagination';top.setAttribute('aria-label','결과 페이지 (목록 위)');document.getElementById(id).insertAdjacentElement('beforebegin',top);}
+    top.innerHTML=nav.innerHTML;
     return r;
   }
   function csvCell(value){let v=String(value??"");if(/^[=+@\-\t\r]/.test(v))v="'"+v;return '"'+v.replace(/"/g,'""')+'"';}

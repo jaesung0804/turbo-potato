@@ -13,7 +13,7 @@ from estate_model import run as run_model, VERSION, CANDIDATE_VERSION
 from estate_io import write_json
 from shapely.geometry import shape, mapping
 
-UI_FILES = ['index.html', 'model.html', 'styles.css', 'app.js', 'data-store.js', 'result-pages.js', 'model.js', '404.html']
+UI_FILES = ['index.html', 'model.html', 'styles.css', 'app.js', 'data-store.js', 'result-pages.js', 'model.js', '404.html','vendor/leaflet.css','vendor/leaflet.js','vendor/LICENSE.txt']
 AMENITIES = ['households', 'elementary_500m', 'nearest_elementary_name', 'nearest_elementary_m',
              'subway_lines', 'subway_station', 'subway_distance_m', 'latitude', 'longitude']
 
@@ -57,7 +57,7 @@ def light_map(path):
     return {'type': 'FeatureCollection', 'features': features}
 
 
-def build(source, output, model_dir=Path('models'), month=None, summary_path=None, require_complete=True, model_version=VERSION):
+def build(source, output, model_dir=Path('models'), month=None, summary_path=None, require_complete=True, model_version=CANDIDATE_VERSION):
     if require_complete:
         collection = json.loads(source.with_suffix('.manifest.json').read_text(encoding='utf-8'))
         if not collection.get('complete') or collection.get('normalizer_version')!=2 or hashlib.sha256(source.read_bytes()).hexdigest() != collection['sha256']:
@@ -82,11 +82,12 @@ def build(source, output, model_dir=Path('models'), month=None, summary_path=Non
     summary = json.loads(summary_path.read_text(encoding='utf-8'))
     output.mkdir(parents=True, exist_ok=True)
     for name in UI_FILES:
+        (output/name).parent.mkdir(parents=True,exist_ok=True)
         shutil.copy2(Path('web')/name, output/name)
     # A returning browser must load matching UI scripts after an HTML release.
     for page in ['index.html', 'model.html']:
         html = (output/page).read_text(encoding='utf-8')
-        for name in ['app.js', 'data-store.js', 'result-pages.js', 'model.js', 'styles.css']:
+        for name in ['app.js', 'data-store.js', 'result-pages.js', 'model.js', 'styles.css','vendor/leaflet.css','vendor/leaflet.js']:
             version = hashlib.sha256((output/name).read_bytes()).hexdigest()[:16]
             html = html.replace('"'+name+'"', '"'+name+'?v='+version+'"')
         (output/page).write_text(html,encoding='utf-8',newline='\n')
@@ -106,6 +107,9 @@ def build(source, output, model_dir=Path('models'), month=None, summary_path=Non
     comparison_path=Path('reports/estate_model_comparison.json')
     if comparison_path.exists():
         manifest['model_comparison']=json.loads(comparison_path.read_text(encoding='utf-8'))
+    importance_path=Path('reports/estate_model_importance.json')
+    if importance_path.exists():
+        manifest['model_importance']=json.loads(importance_path.read_text(encoding='utf-8'))
     validation = {k: v for k, v in model.items() if k != 'recommendations'}
     write_json(output/'data/model_validation.json',validation,indent=2)
     manifest['ui_assets'] = {name: hashlib.sha256((output/name).read_bytes()).hexdigest()
@@ -123,6 +127,6 @@ if __name__ == '__main__':
     parser.add_argument('--output', type=Path, default=Path('.work/site'))
     parser.add_argument('--model-dir', type=Path, default=Path('models'))
     parser.add_argument('--model-month')
-    parser.add_argument('--model-version',choices=[VERSION,CANDIDATE_VERSION],default=VERSION)
+    parser.add_argument('--model-version',choices=[VERSION,CANDIDATE_VERSION],default=CANDIDATE_VERSION)
     args = parser.parse_args()
     build(args.input, args.output, args.model_dir, args.model_month,model_version=args.model_version)

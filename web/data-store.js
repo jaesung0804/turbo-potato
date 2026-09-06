@@ -6,6 +6,7 @@ const DashboardData = (() => {
     if (typeof DecompressionStream === "undefined") throw Error("최신 브라우저로 열어주세요.");
     const r=await fetch(asset.url,{cache:"force-cache"});if(!r.ok)throw Error(`자료 응답 ${r.status}`);
     const body=await r.arrayBuffer();
+    if(body.byteLength!==asset.bytes)throw Error('데이터 무결성 확인 실패 (자료 크기)');
     if(globalThis.crypto?.subtle){
       const h=[...new Uint8Array(await crypto.subtle.digest("SHA-256",body))].map(x=>x.toString(16).padStart(2,"0")).join("");
       if(h!==asset.sha256)throw Error("데이터 무결성 확인 실패");
@@ -15,24 +16,35 @@ const DashboardData = (() => {
   async function open() {
     const r=await fetch("data/dashboard_manifest.json",{cache:"no-cache"});if(!r.ok)throw Error(`자료 응답 ${r.status}`);
     const manifest=await r.json();if(manifest.schema_version!==1)throw Error("지원하지 않는 자료 버전");
-    const [catalog,history,recommendations]=await Promise.all([compressed(manifest.catalog),compressed(manifest.history),compressed(manifest.recommendations)]);
+    const [catalog,packed]=await Promise.all([compressed(manifest.catalog),compressed(manifest.recommendations)]);
+    const locations=new Map(catalog.regions.map(r=>[r.code,r]));
+    const recommendations=packed.encoding==='catalog-v1'?{...packed.metadata,recommendations:packed.rows.map(([idx,code,...values])=>{
+      const b=catalog.addresses[idx],r=locations.get(code);if(!b||!r||values.length!==packed.fields.length)throw Error('모델 색인 오류');
+      return {...b,...r,...Object.fromEntries(packed.fields.map((k,i)=>[k,values[i]])),year:packed.metadata.target_year,building_key:b.key,region_code:code};
+    })}:packed;
+    let history={},historyPromise=null;
     const regions=catalog.regions.map(r=>({...r,loadedBucket:null})), byCode=new Map(regions.map(r=>[r.code,r]));
     const historyCache=new Map();let request=0;
-    return {manifest,recommendations,summary:{...manifest,regions},
+    return {manifest,recommendations,generation:0,summary:{...manifest,regions},
+      ensureHistory(){
+        if(!historyPromise)historyPromise=compressed(manifest.history).then(value=>{history=value;historyCache.clear();return true;}).catch(e=>{historyPromise=null;throw e;});
+        return historyPromise;
+      },
       async loadPeriod(year) {
         const ticket=++request, data=await compressed(manifest.periods[year]);if(ticket!==request)return false;
         const next=new Map();let count=0,trades=0,represented=0;
         for(const [code,n,values,rows,recent] of data){
           if(!byCode.has(code)||next.has(code))throw Error("지역 색인 오류");
-          const addresses=rows.map(([idx,c,v])=>{
+          const addresses=rows.map(([idx,c,v,floor,floorCount])=>{
             if(!catalog.addresses[idx])throw Error("단지 색인 오류");represented+=c;
-            return Object.assign(Object.create(catalog.addresses[idx]),{count:c,metrics:metrics(v)});
+            return Object.assign(Object.create(catalog.addresses[idx]),{count:c,metrics:metrics(v),observed_floor:floor,floor_sample_count:floorCount});
           });
           next.set(code,{count:n,metrics:metrics(values),addresses,recent});count+=rows.length;trades+=n;
         }
         const c=manifest.coverage[year];
         if(count!==c.available_types||trades!==c.source_trades||represented!==c.represented_trades)throw Error("전체 결과 건수 불일치");
         for(const r of regions)r.loadedBucket=next.get(r.code)??null;
+        this.generation++;
         return true;
       },
       historyBucket(code,year){

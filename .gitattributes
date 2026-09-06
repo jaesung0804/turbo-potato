@@ -8,3 +8,4 @@
 *.json text eol=lf
 *.gz -text
 *.joblib -text
+web/vendor/* -text

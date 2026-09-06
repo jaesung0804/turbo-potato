@@ -31,7 +31,8 @@ const state = {
   regionByCode: new Map(),
   regionByMapCode: new Map(),
   year: "all",
-  metric: "price_billion",
+  metric: "ai_score",
+  activeTab: "ai",
   selectedSido: "all",
   selectedGu: "all",
   selectedDong: "all",
@@ -103,7 +104,10 @@ function setElementaryFilterChecked(checked) {
 
 function bucketFor(region) { return region?.loadedBucket ?? null; }
 function historyBucket(region,year) { return state.dataStore.historyBucket(region.code,String(year)); }
-function completedYears() { return state.summary.years.map(Number).filter(y=>y<Number(state.summary.generated_at.slice(0,4))).sort((a,b)=>a-b); }
+function completedYears() {
+ if(state.yearInfo?.summary!==state.summary)state.yearInfo={summary:state.summary,years:state.summary.years.map(Number).filter(y=>y<Number(state.summary.generated_at.slice(0,4))).sort((a,b)=>a-b)};
+ return state.yearInfo.years;
+}
 
 function metricValue(region, metric = state.metric) {
   return cachedRegionMetricValue(region, metric);
@@ -460,9 +464,12 @@ function buildingMatchesFilters(building) {
   return areaMatches(building) && priceMatches(building) && householdsMatch(building) && tradeCountMatches(building) && ageMatches(building) && elementaryMatches(building) && subwayMatches(building);
 }
 
+function viewKey(){return JSON.stringify([state.dataStore?.generation,state.year,state.metric,state.selectedSido,state.selectedGu,state.selectedDong,state.areaRange,state.minPriceBillion,state.maxPriceBillion,state.minHouseholds,state.minTradeCount,state.ageRange,state.elementary500mOnly,state.subwayLine,state.subwayWalkMinutes,state.search]);}
+function viewCache(){const key=viewKey();if(state.view?.key!==key||state.view?.summary!==state.summary){state.view={key,summary:state.summary};state.regionValueCache.clear();}return state.view;}
 function typeItems() {
+ const cache=viewCache();if(cache.items)return cache.items;
  const q=state.search.trim().toLowerCase();
- return activeRegions().flatMap(region=>(bucketFor(region)?.addresses??[]).filter(buildingMatchesFilters)
+ return cache.items=activeRegions().flatMap(region=>(bucketFor(region)?.addresses??[]).filter(buildingMatchesFilters)
   .filter(b=>!q||`${region.sido_name} ${region.gu_name} ${region.dong_name} ${b.key} ${b.building_name} ${b.area_type}`.toLowerCase().includes(q)).map(building=>({region,building})));
 }
 
@@ -595,6 +602,7 @@ function weightedAverage(items, metric) {
 }
 
 function groupedBuildings() {
+  const cache=viewCache();if(cache.groups)return cache.groups;
   const groups = new Map();
   for (const item of typeItems()) {
     const id = groupId(item.region, item.building);
@@ -612,7 +620,7 @@ function groupedBuildings() {
     group.count += item.building.count;
   }
 
-  return [...groups.values()]
+  return cache.groups=[...groups.values()]
     .map((group) => {
       const types = group.types.sort((a, b) => (areaPyeong(b.building) ?? -1) - (areaPyeong(a.building) ?? -1));
       return {
@@ -640,7 +648,11 @@ function selectedType(groups = groupedBuildings()) {
 
 function renderAssetLists(groups=groupedBuildings()) {
  const valid=groups.filter(g=>g.value!==null),n=Math.max(1,Math.ceil(valid.length*.3));
- renderGroupList("all-list","all-count",groups);renderGroupList("hot-list","hot-count",valid.slice(0,n));renderGroupList("cold-list","cold-count",[...valid].reverse().slice(0,n));
+ document.getElementById('all-count').textContent=groups.length.toLocaleString('ko-KR');
+ document.getElementById('hot-count').textContent=Math.min(n,valid.length).toLocaleString('ko-KR');document.getElementById('cold-count').textContent=Math.min(n,valid.length).toLocaleString('ko-KR');
+ if(state.activeTab==='all')renderGroupList('all-list','all-count',groups);
+ if(state.activeTab==='hot')renderGroupList('hot-list','hot-count',valid.slice(0,n));
+ if(state.activeTab==='cold')renderGroupList('cold-list','cold-count',[...valid].reverse().slice(0,n));
 }
 
 function recommendationMatchesFilters(item) {
@@ -665,8 +677,8 @@ function recommendationMatchesFilters(item) {
 }
 
 function renderAiRecommendations() {
- const rows=typeItems().map(type=>({type,rec:aiRecommendationForItem(type)})).filter(x=>x.rec).sort((a,b)=>b.rec.house_match_score-a.rec.house_match_score||a.rec.building_key.localeCompare(b.rec.building_key));
- document.getElementById("ai-count").textContent=rows.length.toLocaleString("ko-KR");const page=ResultPages.view("ai-list",rows);
+ const cache=viewCache(),rows=cache.ai??(cache.ai=typeItems().map(type=>({type,rec:aiRecommendationForItem(type)})).filter(x=>x.rec).sort((a,b)=>b.rec.house_match_score-a.rec.house_match_score||a.rec.building_key.localeCompare(b.rec.building_key)));
+ document.getElementById("ai-count").textContent=rows.length.toLocaleString("ko-KR");if(state.activeTab!=='ai')return;const page=ResultPages.view("ai-list",rows);
  document.getElementById("ai-list").innerHTML=page.rows.length?page.rows.map(({type,rec})=>`<li><button type="button" class="ai-row" data-group-id="${escapeHtml(groupId(type.region,type.building))}" data-type-id="${escapeHtml(typeId(type.region,type.building))}"><span class="ai-main"><strong>${escapeHtml(rec.building_name)}</strong><small>${escapeHtml(rec.gu_name)} ${escapeHtml(rec.dong_name)} · ${escapeHtml(rec.area_type)} · ${rec.trade_count}건</small><small>관측 중앙값 ${format(rec.price_per_pyeong,"price_per_pyeong")} · 기준가격 ${format(rec.fair_price_per_pyeong,"price_per_pyeong")}</small><small>참고 범위 ${format(rec.reference_low,"price_per_pyeong")} ~ ${format(rec.reference_high,"price_per_pyeong")}</small><small class="quality-flags">${escapeHtml(rec.quality_flags.join(" · "))}</small></span><span class="ai-score"><small>검토점수</small><strong>${format(rec.house_match_score,"ai_score")}</strong></span></button></li>`).join(""):'<li class="growth-empty">이 연도에 산출된 모델 결과가 없습니다. 전체 단지 탭에서 모든 자료를 조회할 수 있습니다.</li>';
 }
 
@@ -680,6 +692,7 @@ function renderSummary(groups=groupedBuildings()) {document.getElementById("tota
 function renderSelectedRegion(groups = groupedBuildings()) {
   const group = selectedGroup(groups);
   const selected = selectedType(groups);
+  document.getElementById('selected-region').hidden = !(group && selected);
 
   if (group && selected) {
     const { region, building } = selected;
@@ -717,7 +730,9 @@ function renderSelectedRegion(groups = groupedBuildings()) {
         ${metricCard("검토점수", aiScoreForItem(selected), "ai_score")}
         ${metricCard("전용평수", building.metrics.area_pyeong.avg, "area_pyeong")}
         ${metricCard("연식", `${format(buildingAge(building), "age")} · ${ageFilterText(ageCategory(building))}`, "text")}
-        ${metricCard("세대수", building.households, "households")}
+        ${metricCard("단지 전체 세대수", building.households, "households")}
+        ${metricCard("거래된 층 (중앙 / 범위)", building.observed_floor?.median==null?'미확인':`${building.observed_floor.median}층 / ${building.observed_floor.min}~${building.observed_floor.max}층`, "text")}
+        ${metricCard("해당 면적 세대수", "미확인 · 단지 전체와 다름", "text")}
         ${metricCard("초품아/역세권", `${elementaryLabel(building)} · ${subwayLabel(building)}`, "text")}
         <p class="score-note">${escapeHtml(building.amenity_source ?? "시설 자료 미확인")} · 시설 필터는 확인된 자료가 있는 단지에만 적용됩니다.</p>
       </div>
@@ -954,7 +969,7 @@ function populateDongSelect() {
   document.getElementById("dong-select").value = state.selectedDong;
 }
 
-function populateGrowthPeriodSelect() {document.getElementById("growth-period-select").innerHTML='<option value="all">전체 완결기간</option>'+completedYears().reverse().map(y=>`<option value="${y}">${y}</option>`).join("");document.getElementById("growth-period-select").value=state.growthPeriod;}
+function populateGrowthPeriodSelect() {document.getElementById("growth-period-select").innerHTML='<option value="all">전체 완결기간</option>'+completedYears().slice().reverse().map(y=>`<option value="${y}">${y}</option>`).join("");document.getElementById("growth-period-select").value=state.growthPeriod;}
 
 function populateSubwayLineSelect() {
   const lines = new Set();
@@ -978,19 +993,28 @@ function populateSubwayLineSelect() {
 function refresh(resetPages=true) {
   if(state.loading)return;
   if(resetPages)ResultPages.reset();
-  state.regionValueCache = new Map();
+  viewCache();
   state.mapDist = distribution();
   state.topologyLayer?.setStyle(styleFeature);
   updateLegend();
-  renderGrowthSummary();
-  renderGrowthRankings();
-  renderAiScoreRankings();
+  if(document.getElementById('analysis-panel')?.open)renderAnalysis().catch(e=>{document.getElementById('growth-summary').textContent=e.message;});
   const groups = groupedBuildings();
   renderSummary(groups);
   renderSelectedRegion(groups);
   renderAiRecommendations();
   renderAssetLists(groups);
   renderDataStatus();
+}
+
+function scheduleRefresh(){clearTimeout(state.searchTimer);state.searchTimer=setTimeout(()=>refresh(),180);}
+async function ensureHistory(){if(state.historyReady)return;await state.dataStore.ensureHistory();state.periodAddressMapCache.clear();state.historyReady=true;}
+async function renderAnalysis(){
+ const panel=document.getElementById('analysis-panel');if(!panel?.open)return;
+ await ensureHistory();
+ if(!panel.open)return;
+ const key=viewKey()+state.growthPeriod+state.growthLevel+state.growthSearch+state.growthMinRate+state.aiScoreLevel+state.aiScoreSearch+state.aiScoreMin;
+ if(state.analysisKey===key)return;
+ renderGrowthSummary();renderGrowthRankings();renderAiScoreRankings();state.analysisKey=key;
 }
 
 function selectSido(sidoName) {
@@ -1048,7 +1072,7 @@ function setMapMode(mode) {
   refresh();
 }
 
-function selectGroup(id, preferredTypeId = null) {
+async function selectGroup(id, preferredTypeId = null) {
   const group = groupedBuildings().find((item) => item.id === id);
   if (!group) return;
 
@@ -1059,7 +1083,10 @@ function selectGroup(id, preferredTypeId = null) {
     : null;
   const selected = preferred ?? bestAiType ?? group.types[0];
   state.selectedTypeId = typeId(selected.region, selected.building);
-  refresh(false);
+  renderSelectedRegion();
+  document.getElementById('selected-region').scrollIntoView({block:'start',behavior:'smooth'});
+  try{await ensureHistory();renderSelectedRegion();}
+  catch(e){document.getElementById('data-status').textContent='과거 비교 자료를 불러오지 못했습니다. '+e.message;}
 }
 
 function wireEvents() {
@@ -1073,8 +1100,11 @@ function wireEvents() {
     changeYear(event.target.value);
   });
 
-  document.getElementById("metric-select").addEventListener("change", (event) => {
+  document.getElementById("metric-select").addEventListener("change", async (event) => {
+    const previous=state.metric;
     state.metric = event.target.value;
+    try{if(state.metric==='yoy_rate')await ensureHistory();}
+    catch(e){state.metric=previous;event.target.value=previous;document.getElementById('data-status').textContent=e.message;return;}
     refresh();
   });
 
@@ -1090,7 +1120,7 @@ function wireEvents() {
     state.maxPriceBillion = Number.isFinite(value) ? value : null;
     state.selectedGroupId = null;
     state.selectedTypeId = null;
-    refresh();
+    scheduleRefresh();
   });
 
   document.getElementById("min-price-input").addEventListener("input", (event) => {
@@ -1098,7 +1128,7 @@ function wireEvents() {
     state.minPriceBillion = Number.isFinite(value) ? value : null;
     state.selectedGroupId = null;
     state.selectedTypeId = null;
-    refresh();
+    scheduleRefresh();
   });
 
   document.getElementById("households-input").addEventListener("input", (event) => {
@@ -1106,7 +1136,7 @@ function wireEvents() {
     state.minHouseholds = Number.isFinite(value) ? value : null;
     state.selectedGroupId = null;
     state.selectedTypeId = null;
-    refresh();
+    scheduleRefresh();
   });
 
   document.getElementById("trade-count-input").addEventListener("input", (event) => {
@@ -1114,7 +1144,7 @@ function wireEvents() {
     state.minTradeCount = Number.isFinite(value) ? value : null;
     state.selectedGroupId = null;
     state.selectedTypeId = null;
-    refresh();
+    scheduleRefresh();
   });
 
   document.getElementById("age-range-select").addEventListener("change", (event) => {
@@ -1171,7 +1201,7 @@ function wireEvents() {
     state.search = event.target.value;
     state.selectedGroupId = null;
     state.selectedTypeId = null;
-    refresh();
+    scheduleRefresh();
   });
 
   document.getElementById("growth-level-select").addEventListener("change", (event) => {
@@ -1266,12 +1296,14 @@ function wireEvents() {
   document.querySelectorAll("[data-market-tab]").forEach((button) => {
     button.addEventListener("click", () => {
       const tab = button.dataset.marketTab;
+      state.activeTab=tab;
       document.querySelectorAll("[data-market-tab]").forEach((item) => {
         item.classList.toggle("active", item.dataset.marketTab === tab);
       });
       document.querySelectorAll("[data-market-panel]").forEach((panel) => {
         panel.classList.toggle("active", panel.dataset.marketPanel === tab);
       });
+      renderAiRecommendations();renderAssetLists();
     });
   });
 
@@ -1302,13 +1334,18 @@ function wireEvents() {
 }
 
 async function init() {
+ const compact=window.matchMedia('(max-width:600px)');
+ const syncFilters=()=>{document.getElementById('location-filters').open=!compact.matches;};
+ syncFilters();compact.addEventListener('change',syncFilters);
  try { applyDarkMode(localStorage.getItem("realEstateDashboardDarkMode")==="1"); } catch (_) { applyDarkMode(false); }
  const store=await DashboardData.open();state.dataStore=store;state.summary=store.summary;state.year=store.manifest.default_year;state.recommendations=store.recommendations;
  state.recommendationByType=new Map(store.recommendations.recommendations.map(r=>[recommendationKey(r.region_code,r.building_key),r]));
  await store.loadPeriod(state.year);const summary=state.summary;state.regionByCode=new Map(summary.regions.map(r=>[r.code,r]));
  for(const r of summary.regions)for(const code of new Set((r.map_codes??[r.code]).flatMap(c=>[c,c.slice(0,5)]))){if(!state.regionByMapCode.has(code))state.regionByMapCode.set(code,[]);state.regionByMapCode.get(code).push(r);}
  document.getElementById("year-select").innerHTML='<option value="all">전체연도</option>'+summary.years.map(y=>`<option value="${y}">${y}</option>`).join("");document.getElementById("year-select").value=state.year;
+ document.getElementById('metric-select').value=state.metric;
  populateSidoSelect();populateGuSelect();populateDongSelect();populateGrowthPeriodSelect();populateSubwayLineSelect();wireEvents();wireResultEvents();refresh();
+ document.getElementById('analysis-panel').addEventListener('toggle',()=>renderAnalysis().catch(e=>{document.getElementById('growth-summary').textContent=e.message;}));
  try {
   if(!map)throw Error("지도 로드 실패");const data=await DashboardData.compressed(store.manifest.map);
   const geojson=data.type==="Topology"?topojson.feature(data,data.objects[Object.keys(data.objects)[0]]):data;
@@ -1326,7 +1363,8 @@ function fitDefaultMapView() {
 function renderDataStatus(){const m=state.dataStore.manifest,c=m.coverage[state.year];document.getElementById("data-status").textContent=`자료 ${m.generated_at} · 모델 ${m.model.model_month} · ${c.available_types.toLocaleString("ko-KR")}개 평형 전체 조회`;document.getElementById("coverage-note").textContent=c.complete?"모든 집계 거래가 단지·평형 목록에 보존돼 있습니다. 페이지 수와 관계없이 전체를 검색·다운로드합니다.":`기존 저장본에서 개별 목록 ${c.unrepresented_trades.toLocaleString("ko-KR")}건이 누락돼 있습니다. 전체 복구와 구분해 표시합니다.`;}
 async function changeYear(year){const id=(state.yearRequest??0)+1;state.yearRequest=id;state.loading=true;document.querySelector(".detail-pane").setAttribute("aria-busy","true");try{if(!await state.dataStore.loadPeriod(year))return;state.year=year;state.selectedGroupId=null;state.selectedTypeId=null;state.loading=false;populateSubwayLineSelect();refresh();}catch(e){if(id===state.yearRequest){document.getElementById("year-select").value=state.year;document.getElementById("data-status").textContent=`불러오기 실패: ${e.message}. 이전 결과를 유지합니다.`;}}finally{if(id===state.yearRequest){state.loading=false;document.querySelector(".detail-pane").setAttribute("aria-busy","false");}}}
 function exportResults(){const rows=typeItems().map(({region:r,building:b})=>{const m=aiRecommendationForItem({region:r,building:b});return [state.year,r.sido_name,r.gu_name,r.dong_name,b.building_name,b.area_type,b.key,b.count,b.metrics.price_billion.avg,b.metrics.price_billion.median,b.metrics.price_per_pyeong.median,b.households,b.built_year,m?.house_match_score,m?.fair_price_per_pyeong,m?.reference_low,m?.reference_high,m?.quality_flags.join(" / ")];});ResultPages.downloadCsv(`apartment-results-${state.year}.csv`,["기간","시도","시군구","읍면동","단지","평형","식별키","거래수","평균 거래가(억)","중앙 거래가(억)","중앙 평단가(만원)","세대수","준공연도","검토점수","기준가격(만원/평)","범위 하한","범위 상한","자료 점검"],rows);}
-function wireResultEvents(){document.getElementById("export-results").addEventListener("click",exportResults);document.body.addEventListener("click",e=>{const b=e.target.closest("[data-page-list]");if(b){ResultPages.set(b.dataset.pageList,b.dataset.page);refresh(false);}});document.body.addEventListener("change",e=>{if(e.target.dataset.pageInput){ResultPages.set(e.target.dataset.pageInput,e.target.value);refresh(false);}});}
+function renderPage(id){if(id==="ai-list")renderAiRecommendations();else if(id==="growth-ranking-list")renderGrowthRankings();else if(id==="ai-score-ranking-list")renderAiScoreRankings();else renderAssetLists();}
+function wireResultEvents(){document.getElementById("export-results").addEventListener("click",exportResults);document.body.addEventListener("click",e=>{const b=e.target.closest("[data-page-list]");if(b){ResultPages.set(b.dataset.pageList,b.dataset.page);renderPage(b.dataset.pageList);}});document.body.addEventListener("change",e=>{if(e.target.dataset.pageInput){ResultPages.set(e.target.dataset.pageInput,e.target.value);renderPage(e.target.dataset.pageInput);}});}
 
 window.addEventListener("resize", () => {
   window.clearTimeout(state.resizeTimer);

@@ -40,23 +40,39 @@ const values=Array.from({length:12},(_,i)=>i+1);
 const manifest={schema_version:1,years:['2025','2026'],coverage:{'2025':{available_types:1,source_trades:5,represented_trades:5},'2026':{available_types:1,source_trades:7,represented_trades:7}},
  catalog:asset('catalog',{regions:[{code:'1'}],addresses:[{key:'A',building_name:'끝 단지'}]}),history:asset('history',{}),recommendations:asset('recs',{recommendations:[]}),
  periods:{'2025':asset('2025',[['1',5,values,[[0,5,values]],[]]]),'2026':asset('2026',[['1',7,values,[[0,7,values]],[]]])}};
-let delayed=null,corrupt=false;
+let delayed=null,corrupt=false,historyRequests=0;
 context.fetch=async url=>{
+ if(url===manifest.history.url)historyRequests++;
  if(url==='data/dashboard_manifest.json')return new Response(JSON.stringify(manifest));
  if(delayed&&url===manifest.periods['2025'].url)await delayed.promise;
  return new Response(corrupt?Buffer.from('corrupt'):assets.get(url));
 };
 (async()=>{
  await evaluate('DashboardData.open().then(s=>globalThis.store=s)');
+ assert.equal(historyRequests,0);
+ await evaluate('Promise.all([store.ensureHistory(),store.ensureHistory()])');
+ assert.equal(historyRequests,1);
  await evaluate('store.loadPeriod("2025")');
  assert.equal(evaluate('store.summary.regions[0].loadedBucket.addresses[0].count'),5);
  delayed={};delayed.promise=new Promise(r=>delayed.resolve=r);
  const slow=evaluate('store.loadPeriod("2025")');await evaluate('store.loadPeriod("2026")');delayed.resolve();await slow;delayed=null;
  assert.equal(evaluate('store.summary.regions[0].loadedBucket.count'),7);
+ corrupt=false;
+ manifest.recommendations=asset('packed',{encoding:'catalog-v1',metadata:{target_year:'2026'},fields:['house_match_score','quality_flags'],rows:[[0,'1',72,['few trades']]]});
+ await evaluate('DashboardData.open().then(s=>globalThis.packedStore=s)');
+ assert.equal(evaluate('packedStore.recommendations.recommendations[0].building_name'),'끝 단지');
+ assert.equal(evaluate('packedStore.recommendations.recommendations[0].building_key'),'A');
+ assert.equal(evaluate('packedStore.recommendations.recommendations[0].house_match_score'),72);
  corrupt=true;await assert.rejects(evaluate('store.loadPeriod("2025")'),/무결성/);
  assert.equal(evaluate('store.summary.regions[0].loadedBucket.count'),7);
  // Every statically referenced app element exists in the shipped HTML.
  const html=read('index.html');const ids=new Set([...html.matchAll(/\bid="([^"]+)"/g)].map(x=>x[1]));
+ assert.equal(ids.size,[...html.matchAll(/\bid="([^"]+)"/g)].length,'Duplicate IDs');
+ for(const name of ['leaflet.css','leaflet.js']){
+  const tag=html.match(new RegExp(`<[^>]+(?:href|src)="vendor/${name}"[^>]*>`))[0];
+  const hash=tag.match(/integrity="sha256-([^"]+)"/)[1];
+  assert.equal(createHash('sha256').update(fs.readFileSync(`${root}/web/vendor/${name}`)).digest('base64'),hash,'Vendored Leaflet SRI mismatch');
+ }
  for(const match of read('app.js').matchAll(/getElementById\("([^"]+)"\)/g)){
    if(match[1]==='type-select')continue; // dynamically created only when a type is selected
    assert.ok(ids.has(match[1]),`Missing static element ${match[1]}`);

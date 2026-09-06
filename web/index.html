@@ -6,7 +6,8 @@
   Fast web-only run:
     python run_real_estate_dashboard.py --skip-build
 -->
-<!doctype html>
+<!DOCTYPE html>
+
 <!--
   이 파일의 의도:
   - 대시보드의 정적 HTML 뼈대를 정의합니다.
@@ -14,229 +15,202 @@
   - GitHub Pages 배포를 위해 별도 백엔드 없이 CDN Leaflet과 로컬 JSON만 사용합니다.
 -->
 <html lang="ko">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>수도권 아파트 실거래 비교</title>
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css"
-      integrity="sha256-p4NxAoJBhIINfQqq8p9SzrgGeyfqqCWe6N+zCw0sZ9o="
-      crossorigin=""
-    />
-    <link rel="stylesheet" href="styles.css" />
-  </head>
-  <body>
-    <main class="app-shell">
-      <section class="map-pane">
-        <p id="map-status" role="status">지도는 시군구 거래 집계입니다. 개편 지역은 목록에서 확인하세요.</p>
-        <div id="map" aria-label="수도권 아파트 실거래가 Hot Cold 지도"></div>
-        <div class="legend">
-          <div class="legend-title" id="legend-title">전체연도 · 수도권 전체 · 거래가_억원</div>
-          <div class="legend-gradient"></div>
-          <div class="legend-scale">
-            <span id="legend-min">낮음</span>
-            <span id="legend-mid">중간</span>
-            <span id="legend-max">높음</span>
-          </div>
-        </div>
-        <div class="map-scope">
-          <button type="button" class="scope-button selected" data-map-mode="global">수도권 전체</button>
-          <button type="button" class="scope-button" data-map-mode="sido">선택 시도</button>
-          <button type="button" class="scope-button" data-map-mode="gu">선택 시군구</button>
-          <button type="button" class="scope-button" data-map-mode="dong">선택 읍면동</button>
-        </div>
-        <button type="button" class="map-reset" id="map-reset">전체 보기</button>
-        <div class="growth-summary" id="growth-summary"></div>
-        <section class="growth-ranking">
-          <div class="growth-ranking-head">
-            <strong>상승률 랭킹</strong>
-            <select id="growth-level-select" aria-label="상승률 랭킹 단위">
-              <option value="gu">시군구</option>
-              <option value="dong">읍면동</option>
-            </select>
-            <select id="growth-period-select" aria-label="상승률 랭킹 기간">
-              <option value="all">전체기간</option>
-            </select>
-          </div>
-          <div class="growth-ranking-filters">
-            <input id="growth-search-input" type="search" placeholder="지역 검색" />
-            <input id="growth-min-input" type="number" step="0.1" placeholder="상승률 하한" />
-          </div>
-          <ol id="growth-ranking-list" class="growth-ranking-list"></ol>
-        </section>
-        <section class="growth-ranking ai-score-ranking">
-          <div class="growth-ranking-head">
-            <strong>검토점수 랭킹</strong>
-            <select id="ai-score-level-select" aria-label="검토점수 랭킹 단위">
-              <option value="gu">시군구</option>
-              <option value="dong">읍면동</option>
-            </select>
-            <span>현재 모델</span>
-          </div>
-          <div class="growth-ranking-filters">
-            <input id="ai-score-search-input" type="search" placeholder="지역 검색" />
-            <input id="ai-score-min-input" type="number" step="0.1" placeholder="검토점수 하한" />
-          </div>
-          <ol id="ai-score-ranking-list" class="growth-ranking-list"></ol>
-        </section>
-      </section>
+<head>
+<meta charset="utf-8"/>
+<link rel="icon" href="data:,"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>수도권 아파트 실거래 비교</title>
+<link crossorigin="" href="vendor/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" rel="stylesheet"/>
+<link href="styles.css" rel="stylesheet"/>
+</head>
+<body>
+<main class="app-shell">
+<section class="map-pane"><h2>지역별 비교</h2>
 
-      <aside class="detail-pane">
-        <header class="panel-header">
-          <p id="data-status" role="status">전체 자료를 불러오는 중…</p><p id="coverage-note" class="coverage-note"></p><a href="model.html" class="model-link">사용법 · 모델 검증 · 자료 범위 →</a>
-          <p class="eyebrow">Capital apartment intelligence</p>
-          <h1>수도권 아파트 실거래 비교</h1>
-          <p id="data-status" role="status">전체 자료를 불러오는 중입니다.</p>
-          <p id="coverage-note"></p>
-          <a class="guide-link" href="model.html">모델 사용법 · 검증 · 자료 범위 →</a>
-        </header>
+<div aria-label="수도권 아파트 실거래가 Hot Cold 지도" id="map"></div>
 
-        <section class="control-grid">
-          <label>
-            <span>연도</span>
-            <select id="year-select"></select>
-          </label>
-          <label>
-            <span>대표 지표</span>
-            <select id="metric-select">
-              <option value="price_billion">거래가_억원</option>
-              <option value="price_per_pyeong">평단가_만원</option>
-              <option value="count">거래횟수</option>
-              <option value="yoy_rate">전년 대비 상승률</option>
-              <option value="ai_score">검토점수</option>
-            </select>
-          </label>
-          <label>
-            <span>평형 구간</span>
-            <select id="area-range-select">
-              <option value="all">전체</option>
-              <option value="lte14">14평 이하</option>
-              <option value="gt14_lte26">14평 초과 26평 이하</option>
-              <option value="gt26_lte34">26평 초과 34평 이하</option>
-              <option value="gt34">34평 초과</option>
-            </select>
-          </label>
-          <label>
-            <span>시도</span>
-            <select id="sido-select"></select>
-          </label>
-          <label>
-            <span>시군구</span>
-            <select id="gu-select"></select>
-          </label>
-          <label>
-            <span>읍면동</span>
-            <select id="dong-select"></select>
-          </label>
-          <label class="checkbox-filter mobile-elementary-filter">
-            <span>초품아</span>
-            <input id="elementary-filter-mobile" type="checkbox" />
-          </label>
-        </section>
 
-        <section class="search-row">
-          <label>
-            <span>검색</span>
-            <input id="search-input" type="search" placeholder="시도·시군구·읍면동·단지·면적 검색" />
-          </label>
-          <label>
-            <span>가격 하한(억)</span>
-            <input id="min-price-input" type="number" min="0" step="0.1" placeholder="전체" />
-          </label>
-          <label>
-            <span>가격 상한(억)</span>
-            <input id="price-input" type="number" min="0" step="0.1" placeholder="전체" />
-          </label>
-          <label>
-            <span>최소 세대수</span>
-            <input id="households-input" type="number" min="0" step="50" placeholder="전체" />
-          </label>
-          <label>
-            <span>최소 거래수</span>
-            <input id="trade-count-input" type="number" min="0" step="1" placeholder="전체" />
-          </label>
-          <label>
-            <span>연식</span>
-            <select id="age-range-select">
-              <option value="all">전체</option>
-              <option value="new">신축 0~5년</option>
-              <option value="semi_new">준신축 5~15년</option>
-              <option value="middle">중간 15~20년</option>
-              <option value="old">구축 20~30년</option>
-              <option value="very_old">노후 30년+</option>
-            </select>
-          </label>
-          <button type="button" id="dark-mode-toggle" class="dark-mode-toggle" aria-label="다크모드 전환">Dark</button>
-          <button type="button" id="clear-filter">초기화</button>
-        </section>
 
-        <section class="stats-grid">
-          <div>
-            <span>거래횟수</span>
-            <strong id="total-used">-</strong>
-          </div>
-          <div>
-            <span>조건에 맞는 전체 단지</span>
-            <strong id="total-buildings">-</strong>
-          </div>
-          <label>
-            <span>호선</span>
-            <select id="subway-line-select">
-              <option value="all">전체</option>
-            </select>
-          </label>
-          <label>
-            <span>역세권</span>
-            <select id="subway-walk-select">
-              <option value="all">전체</option>
-              <option value="5">도보 5분</option>
-              <option value="10">도보 10분</option>
-              <option value="15">도보 15분</option>
-            </select>
-          </label>
-          <label class="checkbox-filter">
-            <span>초품아</span>
-            <input id="elementary-filter" type="checkbox" />
-          </label>
-        </section>
 
-        <section id="selected-region" class="selected-region"></section>
 
-        <div class="result-actions"><button id="export-results" type="button">조건에 맞는 전체 평형 CSV</button></div>
-        <p class="score-note">모든 결과를 페이지로 나눠 보여줍니다. 검토점수는 수익률이나 상승 확률이 아닙니다.</p>
-        <section class="market-tabs">
-          <div class="tab-buttons" role="tablist" aria-label="매물 목록">
-            <button type="button" class="tab-button active" data-market-tab="ai">AI 비교·평형 <span id="ai-count">0</span></button>
-            <button type="button" class="tab-button" data-market-tab="all">전체 단지 <span id="all-count">0</span></button>
-            <button type="button" class="tab-button" data-market-tab="hot">Hot <span id="hot-count">0</span></button>
-            <button type="button" class="tab-button" data-market-tab="cold">Cold <span id="cold-count">0</span></button>
-          </div>
-          <p class="score-note">SCORE는 정식 모델 점수이며, 모델 미산출 대상은 지도/정렬용 보조 SCORE로 표시됩니다.</p>
-          <div class="tab-panel active" data-market-panel="ai">
-            <ol id="ai-list" class="ai-list"></ol>
-          </div>
-          <div class="tab-panel" data-market-panel="all">
-            <ol id="all-list" class="asset-list"></ol>
-          </div>
-          <div class="tab-panel" data-market-panel="hot">
-            <ol id="hot-list" class="asset-list compact"></ol>
-          </div>
-          <div class="tab-panel" data-market-panel="cold">
-            <ol id="cold-list" class="asset-list compact"></ol>
-          </div>
-        </section>
-      </aside>
-    </main>
 
-    <script
-      src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"
-      integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
-      crossorigin=""
-    ></script>
-    <script src="https://cdn.jsdelivr.net/npm/topojson-client@3"></script>
-    <script src="data-store.js"></script>
-    <script src="result-pages.js"></script>
-    <script src="app.js"></script>
-  </body>
+<p id="map-status" role="status">지도는 시군구 거래 집계입니다. 개편 지역은 목록에서 확인하세요.</p><div class="map-scope">
+<button class="scope-button selected" data-map-mode="global" type="button">수도권 전체</button>
+<button class="scope-button" data-map-mode="sido" type="button">선택 시도</button>
+<button class="scope-button" data-map-mode="gu" type="button">선택 시군구</button>
+<button class="scope-button" data-map-mode="dong" type="button">선택 읍면동</button>
+</div><button class="map-reset" id="map-reset" type="button">전체 보기</button><div class="legend">
+<div class="legend-title" id="legend-title">전체연도 · 수도권 전체 · 거래가_억원</div>
+<div class="legend-gradient"></div>
+<div class="legend-scale">
+<span id="legend-min">낮음</span>
+<span id="legend-mid">중간</span>
+<span id="legend-max">높음</span>
+</div>
+</div></section>
+<aside class="detail-pane">
+<header class="panel-header"><p class="eyebrow">CAPITAL AREA / REAL ESTATE</p><h1>수도권 아파트 실거래 비교</h1><p id="data-status" role="status">전체 자료를 불러오는 중…</p><p id="coverage-note"></p><a class="guide-link" href="model.html">모델 사용법 · 검증 · 자료 범위 →</a></header>
+<details class="location-filters" id="location-filters" open><summary>연도·지역·면적 선택</summary><section class="control-grid">
+<label>
+<span>연도</span>
+<select id="year-select"></select>
+</label>
+<label>
+<span>대표 지표</span>
+<select id="metric-select">
+<option value="price_billion">거래가_억원</option>
+<option value="price_per_pyeong">평단가_만원</option>
+<option value="count">거래횟수</option>
+<option value="yoy_rate">전년 대비 상승률</option>
+<option value="ai_score">검토점수</option>
+</select>
+</label>
+<label>
+<span>평형 구간</span>
+<select id="area-range-select">
+<option value="all">전체</option>
+<option value="lte14">14평 이하</option>
+<option value="gt14_lte26">14평 초과 26평 이하</option>
+<option value="gt26_lte34">26평 초과 34평 이하</option>
+<option value="gt34">34평 초과</option>
+</select>
+</label>
+<label>
+<span>시도</span>
+<select id="sido-select"></select>
+</label>
+<label>
+<span>시군구</span>
+<select id="gu-select"></select>
+</label>
+<label>
+<span>읍면동</span>
+<select id="dong-select"></select>
+</label>
+
+</section>
+</details><section class="primary-search"><label>
+<span>검색</span>
+<input id="search-input" placeholder="시도·시군구·읍면동·단지·면적 검색" type="search"/>
+</label><button id="clear-filter" type="button">초기화</button><button aria-label="다크모드 전환" class="dark-mode-toggle" id="dark-mode-toggle" type="button">Dark</button></section><details class="advanced-filters" id="advanced-filters"><summary>가격·세대수·연식·입지 필터</summary><section class="search-row">
+
+<label>
+<span>가격 하한(억)</span>
+<input id="min-price-input" min="0" placeholder="전체" step="0.1" type="number"/>
+</label>
+<label>
+<span>가격 상한(억)</span>
+<input id="price-input" min="0" placeholder="전체" step="0.1" type="number"/>
+</label>
+<label>
+<span>최소 세대수</span>
+<input id="households-input" min="0" placeholder="전체" step="50" type="number"/>
+</label>
+<label>
+<span>최소 거래수</span>
+<input id="trade-count-input" min="0" placeholder="전체" step="1" type="number"/>
+</label>
+<label>
+<span>연식</span>
+<select id="age-range-select">
+<option value="all">전체</option>
+<option value="new">신축 0~5년</option>
+<option value="semi_new">준신축 5~15년</option>
+<option value="middle">중간 15~20년</option>
+<option value="old">구축 20~30년</option>
+<option value="very_old">노후 30년+</option>
+</select>
+</label>
+
+
+</section><div class="facility-filters"><label>
+<span>호선</span>
+<select id="subway-line-select">
+<option value="all">전체</option>
+</select>
+</label><label>
+<span>역세권</span>
+<select id="subway-walk-select">
+<option value="all">전체</option>
+<option value="5">도보 5분</option>
+<option value="10">도보 10분</option>
+<option value="15">도보 15분</option>
+</select>
+</label><label class="checkbox-filter">
+<span>초품아</span>
+<input id="elementary-filter" type="checkbox"/>
+</label></div><div class="result-actions"><button id="export-results" type="button">조건에 맞는 전체 평형 CSV</button></div><p class="score-note">다운로드는 현재 페이지와 관계없이 조건에 맞는 결과 전부를 포함합니다.</p></details>
+<section class="stats-grid">
+<div>
+<span>거래횟수</span>
+<strong id="total-used">-</strong>
+</div>
+<div>
+<span>조건에 맞는 전체 단지</span>
+<strong id="total-buildings">-</strong>
+</div>
+
+
+
+</section>
+<section class="selected-region" id="selected-region"></section>
+<section class="market-tabs">
+<div aria-label="매물 목록" class="tab-buttons" role="tablist">
+<button class="tab-button active" data-market-tab="ai" type="button">AI 비교·평형 <span id="ai-count">0</span></button>
+<button class="tab-button" data-market-tab="all" type="button">전체 단지 <span id="all-count">0</span></button>
+<button class="tab-button" data-market-tab="hot" type="button">Hot <span id="hot-count">0</span></button>
+<button class="tab-button" data-market-tab="cold" type="button">Cold <span id="cold-count">0</span></button>
+</div>
+
+<div class="tab-panel active" data-market-panel="ai">
+<ol class="ai-list" id="ai-list"></ol>
+</div>
+<div class="tab-panel" data-market-panel="all">
+<ol class="asset-list" id="all-list"></ol>
+</div>
+<div class="tab-panel" data-market-panel="hot">
+<ol class="asset-list compact" id="hot-list"></ol>
+</div>
+<div class="tab-panel" data-market-panel="cold">
+<ol class="asset-list compact" id="cold-list"></ol>
+</div>
+</section>
+<details class="analysis-panel" id="analysis-panel"><summary>지역별 상승률·검토점수 분석</summary><div class="growth-summary" id="growth-summary"></div><section class="growth-ranking">
+<div class="growth-ranking-head">
+<strong>상승률 랭킹</strong>
+<select aria-label="상승률 랭킹 단위" id="growth-level-select">
+<option value="gu">시군구</option>
+<option value="dong">읍면동</option>
+</select>
+<select aria-label="상승률 랭킹 기간" id="growth-period-select">
+<option value="all">전체기간</option>
+</select>
+</div>
+<div class="growth-ranking-filters">
+<input id="growth-search-input" placeholder="지역 검색" type="search"/>
+<input id="growth-min-input" placeholder="상승률 하한" step="0.1" type="number"/>
+</div>
+<ol class="growth-ranking-list" id="growth-ranking-list"></ol>
+</section><section class="growth-ranking ai-score-ranking">
+<div class="growth-ranking-head">
+<strong>검토점수 랭킹</strong>
+<select aria-label="검토점수 랭킹 단위" id="ai-score-level-select">
+<option value="gu">시군구</option>
+<option value="dong">읍면동</option>
+</select>
+<span>현재 모델</span>
+</div>
+<div class="growth-ranking-filters">
+<input id="ai-score-search-input" placeholder="지역 검색" type="search"/>
+<input id="ai-score-min-input" placeholder="검토점수 하한" step="0.1" type="number"/>
+</div>
+<ol class="growth-ranking-list" id="ai-score-ranking-list"></ol>
+</section></details></aside>
+</main>
+<script crossorigin="" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" src="vendor/leaflet.js"></script>
+
+<script src="data-store.js"></script>
+<script src="result-pages.js"></script>
+<script src="app.js"></script>
+</body>
 </html>

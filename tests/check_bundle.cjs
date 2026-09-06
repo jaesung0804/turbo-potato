@@ -11,6 +11,7 @@ const run=s=>vm.runInContext(s,context);
  await run(`DashboardData.open().then(s=>{state.dataStore=s;state.summary=s.summary;state.recommendations=s.recommendations;
  state.recommendationByType=new Map(s.recommendations.recommendations.map(r=>[recommendationKey(r.region_code,r.building_key),r]));})`);
  const manifest=JSON.parse(read('data/dashboard_manifest.json'));
+ await run('state.dataStore.ensureHistory()');
  for(const year of (origin?[manifest.default_year]:Object.keys(manifest.periods))){
   context.period=year;await run('state.dataStore.loadPeriod(period)');run('state.year=period;state.regionValueCache.clear();');
   for(const metric of ['price_billion','ai_score','yoy_rate']){
