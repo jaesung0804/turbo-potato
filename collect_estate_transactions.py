@@ -21,6 +21,7 @@ import xml.etree.ElementTree as ET
 from datetime import datetime, timezone
 from pathlib import Path
 from get_molit_apt_trade_data import CAPITAL_AREA_LAWD_CODES, LawdCode, DASHBOARD_FIELDNAMES, normalize_row, month_range
+from estate_calendar import today
 
 URL = "https://apis.data.go.kr/1613000/RTMSDataSvcAptTrade/getRTMSDataSvcAptTrade"
 NORMALIZER_VERSION = 2
@@ -149,14 +150,14 @@ def read_partition(path,month,code):
 
 def collect(key,start,end,cache,output,refresh_months=3,workers=2,shard_index=0,shard_count=1):
     months=month_range(start,end)
-    if start>end or end>datetime.now(timezone.utc).strftime("%Y%m") or refresh_months<0:
+    if start>end or end>today().strftime("%Y%m") or refresh_months<0:
         raise ValueError("Invalid contract-month range")
     cache.mkdir(parents=True,exist_ok=True)
     partitions=[]; missing=[]
     # Revisit one older month per daily refresh so late cancellations eventually
     # reach saved history without downloading the entire history every day.
     old_months=months[:-refresh_months] if refresh_months>0 else []
-    audit_month=old_months[datetime.now(timezone.utc).date().toordinal()%len(old_months)] if old_months else None
+    audit_month=old_months[today().toordinal()%len(old_months)] if old_months else None
     if shard_index<0 or shard_index>=shard_count:raise ValueError('Invalid shard index')
     regions=sorted(REGIONS.items())[shard_index::shard_count]
     for month in months:
@@ -193,9 +194,9 @@ def collect(key,start,end,cache,output,refresh_months=3,workers=2,shard_index=0,
         return len(rows)
     print(f"Requested {len(partitions)} partitions; fetch {len(missing)}, reuse {len(partitions)-len(missing)}",flush=True)
     pending=missing
-    for pass_number in range(3):
-        failed=[];consecutive_failures=0
-        with concurrent.futures.ThreadPoolExecutor(max_workers=workers) as pool:
+    with concurrent.futures.ThreadPoolExecutor(max_workers=workers) as pool:
+        for pass_number in range(3):
+            failed=[];consecutive_failures=0
             futures={pool.submit(one,item):item for item in pending}
             for count,future in enumerate(concurrent.futures.as_completed(futures),1):
                 try:
@@ -212,8 +213,8 @@ def collect(key,start,end,cache,output,refresh_months=3,workers=2,shard_index=0,
                     for other in futures:other.cancel()
                     raise
                 if count%100==0 or count==len(pending):print(f"Pass {pass_number+1}: checked {count}/{len(pending)}; transient failures {len(failed)}",flush=True)
-        if not failed:break
-        pending=failed
+            if not failed:break
+            pending=failed
     if failed:raise RuntimeError(f'{len(failed)} incomplete partitions; completed checkpoints and previous CSV were preserved')
     output.parent.mkdir(parents=True,exist_ok=True)
     temp=output.with_suffix(".csv.tmp"); total=0
@@ -247,7 +248,7 @@ def existing_key():
 
 if __name__=="__main__":
     p=argparse.ArgumentParser(description=__doc__)
-    p.add_argument("--start",default="202101");p.add_argument("--end",default=datetime.now(timezone.utc).strftime("%Y%m"))
+    p.add_argument("--start",default="202101");p.add_argument("--end",default=today().strftime("%Y%m"))
     p.add_argument("--refresh-months",type=int,default=3);p.add_argument("--workers",type=int,choices=[1,2,3,4],default=2)
     p.add_argument('--shard-index',type=int,default=0);p.add_argument('--shard-count',type=int,choices=[1,2,4],default=1)
     p.add_argument("--cache",default="data/molit_cache_v3");p.add_argument("--output",default="data/capital_area_apt_trade_transactions.csv")

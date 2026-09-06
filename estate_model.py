@@ -8,6 +8,7 @@ import numpy as np
 import pandas as pd
 from lightgbm import LGBMRegressor
 from estate_io import write_json
+from estate_calendar import today
 
 VERSION='estate-reference-v3'
 NUMERIC=['year','area','age','prior_price','prior_peer','momentum','prior_count','peer_count']
@@ -120,7 +121,7 @@ def evaluate(frame,closed_year):
 
 def run(summary_path,output_path,model_dir,month=None,mode='auto'):
     summary=json.loads(Path(summary_path).read_text());frame,payload=dataset(summary)
-    month=month or date.today().strftime('%Y-%m')
+    month=month or today().strftime('%Y-%m')
     if date.fromisoformat(month+'-01').strftime('%Y-%m')!=month:raise ValueError('Invalid model month')
     artifact_path=Path(model_dir)/VERSION/(month+'.joblib')
     if artifact_path.exists():
@@ -133,7 +134,7 @@ def run(summary_path,output_path,model_dir,month=None,mode='auto'):
         training=frame[frame.year<=cutoff];folds=evaluate(frame,cutoff)
         if not folds:raise ValueError('At least three completed years are required for independent validation')
         weight,interval=tune(training,cutoff)
-        artifact={**fit(training),'version':VERSION,'model_month':month,'created_at':date.today().isoformat(),
+        artifact={**fit(training),'version':VERSION,'model_month':month,'created_at':today().isoformat(),
             'trained_through':f'{cutoff}-12-31','training_rows':len(training),'data_snapshot':summary['generated_at'],
             'training_sha256':hashlib.sha256(training.to_json().encode()).hexdigest(),'ml_weight':weight,'interval':interval,'validation':folds}
         artifact_path.parent.mkdir(parents=True,exist_ok=True);joblib.dump(artifact,artifact_path,compress=3)
@@ -152,7 +153,7 @@ def run(summary_path,output_path,model_dir,month=None,mode='auto'):
             'reference_high':round(fair*math.exp(width),1),'house_match_score':round(score,1),'sample_confidence':round(confidence,3),
             'undervalue_pct':round((fair/p['price_per_pyeong']-1)*100,1),'quality_flags':flags,'expected_growth_pct':None})
     results.sort(key=lambda p:(-p['house_match_score'],p['region_code'],p['building_key']))
-    result={'schema_version':2,'model_version':VERSION,'generated_at':date.today().isoformat(),
+    result={'schema_version':2,'model_version':VERSION,'generated_at':today().isoformat(),
         'data_as_of':summary.get('data_through',summary['generated_at']),'target_year':str(latest),
         **{k:artifact[k] for k in ['model_month','created_at','trained_through','training_rows','ml_weight','validation']},
         'score_note':'검토점수는 기준가격과 관측가격의 차이를 거래수·과거 오차로 조정한 순서이며 수익률이나 상승 확률이 아닙니다.',

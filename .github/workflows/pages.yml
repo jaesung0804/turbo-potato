@@ -15,7 +15,7 @@ permissions:
   pages: write
   id-token: write
 concurrency:
-  group: estate-refresh-and-pages
+  group: estate-raw-data-update
   cancel-in-progress: false
 jobs:
   deploy:
@@ -51,14 +51,13 @@ jobs:
         env:
           MOLIT_API_KEY: ${{ secrets.MOLIT_API_KEY }}
         run: python collect_estate_transactions.py --refresh-months 3 --workers 2 --use-existing-config
-      - name: Persist complete refreshed raw state
-        if: github.event_name == 'schedule' || inputs.refresh == true
+      - name: Persist complete raw state with reusable history partitions
         run: |
           set -euo pipefail
           python raw_estate_state.py pack --state-dir .work/raw-state
           git -C .work/raw-state config user.name github-actions[bot]
           git -C .work/raw-state config user.email 41898282+github-actions[bot]@users.noreply.github.com
-          git -C .work/raw-state add .gitattributes raw_manifest.json objects
+          git -C .work/raw-state add -A
           if ! git -C .work/raw-state diff --cached --quiet; then
             git -C .work/raw-state commit -m 'Save verified incremental apartment transactions'
             git -C .work/raw-state push origin HEAD:estate-raw-state

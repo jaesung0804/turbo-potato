@@ -8,7 +8,7 @@ permissions:
   contents: write
 concurrency:
   group: estate-raw-data-update
-  cancel-in-progress: true
+  cancel-in-progress: false
 jobs:
   collect:
     strategy:
@@ -25,7 +25,7 @@ jobs:
       - uses: actions/cache/restore@v4
         with:
           path: data/molit_cache_v3
-          key: estate-complete-v4-s${{ matrix.shard }}-${{ github.run_id }}
+          key: estate-complete-v4-s${{ matrix.shard }}-${{ github.run_id }}-${{ github.run_attempt }}
           restore-keys: |
             estate-complete-v4-s${{ matrix.shard }}-
             estate-complete-v4-
@@ -39,13 +39,14 @@ jobs:
         uses: actions/cache/save@v4
         with:
           path: data/molit_cache_v3
-          key: estate-complete-v4-s${{ matrix.shard }}-${{ github.run_id }}
+          key: estate-complete-v4-s${{ matrix.shard }}-${{ github.run_id }}-${{ github.run_attempt }}
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: estate-partitions-${{ matrix.shard }}
           path: data/molit_cache_v3/
           retention-days: 30
+          overwrite: true
           compression-level: 0
   assemble:
     needs: collect
@@ -76,17 +77,18 @@ jobs:
           python raw_estate_state.py pack --state-dir .work/raw-state
       - uses: actions/upload-artifact@v4
         with:
-          name: complete-estate-state-${{ github.run_id }}
+          name: complete-estate-state-${{ github.run_id }}-${{ github.run_attempt }}
           path: |
             .work/raw-state/raw_manifest.json
             .work/raw-state/objects/
+            .work/raw-state/partitions/
           retention-days: 90
       - name: Save complete state without changing the live site
         run: |
           set -euo pipefail
           git -C .work/raw-state config user.name github-actions[bot]
           git -C .work/raw-state config user.email 41898282+github-actions[bot]@users.noreply.github.com
-          git -C .work/raw-state add .gitattributes raw_manifest.json objects
+          git -C .work/raw-state add -A
           if ! git -C .work/raw-state diff --cached --quiet; then
             git -C .work/raw-state commit -m 'Save complete apartment history and verified checkpoints'
             git -C .work/raw-state push origin HEAD:estate-raw-state

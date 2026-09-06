@@ -18,6 +18,12 @@ from build_public_site import apply_amenities
 from dashboard_bundle import build_bundle
 
 
+def test_month_changes_at_the_korean_midnight():
+    from datetime import datetime, timezone
+    from estate_calendar import today
+    assert today(datetime(2026,9,30,20,35,tzinfo=timezone.utc)).strftime('%Y-%m') == '2026-10'
+
+
 def trade(**changes):
     return {'CGG_CD': '11110', 'CGG_NM': '종로구', 'STDG_CD': '10100', 'STDG_NM': '청운동',
             'MNO': '1', 'SNO': '0', 'BLDG_NM': '같은이름', 'BLDG_USG': '아파트',
@@ -183,12 +189,40 @@ def test_raw_state_roundtrip_and_corruption_preserves_existing(tmp_path):
     source = tmp_path/'source'; (source/'data/molit_cache_v3').mkdir(parents=True)
     body = b'column\nvalue\n'; raw = source/'data/capital_area_apt_trade_transactions.csv'; raw.write_bytes(body)
     raw.with_suffix('.manifest.json').write_text(json.dumps({'complete': True, 'normalizer_version': 2, 'rows': 1, 'sha256': hashlib.sha256(body).hexdigest()}))
-    state = tmp_path/'state'; raw_state.pack(state, source)
+    state = tmp_path/'state'; raw_state.pack_v1(state, source)
     restored = tmp_path/'restored'; raw_state.restore(state, restored)
     assert (restored/'data/capital_area_apt_trade_transactions.csv').read_bytes() == body
     next(state.glob('objects/*.part')).write_bytes(b'corrupt')
     with pytest.raises(ValueError): raw_state.restore(state, restored)
     assert (restored/'data/capital_area_apt_trade_transactions.csv').read_bytes() == body
+
+
+def test_partition_state_reassembles_exact_csv_and_reuses_unchanged_history(tmp_path):
+    source=tmp_path/'source';cache=source/'data/molit_cache_v3';cache.mkdir(parents=True)
+    rows=[trade()];path=cache/'202501-11110.json.gz'
+    data={'complete':True,'normalizer_version':2,'month':'202501','code':'11110','count':1,
+        'fetched_at':'2026-09-06T00:00:00Z','rows_sha256':collector.digest(collector.rows_bytes(rows)),'rows':rows}
+    path.write_bytes(gzip.compress(json.dumps(data,ensure_ascii=False,separators=(',',':')).encode()))
+    raw=source/'data/capital_area_apt_trade_transactions.csv'
+    with raw.open('w',encoding='utf-8-sig',newline='') as stream:
+        writer=csv.DictWriter(stream,fieldnames=collector.DASHBOARD_FIELDNAMES);writer.writeheader();writer.writerows(rows)
+    original=raw.read_bytes()
+    meta={'complete':True,'normalizer_version':2,'rows':1,'partition_count':1,'region_count':1,
+        'start':'202501','end':'202501','sha256':hashlib.sha256(original).hexdigest()}
+    raw.with_suffix('.manifest.json').write_text(json.dumps(meta))
+    state=tmp_path/'state';manifest=raw_state.pack(state,source)
+    assert manifest['schema_version']==2
+    stored=state/manifest['files'][0]['path'];first=stored.read_bytes()
+    data['fetched_at']='2026-09-07T00:00:00Z'
+    path.write_bytes(gzip.compress(json.dumps(data,ensure_ascii=False,separators=(',',':')).encode()))
+    raw_state.pack(state,source)
+    assert stored.read_bytes()==first
+    restored=tmp_path/'restored';raw_state.restore(state,restored)
+    assert (restored/'data/capital_area_apt_trade_transactions.csv').read_bytes()==original
+    assert collector.read_partition(restored/'data/molit_cache_v3'/path.name,'202501','11110')['fetched_at']=='2026-09-07T00:00:00Z'
+    stored.write_bytes(b'corrupt')
+    with pytest.raises(ValueError):raw_state.restore(state,restored)
+    assert (restored/'data/capital_area_apt_trade_transactions.csv').read_bytes()==original
 
 
 def test_model_state_refuses_replacement_before_writing(tmp_path):
