@@ -5,6 +5,11 @@
       "path": "models/estate-reference-v3/2026-09.joblib",
       "bytes": 184652,
       "sha256": "35e9ad360e2b8b3accc8c6e7bc4ab9357f560d61cd31b94139fdc73420ed1573"
+    },
+    {
+      "path": "models/estate-reference-v4/2026-09.joblib",
+      "bytes": 184344,
+      "sha256": "97f8b57272280f7574ae210cac2a1a884941d2ab5ce96968a60476e041b4dba2"
     }
   ]
 }
