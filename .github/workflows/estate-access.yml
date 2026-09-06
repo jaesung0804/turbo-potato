@@ -12,53 +12,20 @@ jobs:
     timeout-minutes: 5
     steps:
       - uses: actions/checkout@v4
-      - name: Verify approved existing public-data access
+      - name: Verify the live cancellation schema without exposing credentials
         env:
           MOLIT_API_KEY: ${{ secrets.MOLIT_API_KEY }}
         run: |
           python - <<'PY'
-          import ast, json, os, re, urllib.request, urllib.parse, urllib.error
-          import xml.etree.ElementTree as ET
-          from pathlib import Path
-          key = os.getenv("MOLIT_API_KEY", "").strip()
-          source = "repository secret"
-          if not key:
-              # The user explicitly authorized using the existing key in this repository.
-              tree = ast.parse(Path("get_apt_basis_detail_data.py").read_text(encoding="utf-8-sig"))
-              candidates = [n.value for n in ast.walk(tree) if isinstance(n, ast.Constant)
-                            and isinstance(n.value, str) and re.fullmatch(r"[A-Za-z0-9+/=%]{70,160}", n.value)]
-              if len(candidates) == 1:
-                  key = candidates[0]
-                  source = "existing user-provided public-data configuration"
-          if not key:
-              raise SystemExit("No existing MOLIT_API_KEY or provided data.go.kr configuration was available.")
-          print("::add-mask::" + key)
-          result = []
-          for kind, service in [("prod", "RTMSDataSvcAptTrade"), ("dev", "RTMSDataSvcAptTradeDev")]:
-              entry = {"endpoint": kind, "credential_source": source}
-              query = urllib.parse.urlencode({"serviceKey": urllib.parse.unquote(key), "LAWD_CD":"11110",
-                                               "DEAL_YMD":"202605", "pageNo":1, "numOfRows":1})
-              url = "https://apis.data.go.kr/1613000/" + service + "/get" + service + "?" + query
-              try:
-                  with urllib.request.urlopen(url, timeout=20) as response:
-                      root = ET.fromstring(response.read())
-                  code = root.findtext(".//resultCode") or root.findtext(".//returnReasonCode") or "unknown"
-                  entry["code"] = code if code.isdigit() else "unknown"
-                  total = root.findtext(".//totalCount")
-                  entry["total"] = int(total) if total and total.isdigit() else None
-                  entry["success"] = code in {"0","00","000"} and entry["total"] is not None
-              except urllib.error.HTTPError as error:
-                  entry.update(success=False, http_status=error.code)
-              except Exception as error:
-                  entry.update(success=False, error=type(error).__name__)
-              result.append(entry)
-          print(json.dumps(result, ensure_ascii=False))
-          Path("estate_access.json").write_text(json.dumps(result, indent=2))
-          if not any(item["success"] for item in result):
-              raise SystemExit("Neither approved API returned verified transaction counts; no data or site was changed.")
+          import json
+          from collect_estate_transactions import existing_key,request,validate
+          key=existing_key()
+          print('::add-mask::'+key,flush=True)
+          for code,month in [('11110','202501'),('11680','202101')]:
+              root=request(key,code,month,1)
+              items=root.findall('.//item')
+              fields=sorted({node.tag for item in items for node in item})
+              cancellation_fields=[f for f in fields if 'cancel' in f.lower() or 'cdeal' in f.lower()]
+              print(json.dumps({'district':code,'month':month,'total':validate(root),'fields':fields,
+                'cancellation_nonempty':{f:sum(bool((item.findtext(f) or '').strip()) for item in items) for f in cancellation_fields}},ensure_ascii=False),flush=True)
           PY
-      - uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: estate-access-result
-          path: estate_access.json
