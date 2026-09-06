@@ -30,6 +30,8 @@ assert.equal(evaluate('typeYoyRateForYears(state.summary.regions[0],typeItems()[
 evaluate(`state.year='2025';state.metric='ai_score';state.regionValueCache.clear();`);
 assert.equal(evaluate('groupedBuildings().length'),2);
 assert.equal(evaluate('buildingAge({built_year:2000})'),25);
+evaluate(`state.summary.regions.push({...state.summary.regions[0],code:'2',gu_code:'b'});`);
+assert.equal(evaluate('aggregateRegionRates("gu",()=>1).length'),2);
 
 // Asset checks, exact complete counts, stale async requests, and rollback on corruption.
 const assets=new Map();

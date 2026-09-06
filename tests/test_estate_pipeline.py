@@ -107,6 +107,37 @@ def test_registry_has_every_current_district_once():
     assert sum(r.code.startswith('11') for r in collector.REGIONS.values()) == 25
 
 
+def test_transient_partition_retries_and_complete_cache_needs_no_key(tmp_path, monkeypatch):
+    monkeypatch.setattr(collector, 'REGIONS', {k: collector.REGIONS[k] for k in ['11110', '11140']})
+    monkeypatch.setattr(collector, 'request', lambda *args: api_page(0, []))
+    calls = {}
+    def fetch(key, region, month, abort):
+        identity = (region.code, month); calls[identity] = calls.get(identity, 0)+1
+        if identity == ('11110', '202501') and calls[identity] == 1:
+            raise collector.TransientAPIError('Temporary timeout')
+        return [trade(CGG_CD=region.code, CTRT_DAY=month+'01')]
+    monkeypatch.setattr(collector, 'fetch_partition', fetch)
+    cache, out = tmp_path/'cache', tmp_path/'trades.csv'
+    result = collector.collect('key', '202501', '202502', cache, out, 0, 2)
+    assert result['complete'] and result['rows'] == 4 and len(calls) == 4
+    assert sum(calls.values()) == 5
+    previous = out.read_bytes()
+    monkeypatch.setattr(collector, 'fetch_partition', lambda *args: pytest.fail('Cached partitions must not be fetched'))
+    collector.collect('', '202501', '202502', cache, out, 0, 2)
+    assert out.read_bytes() == previous
+
+
+def test_permanent_collection_error_cannot_replace_existing_csv(tmp_path, monkeypatch):
+    monkeypatch.setattr(collector, 'REGIONS', {'11110': collector.REGIONS['11110']})
+    monkeypatch.setattr(collector, 'request', lambda *args: api_page(0, []))
+    def fail(*args): raise RuntimeError('API logical error 22')
+    monkeypatch.setattr(collector, 'fetch_partition', fail)
+    out=tmp_path/'trades.csv';out.write_bytes(b'previous complete source')
+    with pytest.raises(RuntimeError, match='logical error'):
+        collector.collect('key','202501','202501',tmp_path/'cache',out,0,1)
+    assert out.read_bytes() == b'previous complete source'
+
+
 def test_raw_state_roundtrip_and_corruption_preserves_existing(tmp_path):
     source = tmp_path/'source'; (source/'data/molit_cache_v3').mkdir(parents=True)
     body = b'column\nvalue\n'; raw = source/'data/capital_area_apt_trade_transactions.csv'; raw.write_bytes(body)

@@ -1560,3 +1560,16 @@ ol {
     min-height: 420px;
   }
 }
+
+/* Keep pagination reachable in every existing responsive layout. */
+.result-pagination { flex: 0 0 auto; }
+.growth-ranking, .ai-score-ranking { display: flex; flex-direction: column; }
+.growth-ranking-list, .ai-score-ranking .growth-ranking-list { min-height: 48px; height: auto; flex: 1 1 auto; }
+.growth-ranking .result-pagination { font-size: 10px; margin-bottom: 0; }
+.growth-ranking .result-pagination button { padding: 3px 5px; min-height: 28px; }
+.growth-ranking .result-pagination input { width: 46px; }
+.guide-document, .guide-document body { height: auto; min-height: 100%; overflow: auto; }
+@media (max-width: 900px) and (orientation: landscape) {
+ .growth-ranking, .ai-score-ranking { flex: 0 0 auto; overflow: visible; }
+ .growth-ranking-list, .ai-score-ranking .growth-ranking-list { height: 160px; flex: none; }
+}

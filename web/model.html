@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="ko">
+<html lang="ko" class="guide-document">
 <head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>모델 사용법과 검증 · 수도권 아파트</title><link rel="stylesheet" href="styles.css"></head>
 <body class="guide-page">
 <main class="guide-main">
@@ -26,7 +26,7 @@
   <section id="coverage"><h2>어디까지 수집하고 보여주나요?</h2><p>국토부 아파트 매매 API의 서울·경기·인천 전 시군구와 2021년 이후 계약 월을 수집합니다. API의 모든 페이지를 저장한 뒤 응답 건수와 저장 건수를 비교합니다. 아래의 집계 거래는 취소·직거래·유효하지 않은 가격 및 날짜를 제외한 범위입니다. 원본에는 취소·직거래도 보관합니다.</p>
     <div class="table-scroll"><table><thead><tr><th>기간</th><th>집계 거래</th><th>목록에 보존된 거래</th><th>단지·평형</th><th>보존 확인</th></tr></thead><tbody id="coverage-rows"></tbody></table></div>
     <p>연도별로 필요한 파일을 압축해 읽습니다. 한 번에 그리는 카드 수만 제한하고, 검색·다운로드에 쓰는 전체 결과는 자르지 않습니다. 거래가 없는 단지·해당 연도에 거래되지 않은 평형은 그 연도 자료에 없습니다.</p>
-    <p>신고가 늦거나 해제·정정되면 과거 수치도 달라질 수 있습니다. 최근 3개월은 다시 조회하고, 장기 정정 확인은 전체 재검사로 수행합니다. 지도 경계는 2025년 자료라 2026년 개편 지역은 목록으로 확인하세요.</p>
+    <p>신고가 늦거나 해제·정정되면 과거 수치도 달라질 수 있습니다. 최근 3개월과 순환하는 과거 1개월을 다시 조회합니다. 오래된 정정은 순환 주기에 따라 늦게 반영될 수 있습니다. 지도 경계는 2025년 자료라 2026년 개편 지역은 목록으로 확인하세요.</p>
   </section>
   <section id="limits"><h2>해석할 때 알아둘 점</h2><ul>
     <li>2026년은 미완결 연도입니다. 다음 해 연간 수익률의 정답으로 사용하지 않고, 전년 대비 순위도 완결된 연도로 제한합니다.</li>

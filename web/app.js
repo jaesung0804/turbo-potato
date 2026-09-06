@@ -623,7 +623,7 @@ function groupedBuildings() {
         latestBuiltYear: types.find((item) => item.building.built_year)?.building.built_year ?? null,
       };
     })
-    .sort((a, b) => (b.value ?? -Infinity) - (a.value ?? -Infinity) || a.id.localeCompare(b.id));
+    .sort((a, b) => (b.value ?? -Infinity) - (a.value ?? -Infinity) || String(a.id ?? a.key).localeCompare(String(b.id ?? b.key)));
 }
 
 function selectedGroup(groups = groupedBuildings()) {
@@ -817,7 +817,7 @@ function aggregateRegionRates(level, valueGetter, scoped = false) {
       ...group,
       value: averageValues(group.values),
     }))
-    .sort((a, b) => (b.value ?? -Infinity) - (a.value ?? -Infinity) || a.id.localeCompare(b.id));
+    .sort((a, b) => (b.value ?? -Infinity) - (a.value ?? -Infinity) || String(a.id ?? a.key).localeCompare(String(b.id ?? b.key)));
 }
 
 function renderGrowthSummary() {
@@ -833,7 +833,7 @@ function renderGrowthSummary() {
       label: "전체기간",
       values: new Map(aggregateRegionRates("sido", regionPeriodRate, false).map((group) => [group.key, group.value])),
     },
-    ...state.summary.years
+    ...completedYears().map(String).reverse()
       .filter((year) => previousYearFor(year))
       .map((year) => ({
         label: `${year}`,
@@ -866,7 +866,7 @@ function renderGrowthRankings() {
     ? page.rows
         .map((row, index) => `
           <li>
-            <button type="button" class="growth-rank-row" data-growth-level="${row.level}" data-growth-key="${row.key}">
+            <button type="button" class="growth-rank-row" data-growth-level="${row.level}" data-growth-key="${escapeHtml(row.key)}">
               <span>${page.offset + index + 1}. ${escapeHtml(row.name)}</span>
               <strong>${formatHtml(row.value, "yoy_rate")}</strong>
             </button>
@@ -895,7 +895,7 @@ function renderAiScoreRankings() {
     ? page.rows
         .map((row, index) => `
           <li>
-            <button type="button" class="growth-rank-row" data-growth-level="${row.level}" data-growth-key="${row.key}">
+            <button type="button" class="growth-rank-row" data-growth-level="${row.level}" data-growth-key="${escapeHtml(row.key)}">
               <span>${page.offset + index + 1}. ${escapeHtml(row.name)}</span>
               <strong>${format(row.value, "ai_score")}</strong>
             </button>
@@ -1059,13 +1059,13 @@ function selectGroup(id, preferredTypeId = null) {
     : null;
   const selected = preferred ?? bestAiType ?? group.types[0];
   state.selectedTypeId = typeId(selected.region, selected.building);
-  refresh();
+  refresh(false);
 }
 
 function wireEvents() {
   document.getElementById("dark-mode-toggle").addEventListener("click", () => {
     const enabled = !document.body.classList.contains("dark-mode");
-    localStorage.setItem("realEstateDashboardDarkMode", enabled ? "1" : "0");
+    try { localStorage.setItem("realEstateDashboardDarkMode", enabled ? "1" : "0"); } catch (_) {}
     applyDarkMode(enabled);
   });
 

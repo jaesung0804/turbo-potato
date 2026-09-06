@@ -75,7 +75,9 @@ jobs:
             git -C .work/model-state switch --orphan estate-model-state
           fi
       - name: Build full results with the frozen monthly model
-        run: python build_public_site.py
+        run: |
+          python build_public_site.py
+          node tests/check_bundle.cjs .work/site
       - name: Persist the model before public deployment
         run: |
           set -euo pipefail
