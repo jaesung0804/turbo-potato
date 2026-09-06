@@ -27,6 +27,28 @@ evaluate(`state.search='84.92';`);assert.equal(evaluate('typeItems().length'),1)
 evaluate(`state.search='서울';`);assert.equal(evaluate('typeItems().length'),2);
 evaluate(`state.search='';state.metric='count';`);assert.equal(evaluate('featureMetricValue(state.summary.regions)'),6);
 assert.equal(evaluate('typeYoyRateForYears(state.summary.regions[0],typeItems()[0].building,"2026","2025")'),null);
+// Explicit score filters are inclusive, apply to every metric/export, and never
+// borrow a current score for an earlier year or a similarly named apartment.
+evaluate(`state.summary.regions[0].loadedBucket.addresses.push({
+ ...state.summary.regions[0].loadedBucket.addresses[0],key:'lot3|84.91',complex_key:'lot3'});
+ state.recommendationByType.set('1|lot1|84.91',{house_match_score:64.9,quality_flags:[]});
+ state.recommendationByType.set('1|lot2|84.92',{house_match_score:65,quality_flags:[]});
+ state.view=null;state.minReviewScore=65;`);
+assert.equal(evaluate('typeItems().length'),1);
+assert.equal(evaluate('typeItems()[0].building.key'),'lot2|84.92');
+assert.equal(evaluate('regionFilteredMetricValue(state.summary.regions[0],"count")'),5);
+assert.equal(evaluate('groupedBuildings().length'),1);
+evaluate(`ResultPages.downloadCsv=(name,headers,rows)=>{globalThis.exported=rows;};exportResults();`);
+assert.equal(evaluate('exported.length'),1);
+assert.equal(evaluate('exported[0][13]'),65);
+evaluate(`state.minReviewScore=64.9;`);assert.equal(evaluate('typeItems().length'),2);
+evaluate(`state.minReviewScore=70;`);assert.equal(evaluate('typeItems().length'),0);
+evaluate(`state.minReviewScore=0;`);assert.equal(evaluate('typeItems().length'),2);
+evaluate(`state.year='2025';`);assert.equal(evaluate('typeItems().length'),0);
+evaluate(`state.minReviewScore=null;`);assert.equal(evaluate('typeItems().length'),3);
+evaluate(`state.year='2026';state.minReviewScore=65;state.search='84.91';`);
+assert.equal(evaluate('typeItems().length'),0);
+evaluate(`state.search='';state.minReviewScore=null;state.summary.regions[0].loadedBucket.addresses.pop();state.view=null;`);
 evaluate(`state.year='2025';state.metric='ai_score';state.regionValueCache.clear();`);
 assert.equal(evaluate('groupedBuildings().length'),2);
 assert.equal(evaluate('buildingAge({built_year:2000})'),25);

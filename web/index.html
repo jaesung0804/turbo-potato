@@ -92,7 +92,17 @@
 </details><section class="primary-search"><label>
 <span>검색</span>
 <input id="search-input" placeholder="시도·시군구·읍면동·단지·면적 검색" type="search"/>
-</label><button id="clear-filter" type="button">초기화</button><button aria-label="다크모드 전환" class="dark-mode-toggle" id="dark-mode-toggle" type="button">Dark</button></section><details class="advanced-filters" id="advanced-filters"><summary>가격·세대수·연식·입지 필터</summary><section class="search-row">
+</label><button id="clear-filter" type="button">초기화</button><button aria-label="다크모드 전환" class="dark-mode-toggle" id="dark-mode-toggle" type="button">Dark</button></section>
+<section class="review-score-filter" aria-label="검토점수 필터">
+<label><span>검토점수 하한</span><input id="review-score-min-input" type="number" min="0" max="100" step="0.1" placeholder="전체" aria-describedby="review-score-filter-note"/></label>
+<div class="review-score-presets" role="group" aria-label="검토점수 빠른 선택">
+<button type="button" data-review-score="" aria-pressed="true">전체</button>
+<button type="button" data-review-score="60" aria-pressed="false">60점 이상</button>
+<button type="button" data-review-score="65" aria-pressed="false">65점 이상</button>
+<button type="button" data-review-score="70" aria-pressed="false">70점 이상</button>
+</div><p class="score-note" id="review-score-filter-note" role="status">점수 조건 없음 · 미산출 평형도 포함합니다.</p>
+</section>
+<details class="advanced-filters" id="advanced-filters"><summary>가격·세대수·연식·입지 필터</summary><section class="search-row">
 
 <label>
 <span>가격 하한(억)</span>
