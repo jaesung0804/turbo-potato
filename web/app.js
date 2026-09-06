@@ -1317,20 +1317,9 @@ async function init() {
 }
 
 function fitDefaultMapView() {
-  if(!map)return;
-  const isMobile = window.matchMedia("(max-width: 980px)").matches;
-  map.fitBounds(
-    isMobile
-      ? [
-          [37.28, 126.43],
-          [37.86, 127.26],
-        ]
-      : [
-          [37.33, 126.49],
-          [37.81, 127.18],
-        ],
-    { padding: isMobile ? [8, 8] : [12, 12], maxZoom: isMobile ? 10.2 : 10.6 },
-  );
+ if(!map)return;
+ const bounds=state.topologyLayer?.getBounds();
+ if(bounds?.isValid())map.fitBounds(bounds,{padding:[16,16],maxZoom:10.6});
 }
 
 
