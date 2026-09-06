@@ -1,6 +1,7 @@
 """Versioned, binary-safe complete raw data and collection checkpoints."""
 import argparse,gzip,hashlib,io,json,re,tarfile,tempfile,shutil
 from pathlib import Path
+from estate_io import write_binary
 
 def sha(body):return hashlib.sha256(body).hexdigest()
 
@@ -54,7 +55,7 @@ def restore(state,root=Path('.')):
         staged=Path(temp);(staged/'data').mkdir()
         csv=gzip.decompress(bodies['transactions.csv.gz'])
         if sha(csv)!=manifest['collection']['sha256']:raise ValueError('Raw CSV checksum mismatch')
-        (staged/'data/capital_area_apt_trade_transactions.csv').write_bytes(csv)
+        write_binary(staged/'data/capital_area_apt_trade_transactions.csv',csv)
         (staged/'data/capital_area_apt_trade_transactions.manifest.json').write_bytes(bodies['collection.json'])
         with tarfile.open(fileobj=io.BytesIO(bodies['checkpoints.tar.gz']),mode='r:gz') as tar:
             for member in tar.getmembers():

@@ -474,10 +474,7 @@ def area_type_label(metrics: dict[str, float]) -> str:
 
 
 def typed_address_key(row: dict[str, str], metrics: dict[str, float]) -> str:
-    gu = row.get("CGG_NM", "").strip()
-    dong = row.get("STDG_NM", "").strip()
-    building = row.get("BLDG_NM", "").strip() or "(건물명 없음)"
-    return f"{gu} {dong} {building} | {area_type_label(metrics)}".strip()
+    return f"{address_key(row)} | {metrics['area_pyeong'] * SQM_PER_PYEONG:.2f}㎡"
 
 
 def contract_year(row: dict[str, str]) -> str:
@@ -568,7 +565,7 @@ def build_dashboard_data(
         reader = csv.DictReader(file)
         for row in reader:
             total_rows += 1
-            if row.get("RTRCN_DAY", "").strip():
+            if row.get("RTRCN_DAY", "").strip() not in {"", "-", "--"}:
                 continue
             if property_types and row.get("BLDG_USG", "").strip() not in property_types:
                 continue
@@ -625,7 +622,7 @@ def build_dashboard_data(
                 bucket["count"] += 1
                 update_metric_bucket(bucket["metrics"], metrics)
 
-                addr = f"{address_key(row)} | {metrics['area_pyeong'] * SQM_PER_PYEONG:.2f}㎡"
+                addr = typed_address_key(row, metrics)
                 addr_bucket = bucket["addresses"].setdefault(
                     addr,
                     {
@@ -810,7 +807,7 @@ def fill_missing_built_years(addresses: dict[str, Any]) -> None:
     bus_by_building: dict[str, float] = {}
     education_by_building: dict[str, dict[str, Any]] = {}
     for address in addresses.values():
-        building_name = address.get("building_name", "")
+        building_name = address.get("complex_key") or address.get("key", "")
         built_year = address.get("built_year")
         if building_name and built_year:
             year_by_building.setdefault(building_name, built_year)
@@ -844,17 +841,17 @@ def fill_missing_built_years(addresses: dict[str, Any]) -> None:
 
     for address in addresses.values():
         if address.get("built_year") is None:
-            address["built_year"] = year_by_building.get(address.get("building_name", ""))
-        school_info = school_by_building.get(address.get("building_name", ""))
+            address["built_year"] = year_by_building.get(address.get("complex_key") or address.get("key", ""))
+        school_info = school_by_building.get(address.get("complex_key") or address.get("key", ""))
         if school_info and address.get("nearest_elementary_m") is None:
             address.update(school_info)
-        subway_info = subway_by_building.get(address.get("building_name", ""))
+        subway_info = subway_by_building.get(address.get("complex_key") or address.get("key", ""))
         if subway_info and address.get("subway_distance_m") is None:
             address.update(subway_info)
-        bus_distance = bus_by_building.get(address.get("building_name", ""))
+        bus_distance = bus_by_building.get(address.get("complex_key") or address.get("key", ""))
         if bus_distance is not None and address.get("bus_stop_distance_m") is None:
             address["bus_stop_distance_m"] = bus_distance
-        education_info = education_by_building.get(address.get("building_name", ""))
+        education_info = education_by_building.get(address.get("complex_key") or address.get("key", ""))
         if education_info and address.get("education_facility_count") is None:
             address.update(education_info)
 

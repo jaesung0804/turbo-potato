@@ -123,13 +123,17 @@ def collect(key,start,end,cache,output,refresh_months=3,workers=2,shard_index=0,
         raise ValueError("Invalid contract-month range")
     cache.mkdir(parents=True,exist_ok=True)
     partitions=[]; missing=[]
+    # Revisit one older month per daily refresh so late cancellations eventually
+    # reach saved history without downloading the entire history every day.
+    old_months=months[:-refresh_months] if refresh_months>0 else []
+    audit_month=old_months[datetime.now(timezone.utc).date().toordinal()%len(old_months)] if old_months else None
     if shard_index<0 or shard_index>=shard_count:raise ValueError('Invalid shard index')
     regions=sorted(REGIONS.items())[shard_index::shard_count]
     for month in months:
         for code,region in regions:
             path=cache/f"{month}-{code}.json.gz"
             partitions.append((path,month,code))
-            refresh=refresh_months>0 and month in months[-refresh_months:]
+            refresh=refresh_months>0 and (month in months[-refresh_months:] or month==audit_month)
             if path.exists() and not refresh:
                 try:read_partition(path,month,code);continue
                 except (OSError,ValueError,KeyError):pass
@@ -187,7 +191,8 @@ def collect(key,start,end,cache,output,refresh_months=3,workers=2,shard_index=0,
         "shard_index":shard_index,"shard_count":shard_count,
         "partition_count":len(partitions),"region_count":len(regions),"registry_month":"2026-09",
         "sha256":digest(temp.read_bytes()),"fetched_at":utc_now(),"source":URL,
-        "refresh_months":refresh_months,"note":"All API pages retained, including cancellations for downstream filtering."}
+        "refresh_months":refresh_months,"historical_audit_month":audit_month,
+        "note":"All API pages retained, including cancellations for downstream filtering."}
     temp.replace(output)
     output.with_suffix(".manifest.json").write_text(json.dumps(manifest,indent=2))
     print(json.dumps(manifest),flush=True)

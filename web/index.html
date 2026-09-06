@@ -1,4 +1,4 @@
-﻿<!--
+<!--
   Web Run:
     cd C:\code
     python run_real_estate_dashboard.py
@@ -17,7 +17,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>수도권 아파트 매물 선택 대시보드</title>
+    <title>수도권 아파트 실거래 비교</title>
     <link
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css"
@@ -29,6 +29,7 @@
   <body>
     <main class="app-shell">
       <section class="map-pane">
+        <p id="map-status" role="status">지도는 시군구 거래 집계입니다. 개편 지역은 목록에서 확인하세요.</p>
         <div id="map" aria-label="수도권 아파트 실거래가 Hot Cold 지도"></div>
         <div class="legend">
           <div class="legend-title" id="legend-title">전체연도 · 수도권 전체 · 거래가_억원</div>
@@ -66,8 +67,8 @@
         </section>
         <section class="growth-ranking ai-score-ranking">
           <div class="growth-ranking-head">
-            <strong>AI SCORE 랭킹</strong>
-            <select id="ai-score-level-select" aria-label="AI SCORE 랭킹 단위">
+            <strong>검토점수 랭킹</strong>
+            <select id="ai-score-level-select" aria-label="검토점수 랭킹 단위">
               <option value="gu">시군구</option>
               <option value="dong">읍면동</option>
             </select>
@@ -83,8 +84,12 @@
 
       <aside class="detail-pane">
         <header class="panel-header">
+          <p id="data-status" role="status">전체 자료를 불러오는 중…</p><p id="coverage-note" class="coverage-note"></p><a href="model.html" class="model-link">사용법 · 모델 검증 · 자료 범위 →</a>
           <p class="eyebrow">Capital apartment intelligence</p>
-          <h1>수도권 아파트 매물 선택 대시보드</h1>
+          <h1>수도권 아파트 실거래 비교</h1>
+          <p id="data-status" role="status">전체 자료를 불러오는 중입니다.</p>
+          <p id="coverage-note"></p>
+          <a class="guide-link" href="model.html">모델 사용법 · 검증 · 자료 범위 →</a>
         </header>
 
         <section class="control-grid">
@@ -99,7 +104,7 @@
               <option value="price_per_pyeong">평단가_만원</option>
               <option value="count">거래횟수</option>
               <option value="yoy_rate">전년 대비 상승률</option>
-              <option value="ai_score">AI SCORE</option>
+              <option value="ai_score">검토점수</option>
             </select>
           </label>
           <label>
@@ -133,7 +138,7 @@
         <section class="search-row">
           <label>
             <span>검색</span>
-            <input id="search-input" type="search" placeholder="시군구, 읍면동, 건물명 검색" />
+            <input id="search-input" type="search" placeholder="시도·시군구·읍면동·단지·면적 검색" />
           </label>
           <label>
             <span>가격 하한(억)</span>
@@ -172,7 +177,7 @@
             <strong id="total-used">-</strong>
           </div>
           <div>
-            <span>표시후보</span>
+            <span>조건에 맞는 전체 단지</span>
             <strong id="total-buildings">-</strong>
           </div>
           <label>
@@ -198,10 +203,12 @@
 
         <section id="selected-region" class="selected-region"></section>
 
+        <div class="result-actions"><button id="export-results" type="button">조건에 맞는 전체 평형 CSV</button></div>
+        <p class="score-note">모든 결과를 페이지로 나눠 보여줍니다. 검토점수는 수익률이나 상승 확률이 아닙니다.</p>
         <section class="market-tabs">
           <div class="tab-buttons" role="tablist" aria-label="매물 목록">
-            <button type="button" class="tab-button active" data-market-tab="ai">AI 추천 <span id="ai-count">0</span></button>
-            <button type="button" class="tab-button" data-market-tab="all">전체 매물 <span id="all-count">0</span></button>
+            <button type="button" class="tab-button active" data-market-tab="ai">AI 비교·평형 <span id="ai-count">0</span></button>
+            <button type="button" class="tab-button" data-market-tab="all">전체 단지 <span id="all-count">0</span></button>
             <button type="button" class="tab-button" data-market-tab="hot">Hot <span id="hot-count">0</span></button>
             <button type="button" class="tab-button" data-market-tab="cold">Cold <span id="cold-count">0</span></button>
           </div>
@@ -228,6 +235,8 @@
       crossorigin=""
     ></script>
     <script src="https://cdn.jsdelivr.net/npm/topojson-client@3"></script>
+    <script src="data-store.js"></script>
+    <script src="result-pages.js"></script>
     <script src="app.js"></script>
   </body>
 </html>

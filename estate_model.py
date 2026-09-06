@@ -7,6 +7,7 @@ import joblib
 import numpy as np
 import pandas as pd
 from lightgbm import LGBMRegressor
+from estate_io import write_json
 
 VERSION='estate-reference-v3'
 NUMERIC=['year','area','age','prior_price','prior_peer','momentum','prior_count','peer_count']
@@ -162,5 +163,5 @@ def run(summary_path,output_path,model_dir,month=None,mode='auto'):
             '시점이 없는 역·학교·세대수 자료는 과거 학습 입력에서 제외합니다.'],
         'recommendations':results}
     output_path=Path(output_path);output_path.parent.mkdir(parents=True,exist_ok=True)
-    output_path.write_text(json.dumps(result,ensure_ascii=False,separators=(',',':'),allow_nan=False))
+    write_json(output_path,result)
     return result

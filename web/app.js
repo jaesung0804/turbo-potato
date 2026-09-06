@@ -1,29 +1,24 @@
-﻿// Web Run:
+// Web Run:
 //   cd C:\code
 //   python run_real_estate_dashboard.py
 // This starts the web server and opens http://127.0.0.1:8000
 // Fast web-only run:
 //   python run_real_estate_dashboard.py --skip-build
 
-const SUMMARY_URL = "data/seoul_real_estate_summary.json";
 const MAP_URL = "data/capital_area_adm_dong_light.geojson";
-const RECOMMENDATIONS_URL = "data/house_match_recommendations_full.json";
-const LIST_LIMITS = {
-  all: 350,
-  edge: 120,
-};
+const escapeHtml = ResultPages.escape;
 
 // 이 파일의 의도:
 // - 정적 JSON 데이터만으로 지도, 필터, 매물 목록, AI 추천 후보를 렌더링합니다.
 // - GitHub Pages처럼 서버 코드가 없는 환경에서도 동작하도록 모든 계산을 브라우저에서 수행합니다.
 // - 대표지표 변경 시 지도 색상, 전체 매물, Hot/Cold 목록이 같은 기준으로 다시 계산됩니다.
-// - 정식 AI SCORE가 없는 매물은 화면 비교가 끊기지 않도록 보조 SCORE를 계산합니다.
+// - 모델 미산출은 미산출로 표시하며 모든 보관 결과를 조회합니다.
 const metricLabels = {
   price_billion: { title: "거래가_억원", unit: "억", digits: 1 },
   price_per_pyeong: { title: "평단가_만원", unit: "만원/평", digits: 0 },
   count: { title: "거래횟수", unit: "건", digits: 0 },
   yoy_rate: { title: "전년 대비 상승률", unit: "%", digits: 1 },
-  ai_score: { title: "AI SCORE", unit: "", digits: 1 },
+  ai_score: { title: "검토점수", unit: "", digits: 1 },
   area_pyeong: { title: "전용평수", unit: "평", digits: 1 },
   age: { title: "연식", unit: "년차", digits: 0 },
   households: { title: "세대수", unit: "세대", digits: 0 },
@@ -63,9 +58,10 @@ const state = {
   regionValueCache: new Map(),
   periodAddressMapCache: new Map(),
   mapDist: { min: null, mid: null, max: null },
+  dataStore: null, loading: false,
 };
 
-const map = L.map("map", {
+const map = globalThis.L ? L.map("map", {
   attributionControl: false,
   dragging: true,
   doubleClickZoom: false,
@@ -79,7 +75,7 @@ const map = L.map("map", {
   touchZoom: true,
   zoomSnap: 0.1,
   zoomDelta: 0.25,
-});
+}) : null;
 
 async function fetchJson(url, label) {
   const response = await fetch(url, { cache: "no-store" });
@@ -105,10 +101,9 @@ function setElementaryFilterChecked(checked) {
   });
 }
 
-function bucketFor(region) {
-  if (!region) return null;
-  return state.year === "all" ? region.all : region.years[state.year] || null;
-}
+function bucketFor(region) { return region?.loadedBucket ?? null; }
+function historyBucket(region,year) { return state.dataStore.historyBucket(region.code,String(year)); }
+function completedYears() { return state.summary.years.map(Number).filter(y=>y<Number(state.summary.generated_at.slice(0,4))).sort((a,b)=>a-b); }
 
 function metricValue(region, metric = state.metric) {
   return cachedRegionMetricValue(region, metric);
@@ -121,13 +116,7 @@ function comparisonYears() {
   return { current: String(current), previous: previous ? String(previous) : null };
 }
 
-function fullPeriodYears() {
-  const years = state.summary.years.map(Number).sort((a, b) => a - b);
-  return {
-    start: years[0] ? String(years[0]) : null,
-    end: years[years.length - 1] ? String(years[years.length - 1]) : null,
-  };
-}
+function fullPeriodYears() { const years=completedYears();return {start:years.length?String(years[0]):null,end:years.length?String(years.at(-1)):null}; }
 
 function changeRate(current, previous) {
   if (current === null || current === undefined || !previous) return null;
@@ -144,8 +133,8 @@ function previousYearFor(year) {
 function regionYoyRate(region) {
   const { current, previous } = comparisonYears();
   if (!previous) return null;
-  const currentBucket = region.years?.[current];
-  const previousBucket = region.years?.[previous];
+  const currentBucket = historyBucket(region,current);
+  const previousBucket = historyBucket(region,previous);
   if (!currentBucket || !previousBucket) return null;
 
   const rates = currentBucket.addresses
@@ -156,9 +145,7 @@ function regionYoyRate(region) {
   return averageValues(rates);
 }
 
-function generatedYear() {
-  return Number(state.summary?.generated_at?.slice(0, 4)) || new Date().getFullYear();
-}
+function generatedYear() { return state.year === "all" ? Number(state.summary.generated_at.slice(0,4)) : Number(state.year); }
 
 function buildingAge(building) {
   return building.built_year ? Math.max(0, generatedYear() - building.built_year) : null;
@@ -193,7 +180,7 @@ function subwayLabel(building) {
 
 function format(value, metric = state.metric) {
   if (value === null || value === undefined || Number.isNaN(value)) return "-";
-  if (metric === "text") return String(value);
+  if (metric === "text") return escapeHtml(value);
   const label = metricLabels[metric];
   if (metric === "yoy_rate") {
     const sign = value > 0 ? "+" : "";
@@ -224,7 +211,7 @@ function activeRegions() {
     if (state.selectedSido !== "all" && region.sido_name !== state.selectedSido) return false;
     if (state.selectedGu !== "all" && region.gu_code !== state.selectedGu) return false;
     if (state.selectedDong !== "all" && region.code !== state.selectedDong) return false;
-    return cachedRegionMetricValue(region) !== null;
+    return (bucketFor(region)?.addresses?.length ?? 0) > 0;
   });
 }
 
@@ -232,7 +219,7 @@ function regionMatchesSearch(region) {
   const query = state.search.trim().toLowerCase();
   if (!query) return true;
   const bucket = bucketFor(region);
-  const regionText = `${region.gu_name} ${region.dong_name}`.toLowerCase();
+  const regionText = `${region.sido_name} ${region.gu_name} ${region.dong_name}`.toLowerCase();
   const buildingHit = bucket?.addresses?.some((item) =>
     `${item.address ?? ""} ${item.building_name} ${item.area_type}`.toLowerCase().includes(query),
   );
@@ -321,17 +308,11 @@ function featureCode(feature) {
   return feature.properties.ADM_CD || feature.properties.ADM_SGG_CD || feature.properties.EMD_CD;
 }
 
-function regionsForFeature(feature) {
-  const code = featureCode(feature);
-  if (state.regionByMapCode.has(code)) return state.regionByMapCode.get(code);
-  const region = state.regionByCode.get(code);
-  return region ? [region] : [];
-}
+function regionsForFeature(feature) { const code=String(featureCode(feature));return state.regionByMapCode.get(code)??state.regionByMapCode.get(code.slice(0,5))??[]; }
 
 function featureMetricValue(regions) {
-  const values = regions.map((region) => cachedRegionMetricValue(region)).filter((value) => value !== null);
-  if (!values.length) return null;
-  return averageValues(values);
+ const items=regions.flatMap(regionTypeItems);
+ return state.metric === "count" ? (items.length?items.reduce((s,x)=>s+x.building.count,0):null) : weightedAverage(items,state.metric);
 }
 
 function updateLegend() {
@@ -414,7 +395,7 @@ function mapScopeLabel() {
   }
   if (state.mapMode === "dong") {
     const region = state.regionByCode.get(state.selectedDong);
-    return region ? `${region.gu_name} ${region.dong_name} 기준` : "선택 동 없음";
+    return region ? `${escapeHtml(region.gu_name)} ${escapeHtml(region.dong_name)} 기준` : "선택 동 없음";
   }
   return "수도권 전체";
 }
@@ -423,9 +404,7 @@ function typeId(region, building) {
   return `${region.code}|${encodeURIComponent(building.key ?? building.address)}`;
 }
 
-function groupId(region, building) {
-  return `${region.code}|${encodeURIComponent(building.building_name)}`;
-}
+function groupId(region,building) { return `${region.code}|${encodeURIComponent(building.complex_key ?? building.building_name)}`; }
 
 function areaPyeong(building) {
   return building.metrics?.area_pyeong?.avg ?? null;
@@ -482,12 +461,9 @@ function buildingMatchesFilters(building) {
 }
 
 function typeItems() {
-  return filteredRegions().flatMap((region) => {
-    const bucket = bucketFor(region);
-    return (bucket?.addresses ?? [])
-      .filter(buildingMatchesFilters)
-      .map((building) => ({ region, building }));
-  });
+ const q=state.search.trim().toLowerCase();
+ return activeRegions().flatMap(region=>(bucketFor(region)?.addresses??[]).filter(buildingMatchesFilters)
+  .filter(b=>!q||`${region.sido_name} ${region.gu_name} ${region.dong_name} ${b.key} ${b.building_name} ${b.area_type}`.toLowerCase().includes(q)).map(building=>({region,building})));
 }
 
 function regionTypeItems(region) {
@@ -530,49 +506,18 @@ function recommendationKey(regionCode, buildingKey) {
   return `${regionCode}|${buildingKey}`;
 }
 
-function aiRecommendationForItem(item) {
-  const key = item.building.key ?? item.building.address;
-  return state.recommendationByType.get(recommendationKey(item.region.code, key)) ?? null;
-}
+function aiRecommendationForItem(item) { if(state.year!==state.recommendations?.target_year)return null;return state.recommendationByType.get(recommendationKey(item.region.code,item.building.key ?? item.building.address)) ?? null; }
 
-function aiScoreForItem(item) {
-  const recommendation = aiRecommendationForItem(item);
-  return recommendation?.house_match_score ?? fallbackAiScoreForItem(item);
-}
+function aiScoreForItem(item) { return aiRecommendationForItem(item)?.house_match_score ?? null; }
 
-function groupAiScore(group) {
-  const scores = group.types.map((item) => aiScoreForItem(item)).filter((value) => value !== null);
-  return scores.length ? Math.max(...scores) : null;
-}
+function groupAiScore(group) { const values=group.types.map(aiScoreForItem).filter(x=>x!==null);return values.length?Math.max(...values):null; }
 
 function clampScore(value) {
   if (value === null || value === undefined || Number.isNaN(value)) return 0;
   return Math.max(0, Math.min(100, value));
 }
 
-function fallbackAiScoreForItem(item) {
-  const yoy = buildingYoyRate(item);
-  const period = typePeriodRate(item.region, item.building);
-  const count = item.building.count || 0;
-  const households = item.building.households || 0;
-  const subwayDistance = item.building.subway_distance_m;
-  const liquidityScore = clampScore((count / 20) * 100);
-  const scaleScore = clampScore((households / 2000) * 100);
-  const yoyScore = clampScore(((yoy ?? 0) + 10) * 2.5);
-  const periodScore = clampScore(((period ?? 0) + 20) * 1.2);
-  const schoolScore = item.building.elementary_500m ? 100 : 0;
-  const subwayScore = subwayDistance === null || subwayDistance === undefined
-    ? 0
-    : clampScore(100 - (Math.min(subwayDistance, 1600) / 1600) * 100);
-  return (
-    liquidityScore * 0.24
-    + scaleScore * 0.2
-    + yoyScore * 0.2
-    + periodScore * 0.18
-    + schoolScore * 0.08
-    + subwayScore * 0.1
-  );
-}
+
 
 function buildingYoyRate(item) {
   return typeYoyRate(item.region, item.building);
@@ -583,38 +528,23 @@ function typeYoyRate(region, building) {
   return typeYoyRateForYears(region, building, current, previous);
 }
 
-function typeYoyRateForYears(region, building, current, previous) {
-  if (!current || !previous) return null;
-  const key = building.key ?? building.address;
-  const currentBuilding = periodAddressMap(region, current).get(key);
-  const previousBuilding = periodAddressMap(region, previous).get(key);
-  const currentValue = currentBuilding?.metrics?.price_billion?.avg ?? null;
-  const previousValue = previousBuilding?.metrics?.price_billion?.avg ?? null;
-  return changeRate(currentValue, previousValue);
+function typeYoyRateForYears(region,building,current,previous) {
+ if(!current||!previous||!completedYears().includes(Number(current)))return null;
+ const key=building.key??building.address,a=periodAddressMap(region,current).get(key),b=periodAddressMap(region,previous).get(key);
+ if((a?.count??0)<3||(b?.count??0)<3)return null;
+ return changeRate(a.metrics.price_per_pyeong.median??a.metrics.price_per_pyeong.avg,b.metrics.price_per_pyeong.median??b.metrics.price_per_pyeong.avg);
 }
 
-function periodAddressMap(region, year) {
-  const key = `${region.code}|${year}`;
-  if (state.periodAddressMapCache.has(key)) return state.periodAddressMapCache.get(key);
-  const mapForYear = new Map((region.years?.[year]?.addresses ?? []).map((item) => [item.key ?? item.address, item]));
-  state.periodAddressMapCache.set(key, mapForYear);
-  return mapForYear;
+function periodAddressMap(region,year) {
+ const key=`${region.code}|${year}`;if(!state.periodAddressMapCache.has(key))state.periodAddressMapCache.set(key,new Map(historyBucket(region,year).addresses.map(b=>[b.key??b.address,b])));
+ return state.periodAddressMapCache.get(key);
 }
 
-function typePeriodRate(region, building) {
-  const { start, end } = fullPeriodYears();
-  if (!start || !end || start === end) return null;
-  const key = building.key ?? building.address;
-  const endBuilding = periodAddressMap(region, end).get(key);
-  const startBuilding = periodAddressMap(region, start).get(key);
-  const endValue = endBuilding?.metrics?.price_billion?.avg ?? null;
-  const startValue = startBuilding?.metrics?.price_billion?.avg ?? null;
-  return changeRate(endValue, startValue);
-}
+function typePeriodRate(region,building) {const {start,end}=fullPeriodYears();if(!start||!end||start===end)return null;return typeYoyRateForYears(region,building,end,start);}
 
 function regionPeriodRate(region) {
   const { end } = fullPeriodYears();
-  const endBucket = end ? region.years?.[end] : null;
+  const endBucket = end ? historyBucket(region,end) : null;
   if (!endBucket) return null;
   const rates = endBucket.addresses
     .filter(buildingMatchesFilters)
@@ -625,7 +555,7 @@ function regionPeriodRate(region) {
 
 function regionYearRate(region, year) {
   const previous = previousYearFor(year);
-  const currentBucket = region.years?.[year];
+  const currentBucket = historyBucket(region,year);
   if (!previous || !currentBucket) return null;
   const rates = currentBucket.addresses
     .filter(buildingMatchesFilters)
@@ -693,8 +623,7 @@ function groupedBuildings() {
         latestBuiltYear: types.find((item) => item.building.built_year)?.building.built_year ?? null,
       };
     })
-    .filter((group) => group.value !== null)
-    .sort((a, b) => b.value - a.value);
+    .sort((a, b) => (b.value ?? -Infinity) - (a.value ?? -Infinity) || a.id.localeCompare(b.id));
 }
 
 function selectedGroup(groups = groupedBuildings()) {
@@ -709,14 +638,9 @@ function selectedType(groups = groupedBuildings()) {
   return selected ?? group.types[0] ?? null;
 }
 
-function renderAssetLists(groups = groupedBuildings()) {
-  const edgeCount = Math.max(1, Math.ceil(groups.length * 0.3));
-  const hot = groups.slice(0, edgeCount);
-  const cold = [...groups].reverse().slice(0, edgeCount);
-
-  renderGroupList("all-list", "all-count", groups, LIST_LIMITS.all);
-  renderGroupList("hot-list", "hot-count", hot, LIST_LIMITS.edge);
-  renderGroupList("cold-list", "cold-count", cold, LIST_LIMITS.edge);
+function renderAssetLists(groups=groupedBuildings()) {
+ const valid=groups.filter(g=>g.value!==null),n=Math.max(1,Math.ceil(valid.length*.3));
+ renderGroupList("all-list","all-count",groups);renderGroupList("hot-list","hot-count",valid.slice(0,n));renderGroupList("cold-list","cold-count",[...valid].reverse().slice(0,n));
 }
 
 function recommendationMatchesFilters(item) {
@@ -741,89 +665,18 @@ function recommendationMatchesFilters(item) {
 }
 
 function renderAiRecommendations() {
-  const list = document.getElementById("ai-list");
-  const count = document.getElementById("ai-count");
-  if (!list || !count) return;
-
-  const rows = groupedBuildings()
-    .map((group) => {
-      const scoredTypes = group.types
-        .map((type) => ({ type, recommendation: aiRecommendationForItem(type) }))
-        .filter((row) => row.recommendation);
-      const best = scoredTypes.sort((a, b) => b.recommendation.house_match_score - a.recommendation.house_match_score)[0];
-      const bestType = best?.type ?? null;
-      const recommendation = best?.recommendation ?? null;
-      const score = recommendation?.house_match_score ?? null;
-      return { group, bestType, recommendation, score };
-    })
-    .filter((row) => row.bestType && row.recommendation && row.score !== null)
-    .sort((a, b) => b.score - a.score)
-    .slice(0, 40);
-
-  count.textContent = rows.length.toLocaleString("ko-KR");
-  list.innerHTML = rows.length
-    ? rows
-        .map(({ group, bestType, recommendation, score }) => {
-          const building = bestType.building;
-          const region = bestType.region;
-          const type = typeId(region, building);
-          const targetYear = recommendation?.forecast_target_year ?? state.recommendations?.forecast_target_year ?? "-";
-          const fairPrice = recommendation.fair_price_per_pyeong ?? recommendation.predicted_price_per_pyeong;
-          const forecastPrice = recommendation.forecast_price_per_pyeong;
-          const currentPrice = Number(building.metrics.price_per_pyeong.avg).toLocaleString("ko-KR", { maximumFractionDigits: 0 });
-          const fairText = Number.isFinite(Number(fairPrice))
-            ? Number(fairPrice).toLocaleString("ko-KR", { maximumFractionDigits: 0 })
-            : "-";
-          const forecastText = Number.isFinite(Number(forecastPrice)) && Number(forecastPrice) > 0
-            ? Number(forecastPrice).toLocaleString("ko-KR", { maximumFractionDigits: 0 })
-            : "-";
-          const expectedGrowth = recommendation.expected_growth_pct;
-          return `
-            <li>
-              <button type="button" class="ai-row" data-group-id="${group.id}" data-type-id="${type}">
-                <span class="ai-main">
-                  <strong>${group.building_name}</strong>
-                  <small>${region.gu_name ?? ""} ${region.dong_name ?? ""} · ${building.area_type}</small>
-                  <small>현재 ${currentPrice}만원/평 · 모델 적정 ${fairText}만원/평 · ${targetYear}년 예측 ${forecastText}만원/평 (${formatHtml(expectedGrowth, "yoy_rate")})</small>
-                </span>
-                <span class="ai-score">
-                  <small>Score</small>
-                  <strong>${Number(score).toLocaleString("ko-KR", { maximumFractionDigits: 1 })}</strong>
-                </span>
-              </button>
-            </li>
-          `;
-        })
-        .join("")
-    : `<li class="growth-empty">조건에 맞는 AI 추천 후보가 없습니다.</li>`;
-}
-function renderGroupList(listId, countId, groups, limit) {
-  document.getElementById(countId).textContent = groups.length.toLocaleString("ko-KR");
-  const visibleGroups = groups.slice(0, limit);
-  document.getElementById(listId).innerHTML = visibleGroups
-    .map((group) => {
-      const selected = state.selectedGroupId === group.id ? " selected" : "";
-      return `
-        <li>
-          <button type="button" class="asset-row${selected}" data-group-id="${group.id}">
-            <span>${group.building_name}</span>
-            <small>${group.region.gu_name} ${group.region.dong_name} · ${group.typeCount}개 평형</small>
-            <strong>${formatHtml(group.value)} · ${group.count.toLocaleString("ko-KR")}건</strong>
-          </button>
-        </li>
-      `;
-    })
-    .join("");
+ const rows=typeItems().map(type=>({type,rec:aiRecommendationForItem(type)})).filter(x=>x.rec).sort((a,b)=>b.rec.house_match_score-a.rec.house_match_score||a.rec.building_key.localeCompare(b.rec.building_key));
+ document.getElementById("ai-count").textContent=rows.length.toLocaleString("ko-KR");const page=ResultPages.view("ai-list",rows);
+ document.getElementById("ai-list").innerHTML=page.rows.length?page.rows.map(({type,rec})=>`<li><button type="button" class="ai-row" data-group-id="${escapeHtml(groupId(type.region,type.building))}" data-type-id="${escapeHtml(typeId(type.region,type.building))}"><span class="ai-main"><strong>${escapeHtml(rec.building_name)}</strong><small>${escapeHtml(rec.gu_name)} ${escapeHtml(rec.dong_name)} · ${escapeHtml(rec.area_type)} · ${rec.trade_count}건</small><small>관측 중앙값 ${format(rec.price_per_pyeong,"price_per_pyeong")} · 기준가격 ${format(rec.fair_price_per_pyeong,"price_per_pyeong")}</small><small>참고 범위 ${format(rec.reference_low,"price_per_pyeong")} ~ ${format(rec.reference_high,"price_per_pyeong")}</small><small class="quality-flags">${escapeHtml(rec.quality_flags.join(" · "))}</small></span><span class="ai-score"><small>검토점수</small><strong>${format(rec.house_match_score,"ai_score")}</strong></span></button></li>`).join(""):'<li class="growth-empty">이 연도에 산출된 모델 결과가 없습니다. 전체 단지 탭에서 모든 자료를 조회할 수 있습니다.</li>';
 }
 
-function renderSummary(groups = groupedBuildings()) {
-  const fullCount = filteredRegions().reduce((sum, region) => {
-    const bucket = bucketFor(region);
-    return sum + (bucket?.count || 0);
-  }, 0);
-  document.getElementById("total-used").textContent = fullCount.toLocaleString("ko-KR");
-  document.getElementById("total-buildings").textContent = groups.length.toLocaleString("ko-KR");
+function renderGroupList(listId,countId,groups) {
+ document.getElementById(countId).textContent=groups.length.toLocaleString("ko-KR");const page=ResultPages.view(listId,groups);
+ document.getElementById(listId).innerHTML=page.rows.map(g=>`<li><button type="button" class="asset-row" data-group-id="${escapeHtml(g.id)}"><span>${escapeHtml(g.building_name)}</span><small>${escapeHtml(g.region.gu_name)} ${escapeHtml(g.region.dong_name)} · ${g.typeCount}개 평형</small><strong>${formatHtml(g.value)} · ${g.count.toLocaleString("ko-KR")}건</strong></button></li>`).join("");
 }
+
+function renderSummary(groups=groupedBuildings()) {document.getElementById("total-used").textContent=typeItems().reduce((s,r)=>s+r.building.count,0).toLocaleString("ko-KR");document.getElementById("total-buildings").textContent=groups.length.toLocaleString("ko-KR");}
+
 function renderSelectedRegion(groups = groupedBuildings()) {
   const group = selectedGroup(groups);
   const selected = selectedType(groups);
@@ -835,8 +688,8 @@ function renderSelectedRegion(groups = groupedBuildings()) {
     document.getElementById("selected-region").innerHTML = `
       <div class="region-title">
         <div>
-          <h2>${group.building_name}</h2>
-          <span>${region.gu_name} ${region.dong_name}</span>
+          <h2>${escapeHtml(group.building_name)}</h2>
+          <span>${escapeHtml(region.gu_name)} ${escapeHtml(region.dong_name)}</span>
         </div>
         <div class="selected-actions">
           <label class="type-picker">
@@ -846,7 +699,7 @@ function renderSelectedRegion(groups = groupedBuildings()) {
                 .map((item) => {
                   const id = typeId(item.region, item.building);
                   const isSelected = id === state.selectedTypeId ? "selected" : "";
-                  return `<option value="${id}" ${isSelected}>${item.building.area_type}</option>`;
+                  return `<option value="${escapeHtml(id)}" ${isSelected}>${escapeHtml(item.building.area_type)}</option>`;
                 })
                 .join("")}
             </select>
@@ -861,11 +714,12 @@ function renderSelectedRegion(groups = groupedBuildings()) {
         ${metricCard("거래가_억원", building.metrics.price_billion.avg, "price_billion")}
         ${metricCard("평단가_만원", building.metrics.price_per_pyeong.avg, "price_per_pyeong")}
         ${metricCard("거래횟수", building.count, "count")}
-        ${metricCard("AI SCORE", aiScoreForItem(selected), "ai_score")}
+        ${metricCard("검토점수", aiScoreForItem(selected), "ai_score")}
         ${metricCard("전용평수", building.metrics.area_pyeong.avg, "area_pyeong")}
         ${metricCard("연식", `${format(buildingAge(building), "age")} · ${ageFilterText(ageCategory(building))}`, "text")}
         ${metricCard("세대수", building.households, "households")}
         ${metricCard("초품아/역세권", `${elementaryLabel(building)} · ${subwayLabel(building)}`, "text")}
+        <p class="score-note">${escapeHtml(building.amenity_source ?? "시설 자료 미확인")} · 시설 필터는 확인된 자료가 있는 단지에만 적용됩니다.</p>
       </div>
     `;
     document.getElementById("type-select").addEventListener("change", (event) => {
@@ -894,7 +748,7 @@ function renderSelectedRegion(groups = groupedBuildings()) {
       ${metricCard("거래가_억원", averageMetric(regions, "price_billion"), "price_billion")}
       ${metricCard("평단가_만원", averageMetric(regions, "price_per_pyeong"), "price_per_pyeong")}
       ${metricCard("거래횟수", sumMetric(regions, "count"), "count")}
-      ${metricCard("AI SCORE", averageMetric(regions, "ai_score"), "ai_score")}
+      ${metricCard("검토점수", averageMetric(regions, "ai_score"), "ai_score")}
     </div>
   `;
 }
@@ -963,8 +817,7 @@ function aggregateRegionRates(level, valueGetter, scoped = false) {
       ...group,
       value: averageValues(group.values),
     }))
-    .filter((group) => group.value !== null)
-    .sort((a, b) => b.value - a.value);
+    .sort((a, b) => (b.value ?? -Infinity) - (a.value ?? -Infinity) || a.id.localeCompare(b.id));
 }
 
 function renderGrowthSummary() {
@@ -1006,14 +859,15 @@ function renderGrowthRankings() {
   const rows = aggregateRegionRates(state.growthLevel, regionGrowthRateForRanking, false)
     .filter((row) => !query || row.name.toLowerCase().includes(query))
     .filter((row) => state.growthMinRate === null || row.value >= state.growthMinRate)
-    .slice(0, 80);
+    ;
+  const page=ResultPages.view("growth-ranking-list",rows,30);
 
   document.getElementById("growth-ranking-list").innerHTML = rows.length
-    ? rows
+    ? page.rows
         .map((row, index) => `
           <li>
             <button type="button" class="growth-rank-row" data-growth-level="${row.level}" data-growth-key="${row.key}">
-              <span>${index + 1}. ${row.name}</span>
+              <span>${page.offset + index + 1}. ${escapeHtml(row.name)}</span>
               <strong>${formatHtml(row.value, "yoy_rate")}</strong>
             </button>
           </li>
@@ -1034,20 +888,21 @@ function renderAiScoreRankings() {
   const rows = aggregateRegionRates(state.aiScoreLevel, officialRegionAiScore, false)
     .filter((row) => !query || row.name.toLowerCase().includes(query))
     .filter((row) => state.aiScoreMin === null || row.value >= state.aiScoreMin)
-    .slice(0, 80);
+    ;
+  const page=ResultPages.view("ai-score-ranking-list",rows,30);
 
   document.getElementById("ai-score-ranking-list").innerHTML = rows.length
-    ? rows
+    ? page.rows
         .map((row, index) => `
           <li>
             <button type="button" class="growth-rank-row" data-growth-level="${row.level}" data-growth-key="${row.key}">
-              <span>${index + 1}. ${row.name}</span>
+              <span>${page.offset + index + 1}. ${escapeHtml(row.name)}</span>
               <strong>${format(row.value, "ai_score")}</strong>
             </button>
           </li>
         `)
         .join("")
-    : `<li class="growth-empty">조건에 맞는 AI SCORE 지역이 없습니다.</li>`;
+    : `<li class="growth-empty">조건에 맞는 검토점수 지역이 없습니다.</li>`;
 }
 
 function metricCard(label, value, metric) {
@@ -1094,23 +949,17 @@ function populateDongSelect() {
     .sort((a, b) => a.dong_name.localeCompare(b.dong_name, "ko-KR"));
   document.getElementById("dong-select").innerHTML = `
     <option value="all">전체 읍면동</option>
-    ${dongs.map((region) => `<option value="${region.code}">${region.gu_name} ${region.dong_name}</option>`).join("")}
+    ${dongs.map((region) => `<option value="${region.code}">${escapeHtml(region.gu_name)} ${escapeHtml(region.dong_name)}</option>`).join("")}
   `;
   document.getElementById("dong-select").value = state.selectedDong;
 }
 
-function populateGrowthPeriodSelect() {
-  document.getElementById("growth-period-select").innerHTML = `
-    <option value="all">전체기간</option>
-    ${state.summary.years.map((year) => `<option value="${year}">${year}</option>`).join("")}
-  `;
-  document.getElementById("growth-period-select").value = state.growthPeriod;
-}
+function populateGrowthPeriodSelect() {document.getElementById("growth-period-select").innerHTML='<option value="all">전체 완결기간</option>'+completedYears().reverse().map(y=>`<option value="${y}">${y}</option>`).join("");document.getElementById("growth-period-select").value=state.growthPeriod;}
 
 function populateSubwayLineSelect() {
   const lines = new Set();
   for (const region of state.summary.regions) {
-    for (const bucket of [region.all, ...Object.values(region.years ?? {})]) {
+    for (const bucket of [bucketFor(region)]) {
       for (const building of bucket?.addresses ?? []) {
         for (const line of building.subway_lines ?? []) {
           lines.add(line);
@@ -1126,10 +975,12 @@ function populateSubwayLineSelect() {
   document.getElementById("subway-line-select").value = state.subwayLine;
 }
 
-function refresh() {
+function refresh(resetPages=true) {
+  if(state.loading)return;
+  if(resetPages)ResultPages.reset();
   state.regionValueCache = new Map();
   state.mapDist = distribution();
-  state.topologyLayer.setStyle(styleFeature);
+  state.topologyLayer?.setStyle(styleFeature);
   updateLegend();
   renderGrowthSummary();
   renderGrowthRankings();
@@ -1139,6 +990,7 @@ function refresh() {
   renderSelectedRegion(groups);
   renderAiRecommendations();
   renderAssetLists(groups);
+  renderDataStatus();
 }
 
 function selectSido(sidoName) {
@@ -1218,10 +1070,7 @@ function wireEvents() {
   });
 
   document.getElementById("year-select").addEventListener("change", (event) => {
-    state.year = event.target.value;
-    state.selectedGroupId = null;
-    state.selectedTypeId = null;
-    refresh();
+    changeYear(event.target.value);
   });
 
   document.getElementById("metric-select").addEventListener("change", (event) => {
@@ -1453,72 +1302,22 @@ function wireEvents() {
 }
 
 async function init() {
-  applyDarkMode(localStorage.getItem("realEstateDashboardDarkMode") === "1");
-
-  const [summary, mapData] = await Promise.all([
-    fetchJson(SUMMARY_URL, "요약 데이터"),
-    fetchJson(MAP_URL, "지도 경계 데이터"),
-  ]);
-
-  state.summary = summary;
-  state.recommendations = null;
-  state.recommendationByType = new Map();
-  state.regionByCode = new Map(summary.regions.map((region) => [region.code, region]));
-  state.regionByMapCode = new Map();
-  for (const region of summary.regions) {
-    const mapCodes = region.map_codes || (region.map_code ? [region.map_code] : [region.code]);
-    for (const mapCode of mapCodes) {
-      if (!state.regionByMapCode.has(mapCode)) {
-        state.regionByMapCode.set(mapCode, []);
-      }
-      state.regionByMapCode.get(mapCode).push(region);
-    }
-  }
-  document.getElementById("year-select").innerHTML = `
-    <option value="all">전체연도</option>
-    ${summary.years.map((year) => `<option value="${year}">${year}</option>`).join("")}
-  `;
-  populateSidoSelect();
-  populateGuSelect();
-  populateDongSelect();
-  populateGrowthPeriodSelect();
-  populateSubwayLineSelect();
-
-  const geojson = mapData.type === "Topology"
-    ? topojson.feature(mapData, mapData.objects[Object.keys(mapData.objects)[0]])
-    : mapData;
-  state.topologyLayer = L.geoJSON(geojson, {
-    style: styleFeature,
-    onEachFeature(feature, layer) {
-      const regions = regionsForFeature(feature);
-      const region = regions[0];
-      if (!region) return;
-      layer.bindTooltip(`${region.sido_name} ${region.gu_name} ${region.dong_name}`, { sticky: true });
-      layer.on("click", () => selectGu(region.gu_code));
-    },
-  }).addTo(map);
-
-  fitDefaultMapView();
-  wireEvents();
-  refresh();
-
-  fetchJson(RECOMMENDATIONS_URL, "AI 추천 데이터")
-    .then((recommendations) => {
-      state.recommendations = recommendations;
-      state.recommendationByType = new Map(
-        (recommendations?.recommendations ?? []).map((item) => [
-          recommendationKey(item.region_code, item.building_key),
-          item,
-        ]),
-      );
-      refresh();
-    })
-    .catch((error) => {
-      console.warn(error);
-    });
+ try { applyDarkMode(localStorage.getItem("realEstateDashboardDarkMode")==="1"); } catch (_) { applyDarkMode(false); }
+ const store=await DashboardData.open();state.dataStore=store;state.summary=store.summary;state.year=store.manifest.default_year;state.recommendations=store.recommendations;
+ state.recommendationByType=new Map(store.recommendations.recommendations.map(r=>[recommendationKey(r.region_code,r.building_key),r]));
+ await store.loadPeriod(state.year);const summary=state.summary;state.regionByCode=new Map(summary.regions.map(r=>[r.code,r]));
+ for(const r of summary.regions)for(const code of new Set((r.map_codes??[r.code]).flatMap(c=>[c,c.slice(0,5)]))){if(!state.regionByMapCode.has(code))state.regionByMapCode.set(code,[]);state.regionByMapCode.get(code).push(r);}
+ document.getElementById("year-select").innerHTML='<option value="all">전체연도</option>'+summary.years.map(y=>`<option value="${y}">${y}</option>`).join("");document.getElementById("year-select").value=state.year;
+ populateSidoSelect();populateGuSelect();populateDongSelect();populateGrowthPeriodSelect();populateSubwayLineSelect();wireEvents();wireResultEvents();refresh();
+ try {
+  if(!map)throw Error("지도 로드 실패");const data=await DashboardData.compressed(store.manifest.map);
+  const geojson=data.type==="Topology"?topojson.feature(data,data.objects[Object.keys(data.objects)[0]]):data;
+  state.topologyLayer=L.geoJSON(geojson,{style:styleFeature,onEachFeature(feature,layer){const regions=regionsForFeature(feature),r=regions[0];if(!r)return;layer.bindTooltip(escapeHtml(`${r.sido_name} ${r.gu_name} · 시군구 합산`),{sticky:true});layer.on("click",()=>selectGu(r.gu_code));}}).addTo(map);fitDefaultMapView();
+ }catch(e){document.getElementById("map-status").textContent="지도를 불러오지 못했습니다. 전체 목록·검색·다운로드는 이용할 수 있습니다.";}
 }
 
 function fitDefaultMapView() {
+  if(!map)return;
   const isMobile = window.matchMedia("(max-width: 980px)").matches;
   map.fitBounds(
     isMobile
@@ -1534,14 +1333,20 @@ function fitDefaultMapView() {
   );
 }
 
+
+function renderDataStatus(){const m=state.dataStore.manifest,c=m.coverage[state.year];document.getElementById("data-status").textContent=`자료 ${m.generated_at} · 모델 ${m.model.model_month} · ${c.available_types.toLocaleString("ko-KR")}개 평형 전체 조회`;document.getElementById("coverage-note").textContent=c.complete?"모든 집계 거래가 단지·평형 목록에 보존돼 있습니다. 페이지 수와 관계없이 전체를 검색·다운로드합니다.":`기존 저장본에서 개별 목록 ${c.unrepresented_trades.toLocaleString("ko-KR")}건이 누락돼 있습니다. 전체 복구와 구분해 표시합니다.`;}
+async function changeYear(year){const id=(state.yearRequest??0)+1;state.yearRequest=id;state.loading=true;document.querySelector(".detail-pane").setAttribute("aria-busy","true");try{if(!await state.dataStore.loadPeriod(year))return;state.year=year;state.selectedGroupId=null;state.selectedTypeId=null;state.loading=false;populateSubwayLineSelect();refresh();}catch(e){if(id===state.yearRequest){document.getElementById("year-select").value=state.year;document.getElementById("data-status").textContent=`불러오기 실패: ${e.message}. 이전 결과를 유지합니다.`;}}finally{if(id===state.yearRequest){state.loading=false;document.querySelector(".detail-pane").setAttribute("aria-busy","false");}}}
+function exportResults(){const rows=typeItems().map(({region:r,building:b})=>{const m=aiRecommendationForItem({region:r,building:b});return [state.year,r.sido_name,r.gu_name,r.dong_name,b.building_name,b.area_type,b.key,b.count,b.metrics.price_billion.avg,b.metrics.price_billion.median,b.metrics.price_per_pyeong.median,b.households,b.built_year,m?.house_match_score,m?.fair_price_per_pyeong,m?.reference_low,m?.reference_high,m?.quality_flags.join(" / ")];});ResultPages.downloadCsv(`apartment-results-${state.year}.csv`,["기간","시도","시군구","읍면동","단지","평형","식별키","거래수","평균 거래가(억)","중앙 거래가(억)","중앙 평단가(만원)","세대수","준공연도","검토점수","기준가격(만원/평)","범위 하한","범위 상한","자료 점검"],rows);}
+function wireResultEvents(){document.getElementById("export-results").addEventListener("click",exportResults);document.body.addEventListener("click",e=>{const b=e.target.closest("[data-page-list]");if(b){ResultPages.set(b.dataset.pageList,b.dataset.page);refresh(false);}});document.body.addEventListener("change",e=>{if(e.target.dataset.pageInput){ResultPages.set(e.target.dataset.pageInput,e.target.value);refresh(false);}});}
+
 window.addEventListener("resize", () => {
   window.clearTimeout(state.resizeTimer);
   state.resizeTimer = window.setTimeout(() => {
-    map.invalidateSize();
+    map?.invalidateSize();
   }, 120);
 });
 
 init().catch((error) => {
   document.getElementById("selected-region").innerHTML =
-    `<p class="empty-state">데이터를 불러오지 못했습니다. ${error.message}<br>반드시 http://localhost:8000/ 주소로 열어주세요.</p>`;
+    `<p class="empty-state">데이터를 불러오지 못했습니다. ${escapeHtml(error.message)}<br>잠시 후 새로고침해 주세요.</p>`;
 });

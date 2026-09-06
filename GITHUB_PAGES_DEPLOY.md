@@ -1,51 +1,18 @@
-# GitHub Pages 배포 순서
+# 배포와 복구
 
-## 1. 데이터 빌드
+`main`의 Pages 워크플로는 `web/`의 오래된 JSON을 그대로 배포하지 않습니다. 검증한 `estate-raw-state`를 복원하고, `estate-model-state`의 월 모델을 재사용해 `.work/site`를 만듭니다.
 
-AI 모델을 다시 돌리지 않고, 현재 수집된 실거래/교통/교육/초품아 데이터만 웹 JSON에 반영합니다.
+1. 코드·데이터·월 고정·전체 목록 검증을 통과합니다.
+2. 전체 원본을 SHA-256으로 검증해 복원합니다. 야간 실행은 최근 3개월과 과거 순환 1개월을 갱신합니다.
+3. 월 모델을 복원합니다. 처음인 달만 학습하며 같은 달의 파일은 덮어쓰지 않습니다.
+4. 전체 결과의 집계 거래수와 목록 거래수 일치를 확인합니다.
+5. 모델 상태를 저장한 뒤 Pages artifact를 공개합니다.
+6. `Verify actual public HTML, all periods and model metadata`에서 실제 HTTP 파일의 해시와 커밋을 확인합니다.
 
-```powershell
-cd C:\code
-python build_real_estate_dashboard_data.py --apt-detail data/apt_basis_detail_info.csv
-```
+정상 실행은 한국시간 오전 5시 35분 예약이며 GitHub 예약 실행은 지연될 수 있습니다. 수동 실행의 `refresh`를 켜면 자료도 새로 수집하고, 끄면 저장된 전체 원본으로 사이트만 다시 만듭니다.
 
-주의: `python run_real_estate_dashboard.py --no-browser`는 웹 서버를 계속 실행하는 명령이라 그 다음 `git add`, `git commit`으로 자동 진행되지 않습니다. 배포 전 데이터 생성은 위의 build 스크립트를 직접 실행하세요.
+첫 전체 수집은 `Collect complete apartment history` 워크플로로 4개 분할 작업을 수행합니다. 파티션 체크포인트는 실패해도 Actions cache와 artifact에 보존합니다. 4개 작업의 모든 페이지와 83개 시군구가 모여야 `estate-raw-state`로 저장하며, 이 작업만으로 사이트를 바꾸지는 않습니다. `MOLIT_API_KEY`를 우선 사용하고 명시적인 이전 옵션에 한해 기존 설정을 읽습니다.
 
-## 2. 로컬 확인
+수집 실패 시 시간만 늘리거나 일부 CSV로 교체하지 말고 실패한 월·시군구 파티션을 재개합니다. 모델 상태 손상 시 원본 모델 파일을 임의 재학습으로 대체하지 말고 모델 상태의 이전 정상 커밋 또는 보관 artifact를 복원하세요. 과거 월 모델을 덮어쓰지 않습니다.
 
-이미 8000번 포트 서버가 떠 있다면 브라우저에서 새로고침만 하면 됩니다.
-
-새로 서버를 켜야 할 때:
-
-```powershell
-python run_real_estate_dashboard.py --skip-build --skip-ai
-```
-
-포트가 이미 사용 중이면 기존 서버를 종료합니다.
-
-```powershell
-Get-NetTCPConnection -LocalPort 8000
-Stop-Process -Id <OwningProcess>
-```
-
-## 3. GitHub Pages 배포
-
-GitHub 저장소 Settings > Pages에서 Source를 `GitHub Actions`로 설정한 뒤:
-
-```powershell
-git add .gitignore .github README.md GITHUB_PAGES_DEPLOY.md *.py web
-git commit -m "open one"
-git push origin main
-```
-
-배포 주소:
-
-```text
-https://jaesung0804.github.io/turbo-potato/
-```
-
-## 메모
-
-- `data/`, `요건/`, `__pycache__/`는 Git에 올리지 않습니다.
-- `web/data/seoul_real_estate_summary.json`은 GitHub 단일 파일 제한을 넘지 않도록 지역별 매물 표시 개수를 줄여 생성합니다.
-- AI 추천 JSON은 내일 모델을 다시 학습하면 새로 갱신하면 됩니다.
+데이터는 코드 브랜치와 분리됩니다. `estate-raw-state`에는 압축 원본·수집 체크포인트, `estate-model-state`에는 월별 모델을 보존합니다. 둘 다 Git 이력으로 이전 정상 버전을 조회할 수 있습니다.

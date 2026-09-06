@@ -13,3 +13,9 @@
 Thumbs.db
 *.tmp
 *.log
+/.work/
+/models/
+/.pytest_cache/
+.env
+.env.*
+!.env.example
