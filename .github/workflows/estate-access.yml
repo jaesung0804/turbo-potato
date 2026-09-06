@@ -12,31 +12,32 @@ jobs:
     timeout-minutes: 5
     steps:
       - uses: actions/checkout@v4
-      - name: Test verified TLS compatibility and live fields
+      - name: Test persistent certificate-verified API connections
         shell: python
         env:
           MOLIT_API_KEY: ${{ secrets.MOLIT_API_KEY }}
         run: |
-          import json,time,socket,ssl,urllib.request,urllib.parse,xml.etree.ElementTree as ET,sys,os
+          import json,time,http.client,ssl,urllib.parse,xml.etree.ElementTree as ET,sys,os
           sys.path.insert(0,os.getcwd())
           from collect_estate_transactions import existing_key,validate,URL
           key=existing_key();print('::add-mask::'+key,flush=True)
-          ok=False
-          for mode in ['default','TLSv1.2']:
-              context=ssl.create_default_context()
-              if mode=='TLSv1.2':context.maximum_version=ssl.TLSVersion.TLSv1_2
-              started=time.monotonic();entry={'tls_mode':mode,'stage':'handshake'}
+          context=ssl.create_default_context();context.maximum_version=ssl.TLSVersion.TLSv1_2
+          conn=None;success=0
+          for attempt in range(5):
+              started=time.monotonic();entry={'attempt':attempt+1}
               try:
-                  with socket.create_connection(('apis.data.go.kr',443),timeout=8) as sock:
-                      with context.wrap_socket(sock,server_hostname='apis.data.go.kr') as tls:
-                          entry['negotiated']=tls.version()
-                  entry['stage']='response'
+                  if conn is None:conn=http.client.HTTPSConnection('apis.data.go.kr',timeout=12,context=context)
                   query=urllib.parse.urlencode({'serviceKey':urllib.parse.unquote(key),'LAWD_CD':'11110','DEAL_YMD':'202605','pageNo':1,'numOfRows':100})
-                  with urllib.request.urlopen(URL+'?'+query,context=context,timeout=15) as response:root=ET.fromstring(response.read())
-                  items=root.findall('.//item');fields=sorted({node.tag for item in items for node in item})
+                  conn.request('GET',urllib.parse.urlsplit(URL).path+'?'+query,headers={'Connection':'keep-alive','User-Agent':'estate-data/3'})
+                  response=conn.getresponse();body=response.read();entry.update(http_status=response.status,connection_closed=response.will_close)
+                  root=ET.fromstring(body);items=root.findall('.//item');fields=sorted({node.tag for item in items for node in item})
                   cancellation=[f for f in fields if 'cancel' in f.lower() or 'cdeal' in f.lower()]
                   entry.update(total=validate(root),fields=fields,cancellation_nonempty={f:sum(bool((i.findtext(f) or '').strip()) for i in items) for f in cancellation})
-                  ok=True
-              except Exception as error:entry.update(error=type(error).__name__,reason_type=type(getattr(error,'reason',error)).__name__)
+                  success+=1
+              except Exception as error:
+                  entry.update(error=type(error).__name__)
+                  if conn:conn.close()
+                  conn=None
               entry['seconds']=round(time.monotonic()-started,2);print(json.dumps(entry,ensure_ascii=False),flush=True)
-          if not ok:raise SystemExit('The provider did not return a verified API response; no data was published.')
+              if success>=2:break
+          if not success:raise SystemExit('No verified API response; existing data remains unchanged.')
