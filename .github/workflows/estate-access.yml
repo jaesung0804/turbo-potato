@@ -8,27 +8,40 @@ permissions:
   contents: read
 jobs:
   access:
-    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
     timeout-minutes: 6
     steps:
       - uses: actions/checkout@v4
-      - name: Compare page sizes and the live cancellation schema
+      - name: Diagnose the public API network and verify response fields
+        shell: python
         env:
           MOLIT_API_KEY: ${{ secrets.MOLIT_API_KEY }}
         run: |
-          python - <<'PY'
-          import json,time,urllib.request,urllib.parse,xml.etree.ElementTree as ET
+          import json,time,socket,urllib.request,urllib.parse,xml.etree.ElementTree as ET
           from collect_estate_transactions import existing_key,validate,URL
-          key=existing_key();print('::add-mask::'+key,flush=True)
-          for month,size in [('202605',1),('202501',1),('202501',100),('202501',1000)]:
+          addresses=sorted({r[4][0] for r in socket.getaddrinfo('apis.data.go.kr',443,type=socket.SOCK_STREAM)})
+          print('Resolved public gateway addresses',addresses,flush=True)
+          for port in [443,80]:
               started=time.monotonic()
-              query=urllib.parse.urlencode({'serviceKey':urllib.parse.unquote(key),'LAWD_CD':'11110','DEAL_YMD':month,'pageNo':1,'numOfRows':size})
-              entry={'month':month,'page_size':size}
               try:
-                  with urllib.request.urlopen(URL+'?'+query,timeout=15) as response:root=ET.fromstring(response.read())
+                  with socket.create_connection(('apis.data.go.kr',port),timeout=6):pass
+                  status='connected'
+              except Exception as error:status=type(error).__name__
+              print(json.dumps({'tcp_port':port,'status':status,'seconds':round(time.monotonic()-started,2)}),flush=True)
+          key=existing_key();print('::add-mask::'+key,flush=True)
+          for size in [1,100]:
+              started=time.monotonic()
+              query=urllib.parse.urlencode({'serviceKey':urllib.parse.unquote(key),'LAWD_CD':'11110','DEAL_YMD':'202605','pageNo':1,'numOfRows':size})
+              entry={'page_size':size}
+              try:
+                  req=urllib.request.Request(URL+'?'+query,headers={'User-Agent':'Mozilla/5.0','Connection':'close'})
+                  with urllib.request.urlopen(req,timeout=12) as response:root=ET.fromstring(response.read())
                   items=root.findall('.//item');fields=sorted({node.tag for item in items for node in item})
                   cancellation=[f for f in fields if 'cancel' in f.lower() or 'cdeal' in f.lower()]
                   entry.update(total=validate(root),fields=fields,cancellation_nonempty={f:sum(bool((i.findtext(f) or '').strip()) for i in items) for f in cancellation})
-              except Exception as error:entry['error']=type(error).__name__
+              except Exception as error:entry.update(error=type(error).__name__,reason_type=type(getattr(error,'reason',error)).__name__)
               entry['seconds']=round(time.monotonic()-started,2);print(json.dumps(entry,ensure_ascii=False),flush=True)
-          PY
