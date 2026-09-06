@@ -8,7 +8,7 @@ permissions:
   contents: write
 concurrency:
   group: estate-raw-data-update
-  cancel-in-progress: false
+  cancel-in-progress: true
 jobs:
   collect:
     strategy:
@@ -16,7 +16,7 @@ jobs:
       matrix:
         shard: [0, 1, 2, 3]
     runs-on: ubuntu-latest
-    timeout-minutes: 150
+    timeout-minutes: 90
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -25,10 +25,10 @@ jobs:
       - uses: actions/cache/restore@v4
         with:
           path: data/molit_cache_v3
-          key: estate-complete-v3-s${{ matrix.shard }}-${{ github.run_id }}
+          key: estate-complete-v4-s${{ matrix.shard }}-${{ github.run_id }}
           restore-keys: |
-            estate-complete-v3-s${{ matrix.shard }}-
-            estate-complete-v3-
+            estate-complete-v4-s${{ matrix.shard }}-
+            estate-complete-v4-
       - name: Collect every page in the assigned districts
         env:
           MOLIT_API_KEY: ${{ secrets.MOLIT_API_KEY }}
@@ -39,7 +39,7 @@ jobs:
         uses: actions/cache/save@v4
         with:
           path: data/molit_cache_v3
-          key: estate-complete-v3-s${{ matrix.shard }}-${{ github.run_id }}
+          key: estate-complete-v4-s${{ matrix.shard }}-${{ github.run_id }}
       - uses: actions/upload-artifact@v4
         if: always()
         with:

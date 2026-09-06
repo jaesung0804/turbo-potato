@@ -6,6 +6,8 @@ import concurrent.futures
 import csv
 import gzip
 import hashlib
+import http.client
+import ssl
 import json
 import math
 import os
@@ -52,23 +54,50 @@ def validate(root):
     return int(total)
 
 
+_connections = threading.local()
+TLS_CONTEXT = ssl.create_default_context()
+# The live government gateway completed verified TLS 1.2 handshakes while
+# fresh default connections repeatedly stalled. Keep certificate checks enabled
+# and reuse each worker's HTTP/1.1 connection after reading the complete body.
+TLS_CONTEXT.maximum_version = ssl.TLSVersion.TLSv1_2
+
+
 def request(key, code, month, page, timeout=25):
     query = urllib.parse.urlencode({"serviceKey":urllib.parse.unquote(key),"LAWD_CD":code,
         "DEAL_YMD":month,"pageNo":page,"numOfRows":1000})
+    endpoint = urllib.parse.urlsplit(URL)
     for attempt in range(3):
+        delay = max(0, .5 - (time.monotonic()-getattr(_connections,'last_request',0)))
+        if delay:time.sleep(delay)
+        _connections.last_request = time.monotonic()
+        retry_delay = 1 + attempt
         try:
-            with urllib.request.urlopen(URL+"?"+query, timeout=timeout) as response:
-                root = ET.fromstring(response.read())
-            validate(root)
-            return root
-        except urllib.error.HTTPError as error:
-            if error.code in {400,401,403}:
-                raise RuntimeError(f"API HTTP {error.code}; existing data preserved") from None
-            kind = f"HTTP {error.code}"
-        except (urllib.error.URLError,TimeoutError,ET.ParseError) as error:
-            kind = type(getattr(error,'reason',error)).__name__
-        if attempt < 2:
-            time.sleep(1 + attempt)
+            connection = getattr(_connections, 'client', None)
+            if connection is None:
+                connection = http.client.HTTPSConnection(endpoint.hostname, timeout=timeout, context=TLS_CONTEXT)
+                _connections.client = connection
+            if connection.sock is not None:connection.sock.settimeout(timeout)
+            connection.request('GET',endpoint.path+'?'+query,
+                headers={'Connection':'keep-alive','User-Agent':'estate-data/3'})
+            response = connection.getresponse()
+            body = response.read()
+            if response.status in {400,401,403,404}:
+                raise RuntimeError(f'API HTTP {response.status}; existing data preserved')
+            if response.status != 200:
+                kind = f'HTTP {response.status}'
+                if response.status == 429:
+                    retry = response.getheader('Retry-After','10')
+                    retry_delay = min(30,max(1,int(retry))) if retry.isdigit() else 10
+            else:
+                root = ET.fromstring(body)
+                validate(root)
+                return root
+        except (OSError,http.client.HTTPException,ET.ParseError) as error:
+            kind = type(error).__name__
+            connection = getattr(_connections,'client',None)
+            if connection:connection.close()
+            _connections.client = None
+        if attempt < 2:time.sleep(retry_delay)
     raise TransientAPIError(f"API request failed for {code}/{month}/page-{page}: {kind}") from None
 
 

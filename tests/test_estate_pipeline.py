@@ -125,6 +125,29 @@ def test_registry_has_every_current_district_once():
     assert sum(r.code.startswith('11') for r in collector.REGIONS.values()) == 25
 
 
+def test_api_connection_is_reused_with_certificate_validation(monkeypatch):
+    import ssl
+    made=[]
+    class Response:
+        status=200
+        def read(self):return b'<response><resultCode>000</resultCode><totalCount>0</totalCount></response>'
+    class Client:
+        sock=None
+        def __init__(self,host,timeout,context):
+            assert host=='apis.data.go.kr'
+            assert context.check_hostname and context.verify_mode==ssl.CERT_REQUIRED
+            self.requests=[];made.append(self)
+        def request(self,method,path,headers):self.requests.append((method,path,headers))
+        def getresponse(self):return Response()
+        def close(self):pass
+    monkeypatch.setattr(collector,'_connections',threading.local())
+    monkeypatch.setattr(collector.http.client,'HTTPSConnection',Client)
+    monkeypatch.setattr(collector.time,'sleep',lambda _:None)
+    collector.request('key','11110','202501',1)
+    collector.request('key','11110','202502',1)
+    assert len(made)==1 and len(made[0].requests)==2
+
+
 def test_transient_partition_retries_and_complete_cache_needs_no_key(tmp_path, monkeypatch):
     monkeypatch.setattr(collector, 'REGIONS', {k: collector.REGIONS[k] for k in ['11110', '11140']})
     monkeypatch.setattr(collector, 'request', lambda *args: api_page(0, []))
