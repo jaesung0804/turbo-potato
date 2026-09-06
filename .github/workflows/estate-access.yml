@@ -8,41 +8,35 @@ permissions:
   contents: read
 jobs:
   access:
-    strategy:
-      fail-fast: false
-      matrix:
-        os: [ubuntu-latest, windows-latest]
-    runs-on: ${{ matrix.os }}
-    timeout-minutes: 6
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
     steps:
       - uses: actions/checkout@v4
-      - name: Diagnose the public API network and verify response fields
+      - name: Test verified TLS compatibility and live fields
         shell: python
         env:
           MOLIT_API_KEY: ${{ secrets.MOLIT_API_KEY }}
         run: |
-          import json,time,socket,urllib.request,urllib.parse,xml.etree.ElementTree as ET,sys,os
+          import json,time,socket,ssl,urllib.request,urllib.parse,xml.etree.ElementTree as ET,sys,os
           sys.path.insert(0,os.getcwd())
           from collect_estate_transactions import existing_key,validate,URL
-          addresses=sorted({r[4][0] for r in socket.getaddrinfo('apis.data.go.kr',443,type=socket.SOCK_STREAM)})
-          print('Resolved public gateway addresses',addresses,flush=True)
-          for port in [443,80]:
-              started=time.monotonic()
-              try:
-                  with socket.create_connection(('apis.data.go.kr',port),timeout=6):pass
-                  status='connected'
-              except Exception as error:status=type(error).__name__
-              print(json.dumps({'tcp_port':port,'status':status,'seconds':round(time.monotonic()-started,2)}),flush=True)
           key=existing_key();print('::add-mask::'+key,flush=True)
-          for size in [1,100]:
-              started=time.monotonic()
-              query=urllib.parse.urlencode({'serviceKey':urllib.parse.unquote(key),'LAWD_CD':'11110','DEAL_YMD':'202605','pageNo':1,'numOfRows':size})
-              entry={'page_size':size}
+          ok=False
+          for mode in ['default','TLSv1.2']:
+              context=ssl.create_default_context()
+              if mode=='TLSv1.2':context.maximum_version=ssl.TLSVersion.TLSv1_2
+              started=time.monotonic();entry={'tls_mode':mode,'stage':'handshake'}
               try:
-                  req=urllib.request.Request(URL+'?'+query,headers={'User-Agent':'Mozilla/5.0','Connection':'close'})
-                  with urllib.request.urlopen(req,timeout=12) as response:root=ET.fromstring(response.read())
+                  with socket.create_connection(('apis.data.go.kr',443),timeout=8) as sock:
+                      with context.wrap_socket(sock,server_hostname='apis.data.go.kr') as tls:
+                          entry['negotiated']=tls.version()
+                  entry['stage']='response'
+                  query=urllib.parse.urlencode({'serviceKey':urllib.parse.unquote(key),'LAWD_CD':'11110','DEAL_YMD':'202605','pageNo':1,'numOfRows':100})
+                  with urllib.request.urlopen(URL+'?'+query,context=context,timeout=15) as response:root=ET.fromstring(response.read())
                   items=root.findall('.//item');fields=sorted({node.tag for item in items for node in item})
                   cancellation=[f for f in fields if 'cancel' in f.lower() or 'cdeal' in f.lower()]
                   entry.update(total=validate(root),fields=fields,cancellation_nonempty={f:sum(bool((i.findtext(f) or '').strip()) for i in items) for f in cancellation})
+                  ok=True
               except Exception as error:entry.update(error=type(error).__name__,reason_type=type(getattr(error,'reason',error)).__name__)
               entry['seconds']=round(time.monotonic()-started,2);print(json.dumps(entry,ensure_ascii=False),flush=True)
+          if not ok:raise SystemExit('The provider did not return a verified API response; no data was published.')
