@@ -25,6 +25,8 @@ assert.equal(evaluate('reviewScoreAtPrice({...priceRec,trade_count:0},10)'),null
 assert.equal(evaluate('reviewScoreAtPrice({...priceRec,score_error_scale:null},10)'),null);
 assert.equal(evaluate('neutralPrice({fair_price_per_pyeong:4000,area_pyeong:25})'),10);
 assert.equal(evaluate('neutralPrice(null)'),null);
+assert.equal(evaluate('totalPriceLabel(.603149)'),'0.6031억');
+assert.equal(evaluate('totalPriceLabel(8.025)'),'8.025억');
 
 // Changing the sorting metric cannot hide unscored listings or CSV rows.
 evaluate(`state.summary={years:['2026','2025','2024'],generated_at:'2026-09-04',regions:[

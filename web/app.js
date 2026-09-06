@@ -538,7 +538,7 @@ function reviewScoreAtPrice(rec, askingPrice) {
 }
 
 function totalPriceLabel(value) {
-  return Number.isFinite(value) && value>0 ? `${value.toLocaleString('ko-KR',{minimumFractionDigits:2,maximumFractionDigits:2})}억` : '미산출';
+  return Number.isFinite(value) && value>0 ? `${value.toLocaleString('ko-KR',{minimumFractionDigits:2,maximumFractionDigits:4})}억` : '미산출';
 }
 
 function askingPriceResult(rec, text) {
@@ -559,10 +559,10 @@ function askingPricePanel(selected) {
   const text=state.askingPrices.get(key)??'';
   return `<section class="asking-price-panel" aria-label="현재 호가 비교"><h3>현재 호가와 비교</h3>
     <div class="metric-grid">${metricCard('50점 기준가',totalPriceLabel(neutralPrice(rec)),'text')}${metricCard('관측 실거래 중앙가',totalPriceLabel(rec.price_billion),'text')}</div>
-    <p class="score-note">${escapeHtml(rec.area_type)} 기준 · 50점은 입력 가격과 모델 기준가격이 같아지는 지점입니다.</p>
+    <p class="score-note">${escapeHtml(rec.area_type)} 기준 · 50점은 입력 가격과 모델 기준가격이 같아지는 지점입니다. 금액은 만원 단위로 반올림해 표시합니다.</p>
     <div class="asking-price-controls"><label><span>현재 매매 호가 (억)</span><input id="asking-price-input" type="number" min="0" step="0.0001" placeholder="예: 8.5" value="${escapeHtml(text)}" aria-describedby="asking-price-note"/></label><button id="use-neutral-price" type="button">50점 가격 넣기</button></div>
     <div id="asking-price-result" role="status">${askingPriceResult(rec,text)}</div>
-    <p id="asking-price-note" class="score-note">직접 입력한 호가를 실거래 관측가격 대신 넣은 비교입니다. 모델·거래수·오차 기준은 유지하며, 개별 매물의 층·향·수리 상태는 반영하지 않습니다.</p>
+    <p id="asking-price-note" class="score-note">직접 입력한 호가를 실거래 관측가격 대신 넣은 비교입니다. 모델·거래수·오차 기준은 유지하며, 개별 매물의 층·향·수리 상태는 반영하지 않습니다. 관측 총액은 집계 과정에서 반올림되어, 이를 재입력한 점수는 기존 점수와 소폭 다를 수 있습니다.</p>
   </section>`;
 }
 
