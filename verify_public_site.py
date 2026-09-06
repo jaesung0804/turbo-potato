@@ -18,7 +18,7 @@ def verify(base, expected_sha):
     manifest = json.loads(fetch(urljoin(base, 'data/dashboard_manifest.json')+'?verify='+expected_sha))
     if manifest.get('code_commit') != expected_sha:
         raise ValueError('The public site is still serving a different release')
-    if not manifest.get('collection', {}).get('complete') or not all(c['complete'] for c in manifest['coverage'].values()):
+    if not manifest.get('collection', {}).get('complete') or manifest['collection'].get('normalizer_version')!=2 or not all(c['complete'] for c in manifest['coverage'].values()):
         raise ValueError('Public data completeness was not verified')
     for path, sha in manifest['ui_assets'].items():
         if hashlib.sha256(fetch(urljoin(base, path)+'?verify='+expected_sha)).hexdigest() != sha:

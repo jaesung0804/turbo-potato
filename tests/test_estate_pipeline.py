@@ -45,6 +45,13 @@ def test_all_results_survive_old_limit_and_identical_names(tmp_path):
     assert s['data_through'] == '2025-01-10'
 
 
+def test_full_source_area_precision_is_preserved(tmp_path):
+    s=make_summary(tmp_path,[trade(ARCH_AREA=area) for area in ['84.91','84.9100','84.911','84.914']])
+    rows=s['regions'][0]['all']['addresses']
+    assert len(rows)==3 and sorted(r['count'] for r in rows)==[1,1,2]
+    assert any('84.911㎡' in r['key'] for r in rows)
+
+
 @pytest.mark.parametrize('changes', [dict(THING_AMT='NaN'), dict(THING_AMT='inf'), dict(THING_AMT='-1'),
     dict(ARCH_AREA='0'), dict(CTRT_DAY='20250230'), dict(CTRT_DAY='', RCPT_YR='2025'),
     dict(RTRCN_DAY='cancelled'), dict(DCLR_SE='직거래')])
@@ -83,6 +90,17 @@ def test_actual_server_page_size_and_cancellation_flag(monkeypatch):
     assert len(rows) == 3 and rows[-1]['RTRCN_DAY'] == 'cancelled'
 
 
+@pytest.mark.parametrize('field,value', [('cdealDay','2025-02-01'), ('cancelDealDay','2025-02-01'),
+    ('cancelDealDate','2025-02-01'), ('cdealType','O'), ('cancelDealType','Y')])
+def test_both_public_api_cancellation_schemas_are_retained(field, value):
+    item=api_page(1,[1]).find('.//item')
+    node=item.find(field)
+    if node is None: node=ET.SubElement(item,field)
+    node.text=value
+    row=collector.normalize_row(item,collector.REGIONS['11110'])
+    assert row['RTRCN_DAY'] in {'2025-02-01','cancelled'}
+
+
 @pytest.mark.parametrize('second', [api_page(3, [1, 2]), api_page(4, [3]), api_page(3, [])])
 def test_repeated_changed_or_short_pages_fail_closed(monkeypatch, second):
     pages = [api_page(3, [1, 2]), second]
@@ -92,7 +110,7 @@ def test_repeated_changed_or_short_pages_fail_closed(monkeypatch, second):
 
 
 def test_checkpoint_checksum_and_identity(tmp_path):
-    rows = [trade()]; body = {'complete': True, 'month': '202501', 'code': '11110', 'count': 1,
+    rows = [trade()]; body = {'complete': True, 'normalizer_version': 2, 'month': '202501', 'code': '11110', 'count': 1,
         'rows': rows, 'rows_sha256': collector.digest(collector.rows_bytes(rows))}
     path = tmp_path/'202501-11110.json.gz'; path.write_bytes(gzip.compress(json.dumps(body).encode()))
     assert collector.read_partition(path, '202501', '11110')['count'] == 1
@@ -141,7 +159,7 @@ def test_permanent_collection_error_cannot_replace_existing_csv(tmp_path, monkey
 def test_raw_state_roundtrip_and_corruption_preserves_existing(tmp_path):
     source = tmp_path/'source'; (source/'data/molit_cache_v3').mkdir(parents=True)
     body = b'column\nvalue\n'; raw = source/'data/capital_area_apt_trade_transactions.csv'; raw.write_bytes(body)
-    raw.with_suffix('.manifest.json').write_text(json.dumps({'complete': True, 'rows': 1, 'sha256': hashlib.sha256(body).hexdigest()}))
+    raw.with_suffix('.manifest.json').write_text(json.dumps({'complete': True, 'normalizer_version': 2, 'rows': 1, 'sha256': hashlib.sha256(body).hexdigest()}))
     state = tmp_path/'state'; raw_state.pack(state, source)
     restored = tmp_path/'restored'; raw_state.restore(state, restored)
     assert (restored/'data/capital_area_apt_trade_transactions.csv').read_bytes() == body

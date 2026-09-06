@@ -21,6 +21,7 @@ from pathlib import Path
 from get_molit_apt_trade_data import CAPITAL_AREA_LAWD_CODES, LawdCode, DASHBOARD_FIELDNAMES, normalize_row, month_range
 
 URL = "https://apis.data.go.kr/1613000/RTMSDataSvcAptTrade/getRTMSDataSvcAptTrade"
+NORMALIZER_VERSION = 2
 class TransientAPIError(RuntimeError): pass
 OBSOLETE = {"28110", "28140", "28260", "41590", "41190"}
 REGIONS = {r.code:r for r in CAPITAL_AREA_LAWD_CODES if r.code not in OBSOLETE}
@@ -110,7 +111,7 @@ def rows_bytes(rows):
 
 def read_partition(path,month,code):
     data=json.loads(gzip.decompress(path.read_bytes()))
-    if not data.get("complete") or data["month"]!=month or data["code"]!=code:
+    if data.get('normalizer_version')!=NORMALIZER_VERSION or not data.get("complete") or data["month"]!=month or data["code"]!=code:
         raise ValueError("Invalid partition identity")
     if data["count"]!=len(data["rows"]) or digest(rows_bytes(data["rows"]))!=data["rows_sha256"]:
         raise ValueError("Invalid partition count or checksum")
@@ -155,7 +156,7 @@ def collect(key,start,end,cache,output,refresh_months=3,workers=2,shard_index=0,
     def one(item):
         path,month,region=item
         rows=fetch_partition(key,region,month,abort)
-        data={"complete":True,"month":month,"code":region.code,"count":len(rows),
+        data={"complete":True,"normalizer_version":NORMALIZER_VERSION,"month":month,"code":region.code,"count":len(rows),
               "fetched_at":utc_now(),"rows_sha256":digest(rows_bytes(rows)),"rows":rows}
         temp=path.with_suffix(".tmp")
         temp.write_bytes(gzip.compress(json.dumps(data,ensure_ascii=False,separators=(",",":")).encode(),mtime=0))
@@ -164,13 +165,19 @@ def collect(key,start,end,cache,output,refresh_months=3,workers=2,shard_index=0,
     print(f"Requested {len(partitions)} partitions; fetch {len(missing)}, reuse {len(partitions)-len(missing)}",flush=True)
     pending=missing
     for pass_number in range(3):
-        failed=[]
+        failed=[];consecutive_failures=0
         with concurrent.futures.ThreadPoolExecutor(max_workers=workers) as pool:
             futures={pool.submit(one,item):item for item in pending}
             for count,future in enumerate(concurrent.futures.as_completed(futures),1):
-                try:future.result()
+                try:
+                    future.result();consecutive_failures=0
                 except TransientAPIError as error:
                     failed.append(futures[future]);print(str(error),flush=True)
+                    consecutive_failures+=1
+                    if consecutive_failures>=10:
+                        abort.set()
+                        for other in futures:other.cancel()
+                        raise RuntimeError('API connectivity circuit opened after 10 consecutive failed partitions; checkpoints and previous CSV preserved') from None
                 except Exception:
                     abort.set()
                     for other in futures:other.cancel()
@@ -187,7 +194,7 @@ def collect(key,start,end,cache,output,refresh_months=3,workers=2,shard_index=0,
             data=read_partition(path,month,code)
             writer.writerows(data["rows"]);total+=data["count"]
     if total==0:raise RuntimeError("Empty whole-market collection cannot replace existing data")
-    manifest={"schema_version":1,"complete":shard_count==1,"shard_complete":True,"start":start,"end":end,"rows":total,
+    manifest={"schema_version":1,"normalizer_version":NORMALIZER_VERSION,"complete":shard_count==1,"shard_complete":True,"start":start,"end":end,"rows":total,
         "shard_index":shard_index,"shard_count":shard_count,
         "partition_count":len(partitions),"region_count":len(regions),"registry_month":"2026-09",
         "sha256":digest(temp.read_bytes()),"fetched_at":utc_now(),"source":URL,

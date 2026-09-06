@@ -21,7 +21,8 @@ jobs:
         env:
           MOLIT_API_KEY: ${{ secrets.MOLIT_API_KEY }}
         run: |
-          import json,time,socket,urllib.request,urllib.parse,xml.etree.ElementTree as ET
+          import json,time,socket,urllib.request,urllib.parse,xml.etree.ElementTree as ET,sys,os
+          sys.path.insert(0,os.getcwd())
           from collect_estate_transactions import existing_key,validate,URL
           addresses=sorted({r[4][0] for r in socket.getaddrinfo('apis.data.go.kr',443,type=socket.SOCK_STREAM)})
           print('Resolved public gateway addresses',addresses,flush=True)

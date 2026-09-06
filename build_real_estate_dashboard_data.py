@@ -10,6 +10,7 @@ import csv
 import json
 import math
 from datetime import date
+from decimal import Decimal
 from pathlib import Path
 from statistics import mean, median
 from typing import Any
@@ -474,7 +475,12 @@ def area_type_label(metrics: dict[str, float]) -> str:
 
 
 def typed_address_key(row: dict[str, str], metrics: dict[str, float]) -> str:
-    return f"{address_key(row)} | {metrics['area_pyeong'] * SQM_PER_PYEONG:.2f}㎡"
+    return f"{address_key(row)} | {source_area(row)}㎡"
+
+
+def source_area(row: dict[str, str]) -> str:
+    value = format(Decimal(row['ARCH_AREA'].replace(',', '').strip()), 'f')
+    return value.rstrip('0').rstrip('.') if '.' in value else value
 
 
 def contract_year(row: dict[str, str]) -> str:
@@ -630,7 +636,7 @@ def build_dashboard_data(
                         "address": addr,
                         "building_name": row.get("BLDG_NM", "").strip() or "(건물명 없음)",
                         "complex_key": address_key(row),
-                        "area_type": f"전용 {metrics['area_pyeong'] * SQM_PER_PYEONG:.2f}㎡ ({metrics['area_pyeong']:.1f}평)",
+                        "area_type": f"전용 {source_area(row)}㎡ ({metrics['area_pyeong']:.1f}평)",
                         "count": 0,
                         "households": row_households,
                         "built_year": row_built_year,
@@ -696,7 +702,7 @@ def build_dashboard_data(
                         "address": addr,
                         "building_name": row.get("BLDG_NM", "").strip() or "(건물명 없음)",
                         "complex_key": address_key(row),
-                        "area_type": f"전용 {metrics['area_pyeong'] * SQM_PER_PYEONG:.2f}㎡ ({metrics['area_pyeong']:.1f}평)",
+                        "area_type": f"전용 {source_area(row)}㎡ ({metrics['area_pyeong']:.1f}평)",
                         "floor": round_metric(parse_float(row.get("FLR")), 0),
                         "built_year": row_built_year,
                         "price_billion": round_metric(metrics.get("price_billion"), 2),

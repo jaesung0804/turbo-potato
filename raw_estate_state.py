@@ -9,7 +9,7 @@ def pack(state,root=Path('.')):
     source=root/'data/capital_area_apt_trade_transactions.csv'
     collection=source.with_suffix('.manifest.json')
     meta=json.loads(collection.read_text())
-    if not meta.get('complete') or sha(source.read_bytes())!=meta['sha256']:
+    if not meta.get('complete') or meta.get('normalizer_version')!=2 or sha(source.read_bytes())!=meta['sha256']:
         raise ValueError('Only checksum-verified complete collections can replace raw state')
     buf=io.BytesIO()
     with gzip.GzipFile(fileobj=buf,mode='wb',mtime=0) as zipped:
@@ -38,7 +38,7 @@ def pack(state,root=Path('.')):
 
 def restore(state,root=Path('.')):
     manifest=json.loads((state/'raw_manifest.json').read_text());bodies={}
-    if manifest.get('schema_version')!=1 or not manifest['collection']['complete']:
+    if manifest.get('schema_version')!=1 or not manifest['collection']['complete'] or manifest['collection'].get('normalizer_version')!=2:
         raise ValueError('Unsupported or incomplete raw state')
     for item in manifest['files']:
         if item['name'] not in {'transactions.csv.gz','collection.json','checkpoints.tar.gz'}:raise ValueError('Unexpected state path')

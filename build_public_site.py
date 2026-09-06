@@ -59,7 +59,7 @@ def light_map(path):
 def build(source, output, model_dir=Path('models'), month=None, summary_path=None, require_complete=True):
     if require_complete:
         collection = json.loads(source.with_suffix('.manifest.json').read_text())
-        if not collection.get('complete') or hashlib.sha256(source.read_bytes()).hexdigest() != collection['sha256']:
+        if not collection.get('complete') or collection.get('normalizer_version')!=2 or hashlib.sha256(source.read_bytes()).hexdigest() != collection['sha256']:
             raise ValueError('A complete, verified raw collection is required for publication')
     else:
         collection = {'complete': False, 'note': 'Local fixture build; not a production collection'}
@@ -90,7 +90,7 @@ def build(source, output, model_dir=Path('models'), month=None, summary_path=Non
         raise ValueError('A source partition was truncated; publication refused')
     if len(model['recommendations']) != manifest['coverage'][model['target_year']]['available_types']:
         raise ValueError('The latest model output does not cover every observed type')
-    manifest['collection'] = {k: collection.get(k) for k in ['complete', 'start', 'end', 'rows', 'partition_count', 'region_count', 'fetched_at']}
+    manifest['collection'] = {k: collection.get(k) for k in ['complete', 'normalizer_version', 'start', 'end', 'rows', 'partition_count', 'region_count', 'fetched_at']}
     manifest['amenities'] = amenities
     manifest['map_note'] = '2025-06-30 시군구 경계. 2026년 개편 지역은 전체 목록에서 조회합니다.'
     validation = {k: v for k, v in model.items() if k != 'recommendations'}
