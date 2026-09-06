@@ -34,7 +34,30 @@ def clustered_interval(test, actual, baseline, candidate):
             'resampling_unit':'apartment complex; all its types stay together','repeats':300}
 
 
-def experiment(summary_path, source_dir, output_dir, station_file):
+def mixed_use_segments(test, actual, baseline, candidate):
+    """Audit systematic overvaluation as well as aggregate price error."""
+    result = {}
+    for name, mask in {
+        'mixed_use': test.is_mixed_use.eq(1),
+        'ordinary_apartment': test.is_mixed_use.eq(0),
+        'unknown': test.is_mixed_use.isna(),
+        'mixed_use_without_prior': test.is_mixed_use.eq(1) & test.prior_price.isna(),
+    }.items():
+        mask = mask.to_numpy()
+        if not mask.any():
+            continue
+        a, p = actual[mask], candidate[mask]
+        result[name] = {
+            'rows': int(mask.sum()), 'complexes': int(test.loc[mask, 'group'].nunique()),
+            'mae_price_per_pyeong': round(float(np.abs(p-a).mean()), 2),
+            'mean_signed_error_price_per_pyeong': round(float((p-a).mean()), 2),
+            'overestimate_gt_20pct_rate': round(float((p>a*1.2).mean()), 4),
+            'delta_vs_v4': clustered_interval(test.loc[mask], a, baseline[mask], p),
+        }
+    return result
+
+
+def experiment(summary_path, source_dir, output_dir, station_file, include_mixed_use=False):
     output_dir.mkdir(parents=True,exist_ok=True)
     body=summary_path.read_bytes();summary=json.loads(body)
     cache=Path('.work/preference_frame.joblib')
@@ -60,8 +83,23 @@ def experiment(summary_path, source_dir, output_dir, station_file):
         extra=pd.DataFrame([lookup[k] for k in keys],columns=snapshot['columns'])
         provenance=snapshot['provenance']
     frame=pd.concat([frame,extra],axis=1)
+    variants=VARIANTS
+    candidate_name='preferences'
+    candidate_version='estate-preferences-v5-research'
+    if include_mixed_use:
+        if 'is_mixed_use' not in frame:
+            raise ValueError('Rebuild the feature snapshot with --source-dir to include mixed-use classification')
+        n,c=VARIANTS['preferences']
+        variants={'v4':VARIANTS['v4'], 'preferences':VARIANTS['preferences'],
+            'mixed_use':(['is_mixed_use'],[]),
+            'preferences_mixed_use':([*n,'is_mixed_use'],c),
+            'parking':(['log_parking_per_household'],[]),
+            'layout_heating':([],['corridor_type','heating_type']),
+            'structural_preferences':([*n,'is_mixed_use','log_parking_per_household'],[*c,'corridor_type','heating_type'])}
+        candidate_name='structural_preferences'
+        candidate_version='estate-preferences-structure-v6-research'
     predictions={};results={}
-    for name,(numeric,categorical) in VARIANTS.items():
+    for name,(numeric,categorical) in variants.items():
         f=frame.copy();f.attrs={'extra_numeric':numeric,'extra_categorical':categorical}
         started=time.monotonic();folds=model.evaluate(f,2025)
         training=f[f.year<2025];test=f[f.year==2025]
@@ -80,13 +118,16 @@ def experiment(summary_path, source_dir, output_dir, station_file):
     test=frame[frame.year==2025];actual=np.exp(test.target.to_numpy())
     for name,r in results.items():
         r['holdout_delta']=clustered_interval(test,actual,predictions['v4'],predictions[name])
+        if include_mixed_use:
+            r['mixed_use_segments_2025']=mixed_use_segments(test,actual,predictions['v4'],predictions[name])
+            r['holdout_delta_vs_preferences']=clustered_interval(test,actual,predictions['preferences'],predictions[name])
         r['selection_mae']=round(r['selection_mae'],2)
     # Save a separate prospective candidate, even if v4 is selected as simplest.
-    f=frame.copy();n,c=VARIANTS['preferences'];f.attrs={'extra_numeric':n,'extra_categorical':c}
+    f=frame.copy();n,c=variants[candidate_name];f.attrs={'extra_numeric':n,'extra_categorical':c}
     training=f[f.year<=2025];weight,interval=model.tune(training,2025)
-    artifact={**model.fit(training),'version':'estate-preferences-v5-research','trained_through':2025,
+    artifact={**model.fit(training),'version':candidate_version,'trained_through':2025,
         'ml_weight':weight,'interval':interval,'data_sha256':fingerprint,'temporal_status':provenance['temporal_status']}
-    candidate_path=output_dir/'preferences-v5-research.joblib';joblib.dump(artifact,candidate_path,compress=3)
+    candidate_path=output_dir/(candidate_version.removeprefix('estate-')+'.joblib');joblib.dump(artifact,candidate_path,compress=3)
     current=f[f.year==f.year.max()]
     current_payload=[p for p in payload if int(p['year'])==int(f.year.max())]
     current_fair=np.exp(model.predict(artifact,current,weight))
@@ -96,6 +137,10 @@ def experiment(summary_path, source_dir, output_dir, station_file):
         gap=np.log(fair/p['price_per_pyeong']);n=p['trade_count'];confidence=n/(n+5)
         rows.append({**p,'research_model':artifact['version'],'fair_price_per_pyeong':round(float(fair),1),
             'review_score':round(float(50+40*np.tanh(gap/max(error,.05))*confidence),1),
+            **({'is_mixed_use':float(row.is_mixed_use) if pd.notna(row.is_mixed_use) else None,
+                'parking_per_household':round(float(np.expm1(row.log_parking_per_household)),3) if pd.notna(row.log_parking_per_household) else None,
+                'corridor_type':row.corridor_type if pd.notna(row.corridor_type) else None,
+                'heating_type':row.heating_type if pd.notna(row.heating_type) else None} if include_mixed_use else {}),
             'brand_name':row.brand_name,'matched_total_households':round(float(np.expm1(row.log_households))) if pd.notna(row.log_households) else None,
             'school_point_distance_m':round(float(np.expm1(row.school_log_distance))) if pd.notna(row.school_log_distance) else None,
             'verified_metro_subset_distance_m':round(float(np.expm1(row.transit_log_distance))) if pd.notna(row.transit_log_distance) else None})
@@ -104,11 +149,11 @@ def experiment(summary_path, source_dir, output_dir, station_file):
     report={'schema_version':1,'status':'research_only','production_model':'estate-reference-v4',
         'summary_sha256':fingerprint,'data_through':summary['data_through'],'runtime':{'lightgbm':lightgbm.__version__},
         'source_provenance':provenance,'selection_rule':'Choose the fewest features within 0.5% of the best pooled 2023/24 MAE; 2025 is excluded from selection. Fixed LightGBM architecture and prior-year weight tuning for every variant.',
-        'selected_on_2023_2024':selected,'results':results,
+        'selected_on_2023_2024':selected,'results':results,'candidate_version':candidate_version,
         'candidate_artifact_sha256':hashlib.sha256(candidate_path.read_bytes()).hexdigest(),
         'current_research_rows':len(rows),'current_results_sha256':hashlib.sha256(current_path.read_bytes()).hexdigest(),
         'limitations':['This is reference-price error, not future-return performance.','Snapshot backcasts do not prove historical availability; no automatic production promotion.',
-            'All six variants reuse historical holdouts for exploratory reporting; 2025 was already seen in prior v4 research.',
+            'Variants reuse historical holdouts for exploratory reporting; 2025 was already seen in prior v4 research.',
             'School proximity is not assignment, campus adjacency or walking safety. Transit covers a date-verified subset, not every station.',
             'Exact-area household inventory and actual routed walking time remain unobserved; no fabricated values.']}
     write_json(output_dir/'comparison.json',report,indent=2)
@@ -120,6 +165,9 @@ if __name__=='__main__':
     p=argparse.ArgumentParser(description=__doc__)
     p.add_argument('--summary',type=Path,default=Path('.work/build/summary.json'))
     p.add_argument('--source-dir',type=Path,help='Rebuild features from original master/school CSVs; otherwise use the committed research snapshot')
-    p.add_argument('--output-dir',type=Path,default=Path('.work/preference-experiment'))
+    p.add_argument('--output-dir',type=Path)
+    p.add_argument('--mixed-use',action='store_true',help='Compare mixed-use, parking and structural features against v4 and preferences')
     p.add_argument('--stations',type=Path,default=Path('metadata/metro_verified_events.json'))
-    a=p.parse_args();experiment(a.summary,a.source_dir,a.output_dir,a.stations if a.stations.exists() else None)
+    a=p.parse_args()
+    output=a.output_dir or Path('.work/mixed-use-experiment' if a.mixed_use else '.work/preference-experiment')
+    experiment(a.summary,a.source_dir,output,a.stations if a.stations.exists() else None,a.mixed_use)

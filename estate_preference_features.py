@@ -44,6 +44,48 @@ def numeric(value):
         return None
 
 
+def mixed_use(value):
+    """Explicit master/K-APT classification only; missing is never ordinary housing."""
+    label = re.sub(r'\s+', '', str(value or ''))
+    if label in {'주상복합', '도시형생활주택(주상복합)'}:
+        return 1.0
+    if label in {'아파트', '도시형생활주택(아파트)'}:
+        return 0.0
+    return np.nan
+
+
+def parking_per_household(row):
+    """Use reconciled physical inventory; zero-filled/contradictory records stay unknown."""
+    total, above, below, households = [numeric(row.get(c)) for c in
+        ['totprk_ecct', 'grnd_prkg_ecct', 'undgr_prkg_ecct', 'nmhsh']]
+    if any(v is None for v in [total, above, below, households]):
+        return np.nan
+    if total <= 0 or households <= 0 or min(above, below) < 0 or above+below != total:
+        return np.nan
+    return math.log1p(total/households)
+
+
+def corridor_type(value):
+    label = re.sub(r'\s+', '', str(value or ''))
+    if label == '계단식': return 'staircase'
+    if label == '복도식': return 'corridor'
+    if label == '타워형': return 'tower'
+    parts = set(label.split(','))
+    if parts <= {'혼합식','복합식','계단식','복도식'} and (len(parts)>1 or label in {'혼합식','복합식'}):
+        return 'mixed'
+    return np.nan
+
+
+def heating_type(value):
+    label = re.sub(r'\s+', '', str(value or ''))
+    labels = {'개별난방':'individual', '지역난방':'district', '중앙난방':'central'}
+    if label in labels: return labels[label]
+    if label in {'개별난방,도시가스','지역난방,도시가스','지역난방,열병합','중앙난방,도시가스'}:
+        return labels[label.split(',')[0]]
+    if label == '개별난방+기타': return 'mixed'
+    return np.nan
+
+
 def address(value):
     value=re.sub(r'\s+', ' ', value.replace('번지', '').strip())
     # The 2024 master mixes "성남분당구" and "성남시 분당구", and
@@ -141,6 +183,10 @@ def prepare_features(summary, payload, source_dir, station_file=None):
         lat = numeric(matched.get('la')) if matched else None
         lon = numeric(matched.get('lo')) if matched else None
         result.append({'brand_name': brand(p['building_name']),
+            'is_mixed_use': mixed_use(matched.get('hsmp_type')) if matched else np.nan,
+            'log_parking_per_household': parking_per_household(matched) if matched else np.nan,
+            'corridor_type': corridor_type(matched.get('crrdpr_type')) if matched else np.nan,
+            'heating_type': heating_type(matched.get('htng_mthd')) if matched else np.nan,
             'log_households': math.log1p(households) if households and households>0 else np.nan,
             'latitude': lat if lat and lon else np.nan, 'longitude': lon if lat and lon else np.nan,
             'school_log_distance': np.nan, 'school_within_500m': np.nan,
@@ -167,13 +213,22 @@ def prepare_features(summary, payload, source_dir, station_file=None):
                 # This is a verified subset of the network: far away is unknown, not no station.
                 frame.loc[indices,'transit_log_distance']=np.where(d<=2000,np.log1p(d),np.nan)
     coverage = {str(year): {c: round(float(frame.loc[years==year,c].notna().mean()),4)
-                for c in ['log_households','school_log_distance','transit_log_distance']}
+                for c in ['log_households','school_log_distance','transit_log_distance','is_mixed_use',
+                          'log_parking_per_household','corridor_type','heating_type']}
                 for year in sorted(set(years))}
     provenance = {'master_sha256': hashlib.sha256(master_path.read_bytes()).hexdigest(),
         'station_sha256': hashlib.sha256(station_file.read_bytes()).hexdigest() if station_file else None,
         'school_sha256': hashlib.sha256(school_path.read_bytes()).hexdigest(),
         'master_match': 'exact full lot address, normalized name and construction year; reject ambiguous IDs and reconstruction flags',
         'coverage': coverage, 'brand_counts': frame.brand_name.value_counts().to_dict(),
+        'mixed_use_counts': {str(year): {
+            'mixed_use': int(((years==year) & frame.is_mixed_use.eq(1)).sum()),
+            'ordinary_apartment': int(((years==year) & frame.is_mixed_use.eq(0)).sum()),
+            'unknown': int(((years==year) & frame.is_mixed_use.isna()).sum())}
+            for year in sorted(set(years))},
+        'mixed_use_meaning': '2024-labelled master hsmp_type: explicit mixed-use=1, explicit apartment=0, all missing/unmatched/unrecognized types=missing; no name or height inference, no fixed premium/penalty',
+        'parking_meaning': 'log(1+total parking spaces/households), only positive totals with nonnegative above/below components summing to total; does not prove resident-exclusive parking in mixed-use complexes',
+        'structure_meaning': 'explicit master corridor/heating categories; no inferred quality ranks, missing/unrecognized stays missing; same retrospective backcast assumption as households',
         'temporal_status': 'retrospective reconstruction: 2024-labelled structural snapshot and current school coordinates projected backwards; establishment dates gated; historical moves/closures/name changes are not fully known',
         'school_meaning': 'distance to an established current elementary-school point, not catchment or safe walking route',
         'transit_meaning': 'straight-line distance <=2km to a date-verified subset of the metro network; other coverage remains missing'}

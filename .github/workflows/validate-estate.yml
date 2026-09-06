@@ -48,7 +48,9 @@ jobs:
           node tests/check_bundle.cjs .work/site
       - name: Reproduce the separate preference experiment
         if: steps.raw.outputs.ready == 'true' && (github.ref == 'refs/heads/codex/estate-amenity-experiment' || github.head_ref == 'codex/estate-amenity-experiment')
-        run: python compare_preference_models.py
+        run: |
+          python compare_preference_models.py
+          python compare_preference_models.py --mixed-use
       - uses: actions/upload-artifact@v4
         if: steps.raw.outputs.ready == 'true'
         with:
@@ -57,4 +59,5 @@ jobs:
             .work/site/
             models/
             .work/preference-experiment/
+            .work/mixed-use-experiment/
           retention-days: 14

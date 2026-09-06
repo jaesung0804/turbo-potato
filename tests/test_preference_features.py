@@ -1,7 +1,7 @@
 import math
 import numpy as np
 import pandas as pd
-from estate_preference_features import brand, match_master, area_inventory, active_events, tree_nearest, address
+from estate_preference_features import brand, match_master, area_inventory, active_events, tree_nearest, address, mixed_use, parking_per_household, corridor_type, heating_type
 import estate_model as model
 from test_estate_model_candidate import annual_fixture
 
@@ -14,6 +14,45 @@ def test_brand_is_a_category_without_an_assumed_quality_rank():
     assert brand('e-편한세상') == 'elife'
     assert brand('별빛마을') == 'unidentified'
     assert brand('래미안 자이') == 'raemian+xi'
+
+
+def test_mixed_use_requires_an_explicit_classification_not_a_building_name():
+    assert mixed_use('주상복합') == 1
+    assert mixed_use('도시형 생활주택(주상복합)') == 1
+    assert mixed_use('아파트') == 0
+    assert mixed_use('도시형 생활주택(아파트)') == 0
+    for value in [None,'','미확인','타워팰리스','주상복합아파트 추정','연립주택']:
+        assert np.isnan(mixed_use(value))
+
+
+def test_parking_inventory_must_reconcile_and_zero_placeholder_is_unknown():
+    row={'totprk_ecct':'600','grnd_prkg_ecct':'100','undgr_prkg_ecct':'500','nmhsh':'400'}
+    assert parking_per_household(row)==math.log1p(1.5)
+    for change in [{'totprk_ecct':'601'},{'nmhsh':'0'},{'undgr_prkg_ecct':''},
+                   {'grnd_prkg_ecct':'-1','undgr_prkg_ecct':'601'},
+                   {'totprk_ecct':'0','grnd_prkg_ecct':'0','undgr_prkg_ecct':'0'}]:
+        assert np.isnan(parking_per_household({**row,**change}))
+
+
+def test_structural_categories_are_not_quality_ranks():
+    assert corridor_type('계단식')=='staircase'
+    assert corridor_type('복도식')=='corridor'
+    assert corridor_type('계단식, 복도식')==corridor_type('복도식,계단식')=='mixed'
+    assert heating_type('지역난방, 열병합')=='district'
+    assert heating_type('개별난방+기타')=='mixed'
+    assert np.isnan(corridor_type('')) and np.isnan(heating_type('기타'))
+
+
+def test_mixed_use_audit_separates_unknowns_and_detects_overvaluation():
+    from compare_preference_models import mixed_use_segments
+    test=pd.DataFrame({'is_mixed_use':[1,1,0,np.nan],'prior_price':[np.nan,1,1,1],'group':['a','a','b','c']})
+    actual=np.array([100.,100.,100.,100.]);baseline=np.array([150.,150.,100.,100.])
+    result=mixed_use_segments(test,actual,baseline,np.array([110.,110.,100.,100.]))
+    assert result['mixed_use']['rows']==2 and result['mixed_use']['complexes']==1
+    assert result['mixed_use']['mean_signed_error_price_per_pyeong']==10
+    assert result['mixed_use']['overestimate_gt_20pct_rate']==0
+    assert result['mixed_use']['delta_vs_v4']['delta_mae']==-40
+    assert result['unknown']['rows']==1 and result['mixed_use_without_prior']['rows']==1
 
 
 def test_lot_name_year_matching_rejects_ambiguous_complexes():
@@ -76,11 +115,12 @@ def test_experiment_schema_survives_time_slicing_without_changing_v4():
 def test_kapt_v5_json_preserves_real_inventory_and_rejects_wrong_identity():
     import json,pytest
     from collect_apt_preference_metadata import decode
-    item={'kaptCode':'A1','kaptdaCnt':100,'kaptMparea60':10,'kaptMparea85':50,'kaptMparea135':30,'kaptMparea136':10}
+    item={'kaptCode':'A1','kaptdaCnt':100,'kaptMparea60':10,'kaptMparea85':50,'kaptMparea135':30,'kaptMparea136':10,'codeAptNm':'주상복합'}
     body=json.dumps({'response':{'header':{'resultCode':'00'},'body':{'item':item}}}).encode()
     result=decode(body,'A1')
     assert result['total_households']==100 and result['inventory_consistent']
     assert result['area_band_households']==[10,50,30,10]
+    assert result['complex_type']=='주상복합' and result['is_mixed_use']==1
     with pytest.raises(ValueError):decode(body,'A2')
 
 

@@ -13,7 +13,7 @@ import ssl
 import urllib.parse
 import urllib.request
 import xml.etree.ElementTree as ET
-from estate_preference_features import read_csv, numeric, area_inventory
+from estate_preference_features import read_csv, numeric, area_inventory, mixed_use
 
 ENDPOINT='https://apis.data.go.kr/1613000/AptBasisInfoServiceV5/getAphusBassInfoV5'
 
@@ -33,7 +33,10 @@ def decode(body, expected_code):
     if r.get('kaptCode')!=expected_code:raise ValueError('Apartment identity mismatch')
     counts=[numeric(r.get('kaptMparea'+suffix)) for suffix in ['60','85','135','136']]
     total=numeric(r.get('kaptdaCnt'))
+    classification=mixed_use(r.get('codeAptNm'))
     return {'kapt_code':expected_code,'building_name':r.get('kaptName'),'bjd_code':r.get('bjdCode'),
+        'complex_type':r.get('codeAptNm'),
+        'is_mixed_use':None if classification!=classification else classification,
         'lot_address':r.get('kaptAddr'),'used_date':r.get('kaptUsedate'),'total_households':total,
         'area_bands_sqm':['<=60','60-85','85-135','>135'],'area_band_households':counts,
         'inventory_consistent':area_inventory(total,counts,84.91) is not None,
