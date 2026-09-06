@@ -69,6 +69,19 @@ def test_candidate_month_is_separate_and_inference_reuses_bytes(tmp_path):
     assert candidate==again and len(candidate['recommendations'])==len(legacy['recommendations'])
     assert all(f['test_year']<2026 for f in candidate['validation'])
     assert all(np.isfinite(r['house_match_score']) and r['reference_low']<=r['fair_price_per_pyeong']<=r['reference_high'] for r in candidate['recommendations'])
+    for r in candidate['recommendations']:
+        assert r['neutral_price_billion']>0 and r['score_error_scale']>=.05
+        observed=r['price_per_pyeong']*r['area_pyeong']/10000
+        reconstructed=50+40*np.tanh(np.log(r['neutral_price_billion']/observed)/r['score_error_scale'])*r['trade_count']/(r['trade_count']+5)
+        assert round(float(reconstructed),1)==r['house_match_score']
+    # Browser calculator data must survive the packed production bundle.
+    import gzip
+    from dashboard_bundle import build_bundle
+    manifest=build_bundle(annual_fixture(),candidate,tmp_path/'site/data/bundle',{'type':'FeatureCollection','features':[]})
+    packed=json.loads(gzip.decompress((tmp_path/'site'/manifest['recommendations']['url']).read_bytes()))
+    values=dict(zip(packed['fields'],packed['rows'][0][2:]))
+    assert values['neutral_price_billion']==candidate['recommendations'][0]['neutral_price_billion']
+    assert values['score_error_scale']==candidate['recommendations'][0]['score_error_scale']
     with pytest.raises(FileExistsError):model.run(source,tmp_path/'v4.json',tmp_path/'models','2026-09','train',model.CANDIDATE_VERSION)
 
 

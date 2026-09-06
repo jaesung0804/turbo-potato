@@ -32,7 +32,8 @@ def build_bundle(summary,model,root,map_data):
         coverage[year]={'source_trades':source,'represented_trades':represented,'available_types':sum(len(r[3]) for r in rs),
             'unrepresented_trades':source-represented,'complete':source==represented}
     recommendation_fields=['price_billion','price_per_pyeong','area_pyeong','trade_count','prior_price_per_pyeong',
-        'fair_price_per_pyeong','reference_low','reference_high','house_match_score','sample_confidence','undervalue_pct','quality_flags','expected_growth_pct']
+        'fair_price_per_pyeong','reference_low','reference_high','house_match_score','sample_confidence','undervalue_pct','quality_flags','expected_growth_pct',
+        'neutral_price_billion','score_error_scale']
     packed_model={'encoding':'catalog-v1','metadata':{k:v for k,v in model.items() if k!='recommendations'},'fields':recommendation_fields,
         'rows':[[recommendation_catalog[(r['region_code'],r['building_key'])],r['region_code'],*[r.get(k) for k in recommendation_fields]] for r in model['recommendations']]}
     manifest={'schema_version':1,'generated_at':summary.get('data_through',summary['generated_at']),

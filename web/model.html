@@ -4,14 +4,16 @@
 <body class="guide-page">
 <main class="guide-main">
   <header><a class="guide-link" href="index.html">← 전체 실거래 비교</a><p class="eyebrow">MODEL & DATA</p><h1>가격을 비교하고, 불확실성도 함께 보기</h1><p id="model-status" role="status">검증 결과를 불러오는 중입니다.</p></header>
-  <nav class="guide-nav" aria-label="도움말 목차"><a href="#usage">사용 순서</a><a href="#score">점수 읽기</a><a href="#validation">과거 검증</a><a href="#comparison">v3 / v4 비교</a><a href="#features">17? ??</a><a href="#importance">?? ???</a><a href="#quality">2026 ??</a><a href="#coverage">전체 자료</a><a href="#limits">해석 범위</a></nav>
+  <nav class="guide-nav" aria-label="도움말 목차"><a href="#usage">사용 순서</a><a href="#score">점수 읽기</a><a href="#validation">과거 검증</a><a href="#comparison">v3 / v4 비교</a><a href="#features">입력 피처</a><a href="#importance">입력 중요도</a><a href="#quality">2026 자료</a><a href="#coverage">전체 자료</a><a href="#limits">해석 범위</a></nav>
   <section id="usage"><h2>사용 순서</h2><ol>
     <li>처음에는 최신 연도의 <b>AI 비교·평형</b>이 열립니다. 지역·가격·면적을 좁히거나 단지명을 검색하세요.</li>
     <li>단지를 누르면 정확한 전용면적별로 거래수, 가격, 참고 정보를 볼 수 있습니다. 같은 이름이어도 지번이 다르면 따로 구분합니다.</li>
     <li><b>전체 단지</b>에는 점수가 없는 결과도 남습니다. 처음·이전·다음·마지막과 페이지 번호로 모든 결과를 조회합니다.</li>
     <li><b>조건에 맞는 전체 평형 CSV</b>는 현재 페이지에 관계없이 검색·필터에 맞는 결과를 전부 내려받습니다.</li>
-  </ol><p>거래가·평단가의 일반 목록은 평균, AI 카드의 관측가격과 기준가격 비교는 중앙값입니다. 이 화면의 가격은 체결된 거래이며 현재 매도 호가가 아닙니다.</p></section>
+  </ol><p>거래가·평단가의 일반 목록은 평균, AI 카드의 관측가격과 기준가격 비교는 중앙값입니다. 기본 가격 자료는 체결된 거래입니다. 현재 매도 호가는 단지 상세에서 직접 입력해 비교합니다.</p></section>
   <section id="score"><h2>검토점수와 기준가격</h2>
+    <p><b>50점 기준가</b>는 모델 기준 평단가 × 해당 전용면적(평) ÷ 10,000으로 환산한 총 매매가격(억)입니다. 이 가격을 관측가격 대신 넣으면 검토점수는 50점입니다. 현재 점수에 50/70 같은 비율을 곱하는 계산은 아닙니다.</p>
+    <p>단지 상세 화면에서 현재 매매 호가를 입력하면 50점 기준가 대비 금액·비율 차이와 <b>호가 기준 비교점수</b>를 계산합니다. 입력 호가는 직접 확인한 값이며, 모델·기존 거래수·오차 기준을 유지한 가정 비교입니다. 이 입력으로 모델을 다시 학습하거나 공개 순위를 변경하지 않습니다.</p>
     <div class="guide-cards"><article><h3>50 부근</h3><p>관측가격이 모델 기준가격과 비슷하거나, 거래가 적어 차이를 확신하기 어렵습니다.</p></article><article><h3>50보다 높을수록</h3><p>관측가격이 기준가격보다 낮은 방향입니다. 층·향·수리 상태·권리관계처럼 자료에 없는 이유를 먼저 확인하세요.</p></article><article><h3>50보다 낮을수록</h3><p>관측가격이 기준가격보다 높은 방향입니다. 좋은 개별 세대 특성이나 새 시장 상황이 반영됐을 수 있습니다.</p></article></div>
     <p>점수는 <b>상승 확률이나 예상 수익률이 아닙니다.</b> 거래수가 적으면 50으로 더 강하게 조정합니다. 80점이 80% 상승 확률을 뜻하지 않습니다.</p>
     <p id="reference-method">기준가격은 전년도까지의 동일 평형 가격, 주변 가격, 면적, 연식, 지역과 거래 이력으로 계산합니다. 가벼운 LightGBM과 단순 전년 가격 기준을 섞되, 섞는 비중은 이전 연도에서 선택합니다. 모델은 월별로 저장하며 같은 달에는 다시 학습하지 않습니다.</p>

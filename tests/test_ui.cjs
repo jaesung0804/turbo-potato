@@ -14,6 +14,18 @@ assert.deepEqual(Array.from(evaluate('Array.from({length:21},(_,i)=>ResultPages.
 assert.equal(evaluate('ResultPages.csvCell("=HYPERLINK(1)")'),'"\'=HYPERLINK(1)"');
 assert.equal(evaluate('ResultPages.escape("<img onerror=x>")'),'&lt;img onerror=x&gt;');
 
+// Counterfactual prices use the frozen model's unrounded anchor and error scale.
+evaluate(`globalThis.priceRec={neutral_price_billion:10,score_error_scale:.2,trade_count:20};`);
+assert.equal(evaluate('reviewScoreAtPrice(priceRec,10)'),50);
+assert.ok(Math.abs(evaluate('reviewScoreAtPrice(priceRec,10*Math.exp(-.2*Math.atanh(20/(40*.8))))')-70)<1e-10);
+assert.ok(evaluate('reviewScoreAtPrice(priceRec,8)')>50);
+assert.ok(evaluate('reviewScoreAtPrice(priceRec,12)')<50);
+for(const invalid of ['0','-1','NaN','Infinity','null'])assert.equal(evaluate(`reviewScoreAtPrice(priceRec,${invalid})`),null);
+assert.equal(evaluate('reviewScoreAtPrice({...priceRec,trade_count:0},10)'),null);
+assert.equal(evaluate('reviewScoreAtPrice({...priceRec,score_error_scale:null},10)'),null);
+assert.equal(evaluate('neutralPrice({fair_price_per_pyeong:4000,area_pyeong:25})'),10);
+assert.equal(evaluate('neutralPrice(null)'),null);
+
 // Changing the sorting metric cannot hide unscored listings or CSV rows.
 evaluate(`state.summary={years:['2026','2025','2024'],generated_at:'2026-09-04',regions:[
  {code:'1',sido_name:'서울특별시',gu_code:'a',gu_name:'구',dong_name:'동',loadedBucket:{addresses:[
@@ -96,7 +108,7 @@ context.fetch=async url=>{
   assert.equal(createHash('sha256').update(fs.readFileSync(`${root}/web/vendor/${name}`)).digest('base64'),hash,'Vendored Leaflet SRI mismatch');
  }
  for(const match of read('app.js').matchAll(/getElementById\("([^"]+)"\)/g)){
-   if(match[1]==='type-select')continue; // dynamically created only when a type is selected
+   if(['type-select','asking-price-input','asking-price-result','use-neutral-price'].includes(match[1]))continue; // dynamically created only when a type is selected
    assert.ok(ids.has(match[1]),`Missing static element ${match[1]}`);
  }
  console.log('UI data checks passed: complete pagination, missing scores, search, historical metrics, hashes, race handling, static element bindings.');

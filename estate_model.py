@@ -230,6 +230,8 @@ def run(summary_path,output_path,model_dir,month=None,mode='auto',version=VERSIO
         if p['prior_price_per_pyeong'] is None:flags.append('동일 평형 전년도 비교 없음')
         if abs(gap)>2*error:flags.append('가격 차이 큼: 층·상태·권리관계 확인')
         results.append({**p,'fair_price_per_pyeong':round(float(fair),1),'reference_low':round(fair*math.exp(-width),1),
+            'neutral_price_billion':float(fair)*p['area_pyeong']/10000,
+            'score_error_scale':max(float(error),.05),
             'reference_high':round(fair*math.exp(width),1),'house_match_score':round(score,1),'sample_confidence':round(confidence,3),
             'undervalue_pct':round((fair/p['price_per_pyeong']-1)*100,1),'quality_flags':flags,'expected_growth_pct':None})
     results.sort(key=lambda p:(-p['house_match_score'],p['region_code'],p['building_key']))
