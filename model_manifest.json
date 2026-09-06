@@ -10,6 +10,11 @@
       "path": "models/estate-reference-v4/2026-09.joblib",
       "bytes": 184344,
       "sha256": "97f8b57272280f7574ae210cac2a1a884941d2ab5ce96968a60476e041b4dba2"
+    },
+    {
+      "path": "models/estate-reference-v5/2026-09.joblib",
+      "bytes": 183975,
+      "sha256": "1634889301cb8ed347eff9bdd9c7d19c5271181c0af9c402e9ee9d5e38e28887"
     }
   ]
 }
