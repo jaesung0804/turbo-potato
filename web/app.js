@@ -43,6 +43,7 @@ const state = {
   maxPriceBillion: null,
   minHouseholds: null,
   minTradeCount: null,
+  minReviewScore: null,
   ageRange: "all",
   elementary500mOnly: false,
   subwayLine: "all",
@@ -460,23 +461,29 @@ function subwayMatches(building) {
   return distance <= Number(state.subwayWalkMinutes) * 80;
 }
 
-function buildingMatchesFilters(building) {
-  return areaMatches(building) && priceMatches(building) && householdsMatch(building) && tradeCountMatches(building) && ageMatches(building) && elementaryMatches(building) && subwayMatches(building);
+function reviewScoreMatches(building, region) {
+  if (state.minReviewScore === null) return true;
+  const score = region ? aiScoreForItem({region, building}) : null;
+  return Number.isFinite(score) && score >= state.minReviewScore;
 }
 
-function viewKey(){return JSON.stringify([state.dataStore?.generation,state.year,state.metric,state.selectedSido,state.selectedGu,state.selectedDong,state.areaRange,state.minPriceBillion,state.maxPriceBillion,state.minHouseholds,state.minTradeCount,state.ageRange,state.elementary500mOnly,state.subwayLine,state.subwayWalkMinutes,state.search]);}
+function buildingMatchesFilters(building, region) {
+  return areaMatches(building) && priceMatches(building) && householdsMatch(building) && tradeCountMatches(building) && ageMatches(building) && elementaryMatches(building) && subwayMatches(building) && reviewScoreMatches(building, region);
+}
+
+function viewKey(){return JSON.stringify([state.dataStore?.generation,state.year,state.metric,state.selectedSido,state.selectedGu,state.selectedDong,state.areaRange,state.minPriceBillion,state.maxPriceBillion,state.minHouseholds,state.minTradeCount,state.minReviewScore,state.ageRange,state.elementary500mOnly,state.subwayLine,state.subwayWalkMinutes,state.search]);}
 function viewCache(){const key=viewKey();if(state.view?.key!==key||state.view?.summary!==state.summary){state.view={key,summary:state.summary};state.regionValueCache.clear();}return state.view;}
 function typeItems() {
  const cache=viewCache();if(cache.items)return cache.items;
  const q=state.search.trim().toLowerCase();
- return cache.items=activeRegions().flatMap(region=>(bucketFor(region)?.addresses??[]).filter(buildingMatchesFilters)
+ return cache.items=activeRegions().flatMap(region=>(bucketFor(region)?.addresses??[]).filter(building=>buildingMatchesFilters(building,region))
   .filter(b=>!q||`${region.sido_name} ${region.gu_name} ${region.dong_name} ${b.key} ${b.building_name} ${b.area_type}`.toLowerCase().includes(q)).map(building=>({region,building})));
 }
 
 function regionTypeItems(region) {
   const bucket = bucketFor(region);
   return (bucket?.addresses ?? [])
-    .filter(buildingMatchesFilters)
+    .filter(building=>buildingMatchesFilters(building,region))
     .map((building) => ({ region, building }));
 }
 
@@ -554,7 +561,7 @@ function regionPeriodRate(region) {
   const endBucket = end ? historyBucket(region,end) : null;
   if (!endBucket) return null;
   const rates = endBucket.addresses
-    .filter(buildingMatchesFilters)
+    .filter(building=>buildingMatchesFilters(building,region))
     .map((building) => typePeriodRate(region, building))
     .filter((value) => value !== null);
   return averageValues(rates);
@@ -565,7 +572,7 @@ function regionYearRate(region, year) {
   const currentBucket = historyBucket(region,year);
   if (!previous || !currentBucket) return null;
   const rates = currentBucket.addresses
-    .filter(buildingMatchesFilters)
+    .filter(building=>buildingMatchesFilters(building,region))
     .map((building) => typeYoyRateForYears(region, building, year, previous))
     .filter((value) => value !== null);
   return averageValues(rates);
@@ -663,6 +670,7 @@ function recommendationMatchesFilters(item) {
   if (state.selectedDong !== "all" && item.region_code !== state.selectedDong) return false;
 
   const pseudoBuilding = {
+    key: item.building_key,
     count: item.trade_count,
     households: item.households,
     elementary_500m: item.elementary_500m,
@@ -673,13 +681,13 @@ function recommendationMatchesFilters(item) {
       area_pyeong: { avg: item.area_pyeong },
     },
   };
-  return buildingMatchesFilters(pseudoBuilding);
+  return buildingMatchesFilters(pseudoBuilding, {code:item.region_code});
 }
 
 function renderAiRecommendations() {
  const cache=viewCache(),rows=cache.ai??(cache.ai=typeItems().map(type=>({type,rec:aiRecommendationForItem(type)})).filter(x=>x.rec).sort((a,b)=>b.rec.house_match_score-a.rec.house_match_score||a.rec.building_key.localeCompare(b.rec.building_key)));
  document.getElementById("ai-count").textContent=rows.length.toLocaleString("ko-KR");if(state.activeTab!=='ai')return;const page=ResultPages.view("ai-list",rows);
- document.getElementById("ai-list").innerHTML=page.rows.length?page.rows.map(({type,rec})=>`<li><button type="button" class="ai-row" data-group-id="${escapeHtml(groupId(type.region,type.building))}" data-type-id="${escapeHtml(typeId(type.region,type.building))}"><span class="ai-main"><strong>${escapeHtml(rec.building_name)}</strong><small>${escapeHtml(rec.gu_name)} ${escapeHtml(rec.dong_name)} · ${escapeHtml(rec.area_type)} · ${rec.trade_count}건</small><small>관측 중앙값 ${format(rec.price_per_pyeong,"price_per_pyeong")} · 기준가격 ${format(rec.fair_price_per_pyeong,"price_per_pyeong")}</small><small>참고 범위 ${format(rec.reference_low,"price_per_pyeong")} ~ ${format(rec.reference_high,"price_per_pyeong")}</small><small class="quality-flags">${escapeHtml(rec.quality_flags.join(" · "))}</small></span><span class="ai-score"><small>검토점수</small><strong>${format(rec.house_match_score,"ai_score")}</strong></span></button></li>`).join(""):'<li class="growth-empty">이 연도에 산출된 모델 결과가 없습니다. 전체 단지 탭에서 모든 자료를 조회할 수 있습니다.</li>';
+ document.getElementById("ai-list").innerHTML=page.rows.length?page.rows.map(({type,rec})=>`<li><button type="button" class="ai-row" data-group-id="${escapeHtml(groupId(type.region,type.building))}" data-type-id="${escapeHtml(typeId(type.region,type.building))}"><span class="ai-main"><strong>${escapeHtml(rec.building_name)}</strong><small>${escapeHtml(rec.gu_name)} ${escapeHtml(rec.dong_name)} · ${escapeHtml(rec.area_type)} · ${rec.trade_count}건</small><small>관측 중앙값 ${format(rec.price_per_pyeong,"price_per_pyeong")} · 기준가격 ${format(rec.fair_price_per_pyeong,"price_per_pyeong")}</small><small>참고 범위 ${format(rec.reference_low,"price_per_pyeong")} ~ ${format(rec.reference_high,"price_per_pyeong")}</small><small class="quality-flags">${escapeHtml(rec.quality_flags.join(" · "))}</small></span><span class="ai-score"><small>검토점수</small><strong>${format(rec.house_match_score,"ai_score")}</strong></span></button></li>`).join(""):`<li class="growth-empty">${state.year===state.recommendations?.target_year?'현재 조건에 맞는 모델 결과가 없습니다. 점수나 다른 필터 조건을 조정해 주세요.':'이 연도에는 검토점수가 없습니다. 최신 연도를 선택하거나 점수 조건을 해제하고 전체 단지를 조회하세요.'}</li>`;
 }
 
 function renderGroupList(listId,countId,groups) {
@@ -1004,6 +1012,23 @@ function refresh(resetPages=true) {
   renderAiRecommendations();
   renderAssetLists(groups);
   renderDataStatus();
+  renderReviewScoreFilter();
+}
+
+function renderReviewScoreFilter() {
+  const target=state.recommendations?.target_year;
+  const active=state.minReviewScore!==null;
+  document.getElementById("review-score-filter-note").textContent = active
+    ? (state.year===target ? `${state.minReviewScore}점 이상인 평형만 지도·목록·CSV에 표시합니다. 미산출 평형은 제외됩니다.` : `검토점수는 ${target ?? '최신'}년 자료에만 있습니다. 해당 연도를 선택하거나 점수 조건을 해제하세요.`)
+    : '점수 조건 없음 · 미산출 평형도 포함합니다.';
+  document.querySelectorAll('[data-review-score]').forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.reviewScore===(active?String(state.minReviewScore):''))));
+}
+
+function setMinReviewScore(value) {
+  const number=Number.parseFloat(value);
+  state.minReviewScore=Number.isFinite(number)?Math.max(0,Math.min(100,number)):null;
+  state.selectedGroupId=null;state.selectedTypeId=null;
+  scheduleRefresh();
 }
 
 function scheduleRefresh(){clearTimeout(state.searchTimer);state.searchTimer=setTimeout(()=>refresh(),180);}
@@ -1139,6 +1164,13 @@ function wireEvents() {
     scheduleRefresh();
   });
 
+  document.getElementById("review-score-min-input").addEventListener("input",event=>setMinReviewScore(event.target.value));
+  document.getElementById("review-score-min-input").addEventListener("change",event=>{event.target.value=state.minReviewScore??'';});
+  document.querySelectorAll('[data-review-score]').forEach(button=>button.addEventListener('click',()=>{
+    document.getElementById("review-score-min-input").value=button.dataset.reviewScore;
+    setMinReviewScore(button.dataset.reviewScore);
+  }));
+
   document.getElementById("trade-count-input").addEventListener("input", (event) => {
     const value = parseInt(event.target.value, 10);
     state.minTradeCount = Number.isFinite(value) ? value : null;
@@ -1253,6 +1285,7 @@ function wireEvents() {
     state.maxPriceBillion = null;
     state.minHouseholds = null;
     state.minTradeCount = null;
+    state.minReviewScore = null;
     state.ageRange = "all";
     state.elementary500mOnly = false;
     state.subwayLine = "all";
@@ -1270,6 +1303,7 @@ function wireEvents() {
     document.getElementById("price-input").value = "";
     document.getElementById("households-input").value = "";
     document.getElementById("trade-count-input").value = "";
+    document.getElementById("review-score-min-input").value = "";
     document.getElementById("age-range-select").value = "all";
     setElementaryFilterChecked(false);
     document.getElementById("subway-line-select").value = "all";
