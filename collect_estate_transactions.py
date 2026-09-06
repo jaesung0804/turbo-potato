@@ -21,6 +21,7 @@ from pathlib import Path
 from get_molit_apt_trade_data import CAPITAL_AREA_LAWD_CODES, LawdCode, DASHBOARD_FIELDNAMES, normalize_row, month_range
 
 URL = "https://apis.data.go.kr/1613000/RTMSDataSvcAptTrade/getRTMSDataSvcAptTrade"
+class TransientAPIError(RuntimeError): pass
 OBSOLETE = {"28110", "28140", "28260", "41590", "41190"}
 REGIONS = {r.code:r for r in CAPITAL_AREA_LAWD_CODES if r.code not in OBSOLETE}
 for code, sido, name in [
@@ -64,10 +65,10 @@ def request(key, code, month, page, timeout=25):
                 raise RuntimeError(f"API HTTP {error.code}; existing data preserved") from None
             kind = f"HTTP {error.code}"
         except (urllib.error.URLError,TimeoutError,ET.ParseError) as error:
-            kind = type(error).__name__
+            kind = type(getattr(error,'reason',error)).__name__
         if attempt < 2:
             time.sleep(1 + attempt)
-    raise RuntimeError(f"API request failed: {kind}") from None
+    raise TransientAPIError(f"API request failed for {code}/{month}/page-{page}: {kind}") from None
 
 
 def fetch_partition(key, region, month, abort):
@@ -116,14 +117,16 @@ def read_partition(path,month,code):
     return data
 
 
-def collect(key,start,end,cache,output,refresh_months=3,workers=2):
+def collect(key,start,end,cache,output,refresh_months=3,workers=2,shard_index=0,shard_count=1):
     months=month_range(start,end)
     if start>end or end>datetime.now(timezone.utc).strftime("%Y%m") or refresh_months<0:
         raise ValueError("Invalid contract-month range")
     cache.mkdir(parents=True,exist_ok=True)
     partitions=[]; missing=[]
+    if shard_index<0 or shard_index>=shard_count:raise ValueError('Invalid shard index')
+    regions=sorted(REGIONS.items())[shard_index::shard_count]
     for month in months:
-        for code,region in sorted(REGIONS.items()):
+        for code,region in regions:
             path=cache/f"{month}-{code}.json.gz"
             partitions.append((path,month,code))
             refresh=refresh_months>0 and month in months[-refresh_months:]
@@ -132,7 +135,7 @@ def collect(key,start,end,cache,output,refresh_months=3,workers=2):
                 except (OSError,ValueError,KeyError):pass
             missing.append((path,month,region))
     if missing and not key:raise RuntimeError("MOLIT_API_KEY is required for uncached or refreshed partitions")
-    if missing:
+    if missing and shard_count==1:
         # Confirm that pre-reorganization history is reachable under the new
         # registry instead of silently dropping the former city/district.
         for old_codes,new_codes in [(["41190"],["41192","41194","41196"]),
@@ -155,15 +158,23 @@ def collect(key,start,end,cache,output,refresh_months=3,workers=2):
         temp.replace(path)
         return len(rows)
     print(f"Requested {len(partitions)} partitions; fetch {len(missing)}, reuse {len(partitions)-len(missing)}",flush=True)
-    with concurrent.futures.ThreadPoolExecutor(max_workers=workers) as pool:
-        futures={pool.submit(one,item):item for item in missing}
-        for count,future in enumerate(concurrent.futures.as_completed(futures),1):
-            try:future.result()
-            except Exception:
-                abort.set()
-                for other in futures:other.cancel()
-                raise
-            if count%100==0 or count==len(missing):print(f"Completed {count}/{len(missing)} new partitions",flush=True)
+    pending=missing
+    for pass_number in range(3):
+        failed=[]
+        with concurrent.futures.ThreadPoolExecutor(max_workers=workers) as pool:
+            futures={pool.submit(one,item):item for item in pending}
+            for count,future in enumerate(concurrent.futures.as_completed(futures),1):
+                try:future.result()
+                except TransientAPIError as error:
+                    failed.append(futures[future]);print(str(error),flush=True)
+                except Exception:
+                    abort.set()
+                    for other in futures:other.cancel()
+                    raise
+                if count%100==0 or count==len(pending):print(f"Pass {pass_number+1}: checked {count}/{len(pending)}; transient failures {len(failed)}",flush=True)
+        if not failed:break
+        pending=failed
+    if failed:raise RuntimeError(f'{len(failed)} incomplete partitions; completed checkpoints and previous CSV were preserved')
     output.parent.mkdir(parents=True,exist_ok=True)
     temp=output.with_suffix(".csv.tmp"); total=0
     with temp.open("w",newline="",encoding="utf-8-sig") as stream:
@@ -172,8 +183,9 @@ def collect(key,start,end,cache,output,refresh_months=3,workers=2):
             data=read_partition(path,month,code)
             writer.writerows(data["rows"]);total+=data["count"]
     if total==0:raise RuntimeError("Empty whole-market collection cannot replace existing data")
-    manifest={"schema_version":1,"complete":True,"start":start,"end":end,"rows":total,
-        "partition_count":len(partitions),"region_count":len(REGIONS),"registry_month":"2026-09",
+    manifest={"schema_version":1,"complete":shard_count==1,"shard_complete":True,"start":start,"end":end,"rows":total,
+        "shard_index":shard_index,"shard_count":shard_count,
+        "partition_count":len(partitions),"region_count":len(regions),"registry_month":"2026-09",
         "sha256":digest(temp.read_bytes()),"fetched_at":utc_now(),"source":URL,
         "refresh_months":refresh_months,"note":"All API pages retained, including cancellations for downstream filtering."}
     temp.replace(output)
@@ -196,9 +208,10 @@ if __name__=="__main__":
     p=argparse.ArgumentParser(description=__doc__)
     p.add_argument("--start",default="202101");p.add_argument("--end",default=datetime.now(timezone.utc).strftime("%Y%m"))
     p.add_argument("--refresh-months",type=int,default=3);p.add_argument("--workers",type=int,choices=[1,2,3,4],default=2)
+    p.add_argument('--shard-index',type=int,default=0);p.add_argument('--shard-count',type=int,choices=[1,2,4],default=1)
     p.add_argument("--cache",default="data/molit_cache_v3");p.add_argument("--output",default="data/capital_area_apt_trade_transactions.csv")
     p.add_argument("--use-existing-config",action="store_true",help="One-time migration of the configuration already provided in this repository")
     args=p.parse_args()
     key=existing_key() if args.use_existing_config else os.getenv("MOLIT_API_KEY","")
     if key and os.getenv("GITHUB_ACTIONS"):print("::add-mask::"+key,flush=True)
-    collect(key,args.start,args.end,Path(args.cache),Path(args.output),args.refresh_months,args.workers)
+    collect(key,args.start,args.end,Path(args.cache),Path(args.output),args.refresh_months,args.workers,args.shard_index,args.shard_count)

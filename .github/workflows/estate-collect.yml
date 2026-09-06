@@ -11,6 +11,10 @@ concurrency:
   cancel-in-progress: false
 jobs:
   collect:
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [0, 1, 2, 3]
     runs-on: ubuntu-latest
     timeout-minutes: 150
     steps:
@@ -21,46 +25,69 @@ jobs:
       - uses: actions/cache/restore@v4
         with:
           path: data/molit_cache_v3
-          key: estate-complete-v3-${{ github.run_id }}
-          restore-keys: estate-complete-v3-
-      - name: Restore authoritative raw state if present
-        run: |
-          set -euo pipefail
-          if [ -n "$(git ls-remote origin refs/heads/estate-raw-state)" ]; then
-            git fetch origin estate-raw-state
-            git worktree add --detach .work/raw-state FETCH_HEAD
-            python raw_estate_state.py restore --state-dir .work/raw-state
-          else
-            git worktree add --detach .work/raw-state HEAD
-            git -C .work/raw-state switch --orphan estate-raw-state
-          fi
-      - name: Collect all approved general-API pages with checkpoints
+          key: estate-complete-v3-s${{ matrix.shard }}-${{ github.run_id }}
+          restore-keys: |
+            estate-complete-v3-s${{ matrix.shard }}-
+            estate-complete-v3-
+      - name: Collect every page in the assigned districts
         env:
           MOLIT_API_KEY: ${{ secrets.MOLIT_API_KEY }}
-        run: python collect_estate_transactions.py --start 202101 --end 202609 --refresh-months 0 --workers 2 --use-existing-config
+          SHARD: ${{ matrix.shard }}
+        run: python collect_estate_transactions.py --start 202101 --end 202609 --refresh-months 0 --workers 2 --shard-count 4 --shard-index "$SHARD" --use-existing-config
       - name: Preserve completed checkpoints after success or failure
         if: always()
         uses: actions/cache/save@v4
         with:
           path: data/molit_cache_v3
-          key: estate-complete-v3-${{ github.run_id }}
-      - name: Pack complete raw state
-        run: python raw_estate_state.py pack --state-dir .work/raw-state
-      - name: Back up the verified raw state
-        uses: actions/upload-artifact@v4
+          key: estate-complete-v3-s${{ matrix.shard }}-${{ github.run_id }}
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: estate-partitions-${{ matrix.shard }}
+          path: data/molit_cache_v3/
+          retention-days: 30
+          compression-level: 0
+  assemble:
+    needs: collect
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: estate-partitions-*
+          merge-multiple: true
+          path: data/molit_cache_v3
+      - name: Verify all 83 districts and assemble the complete CSV
+        run: python collect_estate_transactions.py --start 202101 --end 202609 --refresh-months 0
+      - name: Prepare persistent raw state
+        run: |
+          set -euo pipefail
+          if [ -n "$(git ls-remote origin refs/heads/estate-raw-state)" ]; then
+            git fetch origin estate-raw-state
+            git worktree add --detach .work/raw-state FETCH_HEAD
+          else
+            git worktree add --detach .work/raw-state HEAD
+            git -C .work/raw-state switch --orphan estate-raw-state
+          fi
+          python raw_estate_state.py pack --state-dir .work/raw-state
+      - uses: actions/upload-artifact@v4
         with:
           name: complete-estate-state-${{ github.run_id }}
           path: |
             .work/raw-state/raw_manifest.json
             .work/raw-state/objects/
           retention-days: 90
-      - name: Save raw state without changing the live site
+      - name: Save complete state without changing the live site
         run: |
           set -euo pipefail
           git -C .work/raw-state config user.name github-actions[bot]
           git -C .work/raw-state config user.email 41898282+github-actions[bot]@users.noreply.github.com
           git -C .work/raw-state add .gitattributes raw_manifest.json objects
           if ! git -C .work/raw-state diff --cached --quiet; then
-            git -C .work/raw-state commit -m 'Save complete apartment API history with verified checkpoints'
+            git -C .work/raw-state commit -m 'Save complete apartment history and verified checkpoints'
             git -C .work/raw-state push origin HEAD:estate-raw-state
           fi
