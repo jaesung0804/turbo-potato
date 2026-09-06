@@ -224,7 +224,12 @@ def normalize_row(item: ET.Element, lawd: LawdCode) -> dict[str, str]:
     deal_day = text_of(item, "dealDay").zfill(2)
     jibun = text_of(item, "jibun")
     main_no, sub_no = split_jibun(jibun)
-    cancel_day = text_of(item, "cancelDealDay")
+    cancel_day = next((value for name in ['cdealDay', 'cancelDealDay', 'cancelDealDate']
+                       if (value := text_of(item, name)) not in {'', '-', '--'}), '')
+    cancel_type = next((value for name in ['cdealType', 'cancelDealType']
+                        if (value := text_of(item, name).upper()) not in {'', '-', '--'}), '')
+    if cancel_type in {'Y', 'O', '1', '해제'} and not cancel_day:
+        cancel_day = 'cancelled'
     legal_dong = text_of(item, "umdNm", "umdNmKor")
 
     return {

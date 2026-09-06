@@ -10,6 +10,7 @@ import csv
 import json
 import math
 from datetime import date
+from decimal import Decimal
 from pathlib import Path
 from statistics import mean, median
 from typing import Any
@@ -65,7 +66,8 @@ def parse_float(value: Any) -> float | None:
     if not value:
         return None
     try:
-        return float(value)
+        result = float(value)
+        return result if math.isfinite(result) else None
     except ValueError:
         return None
 
@@ -473,17 +475,23 @@ def area_type_label(metrics: dict[str, float]) -> str:
 
 
 def typed_address_key(row: dict[str, str], metrics: dict[str, float]) -> str:
-    gu = row.get("CGG_NM", "").strip()
-    dong = row.get("STDG_NM", "").strip()
-    building = row.get("BLDG_NM", "").strip() or "(건물명 없음)"
-    return f"{gu} {dong} {building} | {area_type_label(metrics)}".strip()
+    return f"{address_key(row)} | {source_area(row)}㎡"
+
+
+def source_area(row: dict[str, str]) -> str:
+    value = format(Decimal(row['ARCH_AREA'].replace(',', '').strip()), 'f')
+    return value.rstrip('0').rstrip('.') if '.' in value else value
 
 
 def contract_year(row: dict[str, str]) -> str:
     day = row.get("CTRT_DAY", "").strip()
-    if len(day) >= 4 and day[:4].isdigit():
-        return day[:4]
-    return row.get("RCPT_YR", "").strip()
+    if len(day) == 8 and day.isdigit():
+        try:
+            date(int(day[:4]), int(day[4:6]), int(day[6:8]))
+            return day[:4]
+        except ValueError:
+            pass
+    return ""
 
 
 def calculate_metrics(row: dict[str, str]) -> dict[str, float] | None:
@@ -491,7 +499,7 @@ def calculate_metrics(row: dict[str, str]) -> dict[str, float] | None:
     area_sqm = parse_float(row.get("ARCH_AREA"))
     land_sqm = parse_float(row.get("LAND_AREA"))
 
-    if not price_10k or not area_sqm or area_sqm <= 0:
+    if not price_10k or price_10k <= 0 or not area_sqm or area_sqm <= 0:
         return None
 
     price_billion = price_10k / 10000
@@ -553,6 +561,7 @@ def build_dashboard_data(
     years_seen: set[str] = set()
     total_rows = 0
     used_rows = 0
+    data_through = ""
     excluded_direct_rows = 0
     admin_by_legal_code, admin_by_name = load_legal_admin_mapping()
     complex_info = load_complex_info()
@@ -562,7 +571,7 @@ def build_dashboard_data(
         reader = csv.DictReader(file)
         for row in reader:
             total_rows += 1
-            if row.get("RTRCN_DAY", "").strip():
+            if row.get("RTRCN_DAY", "").strip() not in {"", "-", "--"}:
                 continue
             if property_types and row.get("BLDG_USG", "").strip() not in property_types:
                 continue
@@ -577,6 +586,7 @@ def build_dashboard_data(
                 continue
 
             used_rows += 1
+            data_through = max(data_through, row.get("CTRT_DAY", "").strip())
             years_seen.add(year)
             map_codes = map_region_codes(row, admin_by_legal_code, admin_by_name)
             complex_match = complex_info_for(row, complex_info)
@@ -585,7 +595,7 @@ def build_dashboard_data(
             row_built_year = parse_int(row.get("ARCH_YR")) or complex_match.get("built_year")
             row_nearest_school_name = school_match.get("nearest_elementary_name") if school_match else None
             row_nearest_school_distance = school_match.get("nearest_elementary_m") if school_match else None
-            row_elementary_500m = row_nearest_school_distance is not None and row_nearest_school_distance <= SCHOOL_DISTANCE_M
+            row_elementary_500m = row_nearest_school_distance <= SCHOOL_DISTANCE_M if row_nearest_school_distance is not None else None
             row_subway_lines = school_match.get("subway_lines", []) if school_match else []
             row_subway_station = school_match.get("subway_station") if school_match else None
             row_subway_distance = school_match.get("subway_distance_m") if school_match else None
@@ -625,7 +635,8 @@ def build_dashboard_data(
                         "key": addr,
                         "address": addr,
                         "building_name": row.get("BLDG_NM", "").strip() or "(건물명 없음)",
-                        "area_type": area_type_label(metrics),
+                        "complex_key": address_key(row),
+                        "area_type": f"전용 {source_area(row)}㎡ ({metrics['area_pyeong']:.1f}평)",
                         "count": 0,
                         "households": row_households,
                         "built_year": row_built_year,
@@ -683,12 +694,15 @@ def build_dashboard_data(
                 if row_longitude is not None and addr_bucket.get("longitude") is None:
                     addr_bucket["longitude"] = row_longitude
 
+                if recent_limit_per_region_year == 0:
+                    continue
                 bucket["recent"].append(
                     {
                         "contract_day": row.get("CTRT_DAY", ""),
                         "address": addr,
                         "building_name": row.get("BLDG_NM", "").strip() or "(건물명 없음)",
-                        "area_type": area_type_label(metrics),
+                        "complex_key": address_key(row),
+                        "area_type": f"전용 {source_area(row)}㎡ ({metrics['area_pyeong']:.1f}평)",
                         "floor": round_metric(parse_float(row.get("FLR")), 0),
                         "built_year": row_built_year,
                         "price_billion": round_metric(metrics.get("price_billion"), 2),
@@ -728,6 +742,7 @@ def build_dashboard_data(
         json.dump(
             {
                 "generated_at": date.today().isoformat(),
+                "data_through": f"{data_through[:4]}-{data_through[4:6]}-{data_through[6:8]}",
                 "source": str(input_path),
                 "filters": {
                     "property_types": sorted(property_types),
@@ -759,12 +774,13 @@ def finalize_bucket(
         addresses.append(
             {
                 "key": address["key"],
+                "complex_key": address.get("complex_key"),
                 "building_name": address["building_name"],
                 "area_type": address["area_type"],
                 "count": address["count"],
                 "households": address.get("households"),
                 "built_year": address.get("built_year"),
-                "elementary_500m": bool(address.get("elementary_500m")),
+                "elementary_500m": address.get("elementary_500m"),
                 "nearest_elementary_name": address.get("nearest_elementary_name"),
                 "nearest_elementary_m": round_metric(address.get("nearest_elementary_m"), 0),
                 "subway_lines": address.get("subway_lines") or [],
@@ -784,7 +800,8 @@ def finalize_bucket(
     return {
         "count": bucket["count"],
         "metrics": {key: summarize(bucket["metrics"][key]) for key in METRIC_KEYS},
-        "addresses": addresses[:address_limit],
+        "addresses": addresses,
+        "represented_trades": sum(a["count"] for a in addresses),
         "recent": recent[:recent_limit],
     }
 
@@ -796,7 +813,7 @@ def fill_missing_built_years(addresses: dict[str, Any]) -> None:
     bus_by_building: dict[str, float] = {}
     education_by_building: dict[str, dict[str, Any]] = {}
     for address in addresses.values():
-        building_name = address.get("building_name", "")
+        building_name = address.get("complex_key") or address.get("key", "")
         built_year = address.get("built_year")
         if building_name and built_year:
             year_by_building.setdefault(building_name, built_year)
@@ -806,7 +823,7 @@ def fill_missing_built_years(addresses: dict[str, Any]) -> None:
                 school_by_building[building_name] = {
                     "nearest_elementary_name": address.get("nearest_elementary_name"),
                     "nearest_elementary_m": address.get("nearest_elementary_m"),
-                    "elementary_500m": bool(address.get("elementary_500m")),
+                    "elementary_500m": address.get("elementary_500m"),
                 }
         if building_name and address.get("subway_distance_m") is not None:
             current_subway = subway_by_building.get(building_name)
@@ -830,17 +847,17 @@ def fill_missing_built_years(addresses: dict[str, Any]) -> None:
 
     for address in addresses.values():
         if address.get("built_year") is None:
-            address["built_year"] = year_by_building.get(address.get("building_name", ""))
-        school_info = school_by_building.get(address.get("building_name", ""))
+            address["built_year"] = year_by_building.get(address.get("complex_key") or address.get("key", ""))
+        school_info = school_by_building.get(address.get("complex_key") or address.get("key", ""))
         if school_info and address.get("nearest_elementary_m") is None:
             address.update(school_info)
-        subway_info = subway_by_building.get(address.get("building_name", ""))
+        subway_info = subway_by_building.get(address.get("complex_key") or address.get("key", ""))
         if subway_info and address.get("subway_distance_m") is None:
             address.update(subway_info)
-        bus_distance = bus_by_building.get(address.get("building_name", ""))
+        bus_distance = bus_by_building.get(address.get("complex_key") or address.get("key", ""))
         if bus_distance is not None and address.get("bus_stop_distance_m") is None:
             address["bus_stop_distance_m"] = bus_distance
-        education_info = education_by_building.get(address.get("building_name", ""))
+        education_info = education_by_building.get(address.get("complex_key") or address.get("key", ""))
         if education_info and address.get("education_facility_count") is None:
             address.update(education_info)
 
@@ -851,7 +868,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--output", default="web/data/seoul_real_estate_summary.json")
     parser.add_argument("--apt-detail", default=str(APT_DETAIL_PATH), help="중간 수집된 K-APT 역세권 상세 CSV 경로")
     parser.add_argument("--property-types", nargs="*", default=sorted(DEFAULT_PROPERTY_TYPES))
-    parser.add_argument("--address-limit-per-region-year", type=int, default=70)
+    parser.add_argument("--address-limit-per-region-year", type=int, default=0)
     parser.add_argument("--recent-limit-per-region-year", type=int, default=0)
     parser.add_argument(
         "--include-direct-trades",
