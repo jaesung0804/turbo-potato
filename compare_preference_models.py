@@ -39,11 +39,12 @@ def experiment(summary_path, source_dir, output_dir, station_file):
     body=summary_path.read_bytes();summary=json.loads(body)
     cache=Path('.work/preference_frame.joblib')
     fingerprint=hashlib.sha256(body).hexdigest()
-    if cache.exists() and (saved:=joblib.load(cache)).get('summary_sha256')==fingerprint:
+    model_code=hashlib.sha256(Path(model.__file__).read_bytes()).hexdigest()
+    if cache.exists() and (saved:=joblib.load(cache)).get('summary_sha256')==fingerprint and saved.get('model_code_sha256')==model_code:
         frame,payload=saved['frame'],saved['payload']
     else:
         frame,payload=model.dataset(summary,enhanced=True)
-        joblib.dump({'summary_sha256':fingerprint,'frame':frame,'payload':payload},cache,compress=3)
+        joblib.dump({'summary_sha256':fingerprint,'model_code_sha256':model_code,'frame':frame,'payload':payload},cache,compress=3)
     keys=[(p['year'],p['region_code'],p['building_key']) for p in payload]
     snapshot_path=Path('metadata/preference_features_snapshot.json.gz')
     if source_dir is not None:
