@@ -21,7 +21,7 @@ jobs:
       - name: Collect published lease records for the three study districts
         env:
           MOLIT_API_KEY: ${{ secrets.MOLIT_API_KEY }}
-        run: python collect_estate_rents.py --start 202307 --end 202412
+        run: python collect_estate_rents.py --start 202307 --end 202412 --use-existing-config
       - uses: actions/upload-artifact@v4
         with:
           name: estate-rent-research-${{ github.run_id }}

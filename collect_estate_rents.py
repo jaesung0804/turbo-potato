@@ -46,4 +46,5 @@ def collect(codes,months,out,key):
 
 if __name__=='__main__':
     p=argparse.ArgumentParser();p.add_argument('--codes',default='11740,41210,11620');p.add_argument('--start',default='202307');p.add_argument('--end',default='202412');p.add_argument('--output',type=Path,default=Path('.work/market-data/rents'))
-    a=p.parse_args();collect(a.codes.split(','),month_range(a.start,a.end),a.output,os.getenv('MOLIT_API_KEY',''))
+    p.add_argument('--use-existing-config',action='store_true')
+    a=p.parse_args();collect(a.codes.split(','),month_range(a.start,a.end),a.output,api.existing_key() if a.use_existing_config else os.getenv('MOLIT_API_KEY',''))
