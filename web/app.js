@@ -525,14 +525,22 @@ function aiRecommendationForItem(item) { if(state.year!==state.recommendations?.
 
 function aiScoreForItem(item) { return aiRecommendationForItem(item)?.house_match_score ?? null; }
 
-function neutralPrice(rec) {
+function currentValuation(rec) {
+  const v=rec?.current_valuation;
+  return v?.status==='available' && Number.isFinite(v.price_billion) && v.price_billion>0 ? v : null;
+}
+
+function annualNeutralPrice(rec) {
   if (Number.isFinite(rec?.neutral_price_billion) && rec.neutral_price_billion>0) return rec.neutral_price_billion;
   if (!(rec?.fair_price_per_pyeong>0) || !(rec?.area_pyeong>0)) return null;
   return rec.fair_price_per_pyeong*rec.area_pyeong/10000;
 }
 
+function neutralPrice(rec) { return currentValuation(rec)?.price_billion ?? annualNeutralPrice(rec); }
+
 function reviewScoreAtPrice(rec, askingPrice) {
-  const neutral=neutralPrice(rec),n=rec?.trade_count,scale=rec?.score_error_scale;
+  const v=currentValuation(rec);
+  const neutral=neutralPrice(rec),n=v ? v.effective_sample_size : rec?.trade_count,scale=v ? v.score_error_scale : rec?.score_error_scale;
   if (!(Number.isFinite(askingPrice) && askingPrice>0 && neutral>0 && Number.isFinite(n) && n>0 && Number.isFinite(scale) && scale>0)) return null;
   return 50+40*Math.tanh(Math.log(neutral/askingPrice)/scale)*n/(n+5);
 }
@@ -557,13 +565,18 @@ function askingPricePanel(selected) {
   if (!(neutralPrice(rec)>0)) return '';
   const key=state.year+'|'+typeId(selected.region,selected.building);
   const text=state.askingPrices.get(key)??'';
+  const v=currentValuation(rec);
+  const provenance=v
+    ? `${v.month}월 추정 · ${v.feature_cutoff}까지 계약을 반영(31일 신고 지연 가정). 최근 90일 ${v.recent_trade_count}건, 거래일 ${v.active_trade_days}일. 대표 층: ${v.floor===null?'자료 없음':v.floor+'층'}(과거 365일 중앙값).`
+    : '최근 가격 추정에 필요한 이력 또는 지원 기간이 없어 연간 기준가격을 표시합니다.';
   return `<section class="asking-price-panel" aria-label="현재 호가 비교"><h3>현재 호가와 비교</h3>
-    <div class="metric-grid">${metricCard('50점 기준가 · 총액',totalPriceLabel(neutralPrice(rec)),'text')}${metricCard(`${state.year}년 누적 실거래 중앙가`,totalPriceLabel(rec.price_billion),'text')}</div>
-    <p class="score-note">${escapeHtml(referenceBasisLabel(rec))} 실거래 중앙가는 해당 연도 전체 거래의 중앙값이며, 최근 거래가나 현재 매도 호가와 다릅니다.</p>
+    <div class="metric-grid">${metricCard(v?'최근 50점 기준가 · 총액':'연간 50점 기준가 · 총액',totalPriceLabel(neutralPrice(rec)),'text')}${metricCard(`${state.year}년 누적 실거래 중앙가`,totalPriceLabel(rec.price_billion),'text')}</div>
+    <p class="score-note">${escapeHtml(provenance)}</p>
+    <p class="score-note">연간 평가 기준가 ${totalPriceLabel(annualNeutralPrice(rec))} · 목록의 검토점수·참고 범위는 연간 평가 기준입니다. ${escapeHtml(referenceBasisLabel(rec))} 실거래 중앙가는 해당 연도 전체 거래의 중앙값이며, 최근 거래가나 현재 매도 호가와 다릅니다.</p>
     <p class="score-note">${escapeHtml(rec.area_type)} 기준 · 50점은 입력 가격과 모델 기준가격이 같아지는 지점입니다. 금액은 만원 단위로 반올림해 표시합니다.</p>
     <div class="asking-price-controls"><label><span>현재 매매 호가 (억)</span><input id="asking-price-input" type="number" min="0" step="0.0001" placeholder="예: 8.5" value="${escapeHtml(text)}" aria-describedby="asking-price-note"/></label><button id="use-neutral-price" type="button">50점 가격 넣기</button></div>
     <div id="asking-price-result" role="status">${askingPriceResult(rec,text)}</div>
-    <p id="asking-price-note" class="score-note">직접 입력한 호가를 실거래 관측가격 대신 넣은 비교입니다. 모델·거래수·오차 기준은 유지하며, 개별 매물의 층·향·수리 상태는 반영하지 않습니다. 관측 총액은 집계 과정에서 반올림되어, 이를 재입력한 점수는 기존 점수와 소폭 다를 수 있습니다.</p>
+    <p id="asking-price-note" class="score-note">직접 입력한 호가를 실거래 관측가격 대신 넣은 비교입니다. 최근 추정이 있으면 시간 가중 유효 표본 수와 과거 오차로 호가 비교점수를 조정합니다. 개별 매물의 층·향·수리 상태는 직접 입력받지 않으며 대표 층과 다를 수 있습니다. 최근 90일 거래가 적거나 없으면 해석에 유의하세요. 관측 총액은 집계 과정에서 반올림되어, 이를 재입력한 점수는 기존 점수와 소폭 다를 수 있습니다.</p>
   </section>`;
 }
 
@@ -738,7 +751,7 @@ function recommendationMatchesFilters(item) {
 function renderAiRecommendations() {
  const cache=viewCache(),rows=cache.ai??(cache.ai=typeItems().map(type=>({type,rec:aiRecommendationForItem(type)})).filter(x=>x.rec).sort((a,b)=>b.rec.house_match_score-a.rec.house_match_score||a.rec.building_key.localeCompare(b.rec.building_key)));
  document.getElementById("ai-count").textContent=rows.length.toLocaleString("ko-KR");if(state.activeTab!=='ai')return;const page=ResultPages.view("ai-list",rows);
- document.getElementById("ai-list").innerHTML=page.rows.length?page.rows.map(({type,rec})=>`<li><button type="button" class="ai-row" data-group-id="${escapeHtml(groupId(type.region,type.building))}" data-type-id="${escapeHtml(typeId(type.region,type.building))}"><span class="ai-main"><strong>${escapeHtml(rec.building_name)}</strong><small>${escapeHtml(rec.gu_name)} ${escapeHtml(rec.dong_name)} · ${escapeHtml(rec.area_type)} · ${rec.trade_count}건</small><small class="neutral-price">50점 기준가 ${totalPriceLabel(neutralPrice(rec))} · ${state.year}년 누적 실거래 중앙가 ${totalPriceLabel(rec.price_billion)}</small><small>실거래 중앙 평단가 ${format(rec.price_per_pyeong,"price_per_pyeong")} · 모델 기준 평단가 ${format(rec.fair_price_per_pyeong,"price_per_pyeong")}</small><small>모델 총액 참고 범위 ${totalPriceLabel(rec.reference_low*rec.area_pyeong/10000)} ~ ${totalPriceLabel(rec.reference_high*rec.area_pyeong/10000)}</small><small class="quality-flags">${escapeHtml(rec.quality_flags.join(" · "))}</small></span><span class="ai-score"><small>검토점수</small><strong>${format(rec.house_match_score,"ai_score")}</strong></span></button></li>`).join(""):`<li class="growth-empty">${state.year===state.recommendations?.target_year?'현재 조건에 맞는 모델 결과가 없습니다. 점수나 다른 필터 조건을 조정해 주세요.':'이 연도에는 검토점수가 없습니다. 최신 연도를 선택하거나 점수 조건을 해제하고 전체 단지를 조회하세요.'}</li>`;
+ document.getElementById("ai-list").innerHTML=page.rows.length?page.rows.map(({type,rec})=>`<li><button type="button" class="ai-row" data-group-id="${escapeHtml(groupId(type.region,type.building))}" data-type-id="${escapeHtml(typeId(type.region,type.building))}"><span class="ai-main"><strong>${escapeHtml(rec.building_name)}</strong><small>${escapeHtml(rec.gu_name)} ${escapeHtml(rec.dong_name)} · ${escapeHtml(rec.area_type)} · ${rec.trade_count}건</small><small class="neutral-price">${currentValuation(rec)?'최근 호가 비교 50점가':'연간 50점 기준가'} ${totalPriceLabel(neutralPrice(rec))} · ${state.year}년 누적 실거래 중앙가 ${totalPriceLabel(rec.price_billion)}</small><small>실거래 중앙 평단가 ${format(rec.price_per_pyeong,"price_per_pyeong")} · 모델 기준 평단가 ${format(rec.fair_price_per_pyeong,"price_per_pyeong")}</small><small>연간 모델 총액 참고 범위 ${totalPriceLabel(rec.reference_low*rec.area_pyeong/10000)} ~ ${totalPriceLabel(rec.reference_high*rec.area_pyeong/10000)}</small><small class="quality-flags">${escapeHtml(rec.quality_flags.join(" · "))}</small></span><span class="ai-score"><small>연간 검토점수</small><strong>${format(rec.house_match_score,"ai_score")}</strong></span></button></li>`).join(""):`<li class="growth-empty">${state.year===state.recommendations?.target_year?'현재 조건에 맞는 모델 결과가 없습니다. 점수나 다른 필터 조건을 조정해 주세요.':'이 연도에는 검토점수가 없습니다. 최신 연도를 선택하거나 점수 조건을 해제하고 전체 단지를 조회하세요.'}</li>`;
 }
 
 function renderGroupList(listId,countId,groups) {
@@ -1455,7 +1468,7 @@ function fitDefaultMapView() {
 
 function renderDataStatus(){const m=state.dataStore.manifest,c=m.coverage[state.year];document.getElementById("data-status").textContent=`자료 ${m.generated_at} · 모델 ${m.model.model_month} · ${c.available_types.toLocaleString("ko-KR")}개 평형 전체 조회`;document.getElementById("coverage-note").textContent=c.complete?"모든 집계 거래가 단지·평형 목록에 보존돼 있습니다. 페이지 수와 관계없이 전체를 검색·다운로드합니다.":`기존 저장본에서 개별 목록 ${c.unrepresented_trades.toLocaleString("ko-KR")}건이 누락돼 있습니다. 전체 복구와 구분해 표시합니다.`;}
 async function changeYear(year){const id=(state.yearRequest??0)+1;state.yearRequest=id;state.loading=true;document.querySelector(".detail-pane").setAttribute("aria-busy","true");try{if(!await state.dataStore.loadPeriod(year))return;state.year=year;state.selectedGroupId=null;state.selectedTypeId=null;state.loading=false;populateSubwayLineSelect();refresh();}catch(e){if(id===state.yearRequest){document.getElementById("year-select").value=state.year;document.getElementById("data-status").textContent=`불러오기 실패: ${e.message}. 이전 결과를 유지합니다.`;}}finally{if(id===state.yearRequest){state.loading=false;document.querySelector(".detail-pane").setAttribute("aria-busy","false");}}}
-function exportResults(){const rows=typeItems().map(({region:r,building:b})=>{const m=aiRecommendationForItem({region:r,building:b});return [state.year,r.sido_name,r.gu_name,r.dong_name,b.building_name,b.area_type,b.key,b.count,b.metrics.price_billion.avg,b.metrics.price_billion.median,b.metrics.price_per_pyeong.median,b.households,b.built_year,m?.house_match_score,m?.fair_price_per_pyeong,m?.reference_low,m?.reference_high,m?.quality_flags.join(" / "),neutralPrice(m),m?.reference_low*m?.area_pyeong/10000||null,m?.reference_high*m?.area_pyeong/10000||null];});ResultPages.downloadCsv(`apartment-results-${state.year}.csv`,["기간","시도","시군구","읍면동","단지","평형","식별키","거래수","평균 거래가(억)","중앙 거래가(억)","중앙 평단가(만원)","세대수","준공연도","검토점수","기준가격(만원/평)","범위 하한","범위 상한","자료 점검","50점 기준가(억)","참고 범위 하한(억)","참고 범위 상한(억)"],rows);}
+function exportResults(){const rows=typeItems().map(({region:r,building:b})=>{const m=aiRecommendationForItem({region:r,building:b});return [state.year,r.sido_name,r.gu_name,r.dong_name,b.building_name,b.area_type,b.key,b.count,b.metrics.price_billion.avg,b.metrics.price_billion.median,b.metrics.price_per_pyeong.median,b.households,b.built_year,m?.house_match_score,m?.fair_price_per_pyeong,m?.reference_low,m?.reference_high,m?.quality_flags.join(" / "),neutralPrice(m),m?.reference_low*m?.area_pyeong/10000||null,m?.reference_high*m?.area_pyeong/10000||null];});ResultPages.downloadCsv(`apartment-results-${state.year}.csv`,["기간","시도","시군구","읍면동","단지","평형","식별키","거래수","평균 거래가(억)","중앙 거래가(억)","중앙 평단가(만원)","세대수","준공연도","검토점수","기준가격(만원/평)","범위 하한","범위 상한","자료 점검","호가 비교 50점 기준가(억)","연간 참고 범위 하한(억)","참고 범위 상한(억)"],rows);}
 function renderPage(id){if(id==="ai-list")renderAiRecommendations();else if(id==="growth-ranking-list")renderGrowthRankings();else if(id==="ai-score-ranking-list")renderAiScoreRankings();else renderAssetLists();}
 function wireResultEvents(){document.getElementById("export-results").addEventListener("click",exportResults);document.body.addEventListener("click",e=>{const b=e.target.closest("[data-page-list]");if(b){ResultPages.set(b.dataset.pageList,b.dataset.page);renderPage(b.dataset.pageList);}});document.body.addEventListener("change",e=>{if(e.target.dataset.pageInput){ResultPages.set(e.target.dataset.pageInput,e.target.value);renderPage(e.target.dataset.pageInput);}});}
 

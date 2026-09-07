@@ -25,6 +25,13 @@ assert.equal(evaluate('reviewScoreAtPrice({...priceRec,trade_count:0},10)'),null
 assert.equal(evaluate('reviewScoreAtPrice({...priceRec,score_error_scale:null},10)'),null);
 assert.equal(evaluate('neutralPrice({fair_price_per_pyeong:4000,area_pyeong:25})'),10);
 assert.equal(evaluate('neutralPrice(null)'),null);
+evaluate(`globalThis.recentRec={...priceRec,current_valuation:{status:'available',price_billion:12,effective_sample_size:2,score_error_scale:.15}};`);
+assert.equal(evaluate('neutralPrice(recentRec)'),12);
+assert.equal(evaluate('annualNeutralPrice(recentRec)'),10);
+assert.equal(evaluate('reviewScoreAtPrice(recentRec,12)'),50);
+assert.ok(evaluate('reviewScoreAtPrice(recentRec,10)')>50);
+assert.equal(evaluate("neutralPrice({...priceRec,current_valuation:{status:'insufficient_history'}})"),10);
+assert.equal(evaluate("reviewScoreAtPrice({...recentRec,current_valuation:{...recentRec.current_valuation,effective_sample_size:0}},12)"),null);
 assert.equal(evaluate('totalPriceLabel(.603149)'),'0.6031억');
 assert.equal(evaluate('totalPriceLabel(8.025)'),'8.025억');
 
