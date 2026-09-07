@@ -68,7 +68,7 @@ const map = globalThis.L ? L.map("map", {
   attributionControl: false,
   dragging: true,
   doubleClickZoom: false,
-  scrollWheelZoom: true,
+  scrollWheelZoom: false,
   wheelPxPerZoomLevel: 90,
   wheelDebounceTime: 30,
   boxZoom: false,
@@ -260,6 +260,7 @@ function distribution() {
     .filter((value) => value !== null);
 
   if (!values.length) return { min: null, mid: null, max: null };
+  if (state.metric === "ai_score") return {min:10,mid:50,max:90};
   return {
     min: Math.min(...values),
     mid: quantile(values, 0.5),
@@ -301,11 +302,11 @@ function styleFeature(feature) {
   const dist = state.mapDist;
 
   return {
-    color: isSelected ? "#17202a" : "#ffffff",
-    weight: isSelectedDong ? 1.8 : isSelectedGu ? 1.15 : isSelectedSido ? 0.9 : 0.5,
+    color: isSelected ? "#0f172a" : "#687b90",
+    weight: isSelectedGu ? 2.6 : isSelectedSido ? 1.7 : 1.05,
     opacity: 1,
     fillColor: inMapScope ? colorFor(value, dist) : "#ffffff",
-    fillOpacity: !inMapScope ? 0.72 : value === null ? 0.24 : isSelected ? 0.98 : 0.86,
+    fillOpacity: !inMapScope ? 0.18 : value === null ? 0.2 : isSelected ? 0.94 : 0.82,
     interactive: true,
   };
 }
@@ -329,6 +330,8 @@ function updateLegend() {
   document.getElementById("legend-min").textContent = format(dist.min);
   document.getElementById("legend-mid").textContent = format(dist.mid);
   document.getElementById("legend-max").textContent = format(dist.max);
+  const note=document.getElementById('legend-explanation');
+  if(note)note.textContent=state.metric==='ai_score'?'파랑: 기준보다 높은 거래가격 · 50: 중립 · 빨강: 기준보다 낮은 거래가격. 지역 평균이며 미래 상승률이 아닙니다.':'색은 선택한 지표의 지역 평균입니다. 회색은 자료가 부족한 지역입니다.';
   document.querySelectorAll("[data-map-mode]").forEach((button) => {
     button.classList.toggle("selected", button.dataset.mapMode === state.mapMode);
   });
@@ -557,7 +560,7 @@ function askingPriceResult(rec, text) {
   const score=reviewScoreAtPrice(rec,asking),diff=asking-neutral,pct=diff/neutral*100;
   const amount=Math.abs(diff)<.01?`${Math.round(Math.abs(diff)*10000).toLocaleString('ko-KR')}만원`:totalPriceLabel(Math.abs(diff));
   const comparison=Math.abs(diff)<.00005?'50점 기준가와 같습니다.':`50점 기준가보다 ${amount} (${Math.abs(pct).toFixed(1)}%) ${diff>0?'높습니다':'낮습니다'}.`;
-  return `<div class="metric-grid">${metricCard('입력 호가',totalPriceLabel(asking),'text')}${metricCard('호가 기준 비교점수',score,'ai_score')}</div><p>${comparison}</p>${score===null?'<p class="score-note">가격 차이만 비교할 수 있습니다. 점수 계산 자료를 새로 불러오려면 페이지를 새로고침하세요.</p>':''}`;
+  return `<p class="price-verdict">${Math.abs(diff)<.00005?'기준가격과 같음':diff<0?'기준가격보다 낮은 호가':'기준가격보다 높은 호가'}</p><div class="metric-grid">${metricCard('입력 호가',totalPriceLabel(asking),'text')}${metricCard('호가 기준 비교점수',score,'ai_score')}</div><p>${comparison}</p>${score===null?'<p class="score-note">가격 차이만 비교할 수 있습니다. 점수 계산 자료를 새로 불러오려면 페이지를 새로고침하세요.</p>':''}`;
 }
 
 function askingPricePanel(selected) {
@@ -573,7 +576,7 @@ function askingPricePanel(selected) {
     <div class="metric-grid">${metricCard(v?'최근 50점 기준가 · 총액':'연간 50점 기준가 · 총액',totalPriceLabel(neutralPrice(rec)),'text')}${metricCard(`${state.year}년 누적 실거래 중앙가`,totalPriceLabel(rec.price_billion),'text')}</div>
     <p class="score-note">${escapeHtml(provenance)}</p>
     <p class="score-note">연간 평가 기준가 ${totalPriceLabel(annualNeutralPrice(rec))} · 목록의 검토점수·참고 범위는 연간 평가 기준입니다. ${escapeHtml(referenceBasisLabel(rec))} 실거래 중앙가는 해당 연도 전체 거래의 중앙값이며, 최근 거래가나 현재 매도 호가와 다릅니다.</p>
-    <p class="score-note">${escapeHtml(rec.area_type)} 기준 · 50점은 입력 가격과 모델 기준가격이 같아지는 지점입니다. 금액은 만원 단위로 반올림해 표시합니다.</p>
+    <p class="score-note">${escapeHtml(rec.area_type)} 기준 · 50점은 입력 가격과 모델 기준가격이 같아지는 지점입니다. 50점 초과는 상대적으로 싼 방향이며 상승 확률을 뜻하지 않습니다. 금액은 만원 단위로 반올림해 표시합니다.</p>
     <div class="asking-price-controls"><label><span>현재 매매 호가 (억)</span><input id="asking-price-input" type="number" min="0" step="0.0001" placeholder="예: 8.5" value="${escapeHtml(text)}" aria-describedby="asking-price-note"/></label><button id="use-neutral-price" type="button">50점 가격 넣기</button></div>
     <div id="asking-price-result" role="status">${askingPriceResult(rec,text)}</div>
     <p id="asking-price-note" class="score-note">직접 입력한 호가를 실거래 관측가격 대신 넣은 비교입니다. 최근 추정이 있으면 시간 가중 유효 표본 수와 과거 오차로 호가 비교점수를 조정합니다. 개별 매물의 층·향·수리 상태는 직접 입력받지 않으며 대표 층과 다를 수 있습니다. 최근 90일 거래가 적거나 없으면 해석에 유의하세요. 관측 총액은 집계 과정에서 반올림되어, 이를 재입력한 점수는 기존 점수와 소폭 다를 수 있습니다.</p>
@@ -1124,6 +1127,7 @@ function selectSido(sidoName) {
   populateGuSelect();
   populateDongSelect();
   refresh();
+  focusSelectedMap();
 }
 
 function selectGu(guCode) {
@@ -1138,6 +1142,7 @@ function selectGu(guCode) {
   document.getElementById("gu-select").value = guCode;
   populateDongSelect();
   refresh();
+  focusSelectedMap();
 }
 
 function selectDong(dongCode) {
@@ -1154,6 +1159,7 @@ function selectDong(dongCode) {
   populateDongSelect();
   document.getElementById("dong-select").value = dongCode;
   refresh();
+  focusSelectedMap();
 }
 
 function setMapMode(mode) {
@@ -1167,6 +1173,7 @@ function setMapMode(mode) {
     state.mapMode = mode;
   }
   refresh();
+  if(state.mapMode==="global")fitDefaultMapView();else focusSelectedMap();
 }
 
 async function selectGroup(id, preferredTypeId = null) {
@@ -1395,6 +1402,8 @@ function wireEvents() {
     fitDefaultMapView();
   });
 
+  document.getElementById("map-full-extent").addEventListener("click",()=>fitDefaultMapView(true));
+
   document.querySelectorAll("[data-map-mode]").forEach((button) => {
     button.addEventListener("click", () => setMapMode(button.dataset.mapMode));
   });
@@ -1455,14 +1464,43 @@ async function init() {
  try {
   if(!map)throw Error("지도 로드 실패");const data=await DashboardData.compressed(store.manifest.map);
   const geojson=data.type==="Topology"?topojson.feature(data,data.objects[Object.keys(data.objects)[0]]):data;
-  state.topologyLayer=L.geoJSON(geojson,{style:styleFeature,onEachFeature(feature,layer){const regions=regionsForFeature(feature),r=regions[0];if(!r)return;layer.bindTooltip(escapeHtml(`${r.sido_name} ${r.gu_name} · 시군구 합산`),{sticky:true});layer.on("click",()=>selectGu(r.gu_code));}}).addTo(map);fitDefaultMapView();
+  state.topologyLayer=L.geoJSON(geojson,{style:styleFeature,onEachFeature(feature,layer){const regions=regionsForFeature(feature),r=regions[0];if(!r)return;layer.bindTooltip(escapeHtml(`${r.sido_name} ${r.gu_name} · 시군구 합산`),{sticky:true});layer.on("click",()=>selectGu(r.gu_code));}}).addTo(map);
+  state.mapGeojson=geojson;state.mainlandBounds=geojson.mainland_bounds;
+  map.createPane('provinceBorders');map.getPane('provinceBorders').style.zIndex=410;map.getPane('provinceBorders').style.pointerEvents='none';
+  state.provinceLayer=L.geoJSON(geojson.province_boundaries??{type:'FeatureCollection',features:[]},{pane:'provinceBorders',interactive:false,style:{color:'#263b53',weight:2.6,fill:false,opacity:.95}}).addTo(map);
+  state.mapLabels=L.layerGroup().addTo(map);map.on('zoomend',renderMapLabels);
+  map.invalidateSize();fitDefaultMapView();renderMapLabels();
  }catch(e){document.getElementById("map-status").textContent="지도를 불러오지 못했습니다. 전체 목록·검색·다운로드는 이용할 수 있습니다.";}
 }
 
-function fitDefaultMapView() {
+function fitDefaultMapView(full=false) {
  if(!map)return;
- const bounds=state.topologyLayer?.getBounds();
- if(bounds?.isValid())map.fitBounds(bounds,{padding:[16,16],maxZoom:10.6});
+ const bounds=!full&&state.mainlandBounds ? L.latLngBounds(state.mainlandBounds) : state.topologyLayer?.getBounds();
+ if(bounds?.isValid())map.fitBounds(bounds,{padding:[22,22],maxZoom:10.6,animate:false});
+}
+
+function focusSelectedMap() {
+ if(!map||!state.topologyLayer)return;
+ if(state.selectedSido==='all'){fitDefaultMapView();return;}
+ const bounds=L.latLngBounds([]);
+ state.topologyLayer.eachLayer(layer=>{
+  const matches=regionsForFeature(layer.feature).some(r=>state.selectedGu!=='all'?r.gu_code===state.selectedGu:r.sido_name===state.selectedSido);
+  if(matches)bounds.extend(layer.getBounds());
+ });
+ if(bounds.isValid())map.fitBounds(bounds,{padding:[28,28],maxZoom:11.5,animate:false});
+}
+
+function renderMapLabels() {
+ if(!map||!state.mapLabels)return;
+ state.mapLabels.clearLayers();const zoom=map.getZoom();
+ const province=zoom<9.2;
+ const features=province ? state.mapGeojson?.province_boundaries?.features : state.mapGeojson?.features;
+ for(const f of features??[]){
+  const point=f.properties.label_point;if(!point)continue;
+  const name=province?f.properties.name:regionsForFeature(f)[0]?.gu_name;
+  if(!name)continue;
+  L.marker(point,{interactive:false,icon:L.divIcon({className:province?'province-map-label':'district-map-label',html:escapeHtml(name.replace('특별시','').replace('광역시','')),iconSize:province?[84,26]:[82,20],iconAnchor:province?[42,13]:[41,10]})}).addTo(state.mapLabels);
+ }
 }
 
 

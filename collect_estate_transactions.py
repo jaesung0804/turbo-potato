@@ -22,6 +22,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from get_molit_apt_trade_data import CAPITAL_AREA_LAWD_CODES, LawdCode, DASHBOARD_FIELDNAMES, normalize_row, month_range
 from estate_calendar import today
+from estate_vintages import observe_partition
 
 URL = "https://apis.data.go.kr/1613000/RTMSDataSvcAptTrade/getRTMSDataSvcAptTrade"
 NORMALIZER_VERSION = 2
@@ -185,9 +186,13 @@ def collect(key,start,end,cache,output,refresh_months=3,workers=2,shard_index=0,
     abort=threading.Event()
     def one(item):
         path,month,region=item
+        try:previous=read_partition(path,month,region.code) if path.exists() else None
+        except (OSError,ValueError,KeyError):previous=None
         rows=fetch_partition(key,region,month,abort)
+        observed_at=utc_now()
         data={"complete":True,"normalizer_version":NORMALIZER_VERSION,"month":month,"code":region.code,"count":len(rows),
-              "fetched_at":utc_now(),"rows_sha256":digest(rows_bytes(rows)),"rows":rows}
+              "fetched_at":observed_at,"rows_sha256":digest(rows_bytes(rows)),"rows":rows,
+              "observation_ledger":observe_partition(previous,rows,observed_at)}
         temp=path.with_suffix(".tmp")
         temp.write_bytes(gzip.compress(json.dumps(data,ensure_ascii=False,separators=(",",":")).encode(),mtime=0))
         temp.replace(path)

@@ -12,7 +12,8 @@ from dashboard_bundle import build_bundle
 from estate_model import run as run_model, VERSION, CANDIDATE_VERSION, SIBLING_VERSION
 from estate_io import write_json
 from estate_nowcast_release import attach_nowcast
-from shapely.geometry import shape, mapping
+from shapely.geometry import shape, mapping, box
+from shapely.ops import unary_union
 
 UI_FILES = ['index.html', 'model.html', 'styles.css', 'app.js', 'data-store.js', 'result-pages.js', 'model.js', '404.html','vendor/leaflet.css','vendor/leaflet.js','vendor/LICENSE.txt']
 AMENITIES = ['households', 'elementary_500m', 'nearest_elementary_name', 'nearest_elementary_m',
@@ -49,13 +50,30 @@ def apply_amenities(summary, path=Path('metadata/amenities_snapshot.json.gz')):
 
 def light_map(path):
     data = json.loads(path.read_text(encoding='utf-8'))
-    features = []
+    features, provinces = [], {}
     for f in data['features']:
-        geometry = shape(f['geometry']).simplify(.0006, preserve_topology=True)
+        original = shape(f['geometry'])
+        provinces.setdefault(f['properties']['SIDO_NM'], []).append(original)
+        geometry = original.simplify(.0006, preserve_topology=True)
         if geometry.is_empty:
             raise ValueError('Map simplification removed a district')
-        features.append({'type': 'Feature', 'properties': f['properties'], 'geometry': mapping(geometry)})
-    return {'type': 'FeatureCollection', 'features': features}
+        parts = list(original.geoms) if original.geom_type == 'MultiPolygon' else [original]
+        point = max(parts, key=lambda g: g.area).representative_point()
+        features.append({'type': 'Feature', 'properties': {**f['properties'], 'label_point': [point.y, point.x]}, 'geometry': mapping(geometry)})
+    boundaries = []
+    for name, geometries in provinces.items():
+        merged = unary_union(geometries)
+        parts = list(merged.geoms) if merged.geom_type == 'MultiPolygon' else [merged]
+        point = max(parts, key=lambda g: g.area).representative_point()
+        boundaries.append({'type': 'Feature', 'properties': {'name': name, 'label_point': [point.y, point.x]},
+                           'geometry': mapping(merged.simplify(.0006, preserve_topology=True))})
+    # Keep remote islands in the dataset, but don't let them shrink the initial
+    # mainland view. Full geography remains available through a separate button.
+    mainland = unary_union([shape(f['geometry']) for f in features]).intersection(box(126.25, 36.8, 128, 38.35))
+    west, south, east, north = mainland.bounds
+    return {'type': 'FeatureCollection', 'features': features,
+            'province_boundaries': {'type': 'FeatureCollection', 'features': boundaries},
+            'mainland_bounds': [[south, west], [north, east]]}
 
 
 def build(source, output, model_dir=Path('models'), month=None, summary_path=None, require_complete=True, model_version=SIBLING_VERSION):

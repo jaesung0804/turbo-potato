@@ -25,23 +25,23 @@
 </head>
 <body>
 <main class="app-shell">
-<section class="map-pane"><h2>지역별 비교</h2>
+<section class="map-pane"><div class="map-heading"><h2>수도권 지역 비교</h2><span>지역을 눌러 단지 보기</span></div>
 
-<div aria-label="수도권 아파트 실거래가 Hot Cold 지도" id="map"></div>
-
-
+<div aria-label="수도권 시도·시군구별 아파트 가격 비교 지도" id="map"></div>
 
 
 
 
-<p id="map-status" role="status">지도는 시군구 거래 집계입니다. 개편 지역은 목록에서 확인하세요.</p><div class="map-scope">
+
+
+<p id="map-status" role="status">굵은 선: 시도 · 가는 선: 시군구 · 확대하면 지역명 표시. 2025년 경계이며 2026년 개편 지역은 목록에서 확인하세요.</p><div class="map-scope">
 <button class="scope-button selected" data-map-mode="global" type="button">수도권 전체</button>
 <button class="scope-button" data-map-mode="sido" type="button">선택 시도</button>
 <button class="scope-button" data-map-mode="gu" type="button">선택 시군구</button>
-<button class="scope-button" data-map-mode="dong" type="button">선택 읍면동</button>
-</div><button class="map-reset" id="map-reset" type="button">전체 보기</button><div class="legend">
+
+</div><div class="map-view-actions"><button class="map-reset" id="map-reset" type="button">본토 중심</button><button class="map-reset" id="map-full-extent" type="button">도서 포함 전체</button></div><div class="legend">
 <div class="legend-title" id="legend-title">전체연도 · 수도권 전체 · 거래가_억원</div>
-<div class="legend-gradient"></div>
+<div class="legend-gradient"></div><p id="legend-explanation" class="score-note">색은 선택한 지표의 지역 평균입니다.</p>
 <div class="legend-scale">
 <span id="legend-min">낮음</span>
 <span id="legend-mid">중간</span>
@@ -50,6 +50,11 @@
 </div></section>
 <aside class="detail-pane">
 <header class="panel-header"><p class="eyebrow">CAPITAL AREA / REAL ESTATE</p><h1>수도권 아파트 실거래 비교</h1><p id="data-status" role="status">전체 자료를 불러오는 중…</p><p id="coverage-note"></p><a class="guide-link" href="model.html">모델 사용법 · 검증 · 자료 범위 →</a></header>
+<section class="score-guide-inline" aria-label="점수 읽는 법">
+<div class="score-guide-title"><strong>점수는 가격 차이의 방향입니다</strong><span>상승 확률이 아닙니다</span></div>
+<div class="score-guide-scale"><div><b>50 미만</b><span>기준보다 높은 가격</span></div><div><b>50</b><span>기준가격과 같음</span></div><div><b>50 초과</b><span>기준보다 낮은 가격</span></div></div>
+<p>목록·지도는 <strong>연간 실거래 검토점수</strong>, 단지 상세의 호가 비교는 <strong>최근 거래 기반 점수</strong>입니다. 거래가 적어도 50에 가까워지므로 중립 점수가 정확도 보장은 아닙니다. 미래 잠재력은 아직 점수화하지 않았습니다.</p>
+</section>
 <details class="location-filters" id="location-filters" open><summary>연도·지역·면적 선택</summary><section class="control-grid">
 <label>
 <span>연도</span>
