@@ -52,7 +52,12 @@ def light_map(path):
     data = json.loads(path.read_text(encoding='utf-8'))
     features, provinces = [], {}
     for f in data['features']:
-        original = shape(f['geometry'])
+        source_geometry = shape(f['geometry'])
+        # The source groups adjacent dong polygons into a district MultiPolygon.
+        # Dissolve those internal edges before simplifying and labeling districts.
+        original = unary_union(list(source_geometry.geoms)) if source_geometry.geom_type == 'MultiPolygon' else source_geometry
+        if not original.is_valid:
+            raise ValueError('District boundaries are invalid after dissolving internal edges')
         provinces.setdefault(f['properties']['SIDO_NM'], []).append(original)
         geometry = original.simplify(.0006, preserve_topology=True)
         if geometry.is_empty:
