@@ -25,6 +25,7 @@ assert.equal(evaluate('reviewScoreAtPrice({...priceRec,trade_count:0},10)'),null
 assert.equal(evaluate('reviewScoreAtPrice({...priceRec,score_error_scale:null},10)'),null);
 assert.equal(evaluate('neutralPrice({fair_price_per_pyeong:4000,area_pyeong:25})'),10);
 assert.equal(evaluate('neutralPrice(null)'),null);
+assert.equal(evaluate('colorFor(50,{min:10,mid:50,max:90})'),'rgb(247, 247, 247)');
 evaluate(`globalThis.recentRec={...priceRec,current_valuation:{status:'available',price_billion:12,effective_sample_size:2,score_error_scale:.15}};`);
 assert.equal(evaluate('neutralPrice(recentRec)'),12);
 assert.equal(evaluate('annualNeutralPrice(recentRec)'),10);
