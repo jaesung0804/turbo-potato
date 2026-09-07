@@ -11,6 +11,7 @@ from build_real_estate_dashboard_data import build_dashboard_data
 from dashboard_bundle import build_bundle
 from estate_model import run as run_model, VERSION, CANDIDATE_VERSION, SIBLING_VERSION
 from estate_io import write_json
+from estate_nowcast_release import attach_nowcast
 from shapely.geometry import shape, mapping
 
 UI_FILES = ['index.html', 'model.html', 'styles.css', 'app.js', 'data-store.js', 'result-pages.js', 'model.js', '404.html','vendor/leaflet.css','vendor/leaflet.js','vendor/LICENSE.txt']
@@ -79,6 +80,8 @@ def build(source, output, model_dir=Path('models'), month=None, summary_path=Non
     del summary
     recommendation_name='recommendations.json' if model_version==VERSION else 'recommendations-'+model_version+'.json'
     model = run_model(summary_path, work/recommendation_name, model_dir, month,version=model_version)
+    if require_complete:
+        attach_nowcast(model, source)
     summary = json.loads(summary_path.read_text(encoding='utf-8'))
     output.mkdir(parents=True, exist_ok=True)
     for name in UI_FILES:
