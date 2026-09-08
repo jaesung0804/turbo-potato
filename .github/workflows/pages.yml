@@ -52,10 +52,14 @@ jobs:
         env:
           MOLIT_API_KEY: ${{ secrets.MOLIT_API_KEY }}
         run: python collect_estate_transactions.py --refresh-months 3 --workers 2 --use-existing-config
-      - name: Persist complete raw state with reusable history partitions
+      - name: Refresh dated public KB market context
+        run: |
+          python collect_kb_public_statistics.py --previous .work/raw-state/market_context.json
+      - name: Persist complete raw state and dated market context
         run: |
           set -euo pipefail
           python raw_estate_state.py pack --state-dir .work/raw-state
+          cp metadata/market_context.json .work/raw-state/market_context.json
           git -C .work/raw-state config user.name github-actions[bot]
           git -C .work/raw-state config user.email 41898282+github-actions[bot]@users.noreply.github.com
           git -C .work/raw-state add -A

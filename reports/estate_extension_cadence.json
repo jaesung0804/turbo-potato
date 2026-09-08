@@ -1,0 +1,73 @@
+{
+  "scope": "Seoul; same trades and floors; March-based refresh blocks",
+  "metrics": {
+    "2025": {
+      "monthly": {
+        "transactions": 64627,
+        "complexes": 5321,
+        "mape_pct": 5.873,
+        "complex_balanced_mape_pct": 11.917,
+        "median_ape_pct": 3.799,
+        "mae_oku": 0.8281,
+        "bias_pct": -1.645,
+        "within10_pct": 84.35
+      },
+      "frozen3": {
+        "transactions": 64627,
+        "complexes": 5321,
+        "mape_pct": 6.232,
+        "complex_balanced_mape_pct": 12.11,
+        "median_ape_pct": 4.156,
+        "mae_oku": 0.8863,
+        "bias_pct": -2.279,
+        "within10_pct": 82.37
+      },
+      "frozen6": {
+        "transactions": 64627,
+        "complexes": 5321,
+        "mape_pct": 7.094,
+        "complex_balanced_mape_pct": 12.378,
+        "median_ape_pct": 4.917,
+        "mae_oku": 1.0395,
+        "bias_pct": -3.559,
+        "within10_pct": 77.28
+      }
+    },
+    "2026": {
+      "monthly": {
+        "transactions": 32350,
+        "complexes": 4721,
+        "mape_pct": 7.572,
+        "complex_balanced_mape_pct": 10.73,
+        "median_ape_pct": 5.422,
+        "mae_oku": 1.0145,
+        "bias_pct": -1.116,
+        "within10_pct": 75.46
+      },
+      "frozen3": {
+        "transactions": 32350,
+        "complexes": 4721,
+        "mape_pct": 8.305,
+        "complex_balanced_mape_pct": 11.014,
+        "median_ape_pct": 6.331,
+        "mae_oku": 1.0797,
+        "bias_pct": -2.721,
+        "within10_pct": 69.88
+      },
+      "frozen6": {
+        "transactions": 32350,
+        "complexes": 4721,
+        "mape_pct": 9.462,
+        "complex_balanced_mape_pct": 11.476,
+        "median_ape_pct": 7.709,
+        "mae_oku": 1.2107,
+        "bias_pct": -4.248,
+        "within10_pct": 62.06
+      }
+    }
+  },
+  "coverage": {
+    "target_rows": 96981,
+    "valid_all": 96977
+  }
+}

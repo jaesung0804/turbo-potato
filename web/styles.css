@@ -77,3 +77,5 @@ body.dark-mode{--bg:#101923;--panel:#172330;--soft:#203042;--ink:#e7edf5;--muted
 #legend-explanation{margin-top:8px;font-size:11px}
 @media(max-width:1100px){.app-shell{display:grid;grid-template-columns:minmax(340px,41%) minmax(0,1fr);padding:18px;gap:18px}.map-pane{order:0;position:sticky;top:18px}.detail-pane{order:1}#map{height:clamp(420px,60vh,640px)}}
 @media(max-width:800px){.app-shell{display:flex;flex-direction:column;padding:14px;gap:16px}.map-pane{order:0;position:relative;top:auto;width:100%;padding:12px}.detail-pane{order:1;width:100%}#map{height:clamp(320px,48vh,460px)}.map-heading span{font-size:10px}.score-guide-inline{padding:12px}.score-guide-title strong{font-size:13px}}
+ .market-context { margin: 14px 0; padding: 14px 16px; border: 1px solid #cbd8e4; border-radius: 12px; background: #f4f8fc; }
+ .market-context p { margin: 6px 0 0; }
