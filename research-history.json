@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "normalizer_version": 2,
+  "complete": true,
+  "shard_complete": true,
+  "start": "201601",
+  "end": "202012",
+  "rows": 477522,
+  "shard_index": 0,
+  "shard_count": 1,
+  "partition_count": 1560,
+  "region_count": 26,
+  "registry_month": "2026-09",
+  "sha256": "1e297220707abc6fd3d5a743ad510e7ed12e42612467ae066c31a5e1598a3686",
+  "fetched_at": "2026-09-08T14:08:56.644407+00:00",
+  "source": "https://apis.data.go.kr/1613000/RTMSDataSvcAptTrade/getRTMSDataSvcAptTrade",
+  "refresh_months": 0,
+  "historical_audit_month": null,
+  "note": "All API pages retained, including cancellations for downstream filtering."
+}
