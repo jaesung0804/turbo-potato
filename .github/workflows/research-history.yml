@@ -1,0 +1,43 @@
+name: Collect bounded historical model research
+on:
+  push:
+    branches: [codex/estate-frequency-data]
+    paths: [collect_estate_history.py, .github/workflows/research-history.yml]
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: estate-historical-research
+  cancel-in-progress: false
+jobs:
+  history:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Collect 2016–2020 Seoul and Gwangmyeong sales
+        env:
+          MOLIT_API_KEY: ${{ secrets.MOLIT_API_KEY }}
+        run: python collect_estate_history.py
+      - name: Preserve completed research input separately
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/estate-history-export
+          cp .work/history/research-history.* /tmp/estate-history-export/
+          git switch --orphan estate-history-state
+          git rm -rf --ignore-unmatch .
+          cp /tmp/estate-history-export/* ./
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add research-history.csv.gz research-history.json
+          git commit -m 'Preserve completed 2016–2020 research sales snapshot'
+          git push origin HEAD:estate-history-state
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: historical-sales-${{ github.run_id }}
+          path: /tmp/estate-history-export/
+          retention-days: 90
