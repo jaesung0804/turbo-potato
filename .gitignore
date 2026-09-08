@@ -19,3 +19,6 @@ Thumbs.db
 .env
 .env.*
 !.env.example
+
+# Restored monthly research status is generated from the immutable state branch.
+/metadata/potential_refresh_status.json

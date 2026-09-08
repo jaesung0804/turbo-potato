@@ -75,7 +75,7 @@ def test_release_checks_artifact_and_keeps_annual_ranking(tmp_path, monkeypatch)
     spec = {'sha256': hashlib.sha256(artifact.read_bytes()).hexdigest(),
             'prediction_year': '2026', 'trained_through': '2025-12-31', 'score_error_scale': .1}
     manifest.write_text(json.dumps(spec))
-    d = pd.DataFrame({'date': pd.to_datetime(['2026-07-01']), 'key': ['exact']})
+    d = pd.DataFrame({'date': pd.to_datetime(['2026-07-01']), 'key': ['exact'], 'price_oku': [8.2]})
     monkeypatch.setattr(release, 'load_transactions', lambda _: (d, {}))
     monkeypatch.setattr(release, 'predict_sample', lambda *args: pd.DataFrame([{
         'key':'exact', 'estimated_price_oku': 8., 'feature_cutoff': '2026-08-01',
@@ -88,6 +88,9 @@ def test_release_checks_artifact_and_keeps_annual_ranking(tmp_path, monkeypatch)
     assert model['recommendations'][0]['neutral_price_billion'] == 7
     assert model['recommendations'][0]['current_valuation']['price_billion'] == 8
     assert model['recommendations'][0]['current_valuation']['floor'] is None
+    assert model['recommendations'][0]['current_valuation']['recent_history_start'] == '2026-05-03'
+    assert model['recommendations'][0]['recent_price_comparison']['median_price_billion'] == 8.2
+    assert model['recommendations'][0]['valuation_comparison']['comparison_trade_count'] == 1
     assert model['recommendations'][1]['current_valuation']['status'] == 'insufficient_history'
     assert model['nowcast']['available_types'] == 1
     json.dumps(model, allow_nan=False)

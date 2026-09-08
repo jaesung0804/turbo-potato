@@ -2,6 +2,10 @@ name: Deploy dashboard to GitHub Pages
 on:
   push:
     branches: [main]
+  workflow_run:
+    workflows: ['Refresh immutable monthly potential research']
+    types: [completed]
+    branches: [main]
   schedule:
     - cron: '35 20 * * *'
   workflow_dispatch:
@@ -19,6 +23,7 @@ concurrency:
   cancel-in-progress: false
 jobs:
   deploy:
+    if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
@@ -79,6 +84,16 @@ jobs:
           else
             git worktree add --detach .work/model-state HEAD
             git -C .work/model-state switch --orphan estate-model-state
+          fi
+      - name: Restore the latest verified potential forecast
+        run: |
+          set -euo pipefail
+          if git ls-remote --exit-code --heads origin estate-potential-state > /dev/null; then
+            git fetch origin estate-potential-state
+            git worktree add --detach .work/potential-state FETCH_HEAD
+            python refresh_estate_potential.py restore --state-dir .work/potential-state
+          else
+            echo 'Using the committed baseline potential forecast; no state archive exists yet.'
           fi
       - name: Build full results with the frozen monthly model
         run: |

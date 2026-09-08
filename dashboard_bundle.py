@@ -39,7 +39,7 @@ def build_bundle(summary,model,root,map_data):
     # Annual reference fields remain in the model audit export, not in the
     # initial browser payload: the UI consumes only the current price contract.
     recommendation_fields=['price_billion','price_per_pyeong','area_pyeong','trade_count','current_valuation',
-        'valuation_comparison','transaction_valuation']
+        'valuation_comparison','recent_price_comparison','transaction_valuation']
     packed_model={'encoding':'catalog-v1','metadata':{k:v for k,v in model.items() if k!='recommendations'},'fields':recommendation_fields,
         'rows':[[recommendation_catalog[(r['region_code'],r['building_key'])],r['region_code'],*[recommendation_value(r,k) for k in recommendation_fields]] for r in model['recommendations']]}
     manifest={'schema_version':1,'generated_at':summary.get('data_through',summary['generated_at']),

@@ -8,6 +8,7 @@ import hashlib
 import json
 from pathlib import Path
 
+import joblib
 import numpy as np
 import pandas as pd
 from lightgbm import LGBMRegressor
@@ -44,10 +45,13 @@ def main():
     p.add_argument("--history", default=".work/history/transactions.csv")
     p.add_argument("--cache", default=".work/potential-horizons")
     p.add_argument("--output", default="metadata/potential_shadow_2026-09_policy-v2.json.gz")
+    p.add_argument("--artifacts-dir", type=Path, help="Preserve fitted models and exact mature training tables for a new monthly snapshot")
     args = p.parse_args()
     dest = Path(args.output)
     if dest.exists():
         raise FileExistsError("Frozen forecasts cannot be overwritten")
+    if args.artifacts_dir is not None and args.artifacts_dir.exists():
+        raise FileExistsError("Frozen training artifacts cannot be overwritten")
     origin = pd.Timestamp(args.origin)
     if origin.day != 1:
         raise ValueError("Origin must be a month start")
@@ -60,10 +64,14 @@ def main():
     manifest = json.loads((cache / "manifest.json").read_text())
     if manifest["current"] != current_quality or manifest["older"] != older_quality:
         raise ValueError("History features do not match these exact source files")
+    if manifest.get("horizons") is not None and 24 not in manifest["horizons"]:
+        raise ValueError("History features do not contain the required 24-month design")
+    if manifest.get("regimes") is not None and not {"historical_policy", "uniform61"} <= set(manifest["regimes"]):
+        raise ValueError("Both reporting assumptions are required")
     d = pd.concat([older, current], ignore_index=True)
     d = d[d.floor.between(3, 20)].copy()
     forecast, model, train = fit_forecast(d, pd.read_parquet(cache / "features_historical_policy.parquet"), origin, "historical_policy")
-    alternate, _, alternate_train = fit_forecast(d, pd.read_parquet(cache / "features_uniform61.parquet"), origin, "uniform61")
+    alternate, alternate_model, alternate_train = fit_forecast(d, pd.read_parquet(cache / "features_uniform61.parquet"), origin, "uniform61")
     alternate = alternate.set_index("key")
     contributions = model.booster_.predict(forecast[COLS], pred_contrib=True)
     expected = model.booster_.predict(forecast[COLS], raw_score=True)
@@ -115,6 +123,35 @@ def main():
         "note": "Separate potential research candidate. Relative growth is not a probability, a current undervaluation measure, or a validated five-year forecast. Created later than its nominal month-start origin using corrected final source files.",
         "records": rows,
     }
+    if args.artifacts_dir is not None:
+        from importlib.metadata import version
+        folder = args.artifacts_dir
+        folder.mkdir(parents=True)
+        training_manifest = {
+            "schema_version": 1, "status": "preserved_fitted_models_and_mature_training_tables",
+            "model": result["model"], "origin": result["origin"], "features": COLS,
+            "source_sha256": result["source_sha256"],
+            "feature_manifest_sha256": hashlib.sha256((cache / "manifest.json").read_bytes()).hexdigest(),
+            "libraries": {name: version(name) for name in ("lightgbm", "numpy", "pandas", "pyarrow", "joblib")},
+            "regimes": {},
+        }
+        for regime, fitted, table in (("historical_policy", model, train),
+                                      ("uniform61", alternate_model, alternate_train)):
+            model_path = folder / f"model_{regime}.joblib"
+            table_path = folder / f"training_{regime}.parquet"
+            joblib.dump({"model": fitted, "features": COLS, "origin": result["origin"],
+                         "model_version": result["model"], "availability_regime": regime}, model_path, compress=3)
+            table.to_parquet(table_path, index=False)
+            training_manifest["regimes"][regime] = {
+                "rows": len(table), "origins": int(table.origin.nunique()),
+                "latest_label_available": str(table.label_available.max()),
+                "files": [{"path": path.name, "bytes": path.stat().st_size,
+                           "sha256": hashlib.sha256(path.read_bytes()).hexdigest()}
+                          for path in (model_path, table_path)],
+            }
+        manifest_body = json.dumps(training_manifest, ensure_ascii=False, indent=2, allow_nan=False).encode()
+        (folder / "manifest.json").write_bytes(manifest_body)
+        result["training_manifest_sha256"] = hashlib.sha256(manifest_body).hexdigest()
     dest.parent.mkdir(parents=True, exist_ok=True)
     body = json.dumps(result, ensure_ascii=False, separators=(",", ":"), allow_nan=False).encode()
     dest.write_bytes(gzip.compress(body, mtime=0))
