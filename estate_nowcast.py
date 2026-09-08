@@ -151,6 +151,7 @@ def build_features(d, lag_days=31, first='2023-03', last='2026-08'):
                     f[c] = f['anchor']
             for row in target.itertuples():
                 records.append({**f, 'key': key, 'complex': meta['complex'], 'month': str(month),
+                    'contract_date': str(pd.Timestamp(row.date).date()),
                     'lag_days': lag_days, 'feature_cutoff': str((origin-pd.Timedelta(days=lag_days)).date()),
                     'year': month.year, 'region': meta['region'], 'gu': meta['gu'],
                     'area': row.area, 'age': month.year - row.built,

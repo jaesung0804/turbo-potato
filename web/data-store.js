@@ -22,10 +22,18 @@ const DashboardData = (() => {
       const b=catalog.addresses[idx],r=locations.get(code);if(!b||!r||values.length!==packed.fields.length)throw Error('모델 색인 오류');
       return {...b,...r,...Object.fromEntries(packed.fields.map((k,i)=>[k,values[i]])),year:packed.metadata.target_year,building_key:b.key,region_code:code};
     })}:packed;
-    let history={},historyPromise=null;
+    let history={},historyPromise=null,transactionPromise=null;
     const regions=catalog.regions.map(r=>({...r,loadedBucket:null})), byCode=new Map(regions.map(r=>[r.code,r]));
     const historyCache=new Map();let request=0;
     return {manifest,recommendations,generation:0,summary:{...manifest,regions},
+      ensureTransactionValuations(){
+        if(!transactionPromise)transactionPromise=compressed(manifest.transaction_valuation).then(data=>{
+          if(data.schema_version!==1 || !data.by_key)throw Error('계약 평가 자료 형식 오류');
+          for(const rec of recommendations.recommendations){const value=data.by_key[`${rec.region_code}|${rec.building_key}`];if(value)rec.transaction_valuation=value;}
+          return true;
+        }).catch(error=>{transactionPromise=null;throw error;});
+        return transactionPromise;
+      },
       ensureHistory(){
         if(!historyPromise)historyPromise=compressed(manifest.history).then(value=>{history=value;historyCache.clear();return true;}).catch(e=>{historyPromise=null;throw e;});
         return historyPromise;

@@ -8,14 +8,15 @@ import shutil
 from pathlib import Path
 
 from build_real_estate_dashboard_data import build_dashboard_data
-from dashboard_bundle import build_bundle
+from dashboard_bundle import build_bundle, asset
 from estate_model import run as run_model, VERSION, CANDIDATE_VERSION, SIBLING_VERSION
 from estate_io import write_json
 from estate_nowcast_release import attach_nowcast
+from estate_valuation import build_transaction_replay, attach_transaction_replay
 from shapely.geometry import shape, mapping, box
 from shapely.ops import unary_union
 
-UI_FILES = ['index.html', 'model.html', 'styles.css', 'app.js', 'data-store.js', 'result-pages.js', 'model.js', '404.html','vendor/leaflet.css','vendor/leaflet.js','vendor/LICENSE.txt']
+UI_FILES = ['index.html', 'model.html', 'potential.html', 'styles.css', 'app.js', 'potential.js', 'data-store.js', 'result-pages.js', 'model.js', '404.html','vendor/leaflet.css','vendor/leaflet.js','vendor/LICENSE.txt']
 AMENITIES = ['households', 'elementary_500m', 'nearest_elementary_name', 'nearest_elementary_m',
              'subway_lines', 'subway_station', 'subway_distance_m', 'latitude', 'longitude']
 
@@ -105,15 +106,19 @@ def build(source, output, model_dir=Path('models'), month=None, summary_path=Non
     model = run_model(summary_path, work/recommendation_name, model_dir, month,version=model_version)
     if require_complete:
         attach_nowcast(model, source)
+        if model.get('nowcast', {}).get('status') == 'available':
+            replay = build_transaction_replay(source, month=model['model_month'])
+            attach_transaction_replay(model, replay)
+        write_json(work/'valuation_published_model.json', model)
     summary = json.loads(summary_path.read_text(encoding='utf-8'))
     output.mkdir(parents=True, exist_ok=True)
     for name in UI_FILES:
         (output/name).parent.mkdir(parents=True,exist_ok=True)
         shutil.copy2(Path('web')/name, output/name)
     # A returning browser must load matching UI scripts after an HTML release.
-    for page in ['index.html', 'model.html']:
+    for page in ['index.html', 'model.html', 'potential.html']:
         html = (output/page).read_text(encoding='utf-8')
-        for name in ['app.js', 'data-store.js', 'result-pages.js', 'model.js', 'styles.css','vendor/leaflet.css','vendor/leaflet.js']:
+        for name in ['app.js', 'potential.js', 'data-store.js', 'result-pages.js', 'model.js', 'styles.css','vendor/leaflet.css','vendor/leaflet.js']:
             version = hashlib.sha256((output/name).read_bytes()).hexdigest()[:16]
             html = html.replace('"'+name+'"', '"'+name+'?v='+version+'"')
         (output/page).write_text(html,encoding='utf-8',newline='\n')
@@ -122,6 +127,18 @@ def build(source, output, model_dir=Path('models'), month=None, summary_path=Non
     if (output/'data').exists():
         shutil.rmtree(output/'data')
     manifest = build_bundle(summary, model, output/'data/bundle', light_map(Path('web/data/capital_area_adm_sgg.geojson')))
+    if model.get('transaction_valuation'):
+        ledger = {'schema_version': 1, 'metadata': model['transaction_valuation'],
+                  'by_key': {r['region_code']+'|'+r['building_key']: r['transaction_valuation']
+                             for r in model['recommendations']
+                             if r.get('transaction_valuation', {}).get('status') == 'available'}}
+        manifest['transaction_valuation'] = asset(output/'data/bundle', 'transaction-valuation', ledger)
+    potential_path = Path('metadata/potential_candidates.json.gz')
+    if potential_path.exists():
+        potential = json.loads(gzip.decompress(potential_path.read_bytes()))
+        if potential.get('cohort_size') != len(potential.get('rows', [])):
+            raise ValueError('Potential candidate coverage is incomplete')
+        manifest['potential'] = asset(output/'data/bundle', 'potential', potential)
     if not all(c['complete'] for c in manifest['coverage'].values()):
         raise ValueError('A source partition was truncated; publication refused')
     if len(model['recommendations']) != manifest['coverage'][model['target_year']]['available_types']:

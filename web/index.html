@@ -19,12 +19,12 @@
 <meta charset="utf-8"/>
 <link rel="icon" href="data:,"/>
 <meta content="width=device-width, initial-scale=1" name="viewport"/>
-<title>수도권 아파트 실거래 비교</title>
+<title>실거래 저평가 비교 · 수도권 아파트</title>
 <link crossorigin="" href="vendor/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" rel="stylesheet"/>
 <link href="styles.css" rel="stylesheet"/>
 </head>
 <body>
-<main class="app-shell">
+<nav class="concept-nav" aria-label="모델 선택"><a class="brand-link" href="index.html">수도권 아파트 리서치</a><div><a href="index.html" aria-current="page">01 실거래 저평가</a><a href="potential.html">02 상승 잠재력</a><a href="model.html">사용법·검증</a></div></nav><main class="app-shell">
 <section class="map-pane"><div class="map-heading"><h2>수도권 지역 비교</h2><span>지역을 눌러 단지 보기</span></div>
 
 <div aria-label="수도권 시도·시군구별 아파트 가격 비교 지도" id="map"></div>
@@ -49,25 +49,25 @@
 </div>
 </div></section>
 <aside class="detail-pane">
-<header class="panel-header"><p class="eyebrow">CAPITAL AREA / REAL ESTATE</p><h1>수도권 아파트 실거래 비교</h1><p id="data-status" role="status">전체 자료를 불러오는 중…</p><p id="coverage-note"></p><a class="guide-link" href="model.html">모델 사용법 · 검증 · 자료 범위 →</a></header>
+<header class="panel-header"><p class="eyebrow">01 / CURRENT VALUE</p><h1>실거래 저평가 비교 · 수도권 아파트</h1><p id="data-status" role="status">전체 자료를 불러오는 중…</p><p id="coverage-note"></p><a class="guide-link" href="model.html">모델 사용법 · 검증 · 자료 범위 →</a></header>
 <section class="score-guide-inline" aria-label="점수 읽는 법">
 <div class="score-guide-title"><strong>점수는 가격 차이의 방향입니다</strong><span>상승 확률이 아닙니다</span></div>
 <div class="score-guide-scale"><div><b>50 미만</b><span>기준보다 높은 가격</span></div><div><b>50</b><span>기준가격과 같음</span></div><div><b>50 초과</b><span>기준보다 낮은 가격</span></div></div>
-<p>목록·지도는 <strong>연간 실거래 검토점수</strong>, 단지 상세의 호가 비교는 <strong>최근 거래 기반 점수</strong>입니다. 거래가 적어도 50에 가까워지므로 중립 점수가 정확도 보장은 아닙니다. 미래 잠재력은 아직 점수화하지 않았습니다.</p>
+<p>목록·지도·직접 입력은 <strong>같은 현재 기준가와 계산식</strong>을 사용합니다. 최신 연도 누적 실거래 중앙가를 현재 기준가와 비교하며, <strong>기준가보다 몇 % 낮은지</strong>를 먼저 보세요. 미래 상대 상승 후보는 <a href="potential.html">상승 잠재력</a>에서 확인합니다.</p>
 </section>
 <details class="location-filters" id="location-filters" open><summary>연도·지역·면적 선택</summary><section class="control-grid">
 <label>
-<span>연도</span>
+<span>실거래 집계 연도</span>
 <select id="year-select"></select>
 </label>
 <label>
 <span>대표 지표</span>
 <select id="metric-select">
-<option value="price_billion">거래가_억원</option>
+<option value="price_billion">평균 거래가(억)</option>
 <option value="price_per_pyeong">평단가_만원</option>
 <option value="count">거래횟수</option>
 <option value="yoy_rate">전년 대비 상승률</option>
-<option value="ai_score">검토점수</option>
+<option value="ai_score">가격 비교점수</option>
 </select>
 </label>
 <label>
@@ -98,9 +98,9 @@
 <span>검색</span>
 <input id="search-input" placeholder="시도·시군구·읍면동·단지·면적 검색" type="search"/>
 </label><button id="clear-filter" type="button">초기화</button><button aria-label="다크모드 전환" class="dark-mode-toggle" id="dark-mode-toggle" type="button">Dark</button></section>
-<section class="review-score-filter" aria-label="검토점수 필터">
-<label><span>검토점수 하한</span><input id="review-score-min-input" type="number" min="0" max="100" step="0.1" placeholder="전체" aria-describedby="review-score-filter-note"/></label>
-<div class="review-score-presets" role="group" aria-label="검토점수 빠른 선택">
+<section class="review-score-filter" aria-label="가격 비교점수 필터">
+<label><span>가격 비교점수 하한</span><input id="review-score-min-input" type="number" min="0" max="100" step="0.1" placeholder="전체" aria-describedby="review-score-filter-note"/></label>
+<div class="review-score-presets" role="group" aria-label="가격 비교점수 빠른 선택">
 <button type="button" data-review-score="" aria-pressed="true">전체</button>
 <button type="button" data-review-score="60" aria-pressed="false">60점 이상</button>
 <button type="button" data-review-score="65" aria-pressed="false">65점 이상</button>
@@ -110,11 +110,11 @@
 <details class="advanced-filters" id="advanced-filters"><summary>가격·세대수·연식·입지 필터</summary><section class="search-row">
 
 <label>
-<span>가격 하한(억)</span>
+<span>실거래 중앙가 하한(억)</span>
 <input id="min-price-input" min="0" placeholder="전체" step="0.1" type="number"/>
 </label>
 <label>
-<span>가격 상한(억)</span>
+<span>실거래 중앙가 상한(억)</span>
 <input id="price-input" min="0" placeholder="전체" step="0.1" type="number"/>
 </label>
 <label>
@@ -171,10 +171,10 @@
 <section class="selected-region" id="selected-region"></section>
 <section class="market-tabs">
 <div aria-label="매물 목록" class="tab-buttons" role="tablist">
-<button class="tab-button active" data-market-tab="ai" type="button">AI 비교·평형 <span id="ai-count">0</span></button>
+<button class="tab-button active" data-market-tab="ai" type="button">저평가 비교 <span id="ai-count">0</span></button>
 <button class="tab-button" data-market-tab="all" type="button">전체 단지 <span id="all-count">0</span></button>
-<button class="tab-button" data-market-tab="hot" type="button">Hot <span id="hot-count">0</span></button>
-<button class="tab-button" data-market-tab="cold" type="button">Cold <span id="cold-count">0</span></button>
+<button class="tab-button" data-market-tab="hot" type="button">지표 상위 <span id="hot-count">0</span></button>
+<button class="tab-button" data-market-tab="cold" type="button">지표 하위 <span id="cold-count">0</span></button>
 </div>
 
 <div class="tab-panel active" data-market-panel="ai">
@@ -190,7 +190,7 @@
 <ol class="asset-list compact" id="cold-list"></ol>
 </div>
 </section>
-<details class="analysis-panel" id="analysis-panel"><summary>지역별 상승률·검토점수 분석</summary><div class="growth-summary" id="growth-summary"></div><section class="growth-ranking">
+<details class="analysis-panel" id="analysis-panel"><summary>지역별 상승률·가격 비교점수 분석</summary><div class="growth-summary" id="growth-summary"></div><section class="growth-ranking">
 <div class="growth-ranking-head">
 <strong>상승률 랭킹</strong>
 <select aria-label="상승률 랭킹 단위" id="growth-level-select">
@@ -208,8 +208,8 @@
 <ol class="growth-ranking-list" id="growth-ranking-list"></ol>
 </section><section class="growth-ranking ai-score-ranking">
 <div class="growth-ranking-head">
-<strong>검토점수 랭킹</strong>
-<select aria-label="검토점수 랭킹 단위" id="ai-score-level-select">
+<strong>가격 비교점수 랭킹</strong>
+<select aria-label="가격 비교점수 랭킹 단위" id="ai-score-level-select">
 <option value="gu">시군구</option>
 <option value="dong">읍면동</option>
 </select>
@@ -217,7 +217,7 @@
 </div>
 <div class="growth-ranking-filters">
 <input id="ai-score-search-input" placeholder="지역 검색" type="search"/>
-<input id="ai-score-min-input" placeholder="검토점수 하한" step="0.1" type="number"/>
+<input id="ai-score-min-input" placeholder="가격 비교점수 하한" step="0.1" type="number"/>
 </div>
 <ol class="growth-ranking-list" id="ai-score-ranking-list"></ol>
 </section></details></aside>

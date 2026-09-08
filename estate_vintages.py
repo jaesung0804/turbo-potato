@@ -19,12 +19,23 @@ def advance(previous, rows, observed_at):
     """Keep count changes for indistinguishable public rows, including removals.
 
     The source has no stable transaction ID. A correction is a removed row plus
-    a new row; we do not invent a physical-unit link. Unchanged polls add nothing.
+    a new row; we do not invent a physical-unit link. Every completed poll keeps
+    its precise timestamp, even when the public rows did not change.
     """
     observed_at=utc_timestamp(observed_at)
-    ledger=json.loads(json.dumps(previous)) if previous else {'schema_version':1,'baseline_at':observed_at,'records':{}}
-    latest=max([ledger['baseline_at']]+[r['changes'][-1][0] for r in ledger['records'].values()])
-    if observed_at<latest:raise ValueError('Observation revisions must advance in time')
+    ledger=json.loads(json.dumps(previous)) if previous else {'schema_version':2,'baseline_at':observed_at,'records':{},
+        'observation_times':[observed_at],'observation_times_complete_since':observed_at}
+    latest=max([ledger['baseline_at']]+ledger.get('observation_times',[])+
+        [r['changes'][-1][0] for r in ledger['records'].values()],key=datetime.fromisoformat)
+    if datetime.fromisoformat(observed_at)<datetime.fromisoformat(latest):raise ValueError('Observation revisions must advance in time')
+    if 'observation_times' not in ledger:
+        # Old ledgers omitted unchanged polls. Preserve only known complete polls;
+        # never invent daily polling history while upgrading a schema-1 archive.
+        ledger['observation_times']=[ledger['baseline_at']]
+        ledger['observation_times_complete_since']=observed_at
+    ledger['schema_version']=2
+    if observed_at not in ledger['observation_times']:
+        ledger['observation_times'].append(observed_at)
     counts=Counter(row_id(r) for r in rows)
     values={row_id(r):r for r in rows}
     for key in sorted(set(ledger['records'])|set(counts)):
@@ -33,7 +44,7 @@ def advance(previous, rows, observed_at):
         if rec is None:
             ledger['records'][key]={'row':values[key],'changes':[[observed_at,count]]}
         elif rec['changes'][-1][1]!=count:
-            if observed_at<=rec['changes'][-1][0]:raise ValueError('Observation revisions must advance in time')
+            if datetime.fromisoformat(observed_at)<=datetime.fromisoformat(rec['changes'][-1][0]):raise ValueError('Observation revisions must advance in time')
             rec['changes'].append([observed_at,count])
     return ledger
 

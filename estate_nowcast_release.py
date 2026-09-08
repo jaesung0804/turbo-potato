@@ -1,7 +1,6 @@
-"""Publish the validated monthly valuation alongside the annual ranking model.
+"""Publish monthly valuation and its canonical current price comparison.
 
-Annual scores/intervals keep their original target. Asking-price comparisons use
-this conditional monthly value, with explicit history and floor provenance.
+Old annual scores remain in the payload for audit; they are not current scores.
 """
 import hashlib
 import json
@@ -12,6 +11,7 @@ import numpy as np
 import pandas as pd
 
 from estate_nowcast import load_transactions, predict_sample
+from estate_valuation import attach_current_comparisons, canonical_price
 
 ARTIFACT = Path('metadata/nowcast_2026.joblib')
 MANIFEST = Path('metadata/nowcast_2026.json')
@@ -29,9 +29,12 @@ def attach_nowcast(model, source, artifact_path=ARTIFACT, manifest_path=MANIFEST
             'available_types': 0, 'total_types': len(model['recommendations'])}
     for rec in model['recommendations']:
         rec.pop('current_valuation', None)
+        rec.pop('valuation_comparison', None)
     model['nowcast'] = meta
     if not supported:
-        return model
+        for rec in model['recommendations']:
+            rec['current_valuation'] = {'status': 'unsupported_period'}
+        return attach_current_comparisons(model)
     artifact = joblib.load(artifact_path)
     if artifact['trained_through'] != spec['trained_through']:
         raise ValueError('Monthly valuation training date mismatch')
@@ -39,7 +42,8 @@ def attach_nowcast(model, source, artifact_path=ARTIFACT, manifest_path=MANIFEST
     origin = pd.Period(month).start_time
     known = set(d.loc[d.date < origin, 'key'])
     sample = [{'key': r['building_key']} for r in model['recommendations'] if r['building_key'] in known]
-    predicted = predict_sample(d, sample, artifact, month) if sample else pd.DataFrame()
+    predicted = predict_sample(d, sample, artifact, month,
+                               int(spec.get('assumed_reporting_lag_days', 31))) if sample else pd.DataFrame()
     by_key = {r['key']: r for r in predicted.to_dict('records')}
     for rec in model['recommendations']:
         r = by_key.get(rec['building_key'])
@@ -47,7 +51,8 @@ def attach_nowcast(model, source, artifact_path=ARTIFACT, manifest_path=MANIFEST
             rec['current_valuation'] = {'status': 'insufficient_history'}
             continue
         rec['current_valuation'] = {
-            'status': 'available', 'price_billion': float(r['estimated_price_oku']),
+            'status': 'available', 'price_billion': canonical_price(r['estimated_price_oku']),
+            'raw_price_billion': float(r['estimated_price_oku']),
             'month': month, 'feature_cutoff': r['feature_cutoff'],
             'floor': float(r['floor']) if np.isfinite(r['floor']) else None,
             'recent_trade_count': int(r['n90']),
@@ -57,4 +62,4 @@ def attach_nowcast(model, source, artifact_path=ARTIFACT, manifest_path=MANIFEST
             'score_error_scale': spec['score_error_scale'],
         }
         meta['available_types'] += 1
-    return model
+    return attach_current_comparisons(model)

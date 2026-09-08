@@ -1,0 +1,68 @@
+name: Collect older history for five-year potential research
+on:
+  workflow_dispatch:
+  push:
+    branches: [codex/estate-five-year-history]
+    paths:
+      - collect_estate_older_history.py
+      - .github/workflows/research-five-year.yml
+permissions:
+  contents: write
+concurrency:
+  group: estate-five-year-history
+  cancel-in-progress: false
+jobs:
+  history:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/cache/restore@v4
+        with:
+          path: .work/five-year-history/cache
+          key: estate-older-history-v1-${{ github.run_id }}-${{ github.run_attempt }}
+          restore-keys: estate-older-history-v1-
+      - name: Collect 2006–2015 Seoul and Gwangmyeong sales
+        env:
+          MOLIT_API_KEY: ${{ secrets.MOLIT_API_KEY }}
+        run: python collect_estate_older_history.py
+      - name: Preserve complete older research input separately
+        env:
+          SNAPSHOT_ID: ${{ github.run_id }}-${{ github.run_attempt }}
+        run: |
+          set -euo pipefail
+          state_dir=.work/older-history-state
+          if git ls-remote --exit-code --heads origin estate-history-extended-state > /dev/null; then
+            git fetch origin estate-history-extended-state
+            git worktree add --detach "$state_dir" FETCH_HEAD
+          else
+            git worktree add --detach "$state_dir" "$GITHUB_SHA"
+            git -C "$state_dir" checkout --orphan estate-history-extended-state
+            git -C "$state_dir" rm -rf --quiet .
+          fi
+          snapshot_dir="$state_dir/snapshots/$SNAPSHOT_ID"
+          mkdir -p "$snapshot_dir"
+          cp .work/five-year-history/research-older-history.csv.gz "$snapshot_dir/"
+          cp .work/five-year-history/research-older-history.json "$snapshot_dir/"
+          cp "$snapshot_dir"/* "$state_dir/"
+          git -C "$state_dir" config user.name 'github-actions[bot]'
+          git -C "$state_dir" config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git -C "$state_dir" add research-older-history.csv.gz research-older-history.json "snapshots/$SNAPSHOT_ID"
+          git -C "$state_dir" commit -m 'Preserve complete 2006–2015 research sales with immutable run snapshot'
+          git -C "$state_dir" push origin HEAD:estate-history-extended-state
+      - uses: actions/cache/save@v4
+        if: always()
+        with:
+          path: .work/five-year-history/cache
+          key: estate-older-history-v1-${{ github.run_id }}-${{ github.run_attempt }}
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: older-research-sales-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            .work/five-year-history/research-older-history.csv.gz
+            .work/five-year-history/research-older-history.json
+          retention-days: 90
