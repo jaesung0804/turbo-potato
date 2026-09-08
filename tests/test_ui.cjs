@@ -41,6 +41,15 @@ assert.equal(evaluate('canonicalPrice(.51815)'),.5182);
 assert.equal(evaluate('priceBillion({metrics:{price_billion:{avg:12,median:10}}})'),10);
 for(let p=1;p<20;p+=.125){context.p=p;assert.ok(evaluate('reviewScoreAtPrice(priceRec,p)>=reviewScoreAtPrice(priceRec,p+.125)'));}
 assert.equal(evaluate('askingPriceResult(priceRec,"10")').includes('50점 기준가와 같습니다.'),true);
+assert.match(evaluate('householdEvidenceNote({households_verified:true,household_observed_at:"2026-09-08",household_source_url:"https://example.gov/official"})'),/공식 단지 전체 세대수/);
+assert.match(evaluate('householdEvidenceNote({households_verified:false})'),/기존 시설 자료/);
+evaluate(`globalThis.savedRecommendationForItem=aiRecommendationForItem;
+aiRecommendationForItem=()=>({price_billion:99,current_valuation:{status:'available',price_billion:10,month:'2026-09',feature_cutoff:'2026-08-01',recent_trade_count:0,score_error_scale:.2},valuation_comparison:{status:'no_recent_transactions'},recent_price_comparison:{window_start:'2026-06-10',window_end:'2026-09-07',data_through:'2026-09-07',trade_count:0}});
+globalThis.emptyWindowPanel=askingPricePanel({region:{code:'test'},building:{key:'test'}});
+aiRecommendationForItem=savedRecommendationForItem;`);
+assert.match(evaluate('emptyWindowPanel'),/연간 중앙가로 대체하지 않습니다/);
+assert.match(evaluate('emptyWindowPanel'),/id="asking-price-input"[^>]*value=""/);
+assert.match(evaluate('emptyWindowPanel'),/50점 가격 넣기/);
 
 // Selecting B while the shared transaction ledger loads for A must refresh B.
 evaluate(`globalThis.originalRenderSelectedRegion=renderSelectedRegion;globalThis.renderedSelections=[];renderSelectedRegion=()=>renderedSelections.push(state.selectedTypeId);state.selectedTypeId='A';state.transactionLoading=true;state.selectedTypeId='B';settleTransactionValuations();`);
@@ -52,7 +61,9 @@ assert.deepEqual(Array.from(evaluate('renderedSelections')),['B','B']);
 evaluate(`state.selectedTypeId=null;settleTransactionValuations();renderSelectedRegion=originalRenderSelectedRegion;`);
 assert.equal(evaluate('renderedSelections.length'),2);
 
-// Changing the sorting metric cannot hide unscored listings or CSV rows.
+// The explicit all-evidence view preserves unscored listings and CSV rows.
+assert.equal(evaluate('state.recentEvidenceOnly'),true);
+evaluate('state.recentEvidenceOnly=false;');
 evaluate(`state.summary={years:['2026','2025','2024'],generated_at:'2026-09-04',regions:[
  {code:'1',sido_name:'서울특별시',gu_code:'a',gu_name:'구',dong_name:'동',loadedBucket:{addresses:[
  {key:'lot1|84.91',complex_key:'lot1',building_name:'같은이름',area_type:'84.91㎡',count:1,metrics:{price_billion:{avg:10},area_pyeong:{avg:25},price_per_pyeong:{avg:4000}}},
@@ -87,6 +98,21 @@ evaluate(`state.minReviewScore=null;`);assert.equal(evaluate('typeItems().length
 evaluate(`state.year='2026';state.minReviewScore=65;state.search='84.91';`);
 assert.equal(evaluate('typeItems().length'),0);
 evaluate(`state.search='';state.minReviewScore=null;state.summary.regions[0].loadedBucket.addresses.pop();state.view=null;`);
+// Default evidence requires both the model history and the price window. Its
+// explicit release restores all types; sparse history never changes the score.
+evaluate(`state.recommendationByType.get('1|lot1|84.91').current_valuation={status:'available',price_billion:10,recent_trade_count:3,score_error_scale:.2};
+state.recommendationByType.get('1|lot1|84.91').valuation_comparison.comparison_trade_count=3;
+state.recommendationByType.get('1|lot2|84.92').current_valuation={status:'available',price_billion:10,recent_trade_count:0,score_error_scale:.2};
+state.recommendationByType.get('1|lot2|84.92').valuation_comparison.comparison_trade_count=10;
+state.recentEvidenceOnly=true;`);
+assert.equal(evaluate('typeItems().length'),1);
+assert.equal(evaluate('typeItems()[0].building.key'),'lot1|84.91');
+assert.equal(evaluate('state.recommendationByType.get("1|lot2|84.92").valuation_comparison.score'),65);
+evaluate(`state.recentEvidenceOnly=false;state.minPriceBillion=9.5;`);
+assert.equal(evaluate('typeItems().length'),0,'Budget must use the same recent comparison price of 9, not annual 10/11');
+evaluate(`state.minPriceBillion=8;`);
+assert.equal(evaluate('typeItems().length'),2);
+evaluate(`state.minPriceBillion=null;`);
 evaluate(`state.year='2025';state.metric='ai_score';state.regionValueCache.clear();`);
 assert.equal(evaluate('groupedBuildings().length'),2);
 assert.equal(evaluate('buildingAge({built_year:2000})'),25);

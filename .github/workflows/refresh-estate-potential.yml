@@ -1,0 +1,86 @@
+name: Refresh immutable monthly potential research
+on:
+  schedule:
+    - cron: '0 5 10 * *'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: estate-raw-data-update
+  cancel-in-progress: false
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Restore the immutable research archive
+        run: |
+          set -euo pipefail
+          potential_state_dir=.work/potential-state
+          if git ls-remote --exit-code --heads origin estate-potential-state > /dev/null; then
+            git fetch origin estate-potential-state
+            git worktree add --detach "$potential_state_dir" FETCH_HEAD
+          else
+            git worktree add --detach "$potential_state_dir" "$GITHUB_SHA"
+            git -C "$potential_state_dir" checkout --orphan estate-potential-state
+            git -C "$potential_state_dir" rm -rf --quiet .
+          fi
+          python refresh_estate_potential.py bootstrap --state-dir "$potential_state_dir"
+      - name: Check whether this month is already frozen
+        id: plan
+        run: |
+          python - <<'PY' >> "$GITHUB_OUTPUT"
+          from pathlib import Path
+          from refresh_estate_potential import month_origin, read_state
+          state = read_state(Path('.work/potential-state'))
+          needed = month_origin()[:7] not in state['snapshots']
+          print('needs_refresh=' + str(needed).lower())
+          PY
+      - name: Install fixed research dependencies
+        if: steps.plan.outputs.needs_refresh == 'true'
+        run: pip install -r requirements-nowcast.txt
+      - name: Restore verified current sales and original 2016–2020 history
+        if: steps.plan.outputs.needs_refresh == 'true'
+        id: sources
+        run: |
+          set -euo pipefail
+          git fetch origin estate-raw-state estate-history-state
+          git worktree add --detach .work/raw-state origin/estate-raw-state
+          git worktree add --detach .work/history-state origin/estate-history-state
+          python raw_estate_state.py restore --state-dir .work/raw-state
+          echo "raw_commit=$(git -C .work/raw-state rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+          echo "history_commit=$(git -C .work/history-state rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+      - name: Revalidate and freeze the current month or keep the existing snapshot
+        id: refresh
+        # Allow verified last-attempt status to be saved before failing the job.
+        continue-on-error: true
+        run: |
+          python refresh_estate_potential.py refresh --state-dir .work/potential-state --history-state .work/history-state --raw-state-commit '${{ steps.sources.outputs.raw_commit }}' --history-state-commit '${{ steps.sources.outputs.history_commit }}'
+      - name: Preserve verified forecasts and the latest successful pointer
+        if: always() && !cancelled() && steps.refresh.outcome != 'skipped'
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+          from refresh_estate_potential import read_state
+          print('Verified latest research month:', read_state(Path('.work/potential-state'))['latest'])
+          PY
+          git -C .work/potential-state config user.name 'github-actions[bot]'
+          git -C .work/potential-state config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git -C .work/potential-state add -A
+          if ! git -C .work/potential-state diff --cached --quiet; then
+            git -C .work/potential-state commit -m 'Preserve immutable monthly potential research and diagnostic status'
+            git -C .work/potential-state push origin HEAD:estate-potential-state
+          fi
+      - name: Verify the public research payload restores exactly
+        if: steps.refresh.outcome == 'success'
+        run: python refresh_estate_potential.py restore --state-dir .work/potential-state --output .work/potential-restored.json.gz --status-output .work/potential-refresh-status.json
+      - name: Report a failed refresh while retaining the prior published cohort
+        if: always() && steps.refresh.outcome == 'failure'
+        run: |
+          echo 'The monthly research refresh failed. The latest successful forecast remains preserved; no new public candidate was promoted.'
+          exit 1

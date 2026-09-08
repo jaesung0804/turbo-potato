@@ -17,6 +17,8 @@ from pathlib import Path
 SCORE_VERSION = 'estate-discount-v1'
 REPLAY_VERSION = 'estate-transaction-replay-v1'
 DEFAULT_REPLAY = Path('metadata/transaction_valuation_2026.json.gz')
+RECENT_COMPARISON_DAYS = 90
+MIN_EXPLORATION_TRADES = 3
 
 
 def _positive(value):
@@ -59,21 +61,80 @@ def compare_price(neutral, price, scale):
             'score_error_scale': float(scale)}
 
 
+def attach_recent_comparison_prices(model, transactions, source_quality=None):
+    """Aggregate the already-loaded clean source over exactly 90 calendar days.
+
+    The end is the last observed contract date, capped at the valuation month.
+    This describes currently published contracts, not their publication dates.
+    Empty windows stay empty; annual medians are never substituted.
+    """
+    import pandas as pd
+
+    if transactions.empty or not transactions.date.notna().any():
+        raise ValueError('Recent comparison requires a dated source to establish its data cutoff')
+    month_end = pd.Period(model['model_month']).end_time.normalize()
+    end = transactions.loc[transactions.date.le(month_end), 'date'].max()
+    if pd.isna(end):
+        raise ValueError('Recent comparison has no dated contracts within the valuation period')
+    end = end.normalize()
+    start = end - pd.Timedelta(days=RECENT_COMPARISON_DAYS - 1)
+    window = transactions.loc[transactions.date.between(start, end)]
+    grouped = window.groupby('key', sort=False).agg(
+        trade_count=('price_oku', 'size'), median_price_billion=('price_oku', 'median'),
+        first_contract_date=('date', 'min'), last_contract_date=('date', 'max'))
+    basis = {'window_days': RECENT_COMPARISON_DAYS, 'window_start': str(start.date()),
+             'window_end': str(end.date()), 'data_through': str(end.date()),
+             'end_basis': 'latest_observed_contract_date_capped_at_valuation_month',
+             'inclusive_boundaries': True}
+    rows = grouped.to_dict('index')
+    for rec in model['recommendations']:
+        row = rows.get(rec['building_key'])
+        recent = {**basis, 'status': 'no_recent_transactions', 'trade_count': 0,
+                  'median_price_billion': None, 'first_contract_date': None,
+                  'last_contract_date': None}
+        if row:
+            recent.update(status='available', trade_count=int(row['trade_count']),
+                          median_price_billion=canonical_price(row['median_price_billion']),
+                          first_contract_date=str(row['first_contract_date'].date()),
+                          last_contract_date=str(row['last_contract_date'].date()))
+        rec['recent_price_comparison'] = recent
+    model['recent_price_comparison'] = {**basis,
+        'source_sha256': (source_quality or {}).get('source_sha256'),
+        'source_used_rows': len(transactions), 'window_transactions': len(window),
+        'window_types': len(grouped),
+        'source_note': '최종 공개 자료 중 해제·직거래를 제외한 동일 단지·정확한 면적의 계약일 기준 중앙가입니다. 공개일 기준 집계가 아닙니다.'}
+    return model
+
+
 def attach_current_comparisons(model):
-    """Publish one current score; legacy annual model output is audit only."""
+    """Compare current F50 with the recent window; retain annual stats separately."""
     available = 0
+    recent_evidence = 0
     for rec in model['recommendations']:
         v = rec.get('current_valuation') or {}
+        recent = rec.get('recent_price_comparison') or {}
         comparison = {'status': v.get('status', 'insufficient_history')}
         if v.get('status') == 'available':
-            comparison = compare_price(v.get('price_billion'), rec.get('price_billion'),
+            comparison = compare_price(v.get('price_billion'), recent.get('median_price_billion'),
                                        v.get('score_error_scale'))
+            if recent.get('status') != 'available':
+                comparison = {'status': 'no_recent_transactions'}
             if comparison['status'] == 'available':
-                comparison.update(comparison_kind='annual_median_at_current_valuation',
-                                  comparison_period=str(model['target_year']),
+                enough = (v.get('recent_trade_count', 0) >= MIN_EXPLORATION_TRADES
+                          and recent.get('trade_count', 0) >= MIN_EXPLORATION_TRADES)
+                comparison.update(comparison_kind='recent_90d_median_at_current_valuation',
+                                  comparison_period=f"{recent['window_start']}~{recent['window_end']}",
+                                  comparison_window_start=recent['window_start'],
+                                  comparison_window_end=recent['window_end'],
+                                  comparison_window_days=recent['window_days'],
+                                  comparison_data_through=recent['data_through'],
+                                  comparison_trade_count=recent['trade_count'],
+                                  evidence_level='recent_evidence' if enough else 'sparse_history',
+                                  min_evidence_trades=MIN_EXPLORATION_TRADES,
                                   valuation_month=v['month'], feature_cutoff=v['feature_cutoff'],
                                   model_version=model.get('nowcast', {}).get('version'))
                 available += 1
+                recent_evidence += int(enough)
         rec['valuation_comparison'] = comparison
     model['recommendations'].sort(key=lambda r: (
         r['valuation_comparison']['status'] != 'available',
@@ -81,11 +142,16 @@ def attach_current_comparisons(model):
         r.get('region_code', ''), r['building_key']))
     model['valuation'] = {
         'version': SCORE_VERSION, 'available_types': available,
+        'recent_evidence_types': recent_evidence,
+        'default_evidence_filter': {'min_model_input_trades': MIN_EXPLORATION_TRADES,
+                                    'min_comparison_trades': MIN_EXPLORATION_TRADES},
+        'recent_comparison': model.get('recent_price_comparison'),
         'price_precision_oku': .0001,
         'score_formula': '50 + 40 * tanh(log(F50 / price) / score_error_scale)',
         'score_note': '50점은 표시된 기준가와 같은 가격입니다. 할인율이 클수록 점수가 높으며 거래수는 점수를 낮추지 않고 자료 품질로 따로 표시합니다.',
         'discount_note': '할인율 = (기준가 - 비교가격) / 기준가 × 100. 양수는 기준가보다 낮은 가격입니다.',
-        'comparison_note': '현재 월 기준가와 해당 연도 실거래 중앙가의 현재 시점 비교입니다. 각 계약 당시의 저평가 여부는 계약월별 재평가에서 별도로 산출합니다.',
+        'comparison_note': '현재 월 기준가와 자료마감일까지 최근 90일 실거래 중앙가를 비교합니다. 90일 거래가 없으면 미산출하며 연간 중앙가로 대체하지 않습니다. 각 계약 당시의 저평가 여부는 계약월별 재평가에서 별도로 산출합니다.',
+        'evidence_note': '기본 탐색은 기준가 입력 이력과 비교 90일 거래가 각각 3건 이상인 평형입니다. 3건은 정확도 보장 기준이 아니며, 전체 평형 보기로 희소 자료도 조회할 수 있습니다.',
         'legacy_annual_scores': 'audit_only',
     }
     return model

@@ -13,6 +13,8 @@ from estate_model import run as run_model, VERSION, CANDIDATE_VERSION, SIBLING_V
 from estate_io import write_json
 from estate_nowcast_release import attach_nowcast
 from estate_valuation import build_transaction_replay, attach_transaction_replay
+from estate_research_progress import attach_research_progress
+from collect_verified_households import apply_verified_households
 from shapely.geometry import shape, mapping, box
 from shapely.ops import unary_union
 
@@ -105,6 +107,7 @@ def build(source, output, model_dir=Path('models'), month=None, summary_path=Non
     if require_complete and summary['total_rows'] != collection['rows']:
         raise ValueError('The summary does not cover the verified raw row count')
     amenities = apply_amenities(summary)
+    amenities['verified_households'] = apply_verified_households(summary)
     write_json(summary_path, summary)
     del summary
     recommendation_name='recommendations.json' if model_version==VERSION else 'recommendations-'+model_version+'.json'
@@ -143,6 +146,7 @@ def build(source, output, model_dir=Path('models'), month=None, summary_path=Non
         potential = json.loads(gzip.decompress(potential_path.read_bytes()))
         if potential.get('cohort_size') != len(potential.get('rows', [])):
             raise ValueError('Potential candidate coverage is incomplete')
+        potential = attach_research_progress(potential)
         manifest['potential'] = asset(output/'data/bundle', 'potential', potential)
     if not all(c['complete'] for c in manifest['coverage'].values()):
         raise ValueError('A source partition was truncated; publication refused')

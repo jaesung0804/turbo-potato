@@ -35,6 +35,11 @@ assert.ok(run('Potential.fiveYearHtml(data.five_year_validation)').includes('740
 assert.ok(run('Potential.fiveYearHtml(data.five_year_validation)').includes('-0.65%'));
 assert.ok(run('Potential.fiveYearHtml(data.five_year_validation)').includes('+1.00%'));
 assert.ok(run('Potential.fiveYearHtml(data.five_year_validation)').includes('18~24개월 모델을 유지'));
+assert.equal(run('Potential.pathValidationHtml(null)'),'');
+context.pathResult={passed:false,model_test_origins:17,by_horizon:[24,36,48,60].map(h=>({horizon_months:h,common_eligible_origins:1,model_equal_origin_mean_median_excess_pct:null,baseline_equal_origin_mean_median_excess_pct:{laggard:null}}))};
+assert.ok(run('Potential.pathValidationHtml(pathResult)').includes('실험 완료 · 사전 기준 미통과'));
+assert.ok(run('Potential.pathValidationHtml(pathResult)').includes('표본 부족'));
+assert.ok(run('Potential.pathValidationHtml(pathResult)').includes('실제 매매차익'));
 
 const malicious=run('Potential.rowHtml({...data.rows[0],name:"<img src=x onerror=alert(1)>"},data,true)');assert.ok(!malicious.includes('<img'));
 const ids=new Set([...page.matchAll(/\bid="([^"]+)"/g)].map(m=>m[1]));assert.equal(ids.size,[...page.matchAll(/\bid="([^"]+)"/g)].length);

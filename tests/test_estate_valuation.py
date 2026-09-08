@@ -6,7 +6,7 @@ import pandas as pd
 import pytest
 
 from estate_valuation import (
-    attach_current_comparisons, attach_transaction_replay, canonical_price,
+    attach_current_comparisons, attach_recent_comparison_prices, attach_transaction_replay, canonical_price,
     compare_price, replay_transactions, score_at_price,
 )
 
@@ -24,6 +24,9 @@ def test_reported_neutral_price_reentry_and_user_regression():
 
 def test_one_current_score_independent_of_old_annual_score_and_sample_quality():
     base = {'building_key': 'a', 'price_billion': .52, 'house_match_score': 83.4,
+            'recent_price_comparison': {'status': 'available', 'median_price_billion': .52,
+                'window_start': '2026-06-10', 'window_end': '2026-09-07',
+                'data_through': '2026-09-07', 'window_days': 90, 'trade_count': 3},
             'neutral_price_billion': 2.5, 'current_valuation': {
                 'status': 'available', 'price_billion': .5181, 'month': '2026-09',
                 'feature_cutoff': '2026-08-01', 'score_error_scale': .08094263165106064,
@@ -40,6 +43,59 @@ def test_one_current_score_independent_of_old_annual_score_and_sample_quality():
     attach_current_comparisons(model)
     assert base['valuation_comparison'] == {'status': 'insufficient_history'}
     assert model['valuation']['available_types'] == 0
+
+
+def test_recent_comparison_uses_exact_inclusive_90_days_and_never_annual_fallback():
+    d = pd.DataFrame({'key': ['a', 'a', 'a', 'empty'],
+        'date': pd.to_datetime(['2026-06-09', '2026-06-10', '2026-09-07', '2026-01-01']),
+        'price_oku': [100, .5, .54, 1]})
+    valuation = {'status': 'available', 'price_billion': .5181, 'month': '2026-09',
+        'feature_cutoff': '2026-08-01', 'recent_trade_count': 3, 'score_error_scale': .08094263165106064}
+    model = {'model_month': '2026-09', 'target_year': '2026', 'recommendations': [
+        {'building_key': 'a', 'price_billion': 100, 'current_valuation': dict(valuation)},
+        {'building_key': 'empty', 'price_billion': .52, 'current_valuation': dict(valuation)}]}
+    attach_recent_comparison_prices(model, d, {'source_sha256': 'source'})
+    attach_current_comparisons(model)
+    a, empty = model['recommendations']
+    assert a['recent_price_comparison'] == {
+        'status': 'available', 'window_days': 90, 'window_start': '2026-06-10',
+        'window_end': '2026-09-07', 'data_through': '2026-09-07',
+        'end_basis': 'latest_observed_contract_date_capped_at_valuation_month',
+        'inclusive_boundaries': True, 'trade_count': 2, 'median_price_billion': .52,
+        'first_contract_date': '2026-06-10', 'last_contract_date': '2026-09-07'}
+    assert a['price_billion'] == 100  # Annual statistics remain separate.
+    assert a['valuation_comparison']['comparison_price_billion'] == .52
+    assert a['valuation_comparison']['score'] == 48.2
+    assert a['valuation_comparison']['evidence_level'] == 'sparse_history'
+    assert empty['recent_price_comparison']['trade_count'] == 0
+    assert empty['valuation_comparison'] == {'status': 'no_recent_transactions'}
+    assert model['valuation']['available_types'] == 1
+    assert model['valuation']['recent_evidence_types'] == 0
+    assert model['valuation']['recent_comparison']['source_sha256'] == 'source'
+    assert score_at_price(empty['current_valuation']['price_billion'], .5181, .08) == 50
+
+
+def test_recent_comparison_never_reads_beyond_valuation_month_and_sparse_filter_keeps_score():
+    d = pd.DataFrame({'key': ['a']*4, 'date': pd.to_datetime(
+        ['2026-07-03', '2026-07-04', '2026-09-30', '2026-10-01']),
+        'price_oku': [.5, .52, .54, 99]})
+    v = {'status': 'available', 'price_billion': .5181, 'month': '2026-09',
+        'feature_cutoff': '2026-08-01', 'recent_trade_count': 3, 'score_error_scale': .08094263165106064}
+    rec = {'building_key': 'a', 'price_billion': 200, 'current_valuation': v}
+    model = {'model_month': '2026-09', 'target_year': '2026', 'recommendations': [rec]}
+    attach_recent_comparison_prices(model, d)
+    attach_current_comparisons(model)
+    c = dict(rec['valuation_comparison'])
+    assert c['comparison_trade_count'] == 3
+    assert c['comparison_window_start'] == '2026-07-03'
+    assert c['comparison_window_end'] == '2026-09-30'
+    assert c['evidence_level'] == 'recent_evidence'
+    assert model['valuation']['recent_evidence_types'] == 1
+    v['recent_trade_count'] = 0
+    attach_current_comparisons(model)
+    assert rec['valuation_comparison']['score'] == c['score']
+    assert rec['valuation_comparison']['evidence_level'] == 'sparse_history'
+    assert model['valuation']['recent_evidence_types'] == 0
 
 
 @pytest.mark.parametrize('invalid', [None, 0, -1, float('nan'), float('inf'), 'bad'])

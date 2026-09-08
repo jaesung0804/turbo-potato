@@ -36,10 +36,22 @@ const Potential = (() => {
     if(!result)return '';
     return `<p>${Number(result.raw_rows_added).toLocaleString('ko-KR')}건의 과거 매매를 추가해 ${Number(result.model_test_origins)}개 판단 시점에서 5년 모형을 시험했습니다. 모델과 단순 소외 후보의 관측 조건을 모두 충족한 시점은 ${Number(result.common_eligible_origins)}개로, 채택에 필요한 ${Number(result.required_common_origins)}개보다 적었습니다.</p><div class="potential-detail-grid"><div><span>공통 유효 시점 · 모델 상대 변화 중앙값</span><strong>${signed(result.model_median_excess_pct)}</strong></div><div><span>같은 시점 · 단순 소외 후보</span><strong>${signed(result.benchmark_median_excess_pct)}</strong></div></div><p>${esc(result.outcome_window)}로 비교한 결과입니다. 현재 후보는 검증 범위가 더 넓은 18~24개월 모델을 유지합니다.</p><p>${esc(result.meaning??'')} ${esc(result.next_direction??'')}</p>`;
   }
+  function pathValidationHtml(result) {
+    if(!result)return '';
+    const rows=result.by_horizon.map(h=>`<tr><th>${h.horizon_months}개월</th><td>${h.common_eligible_origins}개</td><td>${signed(h.model_equal_origin_mean_median_excess_pct)}</td><td>${signed(h.baseline_equal_origin_mean_median_excess_pct.laggard)}</td></tr>`).join('');
+    return `<p><b>${result.passed?'사전 연구 기준 통과 · 운영 순위는 별도 검증 후 변경':'실험 완료 · 사전 기준 미통과'}</b></p><p>같은 후보를 미리 선택하고 24·36·48·60개월마다 직전 12개월 거래가격을 확인했습니다. ${result.model_test_origins}개 판단 시점의 모형을 시험했으며, 결과가 없는 후보를 실패나 수익률 0으로 채우지 않았습니다.</p><div class="table-scroll"><table><thead><tr><th>확인 시점</th><th>공통 관측 조건 충족 · 최소6개 필요</th><th>모형 상대 변화</th><th>단순 소외 후보</th></tr></thead><tbody>${rows}</tbody></table></div><p>표는 공통 관측 조건을 충족한 시점별 단지 중앙값을 같은 비중으로 평균한 값입니다. 확인 가능한 후보만의 결과이며, 실제 매매차익이나 독립적인 시장 국면 수를 뜻하지 않습니다.</p><p>상대 10% 이상이 처음 관측된 체크포인트도 보조 분석했습니다. 관측 공백과 미확인 후보를 보존하며, 5년 안의 최고가에 팔았다고 가정하지 않습니다. 이 실험의 점수를 현재 18~24개월 후보에 합산하지 않았습니다.</p>`;
+  }
   function renderInfo(data){
     document.getElementById('potential-origin').textContent=data.origin;
     document.getElementById('five-year-validation').hidden=!data.five_year_validation;
     document.getElementById('five-year-results').innerHTML=fiveYearHtml(data.five_year_validation);
+    document.getElementById('path-validation').hidden=!data.path_validation;
+    document.getElementById('path-results').innerHTML=pathValidationHtml(data.path_validation);
+    const refresh=data.refresh;
+    document.getElementById('potential-refresh').textContent=refresh?'후보는 월별로 보존하며 매월 10일 14:00(한국시간)에 갱신을 시도합니다. 같은 달 예측은 덮어쓰지 않고, 검증 실패 시 이전 공개 후보를 유지합니다.':'이 판단일의 고정 연구 후보입니다. 새 후보의 갱신 상태를 확인하려면 산출 시각을 함께 보세요.';
+    const households=data.household_register;
+    document.getElementById('household-register').hidden=!households;
+    document.getElementById('household-register-status').textContent=households?`공식 단지 ID ${households.official_complexes.toLocaleString('ko-KR')}개, 양수 전체 세대수 ${households.positive_households.toLocaleString('ko-KR')}개를 확보했습니다. ${households.meaning}`:'';
     document.getElementById('potential-cutoff').textContent=data.feature_cutoff;
     document.getElementById('potential-total').textContent=data.cohort_size.toLocaleString('ko-KR');
     document.getElementById('potential-status').textContent=`판단 기준일 ${data.origin} · 실제 산출 ${new Date(data.created_at).toLocaleString('ko-KR',{timeZone:'Asia/Seoul',hour12:false})} (한국시간). 서울·광명, 같은 면적의 180일 매매 3건 이상인 후보를 고정해 표시합니다.`;
@@ -73,6 +85,6 @@ const Potential = (() => {
     const data=await DashboardData.compressed(manifest.potential);if(data.schema_version!==1||!Array.isArray(data.rows)||data.rows.length!==data.cohort_size)throw Error('후보 자료 건수가 일치하지 않습니다.');
     state.data=data;renderInfo(data);render(true);
   }
-  return {init,filterRows,rowHtml,number,signed,fiveYearHtml};
+  return {init,filterRows,rowHtml,number,signed,fiveYearHtml,pathValidationHtml};
 })();
 Potential.init().catch(error=>{document.getElementById('potential-status').textContent=error.message;});

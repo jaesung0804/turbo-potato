@@ -36,6 +36,14 @@ const run=s=>vm.runInContext(s,context);
   console.log(`Separate potential cohort verified: ${potential.cohort_size} types.`);
  }
  await run('state.dataStore.ensureHistory()');
+ context.latestPeriod=manifest.default_year;
+ await run('state.dataStore.loadPeriod(latestPeriod)');
+ run('state.year=latestPeriod;state.regionValueCache.clear();');
+ assert.equal(run('typeItems().length'),manifest.model.valuation.recent_evidence_types,
+   'The default view must include exactly the types with recent price and model evidence');
+ assert.ok(run('typeItems().every(x=>{const r=aiRecommendationForItem(x);return r.current_valuation.recent_trade_count>=3&&r.recent_price_comparison.trade_count>=3;})'),
+   'Default candidates must have at least three recent observations on both sides');
+ run('state.recentEvidenceOnly=false;state.regionValueCache.clear();');
  for(const year of (origin?[manifest.default_year]:Object.keys(manifest.periods))){
   context.period=year;await run('state.dataStore.loadPeriod(period)');run('state.year=period;state.regionValueCache.clear();');
   for(const metric of ['price_billion','ai_score','yoy_rate']){
