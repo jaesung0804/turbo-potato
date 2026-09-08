@@ -3,6 +3,11 @@ import gzip,hashlib,json,os
 from pathlib import Path
 METRICS=['price_billion','area_pyeong','price_per_pyeong'];STATS=['avg','median','min','max']
 def compact(metrics):return [metrics.get(k,{}).get(s) for k in METRICS for s in STATS]
+def recommendation_value(rec, field):
+    value = rec.get(field)
+    if field == 'transaction_valuation' and isinstance(value, dict):
+        return {key: item for key, item in value.items() if key not in {'monthly', 'recent_transactions'}}
+    return value
 def asset(root,name,value):
     body=gzip.compress(json.dumps(value,ensure_ascii=False,separators=(',',':'),allow_nan=False).encode(),mtime=0)
     h=hashlib.sha256(body).hexdigest();filename=f'{name}.{h[:16]}.json.gz'
@@ -31,11 +36,12 @@ def build_bundle(summary,model,root,map_data):
         source=sum(r[1] for r in rs);represented=sum(row[1] for r in rs for row in r[3])
         coverage[year]={'source_trades':source,'represented_trades':represented,'available_types':sum(len(r[3]) for r in rs),
             'unrepresented_trades':source-represented,'complete':source==represented}
-    recommendation_fields=['price_billion','price_per_pyeong','area_pyeong','trade_count','prior_price_per_pyeong',
-        'fair_price_per_pyeong','reference_low','reference_high','house_match_score','sample_confidence','undervalue_pct','quality_flags','expected_growth_pct',
-        'neutral_price_billion','score_error_scale','reference_basis','current_valuation']
+    # Annual reference fields remain in the model audit export, not in the
+    # initial browser payload: the UI consumes only the current price contract.
+    recommendation_fields=['price_billion','price_per_pyeong','area_pyeong','trade_count','current_valuation',
+        'valuation_comparison','transaction_valuation']
     packed_model={'encoding':'catalog-v1','metadata':{k:v for k,v in model.items() if k!='recommendations'},'fields':recommendation_fields,
-        'rows':[[recommendation_catalog[(r['region_code'],r['building_key'])],r['region_code'],*[r.get(k) for k in recommendation_fields]] for r in model['recommendations']]}
+        'rows':[[recommendation_catalog[(r['region_code'],r['building_key'])],r['region_code'],*[recommendation_value(r,k) for k in recommendation_fields]] for r in model['recommendations']]}
     manifest={'schema_version':1,'generated_at':summary.get('data_through',summary['generated_at']),
         'built_at':summary['generated_at'],'code_commit':os.getenv('GITHUB_SHA'),'source':summary['source'],
         'years':summary['years'],'default_year':max(summary['years'],key=int),'coverage':coverage,

@@ -10,12 +10,9 @@ async function loadGuide(){
  }else document.getElementById('market-research-status').textContent='추가 실험 결과가 아직 이 배포본에 포함되지 않았습니다.';
  document.getElementById('model-status').textContent=`${m.model.model_version} · 모델 ${m.model.model_month} · 학습 ${m.model.trained_through}까지 · 거래자료 ${m.generated_at}`;
  if(m.model.nowcast){
-  const n=m.model.nowcast,section=document.createElement('section');
-  section.className='analysis-panel';
-  const heading=document.createElement('h2');heading.textContent='최근 실거래 기반 호가 비교';
-  const detail=document.createElement('p');detail.textContent=`${n.version} · ${n.month}월 · ${n.available_types.toLocaleString('ko-KR')} / ${n.total_types.toLocaleString('ko-KR')}개 평형 산출. ${n.note} 목록 점수·기존 검증표는 연간 모델이며, 최근 50점 가격은 호가 비교에 사용합니다.`;
-  const validation=document.createElement('p');validation.textContent='별도 시계열 검증 325,084건에서 거래당 총액 평균 절대오차: 2025년 0.8714억 → 0.4335억, 2026년 3~7월 0.7521억 → 0.5142억. 실제 거래 층을 입력한 검증이며 대표 층 가격의 정확도나 미래 수익률을 보장하지 않습니다. 호가는 학습 정답으로 쓰지 않았고, 세대수 대비 회전율은 검증된 이력이 없어 제외했습니다. 1~2월과 2027년 이후는 재검증 전 연간 가격으로 대체합니다.';
-  section.append(heading,detail,validation);document.getElementById('model-status').after(section);
+  const n=m.model.nowcast;
+  document.getElementById('model-status').textContent=`현재 가격 ${n.version} · ${n.month}월 · 거래자료 ${m.generated_at} · 이전 연간 기록 ${m.model.model_version}`;
+  document.getElementById('nowcast-info').innerHTML=`<p class="score-note">월별 기준가 ${f(n.available_types)} / ${f(n.total_types)}개 평형 산출. 산출되지 않은 평형은 점수를 비워 둡니다. 가격 비교의 기준가는 연간 가격으로 대체하지 않습니다.</p><p class="score-note">325,084건 별도 시계열 검증에서 총액 평균 절대오차: 2025년 0.8714억 → 0.4335억, 2026년 3~7월 0.7521억 → 0.5142억. 실제 거래 층 기준 검증이며, 상세 화면에서 현재 대표 층과 최근 계약의 실제 층을 구분합니다.</p>`;
  }
  if(m.model.model_version==='estate-reference-v4')document.getElementById('reference-method').textContent='v4 모델입니다. 동일 평형 전년도 가격 → 최근 3년 이력 → 유사 면적의 동·구·시도 가격 → 기존 주변 가격 순으로 비교 기준을 보완합니다. LightGBM은 이 기준에서의 가격 차이를 학습하고, 이전 연도에서 혼합 비중을 선택합니다. 모델은 버전·월별로 고정됩니다.';
  const folds=m.model.validation;
@@ -29,7 +26,7 @@ async function loadGuide(){
  document.getElementById('validation-rows').innerHTML=folds.map(v=>`<tr><th>${v.test_year}</th><td>${f(v.model.rows)}</td><td>${f(v.model.mae_price_per_pyeong)}</td><td>${f(v.baseline.mae_price_per_pyeong)}</td><td>${f(v.model.median_absolute_pct_error)}%</td><td>${pct(v.model.within_20pct)}</td><td>${pct(v.interval_actual_coverage)}</td></tr>`).join('');
  document.getElementById('validation-regions').innerHTML=folds.map(v=>`<details><summary>${v.test_year} 지역별 오차 · 학습 비중 ${pct(v.ml_weight)}</summary><div class="table-scroll"><table><thead><tr><th>지역</th><th>표본</th><th>MAE (만원/평)</th><th>중앙 오차율</th><th>±20% 이내</th></tr></thead><tbody>${Object.entries(v.regions).map(([s,x])=>`<tr><th>${esc(s)}</th><td>${f(x.rows)}</td><td>${f(x.mae_price_per_pyeong)}</td><td>${f(x.median_absolute_pct_error)}%</td><td>${pct(x.within_20pct)}</td></tr>`).join('')}</tbody></table></div></details>`).join('');
  const better=folds.filter(v=>v.model.mae_price_per_pyeong<v.baseline.mae_price_per_pyeong).length;
- document.getElementById('model-comparison').textContent=`${folds.length}개 시험 연도 중 ${better}개에서 학습 보정을 적용하지 않은 비교 기준보다 MAE가 낮았습니다. 현재 월의 ML 혼합 비중은 ${pct(m.model.ml_weight)}입니다. 미래 성능의 보장은 아닙니다.`;
+ document.getElementById('model-comparison').textContent=`${folds.length}개 시험 연도 중 ${better}개에서 학습 보정을 적용하지 않은 비교 기준보다 MAE가 낮았습니다. 해당 연간 모델의 ML 혼합 비중은 ${pct(m.model.ml_weight)}입니다. 미래 성능의 보장은 아닙니다.`;
  document.getElementById('coverage-rows').innerHTML=Object.entries(m.coverage).sort(([a],[b])=>a==='all'?-1:b==='all'?1:Number(b)-Number(a)).map(([year,c])=>`<tr><th>${year==='all'?'전체':esc(year)}</th><td>${f(c.source_trades)}</td><td>${f(c.represented_trades)}</td><td>${f(c.available_types)}</td><td>${c.complete?'일치':'누락 '+f(c.unrepresented_trades)}</td></tr>`).join('');
  const comparison=m.model_comparison;
  const importance=m.model_importance;

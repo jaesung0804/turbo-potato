@@ -30,6 +30,9 @@ def verify(base, expected_sha, expected_manifest):
         if hashlib.sha256(fetch(urljoin(base, path)+'?verify='+expected_sha)).hexdigest() != sha:
             raise ValueError('Public UI or validation mismatch: '+path)
     assets = [manifest[k] for k in ['catalog', 'history', 'recommendations', 'map']] + list(manifest['periods'].values())
+    for key in ['potential', 'transaction_valuation']:
+        if manifest.get(key):
+            assets.append(manifest[key])
     for asset in assets:
         body = fetch(urljoin(base, asset['url']))
         if len(body) != asset['bytes'] or hashlib.sha256(body).hexdigest() != asset['sha256']:

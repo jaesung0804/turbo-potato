@@ -58,6 +58,13 @@ def test_full_source_area_precision_is_preserved(tmp_path):
     assert any('84.911㎡' in r['key'] for r in rows)
 
 
+def test_low_price_transaction_keeps_manwon_precision(tmp_path):
+    s = make_summary(tmp_path, [trade(THING_AMT='5181')])
+    for bucket in [s['regions'][0]['all'], s['regions'][0]['years']['2025']]:
+        assert bucket['metrics']['price_billion']['median'] == .5181
+        assert bucket['addresses'][0]['metrics']['price_billion']['median'] == .5181
+
+
 @pytest.mark.parametrize('changes', [dict(THING_AMT='NaN'), dict(THING_AMT='inf'), dict(THING_AMT='-1'),
     dict(ARCH_AREA='0'), dict(CTRT_DAY='20250230'), dict(CTRT_DAY='', RCPT_YR='2025'),
     dict(RTRCN_DAY='cancelled'), dict(DCLR_SE='직거래')])
@@ -300,6 +307,24 @@ def test_bundle_preserves_all_source_counts_and_stat_values(tmp_path):
     assert sum(r[1] for r in rows)==sum(a[1] for r in rows for a in r[3])==m['coverage']['2026']['source_trades']
     assert hashlib.sha256(body).hexdigest()==asset['sha256']
     assert rows[0][3][0][2][8]==s['regions'][0]['years']['2026']['addresses'][0]['metrics']['price_per_pyeong']['avg']
+
+
+def test_contract_details_are_not_in_initial_recommendation_payload(tmp_path):
+    s = annual_fixture()
+    detail = {'status': 'available', 'trade_count': 2, 'median_score': 51,
+              'monthly': [{'month': '2026-03'}], 'recent_transactions': [{'score': 51}]}
+    rec = {'region_code': '0', 'building_key': 'lot-0 | 84㎡',
+           'valuation_comparison': {'status': 'available', 'score': 50},
+           'transaction_valuation': detail}
+    manifest = build_bundle(s, {'target_year': '2026', 'recommendations': [rec]},
+                            tmp_path/'data/bundle', {'type': 'FeatureCollection', 'features': []})
+    packed = json.loads(gzip.decompress((tmp_path/manifest['recommendations']['url']).read_bytes()))
+    value = dict(zip(packed['fields'], packed['rows'][0][2:]))
+    assert value['valuation_comparison']['score'] == 50
+    assert value['transaction_valuation']['trade_count'] == 2
+    assert 'monthly' not in value['transaction_valuation']
+    assert 'recent_transactions' not in value['transaction_valuation']
+    assert detail['recent_transactions'] == [{'score': 51}]
 
 
 def test_legacy_amenities_do_not_cross_same_name_lots(tmp_path):

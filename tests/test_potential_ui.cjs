@@ -1,0 +1,46 @@
+// Candidate data semantics, query isolation, complete paging, and CSV scope.
+const assert=require('node:assert/strict'),fs=require('node:fs'),vm=require('node:vm'),zlib=require('node:zlib');
+const context=vm.createContext({console,Map,Set,Number,URL,encodeURIComponent});
+const page=fs.readFileSync('web/potential.html','utf8'),code=fs.readFileSync('web/potential.js','utf8').replace(/Potential\.init\(\)\.catch[\s\S]*$/,'');
+vm.runInContext(fs.readFileSync('web/result-pages.js','utf8')+'\n'+code,context);
+const run=s=>vm.runInContext(s,context);
+const data=JSON.parse(zlib.gunzipSync(fs.readFileSync('metadata/potential_candidates.json.gz')));
+context.data=data;context.filters={search:'',district:'all',min:null,max:null,area:'all',top:100,trades:3,sort:'rank'};
+assert.equal(run('Potential.filterRows(data.rows,filters).length'),data.cohort_size);
+assert.equal(run('Potential.filterRows(data.rows,filters)[0].research_rank'),1);
+const result=run('Potential.filterRows(data.rows,{...filters,top:10})');
+assert.ok(result.length>0 && result.length<data.cohort_size*.11);
+assert.ok(result.every(r=>r.top_percent<=10));
+const stable=run('Potential.filterRows(data.rows,{...filters,lag:"stable"})');
+assert.ok(stable.length>0);assert.ok(stable.every(r=>r.lag_sensitivity.both_top_decile===true));
+assert.equal(stable.length,data.rows.filter(r=>r.lag_sensitivity.both_top_decile===true).length);
+const missingLag=data.rows.find(r=>!r.lag_sensitivity.alternate_eligible);context.missingLag=missingLag;
+assert.ok(run('Potential.rowHtml(missingLag,data,true)').includes('거래 이력 조건을 충족하지 못합니다.'));
+assert.ok(!run('Potential.rowHtml(missingLag,data,true)').includes('0위'));
+
+const district=data.rows[0].gu;context.district=district;
+const regional=run('Potential.filterRows(data.rows,{...filters,district})');
+assert.ok(regional.length>0);assert.ok(regional.every(r=>r.gu===district));
+assert.equal(regional[0].research_rank,1,'Filtering must preserve the global research rank');
+const bounded=run('Potential.filterRows(data.rows,{...filters,min:5,max:10,area:"small",trades:5})');
+assert.ok(bounded.length>0);assert.ok(bounded.every(r=>r.entry_reference_oku>=5&&r.entry_reference_oku<=10&&r.area<=60&&r.entry_n>=5));
+const sorted=run('Potential.filterRows(data.rows,{...filters,sort:"price"})');for(let i=1;i<sorted.length;i++)assert.ok(sorted[i-1].entry_reference_oku<=sorted[i].entry_reference_oku);
+const pages=Math.ceil(data.rows.length/30);const all=[];for(let i=1;i<=pages;i++){context.i=i;all.push(...run('ResultPages.paginate(data.rows,i,30).rows'));}assert.equal(all.length,data.cohort_size);assert.equal(new Set(all.map(r=>r.key)).size,data.cohort_size);
+assert.ok(run('Potential.rowHtml(data.rows[0],data,true)').includes('상위'));
+assert.ok(run('Potential.rowHtml(data.rows[0],data,true)').includes('index.html?search='));
+assert.ok(!run('Potential.rowHtml(data.rows[0],data,false)').includes('예상 상대 가격 변화'));
+assert.equal(run('Potential.signed(null)'),'표본 부족');
+assert.equal(run('Potential.fiveYearHtml(null)'),'');
+assert.ok(run('Potential.fiveYearHtml(data.five_year_validation)').includes('740,326'));
+assert.ok(run('Potential.fiveYearHtml(data.five_year_validation)').includes('-0.65%'));
+assert.ok(run('Potential.fiveYearHtml(data.five_year_validation)').includes('+1.00%'));
+assert.ok(run('Potential.fiveYearHtml(data.five_year_validation)').includes('18~24개월 모델을 유지'));
+
+const malicious=run('Potential.rowHtml({...data.rows[0],name:"<img src=x onerror=alert(1)>"},data,true)');assert.ok(!malicious.includes('<img'));
+const ids=new Set([...page.matchAll(/\bid="([^"]+)"/g)].map(m=>m[1]));assert.equal(ids.size,[...page.matchAll(/\bid="([^"]+)"/g)].length);
+for(const m of code.matchAll(/getElementById\('([^']+)'\)/g))assert.ok(ids.has(m[1]),`Missing potential element ${m[1]}`);
+assert.ok(!code.includes('DashboardData.open('),'Potential page must not fetch the entire valuation catalog');
+assert.ok(code.includes('DashboardData.compressed(manifest.potential)'));
+assert.ok(!page.includes('leaflet'),'Potential page must not load an unused map library');
+assert.ok(page.includes('5년 수익률을 뜻하지 않습니다.'));
+console.log(`Potential UI: ${data.cohort_size} candidates preserved; global ranks, filters, 30-row pages, safe links, separate payload verified.`);

@@ -523,14 +523,14 @@ def calculate_metrics(row: dict[str, str]) -> dict[str, float] | None:
     return metrics
 
 
-def summarize(values: list[float]) -> dict[str, float | None]:
+def summarize(values: list[float], digits: int = 3) -> dict[str, float | None]:
     if not values:
         return {"avg": None, "median": None, "min": None, "max": None}
     return {
-        "avg": round(mean(values), 3),
-        "median": round(median(values), 3),
-        "min": round(min(values), 3),
-        "max": round(max(values), 3),
+        "avg": round(mean(values), digits),
+        "median": round(median(values), digits),
+        "min": round(min(values), digits),
+        "max": round(max(values), digits),
     }
 
 
@@ -809,7 +809,7 @@ def finalize_bucket(
                 "education_facility_count": address.get("education_facility_count"),
                 "latitude": round_metric(address.get("latitude"), 6),
                 "longitude": round_metric(address.get("longitude"), 6),
-                "metrics": {key: summarize(address["metrics"][key]) for key in METRIC_KEYS},
+                "metrics": {key: summarize(address["metrics"][key], 4 if key == 'price_billion' else 3) for key in METRIC_KEYS},
             }
         )
     addresses.sort(key=lambda item: (item["count"], item["metrics"]["price_billion"]["avg"] or 0), reverse=True)
@@ -817,7 +817,7 @@ def finalize_bucket(
     recent = sorted(bucket["recent"], key=lambda item: item.get("contract_day") or "", reverse=True)
     return {
         "count": bucket["count"],
-        "metrics": {key: summarize(bucket["metrics"][key]) for key in METRIC_KEYS},
+        "metrics": {key: summarize(bucket["metrics"][key], 4 if key == 'price_billion' else 3) for key in METRIC_KEYS},
         "addresses": addresses,
         "represented_trades": sum(a["count"] for a in addresses),
         "recent": recent[:recent_limit],

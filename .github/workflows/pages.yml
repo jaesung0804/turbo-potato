@@ -39,8 +39,10 @@ jobs:
           python -m pytest -q tests
           node --check web/app.js
           node --check web/model.js
+          node --check web/potential.js
           node tests/test_ui.cjs
           node tests/test_model_guide.cjs
+          node tests/test_potential_ui.cjs
       - name: Restore checksum-verified complete raw state
         run: |
           set -euo pipefail

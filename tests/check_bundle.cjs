@@ -11,6 +11,30 @@ const run=s=>vm.runInContext(s,context);
  await run(`DashboardData.open().then(s=>{state.dataStore=s;state.summary=s.summary;state.recommendations=s.recommendations;
  state.recommendationByType=new Map(s.recommendations.recommendations.map(r=>[recommendationKey(r.region_code,r.building_key),r]));})`);
  const manifest=JSON.parse(read('data/dashboard_manifest.json'));
+ const scored=run('state.recommendations.recommendations.filter(r=>r.valuation_comparison?.status==="available")');
+ for(const rec of scored){
+  context.rec=rec;
+  assert.equal(run('reviewScoreAtPrice(rec,rec.valuation_comparison.comparison_price_billion)'),rec.valuation_comparison.score,
+    'The displayed transaction price must reproduce the list score');
+  assert.equal(run('reviewScoreAtPrice(rec,rec.valuation_comparison.neutral_price_billion)'),50,
+    'Every displayed neutral price must produce exactly 50');
+ }
+ console.log(`Canonical price/score contract verified for ${scored.length} types.`);
+ if(manifest.transaction_valuation){
+  await run('state.dataStore.ensureTransactionValuations()');
+  const replayed=run('state.recommendations.recommendations.filter(r=>r.transaction_valuation?.status==="available")');
+  assert.ok(replayed.length>0,'The published contract replay cannot be empty');
+  assert.ok(replayed.every(r=>Array.isArray(r.transaction_valuation.monthly)&&Array.isArray(r.transaction_valuation.recent_transactions)),
+    'Every available contract summary must resolve to its lazy detail');
+ }
+ if(manifest.potential){
+  context.potentialAsset=manifest.potential;
+  const potential=await run('DashboardData.compressed(potentialAsset)');
+  assert.equal(potential.rows.length,potential.cohort_size,'Potential cohort must be complete');
+  assert.equal(new Set(potential.rows.map(r=>r.key)).size,potential.cohort_size,'Potential identities must be unique');
+  assert.equal(Math.max(...potential.rows.map(r=>r.research_rank)),potential.cohort_size);
+  console.log(`Separate potential cohort verified: ${potential.cohort_size} types.`);
+ }
  await run('state.dataStore.ensureHistory()');
  for(const year of (origin?[manifest.default_year]:Object.keys(manifest.periods))){
   context.period=year;await run('state.dataStore.loadPeriod(period)');run('state.year=period;state.regionValueCache.clear();');

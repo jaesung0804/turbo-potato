@@ -14,27 +14,43 @@ assert.deepEqual(Array.from(evaluate('Array.from({length:21},(_,i)=>ResultPages.
 assert.equal(evaluate('ResultPages.csvCell("=HYPERLINK(1)")'),'"\'=HYPERLINK(1)"');
 assert.equal(evaluate('ResultPages.escape("<img onerror=x>")'),'&lt;img onerror=x&gt;');
 
-// Counterfactual prices use the frozen model's unrounded anchor and error scale.
-evaluate(`globalThis.priceRec={neutral_price_billion:10,score_error_scale:.2,trade_count:20};`);
+// The same canonical prices must yield the same score everywhere. Sample size
+// describes evidence and must never make an equal-price comparison look cheap.
+evaluate(`globalThis.priceRec={house_match_score:83.4,current_valuation:{status:'available',price_billion:10,effective_sample_size:20,score_error_scale:.2},valuation_comparison:{status:'available',neutral_price_billion:10,comparison_price_billion:10,score:50,discount_pct:0,score_error_scale:.2}};`);
 assert.equal(evaluate('reviewScoreAtPrice(priceRec,10)'),50);
-assert.ok(Math.abs(evaluate('reviewScoreAtPrice(priceRec,10*Math.exp(-.2*Math.atanh(20/(40*.8))))')-70)<1e-10);
+assert.equal(evaluate('reviewScoreAtPrice(priceRec,10*Math.exp(-.2*Math.atanh(.5)))'),70);
 assert.ok(evaluate('reviewScoreAtPrice(priceRec,8)')>50);
 assert.ok(evaluate('reviewScoreAtPrice(priceRec,12)')<50);
 for(const invalid of ['0','-1','NaN','Infinity','null'])assert.equal(evaluate(`reviewScoreAtPrice(priceRec,${invalid})`),null);
-assert.equal(evaluate('reviewScoreAtPrice({...priceRec,trade_count:0},10)'),null);
-assert.equal(evaluate('reviewScoreAtPrice({...priceRec,score_error_scale:null},10)'),null);
-assert.equal(evaluate('neutralPrice({fair_price_per_pyeong:4000,area_pyeong:25})'),10);
+assert.equal(evaluate('reviewScoreAtPrice({...priceRec,current_valuation:{...priceRec.current_valuation,effective_sample_size:0}},10)'),50);
+assert.equal(evaluate('reviewScoreAtPrice({current_valuation:{status:"available",price_billion:10}},10)'),null);
+assert.equal(evaluate('neutralPrice({fair_price_per_pyeong:4000,area_pyeong:25,neutral_price_billion:10,house_match_score:83.4})'),null);
 assert.equal(evaluate('neutralPrice(null)'),null);
 assert.equal(evaluate('colorFor(50,{min:10,mid:50,max:90})'),'rgb(247, 247, 247)');
-evaluate(`globalThis.recentRec={...priceRec,current_valuation:{status:'available',price_billion:12,effective_sample_size:2,score_error_scale:.15}};`);
-assert.equal(evaluate('neutralPrice(recentRec)'),12);
-assert.equal(evaluate('annualNeutralPrice(recentRec)'),10);
-assert.equal(evaluate('reviewScoreAtPrice(recentRec,12)'),50);
-assert.ok(evaluate('reviewScoreAtPrice(recentRec,10)')>50);
-assert.equal(evaluate("neutralPrice({...priceRec,current_valuation:{status:'insufficient_history'}})"),10);
-assert.equal(evaluate("reviewScoreAtPrice({...recentRec,current_valuation:{...recentRec.current_valuation,effective_sample_size:0}},12)"),null);
+evaluate(`globalThis.reportedCase={house_match_score:83.4,current_valuation:{status:'available',price_billion:.518149,effective_sample_size:2,score_error_scale:.15}};`);
+assert.equal(evaluate('neutralPrice(reportedCase)'),.5181);
+assert.equal(evaluate('reviewScoreAtPrice(reportedCase,.5181)'),50);
+assert.ok(evaluate('reviewScoreAtPrice(reportedCase,.52)')<50);
+assert.ok(evaluate('reviewScoreAtPrice(reportedCase,.52)')>48);
+assert.equal(evaluate('reviewScoreAtPrice({...reportedCase,current_valuation:{...reportedCase.current_valuation,effective_sample_size:100}},.52)'),evaluate('reviewScoreAtPrice(reportedCase,.52)'));
+assert.equal(evaluate("neutralPrice({neutral_price_billion:10,current_valuation:{status:'insufficient_history'}})"),null);
 assert.equal(evaluate('totalPriceLabel(.603149)'),'0.6031억');
 assert.equal(evaluate('totalPriceLabel(8.025)'),'8.025억');
+// Display-rounding and monotonicity are shared with Python canonical pricing.
+assert.equal(evaluate('canonicalPrice(.51815)'),.5182);
+assert.equal(evaluate('priceBillion({metrics:{price_billion:{avg:12,median:10}}})'),10);
+for(let p=1;p<20;p+=.125){context.p=p;assert.ok(evaluate('reviewScoreAtPrice(priceRec,p)>=reviewScoreAtPrice(priceRec,p+.125)'));}
+assert.equal(evaluate('askingPriceResult(priceRec,"10")').includes('50점 기준가와 같습니다.'),true);
+
+// Selecting B while the shared transaction ledger loads for A must refresh B.
+evaluate(`globalThis.originalRenderSelectedRegion=renderSelectedRegion;globalThis.renderedSelections=[];renderSelectedRegion=()=>renderedSelections.push(state.selectedTypeId);state.selectedTypeId='A';state.transactionLoading=true;state.selectedTypeId='B';settleTransactionValuations();`);
+assert.deepEqual(Array.from(evaluate('renderedSelections')),['B']);
+assert.equal(evaluate('state.transactionLoading'),false);
+evaluate(`state.transactionLoading=true;settleTransactionValuations({message:'temporary failure'});`);
+assert.equal(evaluate('state.transactionError'),'temporary failure');
+assert.deepEqual(Array.from(evaluate('renderedSelections')),['B','B']);
+evaluate(`state.selectedTypeId=null;settleTransactionValuations();renderSelectedRegion=originalRenderSelectedRegion;`);
+assert.equal(evaluate('renderedSelections.length'),2);
 
 // Changing the sorting metric cannot hide unscored listings or CSV rows.
 evaluate(`state.summary={years:['2026','2025','2024'],generated_at:'2026-09-04',regions:[
@@ -53,8 +69,8 @@ assert.equal(evaluate('typeYoyRateForYears(state.summary.regions[0],typeItems()[
 // borrow a current score for an earlier year or a similarly named apartment.
 evaluate(`state.summary.regions[0].loadedBucket.addresses.push({
  ...state.summary.regions[0].loadedBucket.addresses[0],key:'lot3|84.91',complex_key:'lot3'});
- state.recommendationByType.set('1|lot1|84.91',{house_match_score:64.9,quality_flags:[]});
- state.recommendationByType.set('1|lot2|84.92',{house_match_score:65,quality_flags:[]});
+ state.recommendationByType.set('1|lot1|84.91',{house_match_score:99,valuation_comparison:{status:'available',score:64.9,neutral_price_billion:10,comparison_price_billion:9,score_error_scale:.2},quality_flags:[]});
+ state.recommendationByType.set('1|lot2|84.92',{house_match_score:1,valuation_comparison:{status:'available',score:65,neutral_price_billion:10,comparison_price_billion:9,score_error_scale:.2},quality_flags:[]});
  state.view=null;state.minReviewScore=65;`);
 assert.equal(evaluate('typeItems().length'),1);
 assert.equal(evaluate('typeItems()[0].building.key'),'lot2|84.92');
@@ -84,16 +100,17 @@ const values=Array.from({length:12},(_,i)=>i+1);
 const manifest={schema_version:1,years:['2025','2026'],coverage:{'2025':{available_types:1,source_trades:5,represented_trades:5},'2026':{available_types:1,source_trades:7,represented_trades:7}},
  catalog:asset('catalog',{regions:[{code:'1'}],addresses:[{key:'A',building_name:'끝 단지'}]}),history:asset('history',{}),recommendations:asset('recs',{recommendations:[]}),
  periods:{'2025':asset('2025',[['1',5,values,[[0,5,values]],[]]]),'2026':asset('2026',[['1',7,values,[[0,7,values]],[]]])}};
-let delayed=null,corrupt=false,historyRequests=0;
+manifest.transaction_valuation=asset('transaction-valuations',{schema_version:1,by_key:{'1|A':{status:'available',trade_count:2,recent_transactions:[],monthly:[]}}});
+let delayed=null,corrupt=false,historyRequests=0,transactionRequests=0;
 context.fetch=async url=>{
- if(url===manifest.history.url)historyRequests++;
+ if(url===manifest.history.url)historyRequests++;if(url===manifest.transaction_valuation.url)transactionRequests++;
  if(url==='data/dashboard_manifest.json')return new Response(JSON.stringify(manifest));
  if(delayed&&url===manifest.periods['2025'].url)await delayed.promise;
  return new Response(corrupt?Buffer.from('corrupt'):assets.get(url));
 };
 (async()=>{
  await evaluate('DashboardData.open().then(s=>globalThis.store=s)');
- assert.equal(historyRequests,0);
+ assert.equal(historyRequests,0);assert.equal(transactionRequests,0);
  await evaluate('Promise.all([store.ensureHistory(),store.ensureHistory()])');
  assert.equal(historyRequests,1);
  await evaluate('store.loadPeriod("2025")');
@@ -107,6 +124,8 @@ context.fetch=async url=>{
  assert.equal(evaluate('packedStore.recommendations.recommendations[0].building_name'),'끝 단지');
  assert.equal(evaluate('packedStore.recommendations.recommendations[0].building_key'),'A');
  assert.equal(evaluate('packedStore.recommendations.recommendations[0].house_match_score'),72);
+ await evaluate('Promise.all([packedStore.ensureTransactionValuations(),packedStore.ensureTransactionValuations()])');
+ assert.equal(transactionRequests,1);assert.equal(evaluate('packedStore.recommendations.recommendations[0].transaction_valuation.trade_count'),2);
  corrupt=true;await assert.rejects(evaluate('store.loadPeriod("2025")'),/무결성/);
  assert.equal(evaluate('store.summary.regions[0].loadedBucket.count'),7);
  // Every statically referenced app element exists in the shipped HTML.

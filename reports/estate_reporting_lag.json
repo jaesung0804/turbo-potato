@@ -1,0 +1,1808 @@
+{
+  "schema_version": 1,
+  "status": "observation_only_not_calibrated",
+  "created_at": "2026-09-08T16:14:41.629147+00:00",
+  "source": {
+    "manifest_sha256": "50ebefbeb6d549ce6850609bc5b93c3f5d48720d311bc559adcff062ad3e5f87",
+    "collection": {
+      "fetched_at": "2026-09-07T23:00:27.476886+00:00",
+      "start": "202101",
+      "end": "202609",
+      "rows": 1144586,
+      "partition_count": 5727,
+      "region_count": 83,
+      "sha256": "8d26deabbb65da542427c9b754e940cd2ec77fee0e8c61140eca02e31e5cb61f",
+      "source": "https://apis.data.go.kr/1613000/RTMSDataSvcAptTrade/getRTMSDataSvcAptTrade"
+    },
+    "all_partition_checksums_verified": true
+  },
+  "window": {
+    "first_baseline_at": "2026-09-06T07:58:39.224976+00:00",
+    "latest_observed_at": "2026-09-07T23:00:12.356427+00:00",
+    "elapsed_days": 1.6260779103124998,
+    "baseline_partitions_by_kst_date": {
+      "2026-09-06": 83,
+      "2026-09-07": 249
+    }
+  },
+  "counts": {
+    "additional_row_copies_on_existing_signatures": 3,
+    "baseline_left_censored_rows": 59068,
+    "baseline_left_censored_signatures": 58678,
+    "count_decrease_events": 30,
+    "count_increase_events": 3,
+    "current_rows": 1144586,
+    "latest_ledger_rows": 60297,
+    "ledger_partitions": 332,
+    "ledger_signatures": 59934,
+    "new_active_signatures": 1222,
+    "new_cancelled_signatures": 34,
+    "post_baseline_new_row_copies": 1256,
+    "post_baseline_new_signatures": 1256,
+    "removed_row_copies": 30,
+    "revision_events": 33,
+    "rows_without_observation_ledger": 1084289,
+    "source_partitions": 5727
+  },
+  "first_observed_by_kst_date": {
+    "2026-09-08": {
+      "new_signatures": 1256,
+      "new_row_copies": 1256,
+      "active_signatures": 1222,
+      "cancelled_signatures": 34
+    }
+  },
+  "new_signatures_by_contract_month": {
+    "2026-07": {
+      "new_signatures": 23,
+      "new_row_copies": 23,
+      "active_signatures": 14,
+      "cancelled_signatures": 9
+    },
+    "2026-08": {
+      "new_signatures": 545,
+      "new_row_copies": 545,
+      "active_signatures": 528,
+      "cancelled_signatures": 17
+    },
+    "2026-09": {
+      "new_signatures": 688,
+      "new_row_copies": 688,
+      "active_signatures": 680,
+      "cancelled_signatures": 8
+    }
+  },
+  "contract_to_first_observed_age_days": [
+    {
+      "bin": "0–7",
+      "new_signatures": 688,
+      "new_row_copies": 688,
+      "active_signatures": 680,
+      "cancelled_signatures": 8
+    },
+    {
+      "bin": "8–14",
+      "new_signatures": 306,
+      "new_row_copies": 306,
+      "active_signatures": 303,
+      "cancelled_signatures": 3
+    },
+    {
+      "bin": "15–30",
+      "new_signatures": 204,
+      "new_row_copies": 204,
+      "active_signatures": 196,
+      "cancelled_signatures": 8
+    },
+    {
+      "bin": "31–60",
+      "new_signatures": 54,
+      "new_row_copies": 54,
+      "active_signatures": 42,
+      "cancelled_signatures": 12
+    },
+    {
+      "bin": "61–90",
+      "new_signatures": 4,
+      "new_row_copies": 4,
+      "active_signatures": 1,
+      "cancelled_signatures": 3
+    },
+    {
+      "bin": "91–180",
+      "new_signatures": 0,
+      "new_row_copies": 0,
+      "active_signatures": 0,
+      "cancelled_signatures": 0
+    },
+    {
+      "bin": "181+",
+      "new_signatures": 0,
+      "new_row_copies": 0,
+      "active_signatures": 0,
+      "cancelled_signatures": 0
+    },
+    {
+      "bin": "negative",
+      "new_signatures": 0,
+      "new_row_copies": 0,
+      "active_signatures": 0,
+      "cancelled_signatures": 0
+    },
+    {
+      "bin": "invalid_date",
+      "new_signatures": 0,
+      "new_row_copies": 0,
+      "active_signatures": 0,
+      "cancelled_signatures": 0
+    }
+  ],
+  "row_appearance_interval_bounds": {
+    "baseline": 1256,
+    "within_7_days": 1256
+  },
+  "source_partitions_with_new_signatures": [
+    {
+      "path": "partitions/202607-11170.json.gz",
+      "month": "202607",
+      "region_code": "11170",
+      "sha256": "4287f14005b18a32592a7dbdba560450c461b235a0f6c1edee312c8bf6b33e06",
+      "new_signatures": 1,
+      "new_row_copies": 1,
+      "active_signatures": 1,
+      "cancelled_signatures": 0
+    },
+    {
+      "path": "partitions/202607-11290.json.gz",
+      "month": "202607",
+      "region_code": "11290",
+      "sha256": "6e90d3450366256ea340bc1506e7e46ef7b0728a7b319e46b45b93f4fef71e87",
+      "new_signatures": 1,
+      "new_row_copies": 1,
+      "active_signatures": 1,
+      "cancelled_signatures": 0
+    },
+    {
+      "path": "partitions/202607-11320.json.gz",
+      "month": "202607",
+      "region_code": "11320",
+      "sha256": "dea96383361a1820e5eba85791e24fbc1cd2bb4480f881653bb89153fa77834c",
+      "new_signatures": 1,
+      "new_row_copies": 1,
+      "active_signatures": 1,
+      "cancelled_signatures": 0
+    },
+    {
+      "path": "partitions/202607-11350.json.gz",
+      "month": "202607",
+      "region_code": "11350",
+      "sha256": "70c62da9c2a858eef71648bf3528f683c843eb50f339791e9c50c69f1a358dd8",
+      "new_signatures": 1,
+      "new_row_copies": 1,
+      "active_signatures": 0,
+      "cancelled_signatures": 1
+    },
+    {
+      "path": "partitions/202607-11440.json.gz",
+      "month": "202607",
+      "region_code": "11440",
+      "sha256": "3ed8bfdf2027848440ad7320b2eea805120a54be0b24c65531d5c88761ec0e42",
+      "new_signatures": 2,
+      "new_row_copies": 2,
+      "active_signatures": 2,
+      "cancelled_signatures": 0
+    },
+    {
+      "path": "partitions/202607-11470.json.gz",
+      "month": "202607",
+      "region_code": "11470",
+      "sha256": "ac09e2249b2b7f601d63ea5e7719c7ee8d122ed3eee9cf2712ea0bb381842c75",
+      "new_signatures": 1,
+      "new_row_copies": 1,
+      "active_signatures": 1,
+      "cancelled_signatures": 0
+    },
+    {
+      "path": "partitions/202607-11500.json.gz",
+      "month": "202607",
+      "region_code": "11500",
+      "sha256": "24c1122655602b653dba6c9db9865524a85976ef5dd349e8a3bdc37474ccb75d",
+      "new_signatures": 1,
+      "new_row_copies": 1,
+      "active_signatures": 1,
+      "cancelled_signatures": 0
+    },
+    {
+      "path": "partitions/202607-11530.json.gz",
+      "month": "202607",
+      "region_code": "11530",
+      "sha256": "f37ed568ebc773a2d5cc93357f17ee1605512c1ee910606a0fc1188606868a0e",
+      "new_signatures": 1,
+      "new_row_copies": 1,
+      "active_signatures": 1,
+      "cancelled_signatures": 0
+    },
+    {
+      "path": "partitions/202607-11590.json.gz",
+      "month": "202607",
+      "region_code": "11590",
+      "sha256": "fe12948ac621bf8d8b0f3c7c85542f48aff538838802dced54c7c41e07f9a2ba",
+      "new_signatures": 1,
+      "new_row_copies": 1,
+      "active_signatures": 1,
+      "cancelled_signatures": 0
+    },
+    {
+      "path": "partitions/202607-11710.json.gz",
+      "month": "202607",
+      "region_code": "11710",
+      "sha256": "9a4ac7906f076a2d33cf9c7db668608ef089ef0f47054140a3bf6f0a95499e23",
+      "new_signatures": 1,
+      "new_row_copies": 1,
+      "active_signatures": 1,
+      "cancelled_signatures": 0
+    },
+    {
+      "path": "partitions/202607-11740.json.gz",
+      "month": "202607",
+      "region_code": "11740",
+      "sha256": "9c6d5976b6ddc7d125ecdbfbce0abf240c438969d3ec9b627ccfe8a418e25f5a",
+      "new_signatures": 2,
+      "new_row_copies": 2,
+      "active_signatures": 2,
+      "cancelled_signatures": 0
+    },
+    {
+      "path": "partitions/202607-41117.json.gz",
+      "month": "202607",
+      "region_code": "41117",
+      "sha256": "0cea0f775825b542394b5b44fc9132a64110d3ae399c1026fdabe3733a48d61f",
+      "new_signatures": 1,
+      "new_row_copies": 1,
+      "active_signatures": 1,
+      "cancelled_signatures": 0
+    },
+    {
+      "path": "partitions/202607-41173.json.gz",
+      "month": "202607",
+      "region_code": "41173",
+      "sha256": "643f9278236f09b6a20ded338473d00cf64b551e4911d3964f53021d799c0319",
+      "new_signatures": 1,
+      "new_row_copies": 1,
+      "active_signatures": 0,
+      "cancelled_signatures": 1
+    },
+    {
+      "path": "partitions/202607-41210.json.gz",
+      "month": "202607",
+      "region_code": "41210",
+      "sha256": "c6c7c56a4bfd6cf310aec73208452b8211375d554209bed59b5b42a134148b85",
+      "new_signatures": 1,
+      "new_row_copies": 1,
+      "active_signatures": 0,
+      "cancelled_signatures": 1
+    },
+    {
+      "path": "partitions/202607-41220.json.gz",
+      "month": "202607",
+      "region_code": "41220",
+      "sha256": "74f9e0e5a4520608097b3afa933b9024e8fa8d142d92325fab7e773e58cceb14",
+      "new_signatures": 1,
+      "new_row_copies": 1,
+      "active_signatures": 0,
+      "cancelled_signatures": 1
+    },
+    {
+      "path": "partitions/202607-41273.json.gz",
+      "month": "202607",
+      "region_code": "41273",
+      "sha256": "c6a1526a87cf206fdf80bbf113a411b0f9e2b46b625d7ee55ea45b188de3d521",
+      "new_signatures": 1,
+      "new_row_copies": 1,
+      "active_signatures": 0,
+      "cancelled_signatures": 1
+    },
+    {
+      "path": "partitions/202607-41287.json.gz",
+      "month": "202607",
+      "region_code": "41287",
+      "sha256": "dfc2bb9ebf0b216d771ecb581db8dbde2f90f3efe7ce2f54e030033d5efe0fc1",
+      "new_signatures": 1,
+      "new_row_copies": 1,
+      "active_signatures": 0,
+      "cancelled_signatures": 1
+    },
+    {
+      "path": "partitions/202607-41390.json.gz",
+      "month": "202607",
+      "region_code": "41390",
+      "sha256": "f245ad6cac59387ba72f55f04c7c257339a6e79b2ff2800c1f4cbbafe7d44108",
+      "new_signatures": 1,
+      "new_row_copies": 1,
+      "active_signatures": 0,
+      "cancelled_signatures": 1
+    },
+    {
+      "path": "partitions/202607-41570.json.gz",
+      "month": "202607",
+      "region_code": "41570",
+      "sha256": "4cecb2d35ef8aa4b73d3abde47b5d944b899b1b4d1a238020c63b3c9cd686cd5",
+      "new_signatures": 1,
+      "new_row_copies": 1,
+      "active_signatures": 1,
+      "cancelled_signatures": 0
+    },
+    {
+      "path": "partitions/202607-41610.json.gz",
+      "month": "202607",
+      "region_code": "41610",
+      "sha256": "eb9868cd40092000f5d8b4b186df921618688d4ead26827e55f8b3f7fb502f3a",
+      "new_signatures": 1,
+      "new_row_copies": 1,
+      "active_signatures": 0,
+      "cancelled_signatures": 1
+    },
+    {
+      "path": "partitions/202607-41830.json.gz",
+      "month": "202607",
+      "region_code": "41830",
+      "sha256": "8e5c554c4a1b7386b59679b82713fcfea349b5527907af40d9fad272ff75d6aa",
+      "new_signatures": 1,
+      "new_row_copies": 1,
+      "active_signatures": 0,
+      "cancelled_signatures": 1
+    },
+    {
+      "path": "partitions/202608-11170.json.gz",
+      "month": "202608",
+      "region_code": "11170",
+      "sha256": "e3f704d18435675929d4e1c603f82fe30642dc793c9748d9ee07380d8676757c",
+      "new_signatures": 2,
+      "new_row_copies": 2,
+      "active_signatures": 2,
+      "cancelled_signatures": 0
+    },
+    {
+      "path": "partitions/202608-11200.json.gz",
+      "month": "202608",
+      "region_code": "11200",
+      "sha256": "6794fae2d85356294bedd3d164d9477c3e3bbe28e5f104bdc0091aadf0db9718",
+      "new_signatures": 2,
+      "new_row_copies": 2,
+      "active_signatures": 1,
+      "cancelled_signatures": 1
+    },
+    {
+      "path": "partitions/202608-11215.json.gz",
+      "month": "202608",
+      "region_code": "11215",
+      "sha256": "9a64064f22340561ef94b2b9d810a490e019eec90e360c8298e0622410a6d460",
+      "new_signatures": 1,
+      "new_row_copies": 1,
+      "active_signatures": 1,
+      "cancelled_signatures": 0
+    },
+    {
+      "path": "partitions/202608-11230.json.gz",
+      "month": "202608",
+      "region_code": "11230",
+      "sha256": "fee9c05c1fc7b31bca7b061826e7372b6fa666310f16fd0aea380890b0741726",
+      "new_signatures": 5,
+      "new_row_copies": 5,
+      "active_signatures": 5,
+      "cancelled_signatures": 0
+    },
+    {
+      "path": "partitions/202608-11260.json.gz",
+      "month": "202608",
+      "region_code": "11260",
+      "sha256": "2c5d018750162160a4715548646880a1c008cada0a8d3e3f5039e1c7f5bf0cf7",
+      "new_signatures": 3,
+      "new_row_copies": 3,
+      "active_signatures": 3,
+      "cancelled_signatures": 0
+    },
+    {
+      "path": "partitions/202608-11290.json.gz",
+      "month": "202608",
+      "region_code": "11290",
+      "sha256": "c2ff998e73d73d16d8793a87beb1caee71025d11a4085cb7c48b32764ab2634a",
+      "new_signatures": 5,
+      "new_row_copies": 5,
+      "active_signatures": 5,
+      "cancelled_signatures": 0
+    },
+    {
+      "path": "partitions/202608-11320.json.gz",
+      "month": "202608",
+      "region_code": "11320",
+      "sha256": "174cbb316ea656fd748dd071a17de9984613a11917dfc62458836934447b8416",
+      "new_signatures": 8,
+      "new_row_copies": 8,
+      "active_signatures": 8,
+      "cancelled_signatures": 0
+    },
+    {
+      "path": "partitions/202608-11350.json.gz",
+      "month": "202608",
+      "region_code": "11350",
+      "sha256": "27570e5892a385417af4254b57eb571204434e235fb832cdd8781d0e66b7e90e",
+      "new_signatures": 17,
+      "new_row_copies": 17,
+      "active_signatures": 17,
+      "cancelled_signatures": 0
+    },
+    {
+      "path": "partitions/202608-11380.json.gz",
+      "month": "202608",
+      "region_code": "11380",
+      "sha256": "b579d0f8e1c015499e342f706f407ffab1458b2611d28c002a860d1af205108d",
+      "new_signatures": 1,
+      "new_row_copies": 1,
+      "active_signatures": 1,
+      "cancelled_signatures": 0
+    },
+    {
+      "path": "partitions/202608-11410.json.gz",
+      "month": "202608",
+      "region_code": "11410",
+      "sha256": "d519f8e4ea63aaf1a059c274cee3cb168b2b849ef6f4efabdac8474d32d9bdaf",
+      "new_signatures": 4,
+      "new_row_copies": 4,
+      "active_signatures": 4,
+      "cancelled_signatures": 0
+    },
+    {
+      "path": "partitions/202608-11440.json.gz",
+      "month": "202608",
+      "region_code": "11440",
+      "sha256": "1d781747ec5915b40bc676d1009a649cfbfee2f6d4ac972e6dce2ac3e9314c02",
+      "new_signatures": 5,
+      "new_row_copies": 5,
+      "active_signatures": 4,
+      "cancelled_signatures": 1
+    },
+    {
+      "path": "partitions/202608-11470.json.gz",
+      "month": "202608",
+      "region_code": "11470",
+      "sha256": "83d982f7533089e4576ff0c6e9f4aafbf27580a678f0fb1d6c86302a55dfe03d",
+      "new_signatures": 2,
+      "new_row_copies": 2,
+      "active_signatures": 1,
+      "cancelled_signatures": 1
+    },
+    {
+      "path": "partitions/202608-11500.json.gz",
+      "month": "202608",
+      "region_code": "11500",
+      "sha256": "69e4fe6818af0fc1c69c71d79d04d3c6fbb64838b50cdce6fa654561340c8d3b",
+      "new_signatures": 13,
+      "new_row_copies": 13,
+      "active_signatures": 13,
+      "cancelled_signatures": 0
+    },
+    {
+      "path": "partitions/202608-11530.json.gz",
+      "month": "202608",
+      "region_code": "11530",
+      "sha256": "259630e291ce457a75a2ffe11ee2371db8876eee51e55d2c75b70629c6e7aa20",
+      "new_signatures": 8,
+      "new_row_copies": 8,
+      "active_signatures": 8,
+      "cancelled_signatures": 0
+    },
+    {
+      "path": "partitions/202608-11545.json.gz",
+      "month": "202608",
+      "region_code": "11545",
+      "sha256": "6d9d1787e3305752eefe4fdd48e4425d9880054d30e1ae26539ac06b0f13b000",
+      "new_signatures": 16,
+      "new_row_copies": 16,
+      "active_signatures": 16,
+      "cancelled_signatures": 0
+    },
+    {
+      "path": "partitions/202608-11560.json.gz",
+      "month": "202608",
+      "region_code": "11560",
+      "sha256": "eb7db88f2d77f213f75ab3a8153a9b419e8eb1a9325b3e092f549271c0a25c53",
+      "new_signatures": 12,
+      "new_row_copies": 12,
+      "active_signatures": 12,
+      "cancelled_signatures": 0
+    },
+    {
+      "path": "partitions/202608-11590.json.gz",
+      "month": "202608",
+      "region_code": "11590",
+      "sha256": "369595f64293242bf753b7fd9660592a3dd4d360f4e7fc247e03abbd7ad5ad59",
+      "new_signatures": 3,
+      "new_row_copies": 3,
+      "active_signatures": 3,
+      "cancelled_signatures": 0
+    },
+    {
+      "path": "partitions/202608-11620.json.gz",
+      "month": "202608",
+      "region_code": "11620",
+      "sha256": "8b31d6fa1bca914d2fcd0b8c3853d06a2c5f1b25051b9a5cc3397809706a9f43",
+      "new_signatures": 3,
+      "new_row_copies": 3,
+      "active_signatures": 3,
+      "cancelled_signatures": 0
+    },
+    {
+      "path": "partitions/202608-11650.json.gz",
+      "month": "202608",
+      "region_code": "11650",
+      "sha256": "7a9043d248ebf487f59ff6cea12762ecc216351cef429ff9b7ea07b8b5c6eead",
+      "new_signatures": 2,
+      "new_row_copies": 2,
+      "active_signatures": 2,
+      "cancelled_signatures": 0
+    },
+    {
+      "path": "partitions/202608-11680.json.gz",
+      "month": "202608",
+      "region_code": "11680",
+      "sha256": "69747ba6bdf8be8475eae73ee96aeba1c930cd8539ca299babb851ff544411c4",
+      "new_signatures": 4,
+      "new_row_copies": 4,
+      "active_signatures": 4,
+      "cancelled_signatures": 0
+    },
+    {
+      "path": "partitions/202608-11710.json.gz",
+      "month": "202608",
+      "region_code": "11710",
+      "sha256": "546482eba3339eb866e5c43f95ebab6344bb96b8a4630e339e3e59ce61ce3d35",
+      "new_signatures": 10,
+      "new_row_copies": 10,
+      "active_signatures": 10,
+      "cancelled_signatures": 0
+    },
+    {
+      "path": "partitions/202608-11740.json.gz",
+      "month": "202608",
+      "region_code": "11740",
+      "sha256": "ae35f90ec663aa38ad49bce108741e1efe49748be3af15927484f46383eaa1db",
+      "new_signatures": 3,
+      "new_row_copies": 3,
+      "active_signatures": 3,
+      "cancelled_signatures": 0
+    },
+    {
+      "path": "partitions/202608-28125.json.gz",
+      "month": "202608",
+      "region_code": "28125",
+      "sha256": "a25734acbe8887d44c2c6bd25aee150e7d273bfb6bf78501a611749181cea597",
+      "new_signatures": 1,
+      "new_row_copies": 1,
+      "active_signatures": 1,
+      "cancelled_signatures": 0
+    },
+    {
+      "path": "partitions/202608-28155.json.gz",
+      "month": "202608",
+      "region_code": "28155",
+      "sha256": "59839a081d74da343c4a102365735a96fa96bd5f79a8f1073091c3613597282c",
+      "new_signatures": 2,
+      "new_row_copies": 2,
+      "active_signatures": 2,
+      "cancelled_signatures": 0
+    },
+    {
+      "path": "partitions/202608-28177.json.gz",
+      "month": "202608",
+      "region_code": "28177",
+      "sha256": "1429026bcb26aa08365c857f53f7696fdfce0b7cda90499014887b7803d12e80",
+      "new_signatures": 9,
+      "new_row_copies": 9,
+      "active_signatures": 8,
+      "cancelled_signatures": 1
+    },
+    {
+      "path": "partitions/202608-28185.json.gz",
+      "month": "202608",
+      "region_code": "28185",
+      "sha256": "107670bc17346d4c62447f03c62c45301120028cb506d9de8918d62f162eca62",
+      "new_signatures": 16,
+      "new_row_copies": 16,
+      "active_signatures": 16,
+      "cancelled_signatures": 0
+    },
+    {
+      "path": "partitions/202608-28200.json.gz",
+      "month": "202608",
+      "region_code": "28200",
+      "sha256": "4637f94b81950dc615f1993ad9b790dae848db443d7f761f3e86c333b3a1d5dc",
+      "new_signatures": 8,
+      "new_row_copies": 8,
+      "active_signatures": 8,
+      "cancelled_signatures": 0
+    },
+    {
+      "path": "partitions/202608-28237.json.gz",
+      "month": "202608",
+      "region_code": "28237",
+      "sha256": "9f8f0f6d4ee3f1fe9af92f3c4e4fe66adc0b051291a3fd15606e2e6b33e33bc4",
+      "new_signatures": 9,
+      "new_row_copies": 9,
+      "active_signatures": 8,
+      "cancelled_signatures": 1
+    },
+    {
+      "path": "partitions/202608-28245.json.gz",
+      "month": "202608",
+      "region_code": "28245",
+      "sha256": "5b14165787cbe8c266bb1d36ee8b838924bcb91436435e1b72d54538e51bc3ae",
+      "new_signatures": 2,
+      "new_row_copies": 2,
+      "active_signatures": 2,
+      "cancelled_signatures": 0
+    },
+    {
+      "path": "partitions/202608-28275.json.gz",
+      "month": "202608",
+      "region_code": "28275",
+      "sha256": "0bc7c2552ae0c5100ae74d5af2fc842ba33bb88d05c12bc628c5424601da0c09",
+      "new_signatures": 3,
+      "new_row_copies": 3,
+      "active_signatures": 3,
+      "cancelled_signatures": 0
+    },
+    {
+      "path": "partitions/202608-28290.json.gz",
+      "month": "202608",
+      "region_code": "28290",
+      "sha256": "f4235b1da575fb8f8206f051e9a56cfd7cef63e57c15dfb8498257fbd1c58ed7",
+      "new_signatures": 7,
+      "new_row_copies": 7,
+      "active_signatures": 7,
+      "cancelled_signatures": 0
+    },
+    {
+      "path": "partitions/202608-28710.json.gz",
+      "month": "202608",
+      "region_code": "28710",
+      "sha256": "a590a6b635fab6fbf0d6c4ff64412c39024746d5bb6a5b0f8df031ce0b2b0a20",
+      "new_signatures": 1,
+      "new_row_copies": 1,
+      "active_signatures": 1,
+      "cancelled_signatures": 0
+    },
+    {
+      "path": "partitions/202608-41113.json.gz",
+      "month": "202608",
+      "region_code": "41113",
+      "sha256": "d80f6840da33f3554220cdb69801775ccf9e41f12290597718620b540f7d25bb",
+      "new_signatures": 17,
+      "new_row_copies": 17,
+      "active_signatures": 15,
+      "cancelled_signatures": 2
+    },
+    {
+      "path": "partitions/202608-41115.json.gz",
+      "month": "202608",
+      "region_code": "41115",
+      "sha256": "6e7a7da3bb35e8012e81865d3ddcf6e81de7bd8668f5e9e8cc5d1420b24f9f86",
+      "new_signatures": 5,
+      "new_row_copies": 5,
+      "active_signatures": 5,
+      "cancelled_signatures": 0
+    },
+    {
+      "path": "partitions/202608-41117.json.gz",
+      "month": "202608",
+      "region_code": "41117",
+      "sha256": "0eae938261fd3bb4e727dd977548f1d801094e6b6ef7bdf5c045c300aa7c0ba7",
+      "new_signatures": 11,
+      "new_row_copies": 11,
+      "active_signatures": 11,
+      "cancelled_signatures": 0
+    },
+    {
+      "path": "partitions/202608-41133.json.gz",
+      "month": "202608",
+      "region_code": "41133",
+      "sha256": "f53474e4760c30c5accc9e926f9e41bd295274666db4f424317f1150b6896e34",
+      "new_signatures": 6,
+      "new_row_copies": 6,
+      "active_signatures": 5,
+      "cancelled_signatures": 1
+    },
+    {
+      "path": "partitions/202608-41135.json.gz",
+      "month": "202608",
+      "region_code": "41135",
+      "sha256": "db2648fe631de51cf8b98332157470a4d70029b931abba4bc8897931796a7c79",
+      "new_signatures": 5,
+      "new_row_copies": 5,
+      "active_signatures": 5,
+      "cancelled_signatures": 0
+    },
+    {
+      "path": "partitions/202608-41150.json.gz",
+      "month": "202608",
+      "region_code": "41150",
+      "sha256": "31c181d2ccb2ee9391f510f6a5b3e1ffd019cd62adf39f1d61a984e69f02c7d6",
+      "new_signatures": 15,
+      "new_row_copies": 15,
+      "active_signatures": 14,
+      "cancelled_signatures": 1
+    },
+    {
+      "path": "partitions/202608-41171.json.gz",
+      "month": "202608",
+      "region_code": "41171",
+      "sha256": "9817c7e66d93e7249ab97b40cc7e87a8247b22cc16d53a0a741a4dbff4830e11",
+      "new_signatures": 10,
+      "new_row_copies": 10,
+      "active_signatures": 10,
+      "cancelled_signatures": 0
+    },
+    {
+      "path": "partitions/202608-41173.json.gz",
+      "month": "202608",
+      "region_code": "41173",
+      "sha256": "c017086708a1ff0e4750385c6117d58b694d7cf340a34268e99169b331e14216",
+      "new_signatures": 6,
+      "new_row_copies": 6,
+      "active_signatures": 6,
+      "cancelled_signatures": 0
+    },
+    {
+      "path": "partitions/202608-41192.json.gz",
+      "month": "202608",
+      "region_code": "41192",
+      "sha256": "0eab8d0bb4d3437d6364cc1a94fb207e653b5ae17fdd26a65244a56f24ebbb75",
+      "new_signatures": 10,
+      "new_row_copies": 10,
+      "active_signatures": 10,
+      "cancelled_signatures": 0
+    },
+    {
+      "path": "partitions/202608-41194.json.gz",
+      "month": "202608",
+      "region_code": "41194",
+      "sha256": "ce8673d909b8d85dedc307a885cb447f8288fd9eedadf90e454f76044960279c",
+      "new_signatures": 10,
+      "new_row_copies": 10,
+      "active_signatures": 10,
+      "cancelled_signatures": 0
+    },
+    {
+      "path": "partitions/202608-41196.json.gz",
+      "month": "202608",
+      "region_code": "41196",
+      "sha256": "ed05bc511ec8b5cf8d9e52f0cca341f7757e4fe55cb357b4b625fa7cf623c3e9",
+      "new_signatures": 5,
+      "new_row_copies": 5,
+      "active_signatures": 5,
+      "cancelled_signatures": 0
+    },
+    {
+      "path": "partitions/202608-41210.json.gz",
+      "month": "202608",
+      "region_code": "41210",
+      "sha256": "5b7e31a2b4f8688f2f820422fd4db45c7c6e564c9386e1ff048dae676b3b85ed",
+      "new_signatures": 15,
+      "new_row_copies": 15,
+      "active_signatures": 15,
+      "cancelled_signatures": 0
+    },
+    {
+      "path": "partitions/202608-41220.json.gz",
+      "month": "202608",
+      "region_code": "41220",
+      "sha256": "5e9d18c474c57048e72a04267d9b2382a7d380559f3c899da16bfa574291a18f",
+      "new_signatures": 13,
+      "new_row_copies": 13,
+      "active_signatures": 13,
+      "cancelled_signatures": 0
+    },
+    {
+      "path": "partitions/202608-41250.json.gz",
+      "month": "202608",
+      "region_code": "41250",
+      "sha256": "dc84bf1ad3e80fa188b2b0db12c728e6043b376d64b75de99d55f7479b51b4f3",
+      "new_signatures": 2,
+      "new_row_copies": 2,
+      "active_signatures": 2,
+      "cancelled_signatures": 0
+    },
+    {
+      "path": "partitions/202608-41271.json.gz",
+      "month": "202608",
+      "region_code": "41271",
+      "sha256": "ca0c9361544234118b40fd28ed68cf3ebc640b647959ae0773d11a8672fd19ae",
+      "new_signatures": 5,
+      "new_row_copies": 5,
+      "active_signatures": 5,
+      "cancelled_signatures": 0
+    },
+    {
+      "path": "partitions/202608-41273.json.gz",
+      "month": "202608",
+      "region_code": "41273",
+      "sha256": "bfa467fa94a8ab6e1d64f59034228ea05319509cf070ae066206c093deea287d",
+      "new_signatures": 9,
+      "new_row_copies": 9,
+      "active_signatures": 8,
+      "cancelled_signatures": 1
+    },
+    {
+      "path": "partitions/202608-41281.json.gz",
+      "month": "202608",
+      "region_code": "41281",
+      "sha256": "5510ad5c73f6dc52ce9991ad13ba8d6da14e18ebb729f3ebab3b0e27e9780fd1",
+      "new_signatures": 19,
+      "new_row_copies": 19,
+      "active_signatures": 19,
+      "cancelled_signatures": 0
+    },
+    {
+      "path": "partitions/202608-41285.json.gz",
+      "month": "202608",
+      "region_code": "41285",
+      "sha256": "c3afb4dd07645a03df11f4596b3432539ad448ddf1d22f497a711a6a8a05cbbe",
+      "new_signatures": 6,
+      "new_row_copies": 6,
+      "active_signatures": 6,
+      "cancelled_signatures": 0
+    },
+    {
+      "path": "partitions/202608-41287.json.gz",
+      "month": "202608",
+      "region_code": "41287",
+      "sha256": "4ad957545b842e52ca00889510379fff98dde012d0e82dfb96a2d06b0fd7bac8",
+      "new_signatures": 9,
+      "new_row_copies": 9,
+      "active_signatures": 8,
+      "cancelled_signatures": 1
+    },
+    {
+      "path": "partitions/202608-41290.json.gz",
+      "month": "202608",
+      "region_code": "41290",
+      "sha256": "15735ee80915bff539c03ab9c85306344f930c9b05531bb386a802425039945d",
+      "new_signatures": 1,
+      "new_row_copies": 1,
+      "active_signatures": 1,
+      "cancelled_signatures": 0
+    },
+    {
+      "path": "partitions/202608-41360.json.gz",
+      "month": "202608",
+      "region_code": "41360",
+      "sha256": "ef3d03d3f81f520a533c88fe3039895954c3d7cdc01c1743b242d81f5e904a7f",
+      "new_signatures": 34,
+      "new_row_copies": 34,
+      "active_signatures": 34,
+      "cancelled_signatures": 0
+    },
+    {
+      "path": "partitions/202608-41370.json.gz",
+      "month": "202608",
+      "region_code": "41370",
+      "sha256": "f5927f5aacdecd0f86514af59c3275b7927b739df99d11563462195837bc8be3",
+      "new_signatures": 8,
+      "new_row_copies": 8,
+      "active_signatures": 8,
+      "cancelled_signatures": 0
+    },
+    {
+      "path": "partitions/202608-41390.json.gz",
+      "month": "202608",
+      "region_code": "41390",
+      "sha256": "9980d523dc3e7cff2e7b1b3554abb4fa293095c2054573fa3e64ab3c3705b679",
+      "new_signatures": 5,
+      "new_row_copies": 5,
+      "active_signatures": 5,
+      "cancelled_signatures": 0
+    },
+    {
+      "path": "partitions/202608-41410.json.gz",
+      "month": "202608",
+      "region_code": "41410",
+      "sha256": "3ea54124afbf23b57ae5cd834152dcf48ee1195fb74ff35410566290c4f6943c",
+      "new_signatures": 10,
+      "new_row_copies": 10,
+      "active_signatures": 9,
+      "cancelled_signatures": 1
+    },
+    {
+      "path": "partitions/202608-41450.json.gz",
+      "month": "202608",
+      "region_code": "41450",
+      "sha256": "00fea9f4571512593934900ea6792b6f7d8f14164a48e3bcf7d8f446ee5f4ba7",
+      "new_signatures": 8,
+      "new_row_copies": 8,
+      "active_signatures": 8,
+      "cancelled_signatures": 0
+    },
+    {
+      "path": "partitions/202608-41461.json.gz",
+      "month": "202608",
+      "region_code": "41461",
+      "sha256": "f7e2d1a4ee3a7fec946b2cc12c2e0a2df76681b0ef8f86ecf9c82e00011437c7",
+      "new_signatures": 1,
+      "new_row_copies": 1,
+      "active_signatures": 1,
+      "cancelled_signatures": 0
+    },
+    {
+      "path": "partitions/202608-41463.json.gz",
+      "month": "202608",
+      "region_code": "41463",
+      "sha256": "b9af9303044037fad3dd8c389d36c81c10d0c5a6e6badf7cd4bd14e29696d854",
+      "new_signatures": 8,
+      "new_row_copies": 8,
+      "active_signatures": 8,
+      "cancelled_signatures": 0
+    },
+    {
+      "path": "partitions/202608-41465.json.gz",
+      "month": "202608",
+      "region_code": "41465",
+      "sha256": "d1f58eafe4a94256c8a928746edb664602720c5460cd01bd7287c9c90f460e0c",
+      "new_signatures": 6,
+      "new_row_copies": 6,
+      "active_signatures": 6,
+      "cancelled_signatures": 0
+    },
+    {
+      "path": "partitions/202608-41480.json.gz",
+      "month": "202608",
+      "region_code": "41480",
+      "sha256": "05669d8db4b6361307f55cb1ce6355b692dd0e65dea78f1e2c777e2d661ae21d",
+      "new_signatures": 17,
+      "new_row_copies": 17,
+      "active_signatures": 16,
+      "cancelled_signatures": 1
+    },
+    {
+      "path": "partitions/202608-41500.json.gz",
+      "month": "202608",
+      "region_code": "41500",
+      "sha256": "89f9c7809220eb00258737c88d97ac7f5c595165aee2492594fcd38e7e285f0a",
+      "new_signatures": 3,
+      "new_row_copies": 3,
+      "active_signatures": 3,
+      "cancelled_signatures": 0
+    },
+    {
+      "path": "partitions/202608-41550.json.gz",
+      "month": "202608",
+      "region_code": "41550",
+      "sha256": "81a2998970a86ebe891bcdff2edddd0b40c7f61ea04f1a3afe6f6c8304ddde17",
+      "new_signatures": 1,
+      "new_row_copies": 1,
+      "active_signatures": 0,
+      "cancelled_signatures": 1
+    },
+    {
+      "path": "partitions/202608-41570.json.gz",
+      "month": "202608",
+      "region_code": "41570",
+      "sha256": "c0e83847edef8dae4a7835cacf927c05c3c975b9d69aa174b6cd1480fe5eff4e",
+      "new_signatures": 32,
+      "new_row_copies": 32,
+      "active_signatures": 32,
+      "cancelled_signatures": 0
+    },
+    {
+      "path": "partitions/202608-41591.json.gz",
+      "month": "202608",
+      "region_code": "41591",
+      "sha256": "339de915a0500452c80597bfcaa0beddb89a639f1b678d85ef2cf8af838b36fc",
+      "new_signatures": 2,
+      "new_row_copies": 2,
+      "active_signatures": 2,
+      "cancelled_signatures": 0
+    },
+    {
+      "path": "partitions/202608-41593.json.gz",
+      "month": "202608",
+      "region_code": "41593",
+      "sha256": "267f623924e8d5b193e0f15772cf5784fe73346fe3ee3761ca6a9097a3bc2ea3",
+      "new_signatures": 2,
+      "new_row_copies": 2,
+      "active_signatures": 1,
+      "cancelled_signatures": 1
+    },
+    {
+      "path": "partitions/202608-41595.json.gz",
+      "month": "202608",
+      "region_code": "41595",
+      "sha256": "d9ee0b12efc603fb55ca65298c39f42a619f079caf8e0b00c0b61f125c043979",
+      "new_signatures": 4,
+      "new_row_copies": 4,
+      "active_signatures": 4,
+      "cancelled_signatures": 0
+    },
+    {
+      "path": "partitions/202608-41597.json.gz",
+      "month": "202608",
+      "region_code": "41597",
+      "sha256": "ccabb82dbc344e1ef56315adb1f928777c14203988760536038b8d3be1410d3e",
+      "new_signatures": 7,
+      "new_row_copies": 7,
+      "active_signatures": 7,
+      "cancelled_signatures": 0
+    },
+    {
+      "path": "partitions/202608-41610.json.gz",
+      "month": "202608",
+      "region_code": "41610",
+      "sha256": "794d1b34a285c319a10a82decab265b61314c4c9f99084aa2dc0db9d66a88a1d",
+      "new_signatures": 15,
+      "new_row_copies": 15,
+      "active_signatures": 14,
+      "cancelled_signatures": 1
+    },
+    {
+      "path": "partitions/202608-41630.json.gz",
+      "month": "202608",
+      "region_code": "41630",
+      "sha256": "3add14a69cdf6a1ab298dfb206df0735097475169e2558472694693d18f42c60",
+      "new_signatures": 7,
+      "new_row_copies": 7,
+      "active_signatures": 7,
+      "cancelled_signatures": 0
+    },
+    {
+      "path": "partitions/202608-41650.json.gz",
+      "month": "202608",
+      "region_code": "41650",
+      "sha256": "d82086a601c064199798f96fffe9f31c2891797df120dc309b211dea4b4774a4",
+      "new_signatures": 3,
+      "new_row_copies": 3,
+      "active_signatures": 3,
+      "cancelled_signatures": 0
+    },
+    {
+      "path": "partitions/202608-41670.json.gz",
+      "month": "202608",
+      "region_code": "41670",
+      "sha256": "31cfd27a995ca31c0316a88df8b4d32a64191a956d35063524479e540c018213",
+      "new_signatures": 2,
+      "new_row_copies": 2,
+      "active_signatures": 2,
+      "cancelled_signatures": 0
+    },
+    {
+      "path": "partitions/202608-41820.json.gz",
+      "month": "202608",
+      "region_code": "41820",
+      "sha256": "5c9365114bb27e9d3eaa196e4b1d514db2b12feff4f87a7f3edc82b8802ac85a",
+      "new_signatures": 2,
+      "new_row_copies": 2,
+      "active_signatures": 2,
+      "cancelled_signatures": 0
+    },
+    {
+      "path": "partitions/202608-41830.json.gz",
+      "month": "202608",
+      "region_code": "41830",
+      "sha256": "0f4d08187d06b159b13b9ddfea38d1b549c3730bb387723e7683eb68f9637b30",
+      "new_signatures": 2,
+      "new_row_copies": 2,
+      "active_signatures": 1,
+      "cancelled_signatures": 1
+    },
+    {
+      "path": "partitions/202609-11230.json.gz",
+      "month": "202609",
+      "region_code": "11230",
+      "sha256": "e32fe1495bedeb5227cecfa8312c7c6768461f12d7494e7ec9c192383fd16e4b",
+      "new_signatures": 1,
+      "new_row_copies": 1,
+      "active_signatures": 1,
+      "cancelled_signatures": 0
+    },
+    {
+      "path": "partitions/202609-11260.json.gz",
+      "month": "202609",
+      "region_code": "11260",
+      "sha256": "7033475667b7212b8664dd96d20782fe0d13bee8d5e06a5a345d64b5f1885825",
+      "new_signatures": 10,
+      "new_row_copies": 10,
+      "active_signatures": 10,
+      "cancelled_signatures": 0
+    },
+    {
+      "path": "partitions/202609-11290.json.gz",
+      "month": "202609",
+      "region_code": "11290",
+      "sha256": "15d4923401ea25880e51dc148e5c089c6deb77662c7244c1512f70e741af4ea8",
+      "new_signatures": 5,
+      "new_row_copies": 5,
+      "active_signatures": 5,
+      "cancelled_signatures": 0
+    },
+    {
+      "path": "partitions/202609-11305.json.gz",
+      "month": "202609",
+      "region_code": "11305",
+      "sha256": "2b0f90e12f7954e6c66bdb4d4f77f48693c221282503f11e1f897589c3200877",
+      "new_signatures": 4,
+      "new_row_copies": 4,
+      "active_signatures": 4,
+      "cancelled_signatures": 0
+    },
+    {
+      "path": "partitions/202609-11320.json.gz",
+      "month": "202609",
+      "region_code": "11320",
+      "sha256": "bb1bb6f998dea1f5b50fae4dffda48654a37ebc9dcddaef57d0e4f156547f2bb",
+      "new_signatures": 5,
+      "new_row_copies": 5,
+      "active_signatures": 5,
+      "cancelled_signatures": 0
+    },
+    {
+      "path": "partitions/202609-11350.json.gz",
+      "month": "202609",
+      "region_code": "11350",
+      "sha256": "0576ebb07964ee9500701b149ee0e0f2016d68a8e7f4305f78bf67ea03c089ae",
+      "new_signatures": 1,
+      "new_row_copies": 1,
+      "active_signatures": 1,
+      "cancelled_signatures": 0
+    },
+    {
+      "path": "partitions/202609-11380.json.gz",
+      "month": "202609",
+      "region_code": "11380",
+      "sha256": "2d076184575edd22067db06ed4628ecb94d71a90c732e1bba7932ab96db56eff",
+      "new_signatures": 2,
+      "new_row_copies": 2,
+      "active_signatures": 2,
+      "cancelled_signatures": 0
+    },
+    {
+      "path": "partitions/202609-11410.json.gz",
+      "month": "202609",
+      "region_code": "11410",
+      "sha256": "d6c3e934219f1d55aee1640ade880a3a3fc82ac73d542fa069249e6fe4233125",
+      "new_signatures": 2,
+      "new_row_copies": 2,
+      "active_signatures": 2,
+      "cancelled_signatures": 0
+    },
+    {
+      "path": "partitions/202609-11440.json.gz",
+      "month": "202609",
+      "region_code": "11440",
+      "sha256": "a2b5f9166a37e0a166900644503b0ae6fc37cae4a4aa46f690050a5896eb88be",
+      "new_signatures": 2,
+      "new_row_copies": 2,
+      "active_signatures": 2,
+      "cancelled_signatures": 0
+    },
+    {
+      "path": "partitions/202609-11470.json.gz",
+      "month": "202609",
+      "region_code": "11470",
+      "sha256": "84cffe5f8c4581cf6fa11d828d7848d4a65d142de25b415d489818f9667099b3",
+      "new_signatures": 1,
+      "new_row_copies": 1,
+      "active_signatures": 1,
+      "cancelled_signatures": 0
+    },
+    {
+      "path": "partitions/202609-11500.json.gz",
+      "month": "202609",
+      "region_code": "11500",
+      "sha256": "bb81358f48cf0c40c99a3fefe36d1a3f2d7709e66cf43be9d52d81bb66c1abce",
+      "new_signatures": 4,
+      "new_row_copies": 4,
+      "active_signatures": 4,
+      "cancelled_signatures": 0
+    },
+    {
+      "path": "partitions/202609-11530.json.gz",
+      "month": "202609",
+      "region_code": "11530",
+      "sha256": "7d95bbf4b01c64d8f8f7ca288f56ef80b741c175262a7370b449c2a3b1c4afad",
+      "new_signatures": 7,
+      "new_row_copies": 7,
+      "active_signatures": 7,
+      "cancelled_signatures": 0
+    },
+    {
+      "path": "partitions/202609-11545.json.gz",
+      "month": "202609",
+      "region_code": "11545",
+      "sha256": "91ae477341fac71972a5f2dd2f16d1b6bc435cf5d825dc9881320d3efc518980",
+      "new_signatures": 1,
+      "new_row_copies": 1,
+      "active_signatures": 1,
+      "cancelled_signatures": 0
+    },
+    {
+      "path": "partitions/202609-11560.json.gz",
+      "month": "202609",
+      "region_code": "11560",
+      "sha256": "8a8685eb554a3ff6229f7183e1b6a64c39e67830c552b329b3d98890009e83c2",
+      "new_signatures": 1,
+      "new_row_copies": 1,
+      "active_signatures": 1,
+      "cancelled_signatures": 0
+    },
+    {
+      "path": "partitions/202609-11620.json.gz",
+      "month": "202609",
+      "region_code": "11620",
+      "sha256": "46aebb84f94ed1998bf1fab1abaf599f49e7fd0c9fc364cc6a61e1839feb59c3",
+      "new_signatures": 3,
+      "new_row_copies": 3,
+      "active_signatures": 3,
+      "cancelled_signatures": 0
+    },
+    {
+      "path": "partitions/202609-11680.json.gz",
+      "month": "202609",
+      "region_code": "11680",
+      "sha256": "5b67a320a8d2fc9209f634703fdfebaa03f540ed19b2e411a9ff2b1ce388be8b",
+      "new_signatures": 2,
+      "new_row_copies": 2,
+      "active_signatures": 2,
+      "cancelled_signatures": 0
+    },
+    {
+      "path": "partitions/202609-28125.json.gz",
+      "month": "202609",
+      "region_code": "28125",
+      "sha256": "bf267db1db59ba368eb676f22b3f298a2fc69496d2aba7d62d96de9b50b9dc46",
+      "new_signatures": 4,
+      "new_row_copies": 4,
+      "active_signatures": 4,
+      "cancelled_signatures": 0
+    },
+    {
+      "path": "partitions/202609-28155.json.gz",
+      "month": "202609",
+      "region_code": "28155",
+      "sha256": "95a2499b05fbbc94bd15d67360ddbb0a8bc6425754fbff70f18ae68be64c54ba",
+      "new_signatures": 5,
+      "new_row_copies": 5,
+      "active_signatures": 5,
+      "cancelled_signatures": 0
+    },
+    {
+      "path": "partitions/202609-28177.json.gz",
+      "month": "202609",
+      "region_code": "28177",
+      "sha256": "ca49f4831dc41806cf603d01b86d4dada46c71a6e7f54f7c2bf24aac658437ec",
+      "new_signatures": 16,
+      "new_row_copies": 16,
+      "active_signatures": 15,
+      "cancelled_signatures": 1
+    },
+    {
+      "path": "partitions/202609-28185.json.gz",
+      "month": "202609",
+      "region_code": "28185",
+      "sha256": "c3d5444af14f53fc0a68283983000ac4833e4c1333c2c5c0d2d0d631f3fb6ff1",
+      "new_signatures": 17,
+      "new_row_copies": 17,
+      "active_signatures": 17,
+      "cancelled_signatures": 0
+    },
+    {
+      "path": "partitions/202609-28200.json.gz",
+      "month": "202609",
+      "region_code": "28200",
+      "sha256": "9d3fb6a2780f89037d5e6a072fbb15db404a7408675fc8feee320d6b7358d1c6",
+      "new_signatures": 34,
+      "new_row_copies": 34,
+      "active_signatures": 33,
+      "cancelled_signatures": 1
+    },
+    {
+      "path": "partitions/202609-28237.json.gz",
+      "month": "202609",
+      "region_code": "28237",
+      "sha256": "4b0fa8dd477fc4b0b8238df7c9414f016cf52d6b6cd649f4f9fd28c6fad5c92c",
+      "new_signatures": 26,
+      "new_row_copies": 26,
+      "active_signatures": 26,
+      "cancelled_signatures": 0
+    },
+    {
+      "path": "partitions/202609-28245.json.gz",
+      "month": "202609",
+      "region_code": "28245",
+      "sha256": "cdb1727c40f076142b559090d16f12f77be0abad8df79f0f230786e775f4ad7d",
+      "new_signatures": 12,
+      "new_row_copies": 12,
+      "active_signatures": 12,
+      "cancelled_signatures": 0
+    },
+    {
+      "path": "partitions/202609-28275.json.gz",
+      "month": "202609",
+      "region_code": "28275",
+      "sha256": "eb604e31bb28caf3b2213d96227d45252b43c312391372499de77d388c9d4c20",
+      "new_signatures": 18,
+      "new_row_copies": 18,
+      "active_signatures": 18,
+      "cancelled_signatures": 0
+    },
+    {
+      "path": "partitions/202609-28290.json.gz",
+      "month": "202609",
+      "region_code": "28290",
+      "sha256": "f03e06da5c57b00a89f5443a4c71052bc213ce746b315ba159e2c6a2ef4e89b7",
+      "new_signatures": 28,
+      "new_row_copies": 28,
+      "active_signatures": 28,
+      "cancelled_signatures": 0
+    },
+    {
+      "path": "partitions/202609-41111.json.gz",
+      "month": "202609",
+      "region_code": "41111",
+      "sha256": "62e240eea3ecee2ab20c9a1d249bde97d151ddab9d339f037576addfd0511a12",
+      "new_signatures": 2,
+      "new_row_copies": 2,
+      "active_signatures": 2,
+      "cancelled_signatures": 0
+    },
+    {
+      "path": "partitions/202609-41113.json.gz",
+      "month": "202609",
+      "region_code": "41113",
+      "sha256": "dfafdb3eb0c085b4f9481306b717975dd7a1dbe3683bd5c34f5a519afea071b2",
+      "new_signatures": 24,
+      "new_row_copies": 24,
+      "active_signatures": 23,
+      "cancelled_signatures": 1
+    },
+    {
+      "path": "partitions/202609-41115.json.gz",
+      "month": "202609",
+      "region_code": "41115",
+      "sha256": "6ebb7aae82dbc45c4eeb73fa2e917d941082e63642d5e65a46efd76db3d107d8",
+      "new_signatures": 7,
+      "new_row_copies": 7,
+      "active_signatures": 7,
+      "cancelled_signatures": 0
+    },
+    {
+      "path": "partitions/202609-41117.json.gz",
+      "month": "202609",
+      "region_code": "41117",
+      "sha256": "35d6be5b3746e9543642546f2780ae57c9ec217de7e5d5ca76fe25fdecec882b",
+      "new_signatures": 12,
+      "new_row_copies": 12,
+      "active_signatures": 12,
+      "cancelled_signatures": 0
+    },
+    {
+      "path": "partitions/202609-41131.json.gz",
+      "month": "202609",
+      "region_code": "41131",
+      "sha256": "525d1feaaaebd3f54c66514f0908ba5a0dd235111a4b9562bad43d41779db164",
+      "new_signatures": 3,
+      "new_row_copies": 3,
+      "active_signatures": 3,
+      "cancelled_signatures": 0
+    },
+    {
+      "path": "partitions/202609-41133.json.gz",
+      "month": "202609",
+      "region_code": "41133",
+      "sha256": "4483c62c558978cc73fcc0ac0437e3b7b1d11ace4d74c3706e71e8c30985f425",
+      "new_signatures": 1,
+      "new_row_copies": 1,
+      "active_signatures": 1,
+      "cancelled_signatures": 0
+    },
+    {
+      "path": "partitions/202609-41135.json.gz",
+      "month": "202609",
+      "region_code": "41135",
+      "sha256": "a0ea6fc742c04c52819f8fdc1867455301268be72d9387423e71d01a8751c523",
+      "new_signatures": 3,
+      "new_row_copies": 3,
+      "active_signatures": 3,
+      "cancelled_signatures": 0
+    },
+    {
+      "path": "partitions/202609-41150.json.gz",
+      "month": "202609",
+      "region_code": "41150",
+      "sha256": "660d6a7b14bb76ad9ae0da17de032ddb5dcc8bc3eac5cceb5be62fe19e5b057e",
+      "new_signatures": 24,
+      "new_row_copies": 24,
+      "active_signatures": 24,
+      "cancelled_signatures": 0
+    },
+    {
+      "path": "partitions/202609-41171.json.gz",
+      "month": "202609",
+      "region_code": "41171",
+      "sha256": "50b092e564cfb71716d5d898423c64faa2d19136cdce99c66f4c8fbcf93dfaac",
+      "new_signatures": 11,
+      "new_row_copies": 11,
+      "active_signatures": 11,
+      "cancelled_signatures": 0
+    },
+    {
+      "path": "partitions/202609-41173.json.gz",
+      "month": "202609",
+      "region_code": "41173",
+      "sha256": "99d4e18ec50ff01268bc9cc373e16030157ca2353116654fc17b48e8724255c7",
+      "new_signatures": 4,
+      "new_row_copies": 4,
+      "active_signatures": 4,
+      "cancelled_signatures": 0
+    },
+    {
+      "path": "partitions/202609-41192.json.gz",
+      "month": "202609",
+      "region_code": "41192",
+      "sha256": "1bbcffb3abb40e1ca80cd3bb9171b88fb2085ec3fb5671ce0c1bda5ea4528a7d",
+      "new_signatures": 10,
+      "new_row_copies": 10,
+      "active_signatures": 9,
+      "cancelled_signatures": 1
+    },
+    {
+      "path": "partitions/202609-41194.json.gz",
+      "month": "202609",
+      "region_code": "41194",
+      "sha256": "abcd3aa80931c110c0fe2d5c9a0cdc4d637a758d70e77670ba145264a8b80f60",
+      "new_signatures": 10,
+      "new_row_copies": 10,
+      "active_signatures": 10,
+      "cancelled_signatures": 0
+    },
+    {
+      "path": "partitions/202609-41196.json.gz",
+      "month": "202609",
+      "region_code": "41196",
+      "sha256": "5f0cba821ed6bc0098ac7bfa1aa6cb854c39bd28300eb27cefdb765d9629ffde",
+      "new_signatures": 2,
+      "new_row_copies": 2,
+      "active_signatures": 2,
+      "cancelled_signatures": 0
+    },
+    {
+      "path": "partitions/202609-41220.json.gz",
+      "month": "202609",
+      "region_code": "41220",
+      "sha256": "73d9d3e61f0421f961a66f3355881032f80596c4ec3072c9707b984b46e251d7",
+      "new_signatures": 32,
+      "new_row_copies": 32,
+      "active_signatures": 32,
+      "cancelled_signatures": 0
+    },
+    {
+      "path": "partitions/202609-41250.json.gz",
+      "month": "202609",
+      "region_code": "41250",
+      "sha256": "af578eb0cf9b891f55fff233f76cb6dfe05318f8a476a864ff1442eb5208b5a5",
+      "new_signatures": 3,
+      "new_row_copies": 3,
+      "active_signatures": 3,
+      "cancelled_signatures": 0
+    },
+    {
+      "path": "partitions/202609-41271.json.gz",
+      "month": "202609",
+      "region_code": "41271",
+      "sha256": "1190532918115403c079ccf82cfe9cbe3a4d59e1bcda040e9189ce6c1382c50b",
+      "new_signatures": 5,
+      "new_row_copies": 5,
+      "active_signatures": 5,
+      "cancelled_signatures": 0
+    },
+    {
+      "path": "partitions/202609-41273.json.gz",
+      "month": "202609",
+      "region_code": "41273",
+      "sha256": "9a5215f1e0be13078ae2fd82c6027d311a9bc96b9f0ade1aabba155c5fd1f2d1",
+      "new_signatures": 15,
+      "new_row_copies": 15,
+      "active_signatures": 15,
+      "cancelled_signatures": 0
+    },
+    {
+      "path": "partitions/202609-41281.json.gz",
+      "month": "202609",
+      "region_code": "41281",
+      "sha256": "ef548b2f5c9f93226883c360a15bef03925dc35923c63428f6bf4ce28414ba41",
+      "new_signatures": 33,
+      "new_row_copies": 33,
+      "active_signatures": 33,
+      "cancelled_signatures": 0
+    },
+    {
+      "path": "partitions/202609-41285.json.gz",
+      "month": "202609",
+      "region_code": "41285",
+      "sha256": "3dfe27f12610cb2e4e272738d1923433fdf46ef217a8779c5b3331f61dfbcd35",
+      "new_signatures": 7,
+      "new_row_copies": 7,
+      "active_signatures": 7,
+      "cancelled_signatures": 0
+    },
+    {
+      "path": "partitions/202609-41287.json.gz",
+      "month": "202609",
+      "region_code": "41287",
+      "sha256": "29b5a0bf66fdbf19999b3671d856273c83defccb0daf4a1e3fcf71e9602c09af",
+      "new_signatures": 15,
+      "new_row_copies": 15,
+      "active_signatures": 15,
+      "cancelled_signatures": 0
+    },
+    {
+      "path": "partitions/202609-41360.json.gz",
+      "month": "202609",
+      "region_code": "41360",
+      "sha256": "5841f3522ebf980802b3a32629ef8d7cf3928d156dc032c5a382995c566219d5",
+      "new_signatures": 36,
+      "new_row_copies": 36,
+      "active_signatures": 36,
+      "cancelled_signatures": 0
+    },
+    {
+      "path": "partitions/202609-41370.json.gz",
+      "month": "202609",
+      "region_code": "41370",
+      "sha256": "c3e04cb4684b797b2d76847309743a3bfa6f55f6f70f282bb366b00ff132de9a",
+      "new_signatures": 14,
+      "new_row_copies": 14,
+      "active_signatures": 14,
+      "cancelled_signatures": 0
+    },
+    {
+      "path": "partitions/202609-41390.json.gz",
+      "month": "202609",
+      "region_code": "41390",
+      "sha256": "c8eb7ad9b51b4d0e35e25f358fb58812eba5f8fb3e001753a52ea0bb2b7aac60",
+      "new_signatures": 18,
+      "new_row_copies": 18,
+      "active_signatures": 18,
+      "cancelled_signatures": 0
+    },
+    {
+      "path": "partitions/202609-41410.json.gz",
+      "month": "202609",
+      "region_code": "41410",
+      "sha256": "7d5bf8a8148a9923690642223880812433ed6fdea151f78afd4ab924184ded55",
+      "new_signatures": 7,
+      "new_row_copies": 7,
+      "active_signatures": 7,
+      "cancelled_signatures": 0
+    },
+    {
+      "path": "partitions/202609-41430.json.gz",
+      "month": "202609",
+      "region_code": "41430",
+      "sha256": "2d57e99f765e3f36536e8fce31797244e30bb6fa2dde5d6a12782fa4311a744d",
+      "new_signatures": 2,
+      "new_row_copies": 2,
+      "active_signatures": 2,
+      "cancelled_signatures": 0
+    },
+    {
+      "path": "partitions/202609-41450.json.gz",
+      "month": "202609",
+      "region_code": "41450",
+      "sha256": "a1f73c007a16c876fb80c36b6dbc574151e876af92d1b777999384d4e24cf43a",
+      "new_signatures": 4,
+      "new_row_copies": 4,
+      "active_signatures": 4,
+      "cancelled_signatures": 0
+    },
+    {
+      "path": "partitions/202609-41461.json.gz",
+      "month": "202609",
+      "region_code": "41461",
+      "sha256": "3a88c17bf581c6203a1738ed8cdae39f2ed173ca987c60986a4a85f60b49844f",
+      "new_signatures": 5,
+      "new_row_copies": 5,
+      "active_signatures": 5,
+      "cancelled_signatures": 0
+    },
+    {
+      "path": "partitions/202609-41463.json.gz",
+      "month": "202609",
+      "region_code": "41463",
+      "sha256": "6a8cc370ee34214108c8bd6666d83bfcfbcb779512da1dce8226bd21c5c33aee",
+      "new_signatures": 9,
+      "new_row_copies": 9,
+      "active_signatures": 9,
+      "cancelled_signatures": 0
+    },
+    {
+      "path": "partitions/202609-41465.json.gz",
+      "month": "202609",
+      "region_code": "41465",
+      "sha256": "ad21d3efb0f5ec2be230006d361461dd5f2e8c772f6e740a18527f4f4eb999dc",
+      "new_signatures": 1,
+      "new_row_copies": 1,
+      "active_signatures": 1,
+      "cancelled_signatures": 0
+    },
+    {
+      "path": "partitions/202609-41480.json.gz",
+      "month": "202609",
+      "region_code": "41480",
+      "sha256": "29845d07ee66fc663094a17b4f763567f8e73e9383b6274f30cbf4ec9e532658",
+      "new_signatures": 32,
+      "new_row_copies": 32,
+      "active_signatures": 32,
+      "cancelled_signatures": 0
+    },
+    {
+      "path": "partitions/202609-41500.json.gz",
+      "month": "202609",
+      "region_code": "41500",
+      "sha256": "8926e33ad0330909540dd3b508d8a3e6d8df052481ed94c8889dd8b72fd1573b",
+      "new_signatures": 8,
+      "new_row_copies": 8,
+      "active_signatures": 8,
+      "cancelled_signatures": 0
+    },
+    {
+      "path": "partitions/202609-41550.json.gz",
+      "month": "202609",
+      "region_code": "41550",
+      "sha256": "464e9e9ca92746061d32e8db406a10f5557ccad2fae56623b21930e0df2c33b0",
+      "new_signatures": 6,
+      "new_row_copies": 6,
+      "active_signatures": 6,
+      "cancelled_signatures": 0
+    },
+    {
+      "path": "partitions/202609-41570.json.gz",
+      "month": "202609",
+      "region_code": "41570",
+      "sha256": "d3c4cae9d00fabf0856e95c53962a6729ca9f7d9054ca4536fd9f28772cbe0fd",
+      "new_signatures": 11,
+      "new_row_copies": 11,
+      "active_signatures": 11,
+      "cancelled_signatures": 0
+    },
+    {
+      "path": "partitions/202609-41591.json.gz",
+      "month": "202609",
+      "region_code": "41591",
+      "sha256": "ff15fdb531368bd7302c30794ef9d98889d201bfbd21dbcccd88addcb701ddf2",
+      "new_signatures": 3,
+      "new_row_copies": 3,
+      "active_signatures": 2,
+      "cancelled_signatures": 1
+    },
+    {
+      "path": "partitions/202609-41593.json.gz",
+      "month": "202609",
+      "region_code": "41593",
+      "sha256": "2744de7f7a70955d7a357e0eeec6c8a19dc35fe6b0f779ff14953b80343862a6",
+      "new_signatures": 17,
+      "new_row_copies": 17,
+      "active_signatures": 16,
+      "cancelled_signatures": 1
+    },
+    {
+      "path": "partitions/202609-41595.json.gz",
+      "month": "202609",
+      "region_code": "41595",
+      "sha256": "81c969219d138bb7c8cc6ad0e36a1112c7102ee25e0ce550d802ad93cc2c888a",
+      "new_signatures": 24,
+      "new_row_copies": 24,
+      "active_signatures": 24,
+      "cancelled_signatures": 0
+    },
+    {
+      "path": "partitions/202609-41597.json.gz",
+      "month": "202609",
+      "region_code": "41597",
+      "sha256": "bb95bab907627af136ad2a8495c60d03ce1eafe891e82ce344e3d74833c7d1ca",
+      "new_signatures": 4,
+      "new_row_copies": 4,
+      "active_signatures": 4,
+      "cancelled_signatures": 0
+    },
+    {
+      "path": "partitions/202609-41610.json.gz",
+      "month": "202609",
+      "region_code": "41610",
+      "sha256": "de25a8e6de3a1b25bb7300058578ed6991fe047da6bc547afc771454c446c085",
+      "new_signatures": 27,
+      "new_row_copies": 27,
+      "active_signatures": 27,
+      "cancelled_signatures": 0
+    },
+    {
+      "path": "partitions/202609-41630.json.gz",
+      "month": "202609",
+      "region_code": "41630",
+      "sha256": "2ec99b69f40b86311ac9d6c7afd0cfa49d389d7eb8e5b4e48f132267cbaae373",
+      "new_signatures": 15,
+      "new_row_copies": 15,
+      "active_signatures": 14,
+      "cancelled_signatures": 1
+    },
+    {
+      "path": "partitions/202609-41650.json.gz",
+      "month": "202609",
+      "region_code": "41650",
+      "sha256": "25c44e7b50d8244ce875548ace098242e055bcc8b9cea4951669ccfc20701299",
+      "new_signatures": 3,
+      "new_row_copies": 3,
+      "active_signatures": 3,
+      "cancelled_signatures": 0
+    },
+    {
+      "path": "partitions/202609-41670.json.gz",
+      "month": "202609",
+      "region_code": "41670",
+      "sha256": "7f3bbab3cc8e7717c5eef1167cab84ef204d2bfbf30b53a7d6aa69102fdbaf01",
+      "new_signatures": 3,
+      "new_row_copies": 3,
+      "active_signatures": 3,
+      "cancelled_signatures": 0
+    },
+    {
+      "path": "partitions/202609-41820.json.gz",
+      "month": "202609",
+      "region_code": "41820",
+      "sha256": "a937d049a22d09d1344aa1583dcd3632fcf19d32596727df174c9eb3dcc146f9",
+      "new_signatures": 2,
+      "new_row_copies": 2,
+      "active_signatures": 2,
+      "cancelled_signatures": 0
+    },
+    {
+      "path": "partitions/202609-41830.json.gz",
+      "month": "202609",
+      "region_code": "41830",
+      "sha256": "c7b249d7278ead2ea20bf0d648de82e37c22b99d14adef77829bdd5c71849ab8",
+      "new_signatures": 3,
+      "new_row_copies": 3,
+      "active_signatures": 2,
+      "cancelled_signatures": 1
+    }
+  ],
+  "interpretation": {
+    "measured_quantity": "contract_date_to_first_observation_of_a_public_row_signature",
+    "is_true_publication_delay": false,
+    "baseline_rows_excluded_from_arrival_ages": true,
+    "stable_contract_identifiers_available": false,
+    "historical_unchanged_polls_available": false,
+    "correction_weight_fitted": false,
+    "limitations": [
+      "기준 관측에 이미 존재한 행은 최초 공개를 관측하지 못했으므로 도착 나이 분포에서 제외한다.",
+      "신규 공개행에는 정정·해제 표시·동일 내용 복수 거래가 섞일 수 있어 신규 계약 수가 아니다.",
+      "새로 보인 행의 등장 구간만 관측한다. 최초 관측 시각은 실제 신고·공개 시각이 아니다.",
+      "아직 공개되지 않은 계약은 보이지 않는다. 짧은 관측창의 유입 행만으로 전체 지연 분포를 적합하지 않는다.",
+      "과거 원장은 변화 없는 수집 시각을 남기지 않았다. 새 코드부터 완료된 수집 시각을 모두 보존한다."
+    ]
+  },
+  "next_calibration_design": {
+    "state": "collect_complete_poll_history_before_fitting",
+    "proposed_minimum_observation_days": 180,
+    "proposed_minimum_mature_contract_months": 6,
+    "proposed_contract_cohort_maturity_days": 90,
+    "thresholds_are_operational_gates_not_proof": true,
+    "estimate": "월별 계약 코호트의 공개행 누적 도착률을 지역·거래종류·시기별로 추정하고 희소 지역은 상위 지역으로 축소한다.",
+    "validation": "성숙한 계약월을 순서대로 보류해 미공개 거래량 추정과 가격 추세 오차를 확인한다. 실제 공개 빈티지만 사용한다.",
+    "price_adjustment": "거래량의 미공개분 보정과 가격의 오래됨 보정을 분리한다. 신고 지연을 가격 상승률로 직접 치환하지 않는다.",
+    "permit_handling": "허가 절차 전 의사결정 시각과 신고 계약일의 차이는 이 원장으로 측정할 수 없다. 지역별 허가 적용 이력이 확보되면 별도 구분한다."
+  },
+  "official_context": {
+    "url": "https://rt.molit.go.kr/pt/bbs/faqList.do",
+    "checked_on": "2026-09-08",
+    "summary": "국토교통부 FAQ는 2020-02-21 전 계약의 신고 기한을 60일, 이후를 30일로 설명한다. 정상 공개 절차에서는 신고 다음 날 공개가 원칙이며 계약월로 귀속된다. 법정 기한은 관측된 지연 분포나 모든 건의 최대 지연을 의미하지 않는다.",
+    "permit_delay_assumption_applied": false
+  }
+}
