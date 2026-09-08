@@ -10,7 +10,7 @@ import pandas as pd
 import pytest
 
 from publish_estate_potential import public_payload
-from analyze_estate_potential_horizons import assumed_lag, cutoff_for, price_snapshot, evaluate
+from analyze_estate_potential_horizons import assumed_lag, cutoff_for, price_snapshot, evaluate, maturity_for_window
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -50,11 +50,26 @@ def test_publishing_rejects_duplicate_candidates():
         public_payload(original, digest, {"results": []})
 
 
+def test_publishing_rejects_a_validation_report_from_different_history():
+    body = (ROOT / "metadata/potential_shadow_2026-09_policy-v2.json.gz").read_bytes()
+    forecast = json.loads(gzip.decompress(body))
+    report = json.loads((ROOT / "reports/estate_potential_horizons.json").read_text())
+    public_payload(forecast, hashlib.sha256(body).hexdigest(), report)
+    report["sources"]["older"]["source_sha256"] = "different-history"
+    with pytest.raises(ValueError, match="Validation report source"):
+        public_payload(forecast, hashlib.sha256(body).hexdigest(), report)
+
+
 def test_historical_lag_handles_change_in_reporting_deadline():
     assert assumed_lag("2020-02-20", "historical_policy") == 61
     assert assumed_lag("2020-02-21", "historical_policy") == 31
     assert assumed_lag("2026-08-01", "uniform61") == 61
     assert cutoff_for(pd.Timestamp("2020-03-01"), "historical_policy") == pd.Timestamp("2019-12-31")
+
+
+def test_outcome_maturity_waits_for_old_law_contracts_inside_window():
+    assert maturity_for_window("2019-09-01", "2020-03-01", "historical_policy") == pd.Timestamp("2020-04-21")
+    assert maturity_for_window("2019-09-01", "2020-03-01", "uniform61") == pd.Timestamp("2020-05-01")
 
 
 def test_snapshot_does_not_read_unavailable_pre_change_or_future_prices():

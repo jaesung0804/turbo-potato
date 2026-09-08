@@ -30,6 +30,12 @@ assert.ok(run('Potential.rowHtml(data.rows[0],data,true)').includes('상위'));
 assert.ok(run('Potential.rowHtml(data.rows[0],data,true)').includes('index.html?search='));
 assert.ok(!run('Potential.rowHtml(data.rows[0],data,false)').includes('예상 상대 가격 변화'));
 assert.equal(run('Potential.signed(null)'),'표본 부족');
+assert.equal(run('Potential.fiveYearHtml(null)'),'');
+assert.ok(run('Potential.fiveYearHtml(data.five_year_validation)').includes('740,326'));
+assert.ok(run('Potential.fiveYearHtml(data.five_year_validation)').includes('-0.65%'));
+assert.ok(run('Potential.fiveYearHtml(data.five_year_validation)').includes('+1.00%'));
+assert.ok(run('Potential.fiveYearHtml(data.five_year_validation)').includes('18~24개월 모델을 유지'));
+
 const malicious=run('Potential.rowHtml({...data.rows[0],name:"<img src=x onerror=alert(1)>"},data,true)');assert.ok(!malicious.includes('<img'));
 const ids=new Set([...page.matchAll(/\bid="([^"]+)"/g)].map(m=>m[1]));assert.equal(ids.size,[...page.matchAll(/\bid="([^"]+)"/g)].length);
 for(const m of code.matchAll(/getElementById\('([^']+)'\)/g))assert.ok(ids.has(m[1]),`Missing potential element ${m[1]}`);

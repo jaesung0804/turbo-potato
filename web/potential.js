@@ -32,11 +32,17 @@ const Potential = (() => {
     document.getElementById('potential-list').innerHTML=page.rows.length?page.rows.map(r=>rowHtml(r,state.data,state.selected===r.key)).join(''):'<li class="empty-state">현재 조건에 맞는 후보가 없습니다. 지역·가격 또는 순위 범위를 넓혀 보세요.</li>';
   }
   function theme(enabled){document.body.classList.toggle('dark-mode',enabled);document.getElementById('potential-theme').textContent=enabled?'Light':'Dark';document.getElementById('potential-theme').setAttribute('aria-pressed',String(enabled));}
+  function fiveYearHtml(result) {
+    if(!result)return '';
+    return `<p>${Number(result.raw_rows_added).toLocaleString('ko-KR')}건의 과거 매매를 추가해 ${Number(result.model_test_origins)}개 판단 시점에서 5년 모형을 시험했습니다. 모델과 단순 소외 후보의 관측 조건을 모두 충족한 시점은 ${Number(result.common_eligible_origins)}개로, 채택에 필요한 ${Number(result.required_common_origins)}개보다 적었습니다.</p><div class="potential-detail-grid"><div><span>공통 유효 시점 · 모델 상대 변화 중앙값</span><strong>${signed(result.model_median_excess_pct)}</strong></div><div><span>같은 시점 · 단순 소외 후보</span><strong>${signed(result.benchmark_median_excess_pct)}</strong></div></div><p>${esc(result.outcome_window)}로 비교한 결과입니다. 현재 후보는 검증 범위가 더 넓은 18~24개월 모델을 유지합니다.</p><p>${esc(result.meaning??'')} ${esc(result.next_direction??'')}</p>`;
+  }
   function renderInfo(data){
     document.getElementById('potential-origin').textContent=data.origin;
+    document.getElementById('five-year-validation').hidden=!data.five_year_validation;
+    document.getElementById('five-year-results').innerHTML=fiveYearHtml(data.five_year_validation);
     document.getElementById('potential-cutoff').textContent=data.feature_cutoff;
     document.getElementById('potential-total').textContent=data.cohort_size.toLocaleString('ko-KR');
-    document.getElementById('potential-status').textContent=`${data.origin} 판단 시점의 후보를 고정해 표시합니다. 서울·광명, 같은 면적의 180일 매매 3건 이상인 평형입니다.`;
+    document.getElementById('potential-status').textContent=`판단 기준일 ${data.origin} · 실제 산출 ${new Date(data.created_at).toLocaleString('ko-KR',{timeZone:'Asia/Seoul',hour12:false})} (한국시간). 서울·광명, 같은 면적의 180일 매매 3건 이상인 후보를 고정해 표시합니다.`;
     document.getElementById('potential-district').innerHTML='<option value="all">전체 지역</option>'+[...new Map(data.rows.map(r=>[r.gu,r.district])).entries()].sort((a,b)=>a[1].localeCompare(b[1],'ko')).map(([code,name])=>`<option value="${esc(code)}">${esc(name)}</option>`).join('');
     document.getElementById('potential-weighting').textContent=data.weighting;
     const names=Object.fromEntries(data.features.map(f=>[f.key,f.label]));
@@ -47,7 +53,7 @@ const Potential = (() => {
     document.getElementById('potential-lag-assumption').textContent=data.availability_assumption??'';
     const audit=data.reporting_lag_audit;
     document.getElementById('potential-reporting-audit').textContent=audit?`실제 공개 시차 관측: ${audit.window_days.toFixed(1)}일 동안 새 공개 기록 ${audit.new_public_signatures.toLocaleString('ko-KR')}개를 확보했습니다. 현재는 31·61일 가정을 비교하며, 실제 지연 분포로 학습한 보정치는 아직 적용하지 않습니다.`:'';
-    document.getElementById('potential-scope').textContent=`${data.scope}. 거래가 없는 후보의 최종 성과는 확인되지 않았으며, 관측된 후보의 중앙값입니다. 현재 5년 결과와 실제 공시 시차 분포는 검증되지 않았습니다.`;
+    document.getElementById('potential-scope').textContent=`${data.scope}. 거래가 없는 후보의 최종 성과는 확인되지 않았으며, 관측된 후보의 중앙값입니다. 5년 실험 결과는 아래 별도 표에 구분합니다. 실제 공시 시차의 분포 보정은 관측 자료가 더 필요합니다.`;
   }
   function exportRows(){const rows=filterRows(state.data.rows,state);ResultPages.downloadCsv(`apartment-potential-${state.data.origin}.csv`,['판단 기준일','실거래 반영 마감','전체 순위','전체 중 상위(%)','지역','동','단지','전용면적(㎡)','판단 전 대표가격(억)','180일 거래수','예상 상대 가격 변화(%)','61일 지연 가정 순위','31·61일 모두 상위10%','결과 시작','결과 종료','식별키'],rows.map(r=>[state.data.origin,state.data.feature_cutoff,r.research_rank,r.top_percent,r.district,r.dong,r.name,r.area,r.entry_reference_oku,r.entry_n,r.predicted_relative_change_pct,r.lag_sensitivity?.alternate_rank,r.lag_sensitivity?.both_top_decile,state.data.outcome_start,state.data.outcome_end,r.key]));}
   function wire(){
@@ -67,6 +73,6 @@ const Potential = (() => {
     const data=await DashboardData.compressed(manifest.potential);if(data.schema_version!==1||!Array.isArray(data.rows)||data.rows.length!==data.cohort_size)throw Error('후보 자료 건수가 일치하지 않습니다.');
     state.data=data;renderInfo(data);render(true);
   }
-  return {init,filterRows,rowHtml,number,signed};
+  return {init,filterRows,rowHtml,number,signed,fiveYearHtml};
 })();
 Potential.init().catch(error=>{document.getElementById('potential-status').textContent=error.message;});

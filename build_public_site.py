@@ -42,10 +42,15 @@ def apply_amenities(summary, path=Path('metadata/amenities_snapshot.json.gz')):
                 for field in AMENITIES:
                     if b.get(field) is None or b.get(field) == []:
                         b[field] = old.get(field)
+                if b.get('households') is not None and not b.get('households_verified'):
+                    b['household_scope'] = 'unverified_legacy'
+                    b['households_verified'] = False
+                    b['household_use_for_model'] = False
                 b['amenity_source'] = '기존 단지명 일치 자료 · 현장 확인 필요'
                 b['amenity_snapshot_built_at'] = snapshot['snapshot_built_at']
                 matched += 1
     return {'matched_types': matched, 'snapshot_built_at': snapshot['snapshot_built_at'],
+            'household_scope': 'unverified_legacy', 'household_use_for_model': False,
             'note': '현재 확인된 시설 정보가 아닌 기존 표시용 자료이며 과거 가격 학습에 사용하지 않습니다.'}
 
 

@@ -34,6 +34,20 @@ def cutoff_for(origin, regime):
     return origin - pd.Timedelta(days=lag)
 
 
+def maturity_for_window(start, end, regime):
+    """Wait for the latest deadline anywhere in an outcome window.
+
+    When the reporting deadline shortened, an earlier old-law contract could
+    become observable later than a newer contract at the window's endpoint.
+    """
+    end = pd.Timestamp(end)
+    mature = end + pd.Timedelta(days=assumed_lag(end, regime))
+    last_old_contract = LAW_CHANGE - pd.Timedelta(days=1)
+    if pd.Timestamp(start) <= last_old_contract <= end:
+        mature = max(mature, last_old_contract + pd.Timedelta(days=61))
+    return mature
+
+
 def price_snapshot(d, origin, regime, window=180):
     cutoff = cutoff_for(origin, regime)
     past = d[(d.date <= cutoff) & (d.available_date <= origin)]
@@ -82,7 +96,7 @@ def labels(d, snapshot, origin, horizon, regime):
                 f.loc[rows, "benchmark"] = other.median()
     f["target"] = f.growth - f.benchmark
     f["horizon_months"] = horizon
-    f["label_available"] = str((end + pd.Timedelta(days=assumed_lag(end, regime))).date())
+    f["label_available"] = str(maturity_for_window(exit_start, end, regime).date())
     return f.reset_index()
 
 
@@ -173,6 +187,13 @@ def evaluate(features, asof):
     return finite({"results": results, "skipped_model_evaluations": skipped, "named_cases": cases})
 
 
+def cohort_coverage(features):
+    return [{"availability_regime": regime, "horizon_months": int(horizon), "origin": origin,
+             "cohort": len(group), "exit_with_three_trades": int((group.exit_n >= 3).sum()),
+             "relative_outcome_observed": int(group.target.notna().sum())}
+            for (regime, horizon, origin), group in features.groupby(["availability_regime", "horizon_months", "origin"])]
+
+
 def main():
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument("--current", default="data/capital_area_apt_trade_transactions.csv")
@@ -200,7 +221,7 @@ def main():
     cache.mkdir(parents=True, exist_ok=True)
     sources = {"current": current_quality, "older": older_quality, "asof": args.asof}
     # A cache is only valid for these exact input hashes, cut date, and design.
-    manifest = {**sources, "design": "180d_horizons_policy61_31_uniform61_v1",
+    manifest = {**sources, "design": "180d_horizons_policy61_31_uniform61_v2",
                 "origin_start": args.origin_start, "origin_end": args.origin_end,
                 "horizons": args.horizons, "regimes": args.regimes}
     manifest_path = cache / "manifest.json"
@@ -223,7 +244,9 @@ def main():
         features.to_parquet(path, index=False)
         frames.append(features)
     manifest_path.write_text(json.dumps(manifest, ensure_ascii=False, indent=2))
-    result = evaluate(pd.concat(frames, ignore_index=True), asof)
+    combined_features = pd.concat(frames, ignore_index=True)
+    result = evaluate(combined_features, asof)
+    result["coverage"] = cohort_coverage(combined_features)
     result.update({"schema_version": 1, "status": "retrospective_diagnostic_not_model_selection_holdout",
                    "sources": sources, "features": COLS, "entry_window_days": 180,
                    "origin_frequency": "six_months", "horizons_months": args.horizons,

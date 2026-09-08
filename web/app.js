@@ -21,7 +21,7 @@ const metricLabels = {
   ai_score: { title: "가격 비교점수", unit: "", digits: 1 },
   area_pyeong: { title: "전용평수", unit: "평", digits: 1 },
   age: { title: "연식", unit: "년차", digits: 0 },
-  households: { title: "세대수", unit: "세대", digits: 0 },
+  households: { title: "세대수 · 기존 자료", unit: "세대", digits: 0 },
 };
 const state = {
   summary: null,
@@ -366,7 +366,7 @@ function priceFilterLabel() {
 }
 
 function householdFilterLabel() {
-  return state.minHouseholds === null ? "전체 세대수" : `${state.minHouseholds.toLocaleString("ko-KR")}세대 이상`;
+  return state.minHouseholds === null ? "세대수 조건 없음" : `기존 자료 ${state.minHouseholds.toLocaleString("ko-KR")}세대 이상`;
 }
 
 function tradeCountFilterLabel() {
@@ -832,10 +832,11 @@ function renderSelectedRegion(groups = groupedBuildings()) {
         ${metricCard("가격 비교점수", aiScoreForItem(selected), "ai_score")}
         ${metricCard("전용평수", building.metrics.area_pyeong.avg, "area_pyeong")}
         ${metricCard("연식", `${format(buildingAge(building), "age")} · ${ageFilterText(ageCategory(building))}`, "text")}
-        ${metricCard("단지 전체 세대수", building.households, "households")}
+        ${metricCard(building.households_verified?"단지 전체 세대수 · 검증":"세대수 · 기존 자료", building.households, "households")}
         ${metricCard("거래된 층 (중앙 / 범위)", building.observed_floor?.median==null?'미확인':`${building.observed_floor.median}층 / ${building.observed_floor.min}~${building.observed_floor.max}층`, "text")}
-        ${metricCard("해당 면적 세대수", "미확인 · 단지 전체와 다름", "text")}
+        ${metricCard("해당 면적 세대수", "미확인", "text")}
         ${metricCard("초품아/역세권", `${elementaryLabel(building)} · ${subwayLabel(building)}`, "text")}
+        <p class="score-note">세대수는 기존 시설 자료의 값입니다. 단지 전체와 동별 수치의 구분·지번 대조가 완료되지 않아 세대수 대비 거래 회전율이나 모델 가중치에 사용하지 않습니다.</p>
         <p class="score-note">${escapeHtml(building.amenity_source ?? "시설 자료 미확인")} · 시설 필터는 확인된 자료가 있는 단지에만 적용됩니다.</p>
       </div>
     `;
@@ -1539,7 +1540,7 @@ function renderMapLabels() {
 
 function renderDataStatus(){const m=state.dataStore.manifest,c=m.coverage[state.year];document.getElementById("data-status").textContent=`자료 ${m.generated_at} · 모델 ${m.model.model_month} · ${c.available_types.toLocaleString("ko-KR")}개 평형 전체 조회`;document.getElementById("coverage-note").textContent=c.complete?"모든 집계 거래가 단지·평형 목록에 보존돼 있습니다. 페이지 수와 관계없이 전체를 검색·다운로드합니다.":`기존 저장본에서 개별 목록 ${c.unrepresented_trades.toLocaleString("ko-KR")}건이 누락돼 있습니다. 전체 복구와 구분해 표시합니다.`;}
 async function changeYear(year){const id=(state.yearRequest??0)+1;state.yearRequest=id;state.loading=true;document.querySelector(".detail-pane").setAttribute("aria-busy","true");try{if(!await state.dataStore.loadPeriod(year))return;state.year=year;state.selectedGroupId=null;state.selectedTypeId=null;state.loading=false;populateSubwayLineSelect();refresh();}catch(e){if(id===state.yearRequest){document.getElementById("year-select").value=state.year;document.getElementById("data-status").textContent=`불러오기 실패: ${e.message}. 이전 결과를 유지합니다.`;}}finally{if(id===state.yearRequest){state.loading=false;document.querySelector(".detail-pane").setAttribute("aria-busy","false");}}}
-function exportResults(){const rows=typeItems().map(({region:r,building:b})=>{const m=aiRecommendationForItem({region:r,building:b}),c=valuationComparison(m);return [state.year,r.sido_name,r.gu_name,r.dong_name,b.building_name,b.area_type,b.key,b.count,b.metrics.price_billion.avg,b.metrics.price_billion.median,b.metrics.price_per_pyeong.median,b.households,b.built_year,c?.score,c?.neutral_price_billion,c?.comparison_price_billion,c?.discount_pct,c?.valuation_month,c?.comparison_period,currentValuation(m)?.recent_trade_count,c?.score_version];});ResultPages.downloadCsv(`apartment-valuation-${state.year}.csv`,["실거래 집계 연도","시도","시군구","읍면동","단지","평형","식별키","연간 거래수","평균 거래가(억)","중앙 거래가(억)","중앙 평단가(만원)","세대수","준공연도","가격 비교점수","현재 50점 기준가(억)","점수에 사용한 비교 실거래가(억)","기준가보다 낮은 비율(%)","기준가 산출 월","비교 실거래 집계 연도","최근 90일 거래수","점수 버전"],rows);}
+function exportResults(){const rows=typeItems().map(({region:r,building:b})=>{const m=aiRecommendationForItem({region:r,building:b}),c=valuationComparison(m);return [state.year,r.sido_name,r.gu_name,r.dong_name,b.building_name,b.area_type,b.key,b.count,b.metrics.price_billion.avg,b.metrics.price_billion.median,b.metrics.price_per_pyeong.median,b.households,b.built_year,c?.score,c?.neutral_price_billion,c?.comparison_price_billion,c?.discount_pct,c?.valuation_month,c?.comparison_period,currentValuation(m)?.recent_trade_count,c?.score_version];});ResultPages.downloadCsv(`apartment-valuation-${state.year}.csv`,["실거래 집계 연도","시도","시군구","읍면동","단지","평형","식별키","연간 거래수","평균 거래가(억)","중앙 거래가(억)","중앙 평단가(만원)","세대수(기존 자료·범위 미검증)","준공연도","가격 비교점수","현재 50점 기준가(억)","점수에 사용한 비교 실거래가(억)","기준가보다 낮은 비율(%)","기준가 산출 월","비교 실거래 집계 연도","최근 90일 거래수","점수 버전"],rows);}
 function renderPage(id){if(id==="ai-list")renderAiRecommendations();else if(id==="growth-ranking-list")renderGrowthRankings();else if(id==="ai-score-ranking-list")renderAiScoreRankings();else renderAssetLists();}
 function wireResultEvents(){document.getElementById("export-results").addEventListener("click",exportResults);document.body.addEventListener("click",e=>{const b=e.target.closest("[data-page-list]");if(b){ResultPages.set(b.dataset.pageList,b.dataset.page);renderPage(b.dataset.pageList);}});document.body.addEventListener("change",e=>{if(e.target.dataset.pageInput){ResultPages.set(e.target.dataset.pageInput,e.target.value);renderPage(e.target.dataset.pageInput);}});}
 

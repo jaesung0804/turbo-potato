@@ -59,6 +59,14 @@ def public_payload(snapshot: dict, source_sha256: str, report: dict) -> dict:
 
     results = []
     is_v2 = snapshot.get("schema_version", 1) >= 2
+    if is_v2:
+        for name in ("current", "older"):
+            forecast_source = snapshot["source_sha256"][name]["source_sha256"]
+            report_source = report.get("sources", {}).get(name, {}).get("source_sha256")
+            if forecast_source != report_source:
+                raise ValueError(f"Validation report source does not match frozen forecast: {name}")
+        if report.get("features") != snapshot.get("features") or report.get("entry_window_days") != 180:
+            raise ValueError("Validation report feature design does not match frozen forecast")
     for r in report["results"]:
         if is_v2:
             if r["horizon_months"] != 24 or r["method"] != "learned_price" or r["availability_regime"] != "historical_policy":
@@ -113,6 +121,7 @@ def main():
     p.add_argument("--snapshot", default="metadata/potential_shadow_2026-09_policy-v2.json.gz")
     p.add_argument("--report", default="reports/estate_potential_horizons.json")
     p.add_argument("--lag-audit", default="reports/estate_reporting_lag.json")
+    p.add_argument("--five-year-summary", default="reports/estate_potential_five_year_summary.json")
     p.add_argument("--output", default="metadata/potential_candidates.json.gz")
     args = p.parse_args()
     source = Path(args.snapshot).read_bytes()
@@ -129,6 +138,27 @@ def main():
             "observed_through": audit["window"]["latest_observed_at"],
             "source_sha256": hashlib.sha256(lag_path.read_bytes()).hexdigest(),
             "meaning": "공개 행이 처음 관측된 이력입니다. 실제 고유 계약 수·최초 공개일·전체 시장 신고 지연 분포와 같지 않으며, 현재 순위에 관측 지연 보정 가중치를 학습해 넣지 않았습니다.",
+        }
+    five_path = Path(args.five_year_summary)
+    if five_path.exists():
+        five = json.loads(five_path.read_text())
+        primary = five["regimes"]["historical_policy"]
+        result["five_year_validation"] = {
+            "status": "passed_research_candidate_gate" if five["passed"] else "completed_not_promoted",
+            "raw_rows_added": five.get("added_history_raw_rows"),
+            "history_start": five["sources"]["older"]["min_date"],
+            "model_test_origins": primary["available_model_evaluations"],
+            "common_eligible_origins": primary["common_origins"],
+            "required_common_origins": 6,
+            "model_median_excess_pct": primary["model_equal_origin_mean_median_excess_pct"],
+            "benchmark_median_excess_pct": primary["laggard_equal_origin_mean_median_excess_pct"],
+            "median_rank_correlation": primary["model_median_spearman"],
+            "protocol_commit": five["protocol_commit"],
+            "additional_sensitivity_status": five.get("additional_sensitivity_status"),
+            "summary_sha256": hashlib.sha256(five_path.read_bytes()).hexdigest(),
+            "outcome_window": "54~60개월 뒤의 마지막 6개월, 동일 평형 거래 3건 이상",
+            "meaning": "2006년 이후 이력으로 5년 모형 학습·시험을 완료했으나, 이 사양은 사전에 정한 결과 관측량과 단순 소외 후보 대비 성능 기준을 통과하지 못했습니다. 현재 순위는 18~24개월 후보를 유지합니다.",
+            "next_direction": "5년 전에 강하게 재평가되는 후보를 찾는 목적에 맞춰, 향후 더 넓은 결과 측정 기간과 상대 재평가 도달 시점을 별도 사전 설계로 검증합니다.",
         }
     dest = Path(args.output)
     dest.parent.mkdir(parents=True, exist_ok=True)

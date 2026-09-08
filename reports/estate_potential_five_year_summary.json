@@ -1,0 +1,115 @@
+{
+  "schema_version": 1,
+  "status": "did_not_pass_research_candidate_gate",
+  "passed": false,
+  "regimes": {
+    "historical_policy": {
+      "common_origins": 1,
+      "positive_origins": 0,
+      "positive_fraction": 0.0,
+      "model_equal_origin_mean_median_excess_pct": -0.6471558045040113,
+      "laggard_equal_origin_mean_median_excess_pct": 0.9973571144124455,
+      "model_median_spearman": -0.09490289112440599,
+      "conditions": {
+        "at_least_six_common_origins": false,
+        "positive_in_at_least_two_thirds": false,
+        "beats_laggard_equal_origin_mean": false,
+        "median_spearman_positive": false
+      },
+      "passed": false,
+      "comparisons": [
+        {
+          "origin": "2013-07-01",
+          "selected": 285,
+          "observed": 150,
+          "observed_complexes": 134,
+          "model_median_excess_pct": -0.6471558045040113,
+          "laggard_median_excess_pct": 0.9973571144124455,
+          "model_spearman": -0.09490289112440599
+        }
+      ],
+      "excluded_origins": [
+        "2007-01-01",
+        "2007-07-01",
+        "2008-01-01",
+        "2008-07-01",
+        "2009-01-01",
+        "2009-07-01",
+        "2010-01-01",
+        "2010-07-01",
+        "2011-01-01",
+        "2011-07-01",
+        "2012-01-01",
+        "2012-07-01",
+        "2013-01-01",
+        "2014-01-01",
+        "2014-07-01",
+        "2015-01-01",
+        "2015-07-01",
+        "2016-01-01",
+        "2016-07-01",
+        "2017-01-01",
+        "2017-07-01",
+        "2018-01-01",
+        "2018-07-01",
+        "2019-01-01",
+        "2019-07-01",
+        "2020-01-01",
+        "2020-07-01",
+        "2021-01-01",
+        "2021-07-01"
+      ],
+      "available_model_evaluations": 17
+    },
+    "uniform61": {
+      "common_origins": 0,
+      "positive_origins": 0,
+      "positive_fraction": null,
+      "model_equal_origin_mean_median_excess_pct": null,
+      "laggard_equal_origin_mean_median_excess_pct": null,
+      "model_median_spearman": null,
+      "conditions": {
+        "at_least_six_common_origins": false,
+        "positive_in_at_least_two_thirds": false,
+        "beats_laggard_equal_origin_mean": false,
+        "median_spearman_positive": false
+      },
+      "passed": false,
+      "comparisons": [],
+      "excluded_origins": [],
+      "available_model_evaluations": 0
+    }
+  },
+  "additional_sensitivity_status": "stopped_after_primary_failure",
+  "missing_required_regimes": [
+    "uniform61"
+  ],
+  "meaning": "Predeclared operational gate for adding a five-year research candidate; not proof of causal or executable investment outperformance.",
+  "sources": {
+    "current": {
+      "raw_rows": 1144586,
+      "used_rows": 1037893,
+      "cancelled": 58885,
+      "direct_excluded": 47808,
+      "unknown_deal_type": 214019,
+      "source_sha256": "8d26deabbb65da542427c9b754e940cd2ec77fee0e8c61140eca02e31e5cb61f",
+      "min_date": "2021-01-01",
+      "max_date": "2026-09-07"
+    },
+    "older": {
+      "raw_rows": 1217848,
+      "used_rows": 1214440,
+      "cancelled": 3408,
+      "direct_excluded": 0,
+      "unknown_deal_type": 1214440,
+      "source_sha256": "4c1ac90600207f51ee230185c797b90197d3dcbf901b33057707f7e970a0ffc4",
+      "min_date": "2006-01-01",
+      "max_date": "2020-12-31"
+    },
+    "asof": "2026-09-08"
+  },
+  "report_sha256": "33d48d7532042709fed08628b6f34050feccbd2c4cebb552d30d638868cfdccf",
+  "protocol_sha256": "ed70a32ae76f5f5b27ec6de68ea665383cbca8ace8ee51fa7fa67874d6d2a113",
+  "protocol_commit": "0fef1ed9f6effb4b1c7fa08ab1e6e399c1a8fe35",
+  "added_history_raw_rows": 740326
+}

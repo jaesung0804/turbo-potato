@@ -60,6 +60,9 @@ jobs:
           key: estate-older-history-v1-${{ github.run_id }}-${{ github.run_attempt }}
       - uses: actions/upload-artifact@v4
         if: always()
+        # The checked, immutable Git snapshot above is the durable output.
+        # A secondary download archive failure must not invalidate that copy.
+        continue-on-error: true
         with:
           name: older-research-sales-${{ github.run_id }}-${{ github.run_attempt }}
           path: |
