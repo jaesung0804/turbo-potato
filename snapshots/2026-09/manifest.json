@@ -1,0 +1,79 @@
+{
+  "schema_version": 1,
+  "model": "price_activity_relative_growth_24m_policy_v2",
+  "origin": "2026-09-01",
+  "created_at": "2026-09-08T16:15:52.264818+00:00",
+  "archived_at": "2026-09-08T23:04:30.111115+00:00",
+  "status": "research_candidate",
+  "imported_baseline": true,
+  "source_sha256": {
+    "current": {
+      "raw_rows": 1144586,
+      "used_rows": 1037893,
+      "cancelled": 58885,
+      "direct_excluded": 47808,
+      "unknown_deal_type": 214019,
+      "source_sha256": "8d26deabbb65da542427c9b754e940cd2ec77fee0e8c61140eca02e31e5cb61f",
+      "min_date": "2021-01-01",
+      "max_date": "2026-09-07"
+    },
+    "older": {
+      "raw_rows": 477522,
+      "used_rows": 474114,
+      "cancelled": 3408,
+      "direct_excluded": 0,
+      "unknown_deal_type": 474114,
+      "source_sha256": "1e297220707abc6fd3d5a743ad510e7ed12e42612467ae066c31a5e1598a3686",
+      "min_date": "2016-01-01",
+      "max_date": "2020-12-31"
+    }
+  },
+  "source_state_commits": {},
+  "training_rows": 17460,
+  "training_artifacts_status": "not_saved_by_original_baseline_exporter",
+  "latest_training_label_available": "2026-08-01",
+  "validation": {
+    "status": "observed_research_diagnostic",
+    "regimes": {
+      "historical_policy": {
+        "evaluations": 9,
+        "with_observed_headline": 5
+      },
+      "uniform61": {
+        "evaluations": 9,
+        "with_observed_headline": 5
+      }
+    },
+    "performance_promoted": false,
+    "meaning": "The existing 20 observed-complex display condition is required in each lag scenario. No positive-return or new model-selection gate is applied."
+  },
+  "files": [
+    {
+      "path": "public.json.gz",
+      "bytes": 651525,
+      "sha256": "c73ad684c2d32c3b1e949e89c426c6b35c8a65313fb327d3c64c7af1adc7be8e"
+    },
+    {
+      "path": "snapshot.json.gz",
+      "bytes": 537535,
+      "sha256": "ac419c2ab454395adc3a3723acf5ccd8b2d566390480650e44942458dc84999b"
+    },
+    {
+      "path": "training_manifest.json",
+      "bytes": 276,
+      "sha256": "08b07fce5b3ad84d7cad35ffd743dee3c21a45eddb2215ab0801cd90ee1dc405"
+    },
+    {
+      "path": "validation.json",
+      "bytes": 448510,
+      "sha256": "566f06bca3928d6d8471bd2dfb64286f4906daf30d58eac5ad29ff4fc15be178"
+    }
+  ],
+  "code_commit": null,
+  "code_sha256": {
+    "refresh_estate_potential.py": "2aea61160c6267abd843634aa05e377ef0c32bdba4a5ab94c6a76f7bb0b946de",
+    "export_estate_potential_v2.py": "283fbe45dd597f215da0284084947c466b72dff7df3a77df2922ded2833c3aad",
+    "analyze_estate_potential_horizons.py": "5d5ec867a981f64a5ab2e7c9e1cabec8bed8ddf2171aa99370f39f7644e4323f",
+    "publish_estate_potential.py": "2e3744f5d0efe8baf91beb8046bcb06ef8194502503626f649d7d6ef983d9e58"
+  }
+}

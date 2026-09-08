@@ -1,11 +1,4 @@
-*.py text eol=lf
-*.js text eol=lf
-*.cjs text eol=lf
-*.html text eol=lf
-*.css text eol=lf
-*.md text eol=lf
-*.yml text eol=lf
+snapshots/**/*.gz -text
+snapshots/**/*.joblib -text
+snapshots/**/*.parquet -text
 *.json text eol=lf
-*.gz -text
-*.joblib -text
-web/vendor/* -text

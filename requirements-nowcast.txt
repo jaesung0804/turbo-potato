@@ -1,3 +1,0 @@
-# Optional offline validation and prediction exports.
--r requirements.txt
-pyarrow==25.0.1

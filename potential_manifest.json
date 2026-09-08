@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "model": "price_activity_relative_growth_24m_policy_v2",
+  "snapshots": {
+    "2026-09": {
+      "path": "snapshots/2026-09/manifest.json",
+      "bytes": 2705,
+      "sha256": "ccaf7b49459afc8ea83faf16fb9268067678458f6681743e400302b817b55d79"
+    }
+  },
+  "latest": "2026-09",
+  "last_attempt": {
+    "status": "preserved_research_candidate",
+    "origin": "2026-09-01",
+    "attempted_at": "2026-09-08T23:04:30.111115+00:00"
+  }
+}
