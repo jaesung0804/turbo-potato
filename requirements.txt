@@ -6,3 +6,4 @@ lightgbm==4.7.0; sys_platform != "win32"
 lightgbm==4.6.0; sys_platform == "win32"
 joblib==1.5.3
 shapely==2.1.2
+openpyxl==3.1.5

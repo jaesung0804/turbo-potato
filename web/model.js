@@ -1,6 +1,13 @@
 async function loadGuide(){
  const response=await fetch('data/dashboard_manifest.json',{cache:'no-cache'});if(!response.ok)throw Error('자료를 불러오지 못했습니다.');
  const m=await response.json(),f=n=>n==null?'—':Number(n).toLocaleString('ko-KR'),pct=n=>n==null?'—':`${(n*100).toFixed(1)}%`,esc=ResultPages.escape;
+ const research=m.market_research;
+ if(research){
+  document.getElementById('market-research-status').textContent=research.headline;
+  const rows=research.price_comparison.map(r=>`<tr><th>${esc(r.period)}</th><td>${f(r.trades)}</td><td>${r.base.toFixed(4)}</td><td>${r.kb.toFixed(4)}</td><td>${r.lease.toFixed(4)}</td><td>${r.both.toFixed(4)}</td></tr>`).join('');
+  const cadence=research.cadence.map(r=>`<tr><th>${esc(r.period)}</th><td>${f(r.trades)}</td><td>${r.monthly.toFixed(4)}</td><td>${r.quarter.toFixed(4)}</td><td>${r.half.toFixed(4)}</td></tr>`).join('');
+  document.getElementById('market-research-results').innerHTML=`<p>${esc(research.data_note)}</p><h3>현재 가격 오차 · 수도권</h3><p>거래당 총액 평균 절대오차(억). 작을수록 이후 실거래가격에 가깝습니다.</p><div class="table-scroll"><table><thead><tr><th>시험 기간</th><th>거래 수</th><th>기존 월간</th><th>KB 추가</th><th>전세 추가</th><th>둘 다 추가</th></tr></thead><tbody>${rows}</tbody></table></div><h3>가격 갱신 주기 · 서울</h3><p>같은 거래·층의 가격을 비교했습니다. 3월부터 시작하는 3/6개월 동결 구간이며, 아래 단위도 억입니다.</p><div class="table-scroll"><table><thead><tr><th>시험 기간</th><th>거래 수</th><th>매월 갱신</th><th>3개월 고정</th><th>6개월 고정</th></tr></thead><tbody>${cadence}</tbody></table></div><p>${esc(research.potential_note)}</p><p>${esc(research.limitations)}</p>`;
+ }else document.getElementById('market-research-status').textContent='추가 실험 결과가 아직 이 배포본에 포함되지 않았습니다.';
  document.getElementById('model-status').textContent=`${m.model.model_version} · 모델 ${m.model.model_month} · 학습 ${m.model.trained_through}까지 · 거래자료 ${m.generated_at}`;
  if(m.model.nowcast){
   const n=m.model.nowcast,section=document.createElement('section');

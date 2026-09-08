@@ -1,0 +1,299 @@
+{
+  "kb_lag3_2025": {
+    "capital": {
+      "base": {
+        "transactions": 205771,
+        "complexes": 13274,
+        "mape_pct": 5.077,
+        "complex_balanced_mape_pct": 9.748,
+        "median_ape_pct": 3.407,
+        "mae_oku": 0.4335,
+        "bias_pct": -0.388,
+        "within10_pct": 88.22
+      },
+      "candidate": {
+        "transactions": 205771,
+        "complexes": 13274,
+        "mape_pct": 5.051,
+        "complex_balanced_mape_pct": 9.718,
+        "median_ape_pct": 3.367,
+        "mae_oku": 0.4273,
+        "bias_pct": -0.365,
+        "within10_pct": 88.29
+      }
+    },
+    "seoul": {
+      "base": {
+        "transactions": 64630,
+        "complexes": 5323,
+        "mape_pct": 5.874,
+        "complex_balanced_mape_pct": 11.925,
+        "median_ape_pct": 3.799,
+        "mae_oku": 0.8285,
+        "bias_pct": -1.644,
+        "within10_pct": 84.34
+      },
+      "candidate": {
+        "transactions": 64630,
+        "complexes": 5323,
+        "mape_pct": 5.863,
+        "complex_balanced_mape_pct": 12.024,
+        "median_ape_pct": 3.774,
+        "mae_oku": 0.8136,
+        "bias_pct": -1.686,
+        "within10_pct": 84.43
+      }
+    }
+  },
+  "kb_lag3_2026": {
+    "capital": {
+      "base": {
+        "transactions": 119313,
+        "complexes": 12135,
+        "mape_pct": 6.063,
+        "complex_balanced_mape_pct": 9.058,
+        "median_ape_pct": 4.186,
+        "mae_oku": 0.5142,
+        "bias_pct": -1.099,
+        "within10_pct": 82.74
+      },
+      "candidate": {
+        "transactions": 119313,
+        "complexes": 12135,
+        "mape_pct": 6.157,
+        "complex_balanced_mape_pct": 9.14,
+        "median_ape_pct": 4.247,
+        "mae_oku": 0.5401,
+        "bias_pct": -0.721,
+        "within10_pct": 82.38
+      }
+    },
+    "seoul": {
+      "base": {
+        "transactions": 32351,
+        "complexes": 4722,
+        "mape_pct": 7.573,
+        "complex_balanced_mape_pct": 10.734,
+        "median_ape_pct": 5.423,
+        "mae_oku": 1.0146,
+        "bias_pct": -1.117,
+        "within10_pct": 75.46
+      },
+      "candidate": {
+        "transactions": 32351,
+        "complexes": 4722,
+        "mape_pct": 7.789,
+        "complex_balanced_mape_pct": 10.84,
+        "median_ape_pct": 5.619,
+        "mae_oku": 1.1002,
+        "bias_pct": 0.888,
+        "within10_pct": 74.89
+      }
+    }
+  },
+  "kb_lag3_gain": {
+    "mean_oku": -0.0055613324641106505,
+    "complex_bootstrap_95pct": [
+      -0.007337384931367636,
+      -0.003853024199942005
+    ]
+  },
+  "lease_repeated_rows_2025": {
+    "capital": {
+      "base": {
+        "transactions": 205771,
+        "complexes": 13274,
+        "mape_pct": 5.077,
+        "complex_balanced_mape_pct": 9.748,
+        "median_ape_pct": 3.407,
+        "mae_oku": 0.4335,
+        "bias_pct": -0.388,
+        "within10_pct": 88.22
+      },
+      "candidate": {
+        "transactions": 205771,
+        "complexes": 13274,
+        "mape_pct": 5.072,
+        "complex_balanced_mape_pct": 9.703,
+        "median_ape_pct": 3.404,
+        "mae_oku": 0.4334,
+        "bias_pct": -0.358,
+        "within10_pct": 88.22
+      }
+    },
+    "seoul": {
+      "base": {
+        "transactions": 64630,
+        "complexes": 5323,
+        "mape_pct": 5.874,
+        "complex_balanced_mape_pct": 11.925,
+        "median_ape_pct": 3.799,
+        "mae_oku": 0.8285,
+        "bias_pct": -1.644,
+        "within10_pct": 84.34
+      },
+      "candidate": {
+        "transactions": 64630,
+        "complexes": 5323,
+        "mape_pct": 5.873,
+        "complex_balanced_mape_pct": 11.853,
+        "median_ape_pct": 3.791,
+        "mae_oku": 0.8287,
+        "bias_pct": -1.541,
+        "within10_pct": 84.3
+      }
+    }
+  },
+  "lease_repeated_rows_2026": {
+    "capital": {
+      "base": {
+        "transactions": 119313,
+        "complexes": 12135,
+        "mape_pct": 6.063,
+        "complex_balanced_mape_pct": 9.058,
+        "median_ape_pct": 4.186,
+        "mae_oku": 0.5142,
+        "bias_pct": -1.099,
+        "within10_pct": 82.74
+      },
+      "candidate": {
+        "transactions": 119313,
+        "complexes": 12135,
+        "mape_pct": 6.078,
+        "complex_balanced_mape_pct": 9.099,
+        "median_ape_pct": 4.198,
+        "mae_oku": 0.5164,
+        "bias_pct": -1.071,
+        "within10_pct": 82.71
+      }
+    },
+    "seoul": {
+      "base": {
+        "transactions": 32351,
+        "complexes": 4722,
+        "mape_pct": 7.573,
+        "complex_balanced_mape_pct": 10.734,
+        "median_ape_pct": 5.423,
+        "mae_oku": 1.0146,
+        "bias_pct": -1.117,
+        "within10_pct": 75.46
+      },
+      "candidate": {
+        "transactions": 32351,
+        "complexes": 4722,
+        "mape_pct": 7.596,
+        "complex_balanced_mape_pct": 10.758,
+        "median_ape_pct": 5.42,
+        "mae_oku": 1.0198,
+        "bias_pct": -1.036,
+        "within10_pct": 75.43
+      }
+    }
+  },
+  "lease_repeated_rows_gain": {
+    "mean_oku": -0.0006988989647808432,
+    "complex_bootstrap_95pct": [
+      -0.0012421875225663227,
+      -0.00021861737543127428
+    ]
+  },
+  "lease_annual_file_2025": {
+    "capital": {
+      "base": {
+        "transactions": 205771,
+        "complexes": 13274,
+        "mape_pct": 5.077,
+        "complex_balanced_mape_pct": 9.748,
+        "median_ape_pct": 3.407,
+        "mae_oku": 0.4335,
+        "bias_pct": -0.388,
+        "within10_pct": 88.22
+      },
+      "candidate": {
+        "transactions": 205771,
+        "complexes": 13274,
+        "mape_pct": 5.067,
+        "complex_balanced_mape_pct": 9.667,
+        "median_ape_pct": 3.407,
+        "mae_oku": 0.431,
+        "bias_pct": -0.361,
+        "within10_pct": 88.25
+      }
+    },
+    "seoul": {
+      "base": {
+        "transactions": 64630,
+        "complexes": 5323,
+        "mape_pct": 5.874,
+        "complex_balanced_mape_pct": 11.925,
+        "median_ape_pct": 3.799,
+        "mae_oku": 0.8285,
+        "bias_pct": -1.644,
+        "within10_pct": 84.34
+      },
+      "candidate": {
+        "transactions": 64630,
+        "complexes": 5323,
+        "mape_pct": 5.833,
+        "complex_balanced_mape_pct": 11.712,
+        "median_ape_pct": 3.784,
+        "mae_oku": 0.8204,
+        "bias_pct": -1.587,
+        "within10_pct": 84.46
+      }
+    }
+  },
+  "lease_annual_file_2026": {
+    "capital": {
+      "base": {
+        "transactions": 119313,
+        "complexes": 12135,
+        "mape_pct": 6.063,
+        "complex_balanced_mape_pct": 9.058,
+        "median_ape_pct": 4.186,
+        "mae_oku": 0.5142,
+        "bias_pct": -1.099,
+        "within10_pct": 82.74
+      },
+      "candidate": {
+        "transactions": 119313,
+        "complexes": 12135,
+        "mape_pct": 6.082,
+        "complex_balanced_mape_pct": 9.071,
+        "median_ape_pct": 4.214,
+        "mae_oku": 0.5108,
+        "bias_pct": -1.218,
+        "within10_pct": 82.68
+      }
+    },
+    "seoul": {
+      "base": {
+        "transactions": 32351,
+        "complexes": 4722,
+        "mape_pct": 7.573,
+        "complex_balanced_mape_pct": 10.734,
+        "median_ape_pct": 5.423,
+        "mae_oku": 1.0146,
+        "bias_pct": -1.117,
+        "within10_pct": 75.46
+      },
+      "candidate": {
+        "transactions": 32351,
+        "complexes": 4722,
+        "mape_pct": 7.629,
+        "complex_balanced_mape_pct": 10.751,
+        "median_ape_pct": 5.531,
+        "mae_oku": 1.0009,
+        "bias_pct": -1.577,
+        "within10_pct": 75.16
+      }
+    }
+  },
+  "lease_annual_file_gain": {
+    "mean_oku": 0.002843560883235983,
+    "complex_bootstrap_95pct": [
+      0.0015763740518910945,
+      0.004251056741555571
+    ]
+  }
+}

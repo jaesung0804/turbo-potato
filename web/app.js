@@ -575,12 +575,22 @@ function askingPricePanel(selected) {
   return `<section class="asking-price-panel" aria-label="현재 호가 비교"><h3>현재 호가와 비교</h3>
     <div class="metric-grid">${metricCard(v?'최근 50점 기준가 · 총액':'연간 50점 기준가 · 총액',totalPriceLabel(neutralPrice(rec)),'text')}${metricCard(`${state.year}년 누적 실거래 중앙가`,totalPriceLabel(rec.price_billion),'text')}</div>
     <p class="score-note">${escapeHtml(provenance)}</p>
+    ${marketContextPanel(selected.region)}
     <p class="score-note">연간 평가 기준가 ${totalPriceLabel(annualNeutralPrice(rec))} · 목록의 검토점수·참고 범위는 연간 평가 기준입니다. ${escapeHtml(referenceBasisLabel(rec))} 실거래 중앙가는 해당 연도 전체 거래의 중앙값이며, 최근 거래가나 현재 매도 호가와 다릅니다.</p>
     <p class="score-note">${escapeHtml(rec.area_type)} 기준 · 50점은 입력 가격과 모델 기준가격이 같아지는 지점입니다. 50점 초과는 상대적으로 싼 방향이며 상승 확률을 뜻하지 않습니다. 금액은 만원 단위로 반올림해 표시합니다.</p>
     <div class="asking-price-controls"><label><span>현재 매매 호가 (억)</span><input id="asking-price-input" type="number" min="0" step="0.0001" placeholder="예: 8.5" value="${escapeHtml(text)}" aria-describedby="asking-price-note"/></label><button id="use-neutral-price" type="button">50점 가격 넣기</button></div>
     <div id="asking-price-result" role="status">${askingPriceResult(rec,text)}</div>
     <p id="asking-price-note" class="score-note">직접 입력한 호가를 실거래 관측가격 대신 넣은 비교입니다. 최근 추정이 있으면 시간 가중 유효 표본 수와 과거 오차로 호가 비교점수를 조정합니다. 개별 매물의 층·향·수리 상태는 직접 입력받지 않으며 대표 층과 다를 수 있습니다. 최근 90일 거래가 적거나 없으면 해석에 유의하세요. 관측 총액은 집계 과정에서 반올림되어, 이를 재입력한 점수는 기존 점수와 소폭 다를 수 있습니다.</p>
   </section>`;
+}
+
+function marketContextPanel(region) {
+  const context=state.dataStore?.manifest?.market_context;
+  if(!context||state.year!==state.recommendations?.target_year)return '';
+  const code=String(region.gu_code??''),data=context.regions?.[code]??context.regions?.[code.slice(0,2)];
+  if(!data)return '';
+  const change=n=>Number.isFinite(n)?`${n>0?'+':''}${n.toFixed(2)}%`:'미확인';
+  return `<div class="market-context"><strong>${escapeHtml(data.name)}의 매매·전세 흐름</strong><p>KB 아파트 지수 · ${escapeHtml(context.reference_month)} 기준 · 최근 3개월 매매 ${change(data.sale_3m_pct)}, 전세 ${change(data.rent_3m_pct)}</p><p class="score-note">지역 흐름을 비교하는 참고 자료입니다. 이 단지의 전세가율이나 미래 상승 확률을 뜻하지 않습니다. <a href="model.html#market-research">50점 가격에 추가 가중하지 않은 검증 이유 →</a></p></div>`;
 }
 
 function referenceBasisLabel(rec) {

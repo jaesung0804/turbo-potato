@@ -130,6 +130,12 @@ def build(source, output, model_dir=Path('models'), month=None, summary_path=Non
     manifest['release_id'] = os.getenv('GITHUB_RUN_ID', 'local')+'-'+os.getenv('GITHUB_RUN_ATTEMPT', '1')
     manifest['amenities'] = amenities
     manifest['map_note'] = '2025-06-30 시군구 경계. 2026년 개편 지역은 전체 목록에서 조회합니다.'
+    market_path=Path('metadata/market_context.json')
+    if market_path.exists():
+        manifest['market_context']=json.loads(market_path.read_text(encoding='utf-8'))
+    research_path=Path('reports/estate_extension_summary.json')
+    if research_path.exists():
+        manifest['market_research']=json.loads(research_path.read_text(encoding='utf-8'))
     comparison_path=Path('reports/estate_model_comparison.json')
     if comparison_path.exists():
         manifest['model_comparison']=json.loads(comparison_path.read_text(encoding='utf-8'))

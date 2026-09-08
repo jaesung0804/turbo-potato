@@ -1,0 +1,227 @@
+{
+  "leases": [
+    {
+      "catalog": "https://data.seoul.go.kr/dataList/OA-21276/A/1/datasetView.do",
+      "license": "공공누리 제1유형 (출처표시)",
+      "retrieved_at": "2026-09-08T14:05:42.408206+00:00",
+      "sources": [
+        {
+          "file_year": 2021,
+          "sequence": 34,
+          "catalog_modified": "2022-05-18",
+          "sha256": "c623b49d483a41bb090329768297ea086fff181fb45a3bd7ad68a3e4e5ea4aac",
+          "raw_rows": 524675,
+          "pure_apartment_jeonse_rows": 122977,
+          "contract_types": {
+            "미상": 73750,
+            "신규": 26658,
+            "갱신": 22569
+          },
+          "contract_min": "2011-01-07",
+          "contract_max": "2022-01-10"
+        },
+        {
+          "file_year": 2022,
+          "sequence": 36,
+          "catalog_modified": "2023-01-12",
+          "sha256": "77483fe458b54523042aa6443c25034918dd4cea220bd6e871b5332ac4cc3dab",
+          "raw_rows": 560665,
+          "pure_apartment_jeonse_rows": 126813,
+          "contract_types": {
+            "갱신": 53597,
+            "신규": 49473,
+            "미상": 23743
+          },
+          "contract_min": "2022-01-01",
+          "contract_max": "2022-12-31"
+        },
+        {
+          "file_year": 2023,
+          "sequence": 38,
+          "catalog_modified": "2024-02-19",
+          "sha256": "8edf19b8c94fd81ebad58438a521cf789e2eb37b413323159e4990484701664b",
+          "raw_rows": 545813,
+          "pure_apartment_jeonse_rows": 139289,
+          "contract_types": {
+            "신규": 80227,
+            "갱신": 41536,
+            "미상": 17526
+          },
+          "contract_min": "2022-11-05",
+          "contract_max": "2024-02-06"
+        },
+        {
+          "file_year": 2024,
+          "sequence": 39,
+          "catalog_modified": "2025-04-04",
+          "sha256": "1a72d2dc71a8cca3b1f87747427e5e181f7ae954d9c1fed6cf2f4670e674f125",
+          "raw_rows": 522001,
+          "pure_apartment_jeonse_rows": 119366,
+          "contract_types": {
+            "신규": 71283,
+            "갱신": 40632,
+            "미상": 7451
+          },
+          "contract_min": "2023-11-05",
+          "contract_max": "2025-05-01"
+        },
+        {
+          "file_year": 2025,
+          "sequence": 40,
+          "catalog_modified": "2026-02-04",
+          "sha256": "d7a887488fb89eb337e134d4ce724b0279b207ec4d4f54e6ee3fb95c6fa49d52",
+          "raw_rows": 1084942,
+          "pure_apartment_jeonse_rows": 249528,
+          "contract_types": {
+            "신규": 124284,
+            "갱신": 106761,
+            "미상": 18483
+          },
+          "contract_min": "2023-09-19",
+          "contract_max": "2026-02-02"
+        }
+      ],
+      "availability": "Current downloadable vintage; contract date and receipt year are not first publication timestamps.",
+      "rows": 757973,
+      "identical_normalized_rows": 107284,
+      "deduplication": "No stable contract ID. Identical rows are retained; file years are ingested once."
+    },
+    {
+      "catalog": "https://data.seoul.go.kr/dataList/OA-21276/A/1/datasetView.do",
+      "license": "공공누리 제1유형 (출처표시)",
+      "retrieved_at": "2026-09-08T14:09:27.133927+00:00",
+      "sources": [
+        {
+          "file_year": 2016,
+          "sequence": 29,
+          "catalog_modified": "2022-05-18",
+          "sha256": "f2eb5aff4c3188b4a4e5f0a6874c370468b091835dc27e7ee9dc84299f34fcc0",
+          "raw_rows": 382412,
+          "pure_apartment_jeonse_rows": 99396,
+          "contract_types": {
+            "미상": 99396
+          },
+          "contract_min": "2011-01-05",
+          "contract_max": "2016-12-30"
+        },
+        {
+          "file_year": 2017,
+          "sequence": 30,
+          "catalog_modified": "2022-05-18",
+          "sha256": "4c57c455fb54b7e7e77b2279d7b26242bb0531c5d93a6a671e52d44a5095a717",
+          "raw_rows": 398292,
+          "pure_apartment_jeonse_rows": 106024,
+          "contract_types": {
+            "미상": 106024
+          },
+          "contract_min": "2011-01-10",
+          "contract_max": "2017-12-29"
+        },
+        {
+          "file_year": 2018,
+          "sequence": 31,
+          "catalog_modified": "2022-05-18",
+          "sha256": "5e32d31450b2d2afa0526151725a52a6fc03c3dfc9fc4cc4620635712ee098a6",
+          "raw_rows": 436595,
+          "pure_apartment_jeonse_rows": 118226,
+          "contract_types": {
+            "미상": 118226
+          },
+          "contract_min": "2011-01-20",
+          "contract_max": "2018-12-31"
+        },
+        {
+          "file_year": 2019,
+          "sequence": 32,
+          "catalog_modified": "2022-05-18",
+          "sha256": "3a521bdae3aebef7fd5cbe74a1aa288ded173a0bc7ab83a56143e00d531bf2c2",
+          "raw_rows": 458969,
+          "pure_apartment_jeonse_rows": 124144,
+          "contract_types": {
+            "미상": 124144
+          },
+          "contract_min": "2011-02-01",
+          "contract_max": "2019-12-31"
+        },
+        {
+          "file_year": 2020,
+          "sequence": 33,
+          "catalog_modified": "2022-05-18",
+          "sha256": "8976f47d1fae092450fc6ab404a94dc6c335ff29314b73822a857ed262181d2c",
+          "raw_rows": 509038,
+          "pure_apartment_jeonse_rows": 135278,
+          "contract_types": {
+            "미상": 135278
+          },
+          "contract_min": "2011-01-30",
+          "contract_max": "2020-12-31"
+        }
+      ],
+      "availability": "Current downloadable vintage; contract date and receipt year are not first publication timestamps.",
+      "rows": 583068,
+      "identical_normalized_rows": 2,
+      "deduplication": "No stable contract ID. Identical rows are retained; file years are ingested once."
+    }
+  ],
+  "historical_sales": {
+    "schema_version": 1,
+    "normalizer_version": 2,
+    "complete": true,
+    "shard_complete": true,
+    "start": "201601",
+    "end": "202012",
+    "rows": 477522,
+    "shard_index": 0,
+    "shard_count": 1,
+    "partition_count": 1560,
+    "region_count": 26,
+    "registry_month": "2026-09",
+    "sha256": "1e297220707abc6fd3d5a743ad510e7ed12e42612467ae066c31a5e1598a3686",
+    "fetched_at": "2026-09-08T14:08:56.644407+00:00",
+    "source": "https://apis.data.go.kr/1613000/RTMSDataSvcAptTrade/getRTMSDataSvcAptTrade",
+    "refresh_months": 0,
+    "historical_audit_month": null,
+    "note": "All API pages retained, including cancellations for downstream filtering."
+  },
+  "price_input": {
+    "current": {
+      "raw_rows": 1143357,
+      "used_rows": 1036719,
+      "cancelled": 58851,
+      "direct_excluded": 47787,
+      "unknown_deal_type": 214019,
+      "source_sha256": "7effdf9bcc61080021899fba7e3fd8bebbd44b072bcea0dbeacf071ada191c20",
+      "min_date": "2021-01-01",
+      "max_date": "2026-09-05"
+    },
+    "older": {
+      "raw_rows": 477522,
+      "used_rows": 474114,
+      "cancelled": 3408,
+      "direct_excluded": 0,
+      "unknown_deal_type": 474114,
+      "source_sha256": "1e297220707abc6fd3d5a743ad510e7ed12e42612467ae066c31a5e1598a3686",
+      "min_date": "2016-01-01",
+      "max_date": "2020-12-31"
+    }
+  },
+  "current_sales_state_commit": "cdd427e2029bef10098e222b9423eaf2a847204c",
+  "kb": {
+    "download_url": "https://api.kbland.kr/land-extra/statistics/getfiledown?urlpath=%2F%2Fkbstar%2Fland%2Fstatc%2Ftmsr%2Fmonthly%2Feafe3c5681a94890.xlsx",
+    "record": {
+      "등록일시": "2026-08-28T08:55:30",
+      "기준년월일": "2021-08-31",
+      "내용": "- 지수기준시점 (기간은 전체기간으로 제공)\n  (주택/오피스텔) '26.1월 = 100\n- 문의사항 'KB부동산앱 > 메뉴 >  '개선의견등록' \n- 참고: KB부동산 > 메뉴 > 데이터허브",
+      "이미지도메인URL": "https://file.kbland.kr/image",
+      "파일명": "eafe3c5681a94890.xlsx",
+      "제목": "월간시계열 2026-08",
+      "원본파일명": "202608_월간 주택 시계열(PIR포함).xlsx",
+      "자료구분": "월간시계열",
+      "파일구분": "3",
+      "주월간구분": "1",
+      "파일경로": "//kbstar/land/statc/tmsr/monthly",
+      "통계일련번호": 2
+    }
+  },
+  "kb_sha256": "6d03201f22b332970a511203de88f0cc32531e34035ad3ea0ebf235fca63156b"
+}
