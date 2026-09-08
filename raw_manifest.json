@@ -7,17 +7,17 @@
     "shard_complete": true,
     "start": "202101",
     "end": "202609",
-    "rows": 1144586,
+    "rows": 1145460,
     "shard_index": 0,
     "shard_count": 1,
     "partition_count": 5727,
     "region_count": 83,
     "registry_month": "2026-09",
-    "sha256": "8d26deabbb65da542427c9b754e940cd2ec77fee0e8c61140eca02e31e5cb61f",
-    "fetched_at": "2026-09-07T23:00:27.476886+00:00",
+    "sha256": "0fd2e8c789d14b3cf31cb972e89adc11f4d88a1bd7dd80abcf2a428d6d3486c7",
+    "fetched_at": "2026-09-08T22:57:55.326645+00:00",
     "source": "https://apis.data.go.kr/1613000/RTMSDataSvcAptTrade/getRTMSDataSvcAptTrade",
     "refresh_months": 3,
-    "historical_audit_month": "202108",
+    "historical_audit_month": "202109",
     "note": "All API pages retained, including cancellations for downstream filtering."
   },
   "files": [
@@ -4007,501 +4007,501 @@
     },
     {
       "path": "partitions/202109-11110.json.gz",
-      "size": 1361,
-      "sha256": "d84f30b8555ca62dc03db4c207a1cd62892f8897523e23228adb0ea0bcd880c9",
-      "fetched_at": "2026-09-06T07:58:45.008779+00:00"
+      "size": 3275,
+      "sha256": "4b70399834ec981975113200193f4f4c12f57e70add08c7e451c8939cb732c6c",
+      "fetched_at": "2026-09-08T22:56:11.739768+00:00"
     },
     {
       "path": "partitions/202109-11140.json.gz",
-      "size": 1520,
-      "sha256": "6f626bda6b23458d4d54b88dfcc0dc31420b096ef18a5ffb33d9737bd641d33e",
-      "fetched_at": "2026-09-06T08:23:15.413735+00:00"
+      "size": 3531,
+      "sha256": "2e7ab203255b7a01e5cc38d0daf8a097badda4ac556c876e756483cf3007ea8f",
+      "fetched_at": "2026-09-08T22:56:11.924702+00:00"
     },
     {
       "path": "partitions/202109-11170.json.gz",
-      "size": 2073,
-      "sha256": "fe081ad15b43ab47f2c4720a2bde501de244da371bdb6a2b700a44fc42061d21",
-      "fetched_at": "2026-09-06T07:59:39.405017+00:00"
+      "size": 5092,
+      "sha256": "ac80afdd84b0dc35449bde855ee30bad0cfe1bd9700eb01953c9e1faea1b7183",
+      "fetched_at": "2026-09-08T22:56:11.963910+00:00"
     },
     {
       "path": "partitions/202109-11200.json.gz",
-      "size": 2764,
-      "sha256": "5abfcb2d7768f8508566a3a996e1385b20c0cca38596ba70ddc439726514e951",
-      "fetched_at": "2026-09-06T08:34:25.287663+00:00"
+      "size": 9050,
+      "sha256": "b2b0aab92f83c75df38f4d8d525b5e38f269022c32c2cc749c29c386e3ad33e5",
+      "fetched_at": "2026-09-08T22:56:12.337335+00:00"
     },
     {
       "path": "partitions/202109-11215.json.gz",
-      "size": 1796,
-      "sha256": "73799790dccde7e4a0094b8bb2deff020736136a3edab5df8c7c31360b698975",
-      "fetched_at": "2026-09-06T07:58:44.716873+00:00"
+      "size": 4807,
+      "sha256": "918c92318556999ee4877590ec6a67ef168c514ea600ef583558a93d16169acf",
+      "fetched_at": "2026-09-08T22:56:12.462147+00:00"
     },
     {
       "path": "partitions/202109-11230.json.gz",
-      "size": 2916,
-      "sha256": "2b5cdaa36ec4bbf05c38a17a10a6432bf0bd9fabc80b7a71bb400c5ce58170c2",
-      "fetched_at": "2026-09-06T08:23:15.934260+00:00"
+      "size": 9208,
+      "sha256": "1e6113bb789b345f73db1a1d33580d54afe106c3b0026feb69fc87e76e8dd67f",
+      "fetched_at": "2026-09-08T22:56:12.640620+00:00"
     },
     {
       "path": "partitions/202109-11260.json.gz",
-      "size": 3033,
-      "sha256": "17fc6dceb239deb564bfaf65585a03142d43c123855e0cb684bbb321dee18c68",
-      "fetched_at": "2026-09-06T07:59:39.818128+00:00"
+      "size": 9848,
+      "sha256": "eb6ff9f6194bf646a6458445053c8ecf1146d09077bb06677246e2f1978cbcf2",
+      "fetched_at": "2026-09-08T22:56:12.959782+00:00"
     },
     {
       "path": "partitions/202109-11290.json.gz",
-      "size": 3849,
-      "sha256": "4315f2edf1c7c5bac2459e7f2ae552ee69359cbdb76bb808c35d080cdae4a37b",
-      "fetched_at": "2026-09-06T08:34:25.794223+00:00"
+      "size": 13631,
+      "sha256": "d8d66d42a41706f821c7f1ef740ed97c7ccce39d065d2184ec400c3d311c4567",
+      "fetched_at": "2026-09-08T22:56:13.160772+00:00"
     },
     {
       "path": "partitions/202109-11305.json.gz",
-      "size": 1684,
-      "sha256": "5481b99196155ceb375e45156ab5ea90f46fb9a65279db1ee7ba550ef89e212b",
-      "fetched_at": "2026-09-06T07:58:45.211683+00:00"
+      "size": 4365,
+      "sha256": "82c20192b05f90c90f4bfbbe064f4db00cad365c0cd9c2c38647544d4bcef0d6",
+      "fetched_at": "2026-09-08T22:56:13.453587+00:00"
     },
     {
       "path": "partitions/202109-11320.json.gz",
-      "size": 2317,
-      "sha256": "fa1a15a1c2586c3835ca837674872bda4211fdfde0a391f2b9ac0b77d4008971",
-      "fetched_at": "2026-09-06T08:23:16.430338+00:00"
+      "size": 7362,
+      "sha256": "6311a598d756402cbfc87190daa5cf86fc08179d9348dd74925f7f4c7fb745aa",
+      "fetched_at": "2026-09-08T22:56:13.643685+00:00"
     },
     {
       "path": "partitions/202109-11350.json.gz",
-      "size": 5238,
-      "sha256": "3b21d9b408f6fc7087b956fe5a3caf67a398a8982f0f34c64f95b23efd6c1fbb",
-      "fetched_at": "2026-09-06T07:59:40.544962+00:00"
+      "size": 19618,
+      "sha256": "d860f7e5d1dadf120d9f1652ef9137f4918e001934ec3f779f8c04ac8da848b0",
+      "fetched_at": "2026-09-08T22:56:14.161716+00:00"
     },
     {
       "path": "partitions/202109-11380.json.gz",
-      "size": 3561,
-      "sha256": "ae0c1d7069e33fdb9346982d7c2380504e8210f8be8a361be08faad462d745da",
-      "fetched_at": "2026-09-06T08:34:26.197895+00:00"
+      "size": 10931,
+      "sha256": "e118129f88408d197dfa2fece9b1397816d182b8f188e2c8c36868c0bcd2c353",
+      "fetched_at": "2026-09-08T22:56:14.168943+00:00"
     },
     {
       "path": "partitions/202109-11410.json.gz",
-      "size": 3161,
-      "sha256": "2dea944fbaa79faa768f035784d72deb667ad5e18dc307daaeae446fbb65b15f",
-      "fetched_at": "2026-09-06T07:58:45.929947+00:00"
+      "size": 10758,
+      "sha256": "fd9a499f9674394790364742d9b309cd65e54dafe576e64aeda5acea7115401a",
+      "fetched_at": "2026-09-08T22:56:14.480444+00:00"
     },
     {
       "path": "partitions/202109-11440.json.gz",
-      "size": 3232,
-      "sha256": "8eb69d69e2878c931ff4b809ac41979a72c4d1cee70968929f8cb1251bbfc394",
-      "fetched_at": "2026-09-06T08:23:16.940553+00:00"
+      "size": 10627,
+      "sha256": "4bfbb1415f5a39e1c124b871bae63d4b36ba33ee9a2330aa11f15d6bc1726a78",
+      "fetched_at": "2026-09-08T22:56:14.650881+00:00"
     },
     {
       "path": "partitions/202109-11470.json.gz",
-      "size": 3508,
-      "sha256": "dc7b7f6df6b934f96882a268f90a5e217a3287ed8a5dfbd8ac086e7f8ac50a93",
-      "fetched_at": "2026-09-06T07:59:40.177735+00:00"
+      "size": 11591,
+      "sha256": "b60fe698f74dbaaafd53aa9a60693e683fe18ebbdb7dd0c3614b4329dca4f5d3",
+      "fetched_at": "2026-09-08T22:56:14.969282+00:00"
     },
     {
       "path": "partitions/202109-11500.json.gz",
-      "size": 4500,
-      "sha256": "25a57315816bc42adcaa671470ed78ce129f344a810f639890fe3295940ea60d",
-      "fetched_at": "2026-09-06T08:34:26.800121+00:00"
+      "size": 14889,
+      "sha256": "db6eb03ce39116bbd083103b50e47d3004d9ba3b905452b8f7838d44d1d8db0d",
+      "fetched_at": "2026-09-08T22:56:15.170191+00:00"
     },
     {
       "path": "partitions/202109-11530.json.gz",
-      "size": 4261,
-      "sha256": "c3692ac9fa1aea862072be315230ca746c8bf02dcdad5ea4c299d12f97bb3dff",
-      "fetched_at": "2026-09-06T07:58:45.737184+00:00"
+      "size": 14651,
+      "sha256": "86d303953c7250f47ab3ce9a4813e82ba33093eacded8bf6d97bdb1bd57cacc7",
+      "fetched_at": "2026-09-08T22:56:15.477996+00:00"
     },
     {
       "path": "partitions/202109-11545.json.gz",
-      "size": 2075,
-      "sha256": "f890e4e52007684f372d6f278dfd0f420db1bcca4597b91a293a4f2b60be858d",
-      "fetched_at": "2026-09-06T08:23:17.427173+00:00"
+      "size": 6190,
+      "sha256": "2aafa76c2f08cd9f4a5f4cb3df1e6c58a68b34e68523d4415e287ff20a2b7f47",
+      "fetched_at": "2026-09-08T22:56:15.648453+00:00"
     },
     {
       "path": "partitions/202109-11560.json.gz",
-      "size": 3631,
-      "sha256": "faf842636559cc901c4cbe5d2fe0880e77b414a7618f59657acd4b739f3cbec5",
-      "fetched_at": "2026-09-06T07:59:40.675128+00:00"
+      "size": 13201,
+      "sha256": "04b4ee4a63e9808b70d328365a138c3040baa730f96cf210c053b32c0decaa2d",
+      "fetched_at": "2026-09-08T22:56:15.969724+00:00"
     },
     {
       "path": "partitions/202109-11590.json.gz",
-      "size": 3013,
-      "sha256": "6dbe48210ded7560023ff1485b82464839747cd74516e008e34929f9c2c60707",
-      "fetched_at": "2026-09-06T08:34:27.197180+00:00"
+      "size": 9829,
+      "sha256": "6ee56bf44bdef348518bab476a8cbc0902032059079202fe20ef1c46bd2cd1a6",
+      "fetched_at": "2026-09-08T22:56:16.145114+00:00"
     },
     {
       "path": "partitions/202109-11620.json.gz",
-      "size": 2921,
-      "sha256": "55b0b1ff57bf0ccdb5a288b243d3bb4120b488142957b4195a0883585fc36991",
-      "fetched_at": "2026-09-06T07:58:46.227898+00:00"
+      "size": 9717,
+      "sha256": "afc177bffac1b1cac2536085db66eec497afb6c12e85e78dc096e65334c0d794",
+      "fetched_at": "2026-09-08T22:56:16.466474+00:00"
     },
     {
       "path": "partitions/202109-11650.json.gz",
-      "size": 3883,
-      "sha256": "ba1cd8b7a1d496001122c20f1cf44d9465dd5af7c975e21a43e0d65e32c1bee8",
-      "fetched_at": "2026-09-06T08:23:17.947455+00:00"
+      "size": 12681,
+      "sha256": "0d1abe43e5486679cf6b98020c62295897dfa1738c5401776d53ea10ab4bb9ee",
+      "fetched_at": "2026-09-08T22:56:16.677064+00:00"
     },
     {
       "path": "partitions/202109-11680.json.gz",
-      "size": 4440,
-      "sha256": "f4e07351cd724ca751cb48a056c996641f62c8ae73ceafb2afb4c3176f6a898d",
-      "fetched_at": "2026-09-06T07:59:41.254770+00:00"
+      "size": 14572,
+      "sha256": "736527c04f6d016d2fc8ec8fc83b7e421efc14b909e89594e19500814cf1d998",
+      "fetched_at": "2026-09-08T22:56:16.975854+00:00"
     },
     {
       "path": "partitions/202109-11710.json.gz",
-      "size": 4215,
-      "sha256": "81ed99c3421a6a5ff7493b409634634998c311bb1d2bc94080c5e6f643eaa1ed",
-      "fetched_at": "2026-09-06T08:34:27.811702+00:00"
+      "size": 15171,
+      "sha256": "a1399a3674e497baa6b1b0e166f79dbfdee54f8cb97a8f230f5a408e870a5b21",
+      "fetched_at": "2026-09-08T22:56:17.178907+00:00"
     },
     {
       "path": "partitions/202109-11740.json.gz",
-      "size": 3384,
-      "sha256": "016273f1fd30ad24be51152f43797e06037cfa5671fd1201845fd0a2eb692c4a",
-      "fetched_at": "2026-09-06T07:58:46.431073+00:00"
+      "size": 11193,
+      "sha256": "2eeadd0345ac7d700bddfe5044ec30d8c36328dd08518328e2d60ae3c2e0a613",
+      "fetched_at": "2026-09-08T22:56:17.471571+00:00"
     },
     {
       "path": "partitions/202109-28125.json.gz",
-      "size": 2607,
-      "sha256": "0a88433d032f6f61e985a9630f1a27e8a8caccd2edd4091c416c4254b30d6d42",
-      "fetched_at": "2026-09-06T08:23:18.440523+00:00"
+      "size": 8923,
+      "sha256": "70b7ce3d56d1c13913dc63ae86c166bd7df5d2a496a9b324ab2e5e11a4780b1d",
+      "fetched_at": "2026-09-08T22:56:17.675088+00:00"
     },
     {
       "path": "partitions/202109-28155.json.gz",
-      "size": 4086,
-      "sha256": "e69da1d529bd7577669f3bda224273aaa879d81bfd6be6a43b7d76943e80db07",
-      "fetched_at": "2026-09-06T07:59:41.487484+00:00"
+      "size": 17201,
+      "sha256": "887a360a7bdfebbc52112a782d31420dec23526aea745fcade552159a21a1f8f",
+      "fetched_at": "2026-09-08T22:56:17.989209+00:00"
     },
     {
       "path": "partitions/202109-28177.json.gz",
-      "size": 7371,
-      "sha256": "b0b5395af116816f9225897a120739b22f5b4e3bfef3137fbd2ed44fb4f4d95f",
-      "fetched_at": "2026-09-06T08:34:28.510859+00:00"
+      "size": 27888,
+      "sha256": "1ba254ac8163d6000b8a4906bd8c182962fd5972bb47c294d2493ab2720bf1dd",
+      "fetched_at": "2026-09-08T22:56:18.358457+00:00"
     },
     {
       "path": "partitions/202109-28185.json.gz",
-      "size": 6556,
-      "sha256": "6f45c6da8f9bb2724829ab5087e0f59d2ae45e904741b3679df1d03b8b620e04",
-      "fetched_at": "2026-09-06T07:58:46.874813+00:00"
+      "size": 25009,
+      "sha256": "78a0248bfcb71f7097b2b498ab6a51d31eec8c060da1b0de71aca7538b30bc41",
+      "fetched_at": "2026-09-08T22:56:18.661867+00:00"
     },
     {
       "path": "partitions/202109-28200.json.gz",
-      "size": 8458,
-      "sha256": "a1e09772f87f1ec0676d3cd9aaf4b53361f90a2d1b5c93781caee0b2ebed9a36",
-      "fetched_at": "2026-09-06T08:23:19.110797+00:00"
+      "size": 31607,
+      "sha256": "d14c1114dd55a26b6257928513b3620974f50945fa1547fdfc93099282c092c6",
+      "fetched_at": "2026-09-08T22:56:18.879558+00:00"
     },
     {
       "path": "partitions/202109-28237.json.gz",
-      "size": 7799,
-      "sha256": "a1c9198a80d4c5488e5edf0a023be3c38a5eb98399a87d5a8b2461994aa4b4ba",
-      "fetched_at": "2026-09-06T07:59:42.138429+00:00"
+      "size": 29567,
+      "sha256": "098b8c4b640ad708557cbc0ece0ddf79aa98038dab69e8eb394dc20243ebb571",
+      "fetched_at": "2026-09-08T22:56:19.177571+00:00"
     },
     {
       "path": "partitions/202109-28245.json.gz",
-      "size": 5215,
-      "sha256": "4a7c045455c58b9e7cc757291b75c57d9bb8ada2532625174d13db1ab1e731e3",
-      "fetched_at": "2026-09-06T08:34:29.016939+00:00"
+      "size": 20197,
+      "sha256": "be7af46006b22e22ed5aa094f91de44a4d6d31b0edea73e94719b31bbbab69fb",
+      "fetched_at": "2026-09-08T22:56:19.196916+00:00"
     },
     {
       "path": "partitions/202109-28275.json.gz",
-      "size": 5233,
-      "sha256": "eb116b6f11e8552df2160ab2323a2a52ccd9323969a7a0807b8e73d27ad7f077",
-      "fetched_at": "2026-09-06T07:58:47.024805+00:00"
+      "size": 18728,
+      "sha256": "90b0a0f9591bcb1adf87d728941fb9f2275f4d49c28d5590375507cdcede2ee5",
+      "fetched_at": "2026-09-08T22:56:19.490069+00:00"
     },
     {
       "path": "partitions/202109-28290.json.gz",
-      "size": 4367,
-      "sha256": "b826bf655d0e6d5b9378a5e237618034635c27dc06bc71bc1c2d459c2c60e661",
-      "fetched_at": "2026-09-06T08:23:19.451605+00:00"
+      "size": 16431,
+      "sha256": "557dcaa1f0b8f7d7e89bf037ac4c092e5290d7a4b250de5f93a7db52ddb2ed8f",
+      "fetched_at": "2026-09-08T22:56:19.692783+00:00"
     },
     {
       "path": "partitions/202109-28710.json.gz",
-      "size": 744,
-      "sha256": "e19f059c05c71b25fedd9b74ceb29dbc5154b998d6372f833428c4d94b65f63f",
-      "fetched_at": "2026-09-06T07:59:41.661842+00:00"
+      "size": 1493,
+      "sha256": "1461d901b329662ad929f561528358f728f9f33d5617012ab441da396ae91a95",
+      "fetched_at": "2026-09-08T22:56:19.947403+00:00"
     },
     {
       "path": "partitions/202109-28720.json.gz",
-      "size": 158,
-      "sha256": "3a3f344a0d3aaaa213378d84add8cf410a141dbcedf6e120b2162f309081e4d8",
-      "fetched_at": "2026-09-06T08:34:29.180115+00:00"
+      "size": 264,
+      "sha256": "89b640990641123f3908f0a6499322b05b2081811d0e4893965937418fb848ea",
+      "fetched_at": "2026-09-08T22:56:20.132826+00:00"
     },
     {
       "path": "partitions/202109-41111.json.gz",
-      "size": 4106,
-      "sha256": "8d59c401260df9cf7f374a0ceeb79b029c3d47a0761a9e9b8307ec63f7d703ff",
-      "fetched_at": "2026-09-06T07:58:47.232613+00:00"
+      "size": 14528,
+      "sha256": "2ba8b065de65fd1d39d655c5da9d6fcdaeff0dcd582da2d8181c50e4f8e71363",
+      "fetched_at": "2026-09-08T22:56:20.484395+00:00"
     },
     {
       "path": "partitions/202109-41113.json.gz",
-      "size": 5752,
-      "sha256": "89c6c72d4defc2566e3c12f13a4b650b99f2407d25e061a84ce4ae337e199dce",
-      "fetched_at": "2026-09-06T08:23:20.092234+00:00"
+      "size": 22210,
+      "sha256": "6f233e3b27729857d348f59bf138d5980886ab302afb4df55b61c103c097454f",
+      "fetched_at": "2026-09-08T22:56:20.852435+00:00"
     },
     {
       "path": "partitions/202109-41115.json.gz",
-      "size": 2120,
-      "sha256": "cae7727e589a518e2aec5060b73795d9f29b92e2941db295b6cb2cfd7d1d4903",
-      "fetched_at": "2026-09-06T07:59:42.328461+00:00"
+      "size": 6275,
+      "sha256": "43f4b90709cd452aa95578ed518c220f4db0725fee87a260e3e505e0fc0a37d9",
+      "fetched_at": "2026-09-08T22:56:20.957810+00:00"
     },
     {
       "path": "partitions/202109-41117.json.gz",
-      "size": 7650,
-      "sha256": "15ab4987cdd9cefd0868f07c33b58cd77f4f221ecc7bfd8c86953c8edf1b2655",
-      "fetched_at": "2026-09-06T08:34:30.164660+00:00"
+      "size": 30313,
+      "sha256": "5e0f1168602a747cb7f8d3d822128e48735f4d22e9b161fe8423d0f2492557fc",
+      "fetched_at": "2026-09-08T22:56:21.367532+00:00"
     },
     {
       "path": "partitions/202109-41131.json.gz",
-      "size": 1627,
-      "sha256": "009ac428efeba70aa1724e5b63847fc77b118e6b480a003f954d993ece395904",
-      "fetched_at": "2026-09-06T07:58:47.329731+00:00"
+      "size": 3983,
+      "sha256": "0848e3379091262370fdac9cece04487f839c2867cfc7b97965a42edd28d727a",
+      "fetched_at": "2026-09-08T22:56:21.459568+00:00"
     },
     {
       "path": "partitions/202109-41133.json.gz",
-      "size": 1670,
-      "sha256": "0762de9bf659687f88be1a9df877cd5ddd906b5e4074ce36558bcc7b8a1924b3",
-      "fetched_at": "2026-09-06T08:23:20.420138+00:00"
+      "size": 4242,
+      "sha256": "f0f6a2ed366c3d6a7acacafc05f6e85ce672474d10e4eeeda096a1cd99b26549",
+      "fetched_at": "2026-09-08T22:56:21.641807+00:00"
     },
     {
       "path": "partitions/202109-41135.json.gz",
-      "size": 5116,
-      "sha256": "42d2ea2bda801a48d2dddfac650cca1f9f0a4f4cb7a6ed0337b8861d9b6c750e",
-      "fetched_at": "2026-09-06T07:59:42.810413+00:00"
+      "size": 18290,
+      "sha256": "d0ffce6943d83ac6abaf22105793d46d160df6a29141390f8d62151951079168",
+      "fetched_at": "2026-09-08T22:56:21.986261+00:00"
     },
     {
       "path": "partitions/202109-41150.json.gz",
-      "size": 9212,
-      "sha256": "761d85cf2021c9f28cee95d6237ebe4ebee261bd266043af7f81cb0ccc755c5c",
-      "fetched_at": "2026-09-06T08:34:30.814005+00:00"
+      "size": 35406,
+      "sha256": "ddae4c0c2d00f08703e3303fa295e601f0282ab66e58502e92c814eb4949d011",
+      "fetched_at": "2026-09-08T22:56:22.369031+00:00"
     },
     {
       "path": "partitions/202109-41171.json.gz",
-      "size": 3169,
-      "sha256": "3c73e1ca280613e3c885f4bcbff00e91e9bbcbf9e2cf4b1d031542c7a72f97ab",
-      "fetched_at": "2026-09-06T07:58:47.728753+00:00"
+      "size": 10190,
+      "sha256": "a5791bcee3e1677fdf2897a2eadbb8359afe75beefab679b56c1056228f24ab0",
+      "fetched_at": "2026-09-08T22:56:22.469224+00:00"
     },
     {
       "path": "partitions/202109-41173.json.gz",
-      "size": 3896,
-      "sha256": "da72ea674925f53b9e17c42233e92e4677c73babe48c44d56886a828ab6048f9",
-      "fetched_at": "2026-09-06T08:23:20.949298+00:00"
+      "size": 13798,
+      "sha256": "20ee96e6feb8a5f15ce52fc6dfaf72a2123bc4d7b248587361d2c55bf7e68722",
+      "fetched_at": "2026-09-08T22:56:22.663446+00:00"
     },
     {
       "path": "partitions/202109-41192.json.gz",
-      "size": 5474,
-      "sha256": "36a5ec1178bb9f89299dbf68145852ef29db25c7441ca9e06295f2173a122f4f",
-      "fetched_at": "2026-09-06T07:59:43.006751+00:00"
+      "size": 19684,
+      "sha256": "0ffcdd3ba641f734135860341f054078d2dc75dd12ecbb1599bc1644bff40a4b",
+      "fetched_at": "2026-09-08T22:56:22.983787+00:00"
     },
     {
       "path": "partitions/202109-41194.json.gz",
-      "size": 3640,
-      "sha256": "3adfc12b4c7eaccd92c5b1ea0b4dfd4f379fe13a532d7eac2c836dfd46f455ae",
-      "fetched_at": "2026-09-06T08:34:31.152413+00:00"
+      "size": 12142,
+      "sha256": "608ad19f06fe049e705b3b517a7f75ac38cf62d99caae175126b08a24e770fed",
+      "fetched_at": "2026-09-08T22:56:23.160695+00:00"
     },
     {
       "path": "partitions/202109-41196.json.gz",
-      "size": 2037,
-      "sha256": "823c66f197988c1c8d9fe1f8c2e4f572c4bd6dbfe1991c155e2684640e8eb1b7",
-      "fetched_at": "2026-09-06T07:58:47.966537+00:00"
+      "size": 5937,
+      "sha256": "0f2a7ad785fb3e05994f361f4028e397a3bf078b992e30f8713d7568c2b79137",
+      "fetched_at": "2026-09-08T22:56:23.464723+00:00"
     },
     {
       "path": "partitions/202109-41210.json.gz",
-      "size": 3303,
-      "sha256": "b3922f1f81d0d33d94eb547b2e950e049473f19cf7710df86879c968464ef9ef",
-      "fetched_at": "2026-09-06T08:23:21.436574+00:00"
+      "size": 11858,
+      "sha256": "a71a7fd016b20cab985e5de6d94b410ccf8a4b98ea565581b1ee5633a07501bb",
+      "fetched_at": "2026-09-08T22:56:23.662261+00:00"
     },
     {
       "path": "partitions/202109-41220.json.gz",
-      "size": 21121,
-      "sha256": "69666bc88ae14bd01e95b2702144d0dc9b9d26b2ee673abf59ef6d99711dbb09",
-      "fetched_at": "2026-09-06T07:59:45.544503+00:00"
+      "size": 80733,
+      "sha256": "6e58d394132b59a23eedeb82eb2c55b16e041c9228b36c368590439b16062abb",
+      "fetched_at": "2026-09-08T22:56:24.589069+00:00"
     },
     {
       "path": "partitions/202109-41250.json.gz",
-      "size": 1480,
-      "sha256": "e074367d46aa6a2922bd6f33348ba4f3c5056d90a7e83b3c98afcb857c1515d9",
-      "fetched_at": "2026-09-06T08:34:31.633539+00:00"
+      "size": 3656,
+      "sha256": "74d6749b457f800795351a8ced9be3586acb88ac0dcfca551794dd1558f53a05",
+      "fetched_at": "2026-09-08T22:56:24.153302+00:00"
     },
     {
       "path": "partitions/202109-41271.json.gz",
-      "size": 3351,
-      "sha256": "2c3ba4ee589d6588eb5e47aa57e999b23c4ab688f44fe82f218d35ba99e6230f",
-      "fetched_at": "2026-09-06T07:58:48.234129+00:00"
+      "size": 12340,
+      "sha256": "c7aad38ea3adf5804534b66175aa4bff5685b269600e0939ecd903fc9a02779d",
+      "fetched_at": "2026-09-08T22:56:24.647766+00:00"
     },
     {
       "path": "partitions/202109-41273.json.gz",
-      "size": 4504,
-      "sha256": "4c1a199c2d2f10f72b00f5a12e2d60b399285045d5d41c8a1e256d466c1af235",
-      "fetched_at": "2026-09-06T08:23:21.965329+00:00"
+      "size": 17532,
+      "sha256": "02ba393760815d291c86f887c687db9b45bf99414b173aae885ea9882da021b9",
+      "fetched_at": "2026-09-08T22:56:24.897531+00:00"
     },
     {
       "path": "partitions/202109-41281.json.gz",
-      "size": 6722,
-      "sha256": "eda74faaa875a3acc48e00699ac820d43d552071df5237b75f9e7514097d6ccd",
-      "fetched_at": "2026-09-06T07:59:43.679017+00:00"
+      "size": 25996,
+      "sha256": "08f8b5f39f1625ed92602b2fc22633cd3ee8dd4d6c5763cf7aca481314804000",
+      "fetched_at": "2026-09-08T22:56:25.348938+00:00"
     },
     {
       "path": "partitions/202109-41285.json.gz",
-      "size": 4275,
-      "sha256": "1b042982bbd4054491cd6859fd1e314dd51e6cc20829f532f9e002dfb3facfe9",
-      "fetched_at": "2026-09-06T08:34:32.293174+00:00"
+      "size": 16079,
+      "sha256": "501762323000fa9aa8c4ae0d2aa440c6963bf8999bb6d6d32d67b840c9ba9476",
+      "fetched_at": "2026-09-08T22:56:25.389245+00:00"
     },
     {
       "path": "partitions/202109-41287.json.gz",
-      "size": 8191,
-      "sha256": "2f271dc560aefbd4b2d2e1a494b9f3eb457087cb984aaa3e9b41da299dc45f73",
-      "fetched_at": "2026-09-06T07:58:49.214678+00:00"
+      "size": 31611,
+      "sha256": "4f3f134d427b04699f90189d871b85f68161b764f5a58b38c9790169fb457cdc",
+      "fetched_at": "2026-09-08T22:56:25.870475+00:00"
     },
     {
       "path": "partitions/202109-41290.json.gz",
-      "size": 673,
-      "sha256": "50935ca7a79de1044f313ffcd4af12653ea35a18a6791d6c239ff60a22bb4dff",
-      "fetched_at": "2026-09-06T08:23:22.405439+00:00"
+      "size": 1323,
+      "sha256": "c934161087b627700cc0be9deb3d585a3439dd25bb415f8921f9d0ef89af4085",
+      "fetched_at": "2026-09-08T22:56:25.865360+00:00"
     },
     {
       "path": "partitions/202109-41310.json.gz",
-      "size": 2905,
-      "sha256": "5cf0eccc82228e57112b7e53bda36ce1e855758e3b5c76b939fd94f47ac79a65",
-      "fetched_at": "2026-09-06T07:59:44.066045+00:00"
+      "size": 9595,
+      "sha256": "2f82b2feb3953bed651396c17a720aecfc76e1c2d6a27bbc4c94a6b426de5fe8",
+      "fetched_at": "2026-09-08T22:56:26.381885+00:00"
     },
     {
       "path": "partitions/202109-41360.json.gz",
-      "size": 14607,
-      "sha256": "01dd2b7a0c31a8db546b6497ad2d37fe6873153fc9e4a13064417af64a0e675b",
-      "fetched_at": "2026-09-06T08:34:33.017155+00:00"
+      "size": 54228,
+      "sha256": "48007c2449f691482ecb2c4e07e1ab7dc2003f91bf967469dd683ec0d10ab269",
+      "fetched_at": "2026-09-08T22:56:26.560822+00:00"
     },
     {
       "path": "partitions/202109-41370.json.gz",
-      "size": 4661,
-      "sha256": "3fea934b58f8e6c0641986561592569ed011e899c45c7a520abfef7ba7d6f194",
-      "fetched_at": "2026-09-06T07:58:48.742917+00:00"
+      "size": 17254,
+      "sha256": "2c6119743b10fe701fa77db0e382b9ad72024450ef145bb4f2d1afbadc301056",
+      "fetched_at": "2026-09-08T22:56:26.892864+00:00"
     },
     {
       "path": "partitions/202109-41390.json.gz",
-      "size": 9130,
-      "sha256": "63f0c7bbc0715a1bd85aa460f5cf580a6ff8e5df2b9eebf88efbf2443c8f0d2d",
-      "fetched_at": "2026-09-06T08:23:23.125320+00:00"
+      "size": 34728,
+      "sha256": "9013fe7cd60e43ac2e9b4465fa9d19b9c7c1bbfdcc4e9d483b84de8d803fb1b9",
+      "fetched_at": "2026-09-08T22:56:27.032683+00:00"
     },
     {
       "path": "partitions/202109-41410.json.gz",
-      "size": 3984,
-      "sha256": "c456b2df4490750011f355a3144fd33cecd28c1bd3411fd9b3128ee945da65b9",
-      "fetched_at": "2026-09-06T07:59:44.680149+00:00"
+      "size": 14044,
+      "sha256": "06170ac32b824cb8e68dbf45ae2170aabe567341a9e32253885bcd4fec978f97",
+      "fetched_at": "2026-09-08T22:56:27.381921+00:00"
     },
     {
       "path": "partitions/202109-41430.json.gz",
-      "size": 2433,
-      "sha256": "2156c50ee00efccbe42cddf67bb89b79e010ccdb94737a3e7e6b8030ce5ef07d",
-      "fetched_at": "2026-09-06T08:34:33.346105+00:00"
+      "size": 7095,
+      "sha256": "427c0f88791412a3f2a4f47079f3227d43ffab9d75987ef487619fbfd302d149",
+      "fetched_at": "2026-09-08T22:56:27.315451+00:00"
     },
     {
       "path": "partitions/202109-41450.json.gz",
-      "size": 4497,
-      "sha256": "d252ffcd16069dc52eeb9dba9075d17e1c852376254292ee399dfd7ee52c4fb0",
-      "fetched_at": "2026-09-06T07:58:49.237410+00:00"
+      "size": 17071,
+      "sha256": "1b9e1d0d71a6930a87aa596160e1b4fae4f020cfbeabc88d60d6168d3f572005",
+      "fetched_at": "2026-09-08T22:56:27.841513+00:00"
     },
     {
       "path": "partitions/202109-41461.json.gz",
-      "size": 4490,
-      "sha256": "f7b1e14602bebe5693391e42ab8e3333b7463df9878a066b518075e278ca2683",
-      "fetched_at": "2026-09-06T08:23:23.446090+00:00"
+      "size": 15853,
+      "sha256": "b0221799c859479f765bb2c205924d676e8bcc2d18fdb273de86d6a63390e8ff",
+      "fetched_at": "2026-09-08T22:56:27.896587+00:00"
     },
     {
       "path": "partitions/202109-41463.json.gz",
-      "size": 9185,
-      "sha256": "ec9e3a7a4968ee69282df4b3131e32b3483b5b7a475d599439952be919a0156b",
-      "fetched_at": "2026-09-06T07:59:45.219340+00:00"
+      "size": 33961,
+      "sha256": "f21f71e209e82a0b54664657d4d173adadee45cf49859283cd1d2d90a37dfb06",
+      "fetched_at": "2026-09-08T22:56:28.552615+00:00"
     },
     {
       "path": "partitions/202109-41465.json.gz",
-      "size": 8379,
-      "sha256": "71791191aa698aad980f8e200ed9904ccda1baf6a25796d21ec6c7a748ebe060",
-      "fetched_at": "2026-09-06T08:34:34.167465+00:00"
+      "size": 32053,
+      "sha256": "1ccbe7f5f72c62c60028d47e64bb1ce699e8518a45377cc38fd5f99c84d0e1fd",
+      "fetched_at": "2026-09-08T22:56:28.590677+00:00"
     },
     {
       "path": "partitions/202109-41480.json.gz",
-      "size": 11697,
-      "sha256": "5dc894569039c0ea49a8b47170f98189a429d8e4937ba5f13e7eecdda49e411a",
-      "fetched_at": "2026-09-06T07:58:50.467510+00:00"
+      "size": 44452,
+      "sha256": "7d77de2989bd5da2da35cb37e7a67ab50ec3e41dfceacaa011016281b257ad97",
+      "fetched_at": "2026-09-08T22:56:29.231336+00:00"
     },
     {
       "path": "partitions/202109-41500.json.gz",
-      "size": 7371,
-      "sha256": "a80a54a5968f866b5f35c391c2c8a9bf33d741de3fdc61bd7c47adbaa60379a2",
-      "fetched_at": "2026-09-06T08:23:24.113719+00:00"
+      "size": 29010,
+      "sha256": "b4b66c37d42f302c47f3a22cb37611654bc09bd0eb22a262feef37ceaacdb0c0",
+      "fetched_at": "2026-09-08T22:56:29.080010+00:00"
     },
     {
       "path": "partitions/202109-41550.json.gz",
-      "size": 5713,
-      "sha256": "4578f6c2ab94602fc55cf6bde4f66a8ba7d60d3d348c834eb036509e658898e3",
-      "fetched_at": "2026-09-06T07:59:45.800728+00:00"
+      "size": 23371,
+      "sha256": "a1a6a782026b3f4e71aee96f7f9550aaeb8b9944840a2e6fd52e25a491897632",
+      "fetched_at": "2026-09-08T22:56:29.577716+00:00"
     },
     {
       "path": "partitions/202109-41570.json.gz",
-      "size": 12342,
-      "sha256": "608a24d8b5455e6820edfa24f5878a0397a374bb8ad02b7ef82e9b059f8dc66b",
-      "fetched_at": "2026-09-06T08:34:34.865277+00:00"
+      "size": 48824,
+      "sha256": "60a8316f881372996b2f19dabbdb0f1054733eddd074579201a3bc794713bafe",
+      "fetched_at": "2026-09-08T22:56:30.348881+00:00"
     },
     {
       "path": "partitions/202109-41591.json.gz",
-      "size": 2929,
-      "sha256": "1cd9fe4b901dbab29b7b5241e77f949f881a5aa09b9370514097301d4b5e71b7",
-      "fetched_at": "2026-09-06T07:58:49.723138+00:00"
+      "size": 9276,
+      "sha256": "9c00a1998a72b106b639851d67b388f22d5a404b8b4cf1a408ba285e9f1e83f6",
+      "fetched_at": "2026-09-08T22:56:29.876787+00:00"
     },
     {
       "path": "partitions/202109-41593.json.gz",
-      "size": 2954,
-      "sha256": "ddcaac890abbaf8f78a30f85d66595747a763a829ca97a87c4b107713bae6077",
-      "fetched_at": "2026-09-06T08:23:24.438627+00:00"
+      "size": 10085,
+      "sha256": "816bd6cda27c9c8a062c4c3e4fe01141c5ed36d1a0d88e4f30777cfa9a3bed67",
+      "fetched_at": "2026-09-08T22:56:30.382257+00:00"
     },
     {
       "path": "partitions/202109-41595.json.gz",
-      "size": 4620,
-      "sha256": "c04aedb0517f6098f60afb0dc451009f2fbc47c10a8dcc9ff2f48285adcc0d44",
-      "fetched_at": "2026-09-06T07:59:46.534759+00:00"
+      "size": 18064,
+      "sha256": "85f1f0b0a2514dde0e4ac77dd68eeed942d62e138add11f6be6ff176f89929e0",
+      "fetched_at": "2026-09-08T22:56:31.188205+00:00"
     },
     {
       "path": "partitions/202109-41597.json.gz",
-      "size": 8766,
-      "sha256": "31e46e10c37de079825689606ba33bc23a762105accadce6f072e95779a8b045",
-      "fetched_at": "2026-09-06T08:34:35.526256+00:00"
+      "size": 34272,
+      "sha256": "bfd35710907a7b5a88cc11249748d1615abacfaf7e94cd8172285575826e5ca7",
+      "fetched_at": "2026-09-08T22:56:31.140189+00:00"
     },
     {
       "path": "partitions/202109-41610.json.gz",
-      "size": 5023,
-      "sha256": "de0d6ff6119ff6c9eca14f38b4ea166b14c8f5c1b7d99ee8a34f7afd6d8f9d44",
-      "fetched_at": "2026-09-06T07:58:50.239065+00:00"
+      "size": 17929,
+      "sha256": "86eea5404e7c5c33c6dc7db38508da6af3480d7bd1396eec8322ab33f36da4f3",
+      "fetched_at": "2026-09-08T22:56:31.397951+00:00"
     },
     {
       "path": "partitions/202109-41630.json.gz",
-      "size": 4406,
-      "sha256": "26f5a645199fa1b8bbb88046e3a07b0dc180a8a640645bbfb5975534937bb49e",
-      "fetched_at": "2026-09-06T08:23:24.957097+00:00"
+      "size": 16513,
+      "sha256": "761804f2a813dba107f2b9d314c0ce71c0ac75de7638e244f7d49e4432319d4b",
+      "fetched_at": "2026-09-08T22:56:32.026043+00:00"
     },
     {
       "path": "partitions/202109-41650.json.gz",
-      "size": 2553,
-      "sha256": "514e68a65a3bc8a682e168288de0d5955d68ec2065359d8a65ab8662f8db5d0d",
-      "fetched_at": "2026-09-06T07:59:46.188671+00:00"
+      "size": 8740,
+      "sha256": "961b86e579257db20d6307317cd5c0b61374e1e1e62d9d15e2aab1d0131aaa79",
+      "fetched_at": "2026-09-08T22:56:31.886829+00:00"
     },
     {
       "path": "partitions/202109-41670.json.gz",
-      "size": 3563,
-      "sha256": "b5ab8ae962495a5b80ad3f29e6e358b4a08c2f426304ae64a378892425f3720c",
-      "fetched_at": "2026-09-06T08:34:36.015800+00:00"
+      "size": 13708,
+      "sha256": "e40bf65973f74399883f5f8e9204002948574d9d06802f3a5ea00b758e65d379",
+      "fetched_at": "2026-09-08T22:56:32.405204+00:00"
     },
     {
       "path": "partitions/202109-41800.json.gz",
-      "size": 916,
-      "sha256": "7699d2dbe006e5b26bc34eee745eb8081bdc807c8f310fc20c2af3a4fcb5333f",
-      "fetched_at": "2026-09-06T07:58:50.710006+00:00"
+      "size": 2321,
+      "sha256": "b8b026b8f0b06f0ecec7faf7d6c23a5cd2e16b0a33b8e584313339cdc1888681",
+      "fetched_at": "2026-09-08T22:56:32.252716+00:00"
     },
     {
       "path": "partitions/202109-41820.json.gz",
-      "size": 1227,
-      "sha256": "63c8702c837703d11a1f37bb67cdc5254834245796c4c2ef49232cb1647ba2d6",
-      "fetched_at": "2026-09-06T08:23:25.416057+00:00"
+      "size": 2876,
+      "sha256": "14162f0d32d7c7a0e57fc6a53a6be6c9e06b265d10223c0782de0a37c8c05216",
+      "fetched_at": "2026-09-08T22:56:32.762678+00:00"
     },
     {
       "path": "partitions/202109-41830.json.gz",
-      "size": 1671,
-      "sha256": "650ca18eb537705e2fd9de913484a8dc6d60f1c796059270fc94cba474c5a5b0",
-      "fetched_at": "2026-09-06T07:59:46.637359+00:00"
+      "size": 4196,
+      "sha256": "38871422e6f269e36b8d8606cd8f670af442747446031aa28da4a19028d81c51",
+      "fetched_at": "2026-09-08T22:56:32.881175+00:00"
     },
     {
       "path": "partitions/202110-11110.json.gz",
@@ -32891,1497 +32891,1497 @@
     },
     {
       "path": "partitions/202607-11110.json.gz",
-      "size": 4012,
-      "sha256": "c4c3b9076176a75c04c4d49e70137b17a4b7a29716c756fee47d35c40f653ab5",
-      "fetched_at": "2026-09-07T22:59:07.935856+00:00"
+      "size": 4193,
+      "sha256": "8a17abf10a775b095424701fd0737bea4457f02ff947e7ad6d1ac73d8e918a13",
+      "fetched_at": "2026-09-08T22:56:33.444196+00:00"
     },
     {
       "path": "partitions/202607-11140.json.gz",
-      "size": 7364,
-      "sha256": "e4379dd50b4910cdd461f61bda3ce81eeef8dc067352ff91b7a5d7730fc3142a",
-      "fetched_at": "2026-09-07T22:59:07.948672+00:00"
+      "size": 7455,
+      "sha256": "c5a36e690dad27edeb28a84fe061b5626b72f047ece4351c22a963d181eb6c5e",
+      "fetched_at": "2026-09-08T22:56:33.391472+00:00"
     },
     {
       "path": "partitions/202607-11170.json.gz",
-      "size": 6929,
-      "sha256": "4287f14005b18a32592a7dbdba560450c461b235a0f6c1edee312c8bf6b33e06",
-      "fetched_at": "2026-09-07T22:59:08.445532+00:00"
+      "size": 6984,
+      "sha256": "ea3fe7690d97a327496b0c5a23df4058c40bd37c7552f7e171e2e6c1f20d7f02",
+      "fetched_at": "2026-09-08T22:56:33.880003+00:00"
     },
     {
       "path": "partitions/202607-11200.json.gz",
-      "size": 9481,
-      "sha256": "2fae467d6bad4a0a87c08cd566b058d5f894165524f2b699a0de30390035f38d",
-      "fetched_at": "2026-09-07T22:59:08.580904+00:00"
+      "size": 9547,
+      "sha256": "cd33235a6d6bf7d864ef1a3b1d5d49c760f263cd914a0bf1e9bfb0a40cefd38f",
+      "fetched_at": "2026-09-08T22:56:34.005072+00:00"
     },
     {
       "path": "partitions/202607-11215.json.gz",
-      "size": 7669,
-      "sha256": "5c572689cf2c432b92cdad7b31b76eb909a3a6ea6d8144bc8a9f71782721e6c8",
-      "fetched_at": "2026-09-07T22:59:08.940459+00:00"
+      "size": 7730,
+      "sha256": "70c0115df6da41ccd796f1c67efa64e4f3fd574e3b6cebde2e6aa526462b1727",
+      "fetched_at": "2026-09-08T22:56:34.389465+00:00"
     },
     {
       "path": "partitions/202607-11230.json.gz",
-      "size": 21136,
-      "sha256": "c38a2d0ad355c5d7a5820e40902c3837cbe2845afe612e40aef25b5fc0b03e46",
-      "fetched_at": "2026-09-07T22:59:09.150258+00:00"
+      "size": 21211,
+      "sha256": "0971f5c2b9fd14cb53f5935fee8ac8b8cdd382c0ec85b97dc4fa4dc3843e1d4e",
+      "fetched_at": "2026-09-08T22:56:34.833577+00:00"
     },
     {
       "path": "partitions/202607-11260.json.gz",
-      "size": 27697,
-      "sha256": "aa021e1853e3911b2f36aa9e095cf383a3fea460e68f34b594c69edc1e813d4f",
-      "fetched_at": "2026-09-07T22:59:09.759100+00:00"
+      "size": 27784,
+      "sha256": "343d580980905061341f4189fad08cee6b2f3f35a63b0876057e5a918d0dc3d4",
+      "fetched_at": "2026-09-08T22:56:35.296192+00:00"
     },
     {
       "path": "partitions/202607-11290.json.gz",
-      "size": 29032,
-      "sha256": "6e90d3450366256ea340bc1506e7e46ef7b0728a7b319e46b45b93f4fef71e87",
-      "fetched_at": "2026-09-07T22:59:09.795326+00:00"
+      "size": 29119,
+      "sha256": "a4bc6ad5ec5ed4a186bf04b228d4e03ec9eafe2a62dc0ae5d629dd4ba2fba3b5",
+      "fetched_at": "2026-09-08T22:56:35.585534+00:00"
     },
     {
       "path": "partitions/202607-11305.json.gz",
-      "size": 11325,
-      "sha256": "a0b38fd446af63a7448aba3def2787a277c0b7055fe434d37e0422f428a62072",
-      "fetched_at": "2026-09-07T22:59:10.017240+00:00"
+      "size": 11391,
+      "sha256": "e790a173464a90f4f4ef1f1fea275a67baee4ced883ac1ea8f04a2a843a4587c",
+      "fetched_at": "2026-09-08T22:56:35.543624+00:00"
     },
     {
       "path": "partitions/202607-11320.json.gz",
-      "size": 23300,
-      "sha256": "dea96383361a1820e5eba85791e24fbc1cd2bb4480f881653bb89153fa77834c",
-      "fetched_at": "2026-09-07T22:59:10.314228+00:00"
+      "size": 23380,
+      "sha256": "9bbfbe5a378a360790532df470df20dccd0b7b55e8451e6d4b0a39dd89a0b3c1",
+      "fetched_at": "2026-09-08T22:56:36.235224+00:00"
     },
     {
       "path": "partitions/202607-11350.json.gz",
-      "size": 62487,
-      "sha256": "70c62da9c2a858eef71648bf3528f683c843eb50f339791e9c50c69f1a358dd8",
-      "fetched_at": "2026-09-07T22:59:10.979735+00:00"
+      "size": 62572,
+      "sha256": "a2ca7b11131d4ebedfeacddd42e09fc6110f664de1a9b82ba789d67f856d4aad",
+      "fetched_at": "2026-09-08T22:56:36.971509+00:00"
     },
     {
       "path": "partitions/202607-11380.json.gz",
-      "size": 27241,
-      "sha256": "7fd571898b52d9d9bc3ebe713b5bdad38ed78bcadbbae6d13bf7e4c8b255a239",
-      "fetched_at": "2026-09-07T22:59:10.823733+00:00"
+      "size": 27408,
+      "sha256": "1164e1814b713a8e1562d470be147a928a9d4cc7758bba049a37a56886afbe41",
+      "fetched_at": "2026-09-08T22:56:36.800632+00:00"
     },
     {
       "path": "partitions/202607-11410.json.gz",
-      "size": 21252,
-      "sha256": "c20bbfe9125c6d51cd5938d979fa7bf6bdfbac37fdbe1b073226b7941db7bcb8",
-      "fetched_at": "2026-09-07T22:59:11.441896+00:00"
+      "size": 21419,
+      "sha256": "39c09e7642caba4f40a28320ea55de6541a3c98d8b8beb0b09bb0428bb094bdd",
+      "fetched_at": "2026-09-08T22:56:37.229860+00:00"
     },
     {
       "path": "partitions/202607-11440.json.gz",
-      "size": 14312,
-      "sha256": "3ed8bfdf2027848440ad7320b2eea805120a54be0b24c65531d5c88761ec0e42",
-      "fetched_at": "2026-09-07T22:59:11.241046+00:00"
+      "size": 14474,
+      "sha256": "ba8546fbc87490968a8b90f89093c8a9fe1209a25f1cedcafbdee6e5dd41e5f3",
+      "fetched_at": "2026-09-08T22:56:37.617075+00:00"
     },
     {
       "path": "partitions/202607-11470.json.gz",
-      "size": 21095,
-      "sha256": "ac09e2249b2b7f601d63ea5e7719c7ee8d122ed3eee9cf2712ea0bb381842c75",
-      "fetched_at": "2026-09-07T22:59:11.735302+00:00"
+      "size": 21171,
+      "sha256": "761841014b9ccf4643156daecbcf99773926e819442b81a7f139cbfacc54bf23",
+      "fetched_at": "2026-09-08T22:56:37.563072+00:00"
     },
     {
       "path": "partitions/202607-11500.json.gz",
-      "size": 35841,
-      "sha256": "24c1122655602b653dba6c9db9865524a85976ef5dd349e8a3bdc37474ccb75d",
-      "fetched_at": "2026-09-07T22:59:12.241070+00:00"
+      "size": 36147,
+      "sha256": "4c62a332b52ee70b4a176ae4174514388ac3c64d79bab49116245af7e52b638d",
+      "fetched_at": "2026-09-08T22:56:38.246227+00:00"
     },
     {
       "path": "partitions/202607-11530.json.gz",
-      "size": 33267,
-      "sha256": "f37ed568ebc773a2d5cc93357f17ee1605512c1ee910606a0fc1188606868a0e",
-      "fetched_at": "2026-09-07T22:59:12.382895+00:00"
+      "size": 33353,
+      "sha256": "e1cef0aa0f35ae308cacebff64b62bd46363699869df1756f622b7ae25983f62",
+      "fetched_at": "2026-09-08T22:56:38.522979+00:00"
     },
     {
       "path": "partitions/202607-11545.json.gz",
-      "size": 10716,
-      "sha256": "a62c131095b76dc350751c284c200870b0b951fa4523e1862f4ab2a051cb20b3",
-      "fetched_at": "2026-09-07T22:59:12.591820+00:00"
+      "size": 10782,
+      "sha256": "c9c51e70ea3e56fa145b95865f8c40c51e52c1283b15021cad77f5e9515c9851",
+      "fetched_at": "2026-09-08T22:56:38.544316+00:00"
     },
     {
       "path": "partitions/202607-11560.json.gz",
-      "size": 24641,
-      "sha256": "8c9b1bf9b2329232312f8af683e9d42b56a8cb30abd035c42a53483851c48723",
-      "fetched_at": "2026-09-07T22:59:12.870272+00:00"
+      "size": 24719,
+      "sha256": "78d113c03c58d337b236af58817c0a08f06a6c8f29d238baaca62c8901366415",
+      "fetched_at": "2026-09-08T22:56:39.356541+00:00"
     },
     {
       "path": "partitions/202607-11590.json.gz",
-      "size": 18587,
-      "sha256": "fe12948ac621bf8d8b0f3c7c85542f48aff538838802dced54c7c41e07f9a2ba",
-      "fetched_at": "2026-09-07T22:59:13.232667+00:00"
+      "size": 18656,
+      "sha256": "c282503a102bf06f55e6b87a2fdc70807ca0363b96aee38f7a2c4c19d8868b8d",
+      "fetched_at": "2026-09-08T22:56:39.233361+00:00"
     },
     {
       "path": "partitions/202607-11620.json.gz",
-      "size": 17665,
-      "sha256": "bbc6b123f4105cc232605dd76df07ff571187222677b3061ec31812fe438ea4a",
-      "fetched_at": "2026-09-07T22:59:13.266087+00:00"
+      "size": 17839,
+      "sha256": "607278c3d2ec16882aa3fcc2c8d3bc3c74bd11afe5603bd7fc40fe680f9b4a95",
+      "fetched_at": "2026-09-08T22:56:39.554631+00:00"
     },
     {
       "path": "partitions/202607-11650.json.gz",
-      "size": 12800,
-      "sha256": "3e8aea5b8a6e653c806314efee4e4e4901e1b15e5d9058b08e711685728522d2",
-      "fetched_at": "2026-09-07T22:59:13.593915+00:00"
+      "size": 12826,
+      "sha256": "1936396a335f8ef46785896869b7deadcfe1fec56eee0d610bcd17d3044d7fff",
+      "fetched_at": "2026-09-08T22:56:39.969849+00:00"
     },
     {
       "path": "partitions/202607-11680.json.gz",
-      "size": 16113,
-      "sha256": "c7e4be2b823517581e45961ab150a601eb96d76110a7dbcc3597aa0a58a9bdb8",
-      "fetched_at": "2026-09-07T22:59:13.743867+00:00"
+      "size": 16176,
+      "sha256": "fe4ebaa03f27c1a530814ec5fed7db8cbebf6759bc92996036aaff62c900fbda",
+      "fetched_at": "2026-09-08T22:56:40.040787+00:00"
     },
     {
       "path": "partitions/202607-11710.json.gz",
-      "size": 28724,
-      "sha256": "9a4ac7906f076a2d33cf9c7db668608ef089ef0f47054140a3bf6f0a95499e23",
-      "fetched_at": "2026-09-07T22:59:14.388590+00:00"
+      "size": 28806,
+      "sha256": "3d794e1742a7ee9102ce43c72d3b885919f752eb551954ccbbad64cb84d3b3f9",
+      "fetched_at": "2026-09-08T22:56:40.628416+00:00"
     },
     {
       "path": "partitions/202607-11740.json.gz",
-      "size": 24933,
-      "sha256": "9c6d5976b6ddc7d125ecdbfbce0abf240c438969d3ec9b627ccfe8a418e25f5a",
-      "fetched_at": "2026-09-07T22:59:14.403485+00:00"
+      "size": 25098,
+      "sha256": "48dc648a2d68d06c1e7523e133036e700de41cfaa95f1c760eeb9b63004dfc71",
+      "fetched_at": "2026-09-08T22:56:40.737559+00:00"
     },
     {
       "path": "partitions/202607-28125.json.gz",
-      "size": 6355,
-      "sha256": "d51c73b5bf55244b382db3b25deffa9d6a0f0f23689a38e81b31cfad6372da7d",
-      "fetched_at": "2026-09-07T22:59:14.616132+00:00"
+      "size": 6415,
+      "sha256": "e958e808c3ce75cceaec26f202e7492f833ed284e7e7bd43a713fd5c5d9cd267",
+      "fetched_at": "2026-09-08T22:56:41.046506+00:00"
     },
     {
       "path": "partitions/202607-28155.json.gz",
-      "size": 8587,
-      "sha256": "ab336a281f7f7ad794ff373769d0d077a9ef6010669b9f09330cab34ce002051",
-      "fetched_at": "2026-09-07T22:59:14.712570+00:00"
+      "size": 8718,
+      "sha256": "b7525ae16792198216fa190202d539c5fd6d09a8842c60deec19749f281fe09f",
+      "fetched_at": "2026-09-08T22:56:41.033867+00:00"
     },
     {
       "path": "partitions/202607-28177.json.gz",
-      "size": 21043,
-      "sha256": "e96653dc4dafdfd8c13124e5aeb4c30054d9029193998feb9fd462e4b0cc1909",
-      "fetched_at": "2026-09-07T22:59:15.388673+00:00"
+      "size": 21224,
+      "sha256": "d92252dc57aff41617d3733c1eef5516d00c702f000e0f048faf824b09bd1f12",
+      "fetched_at": "2026-09-08T22:56:41.544797+00:00"
     },
     {
       "path": "partitions/202607-28185.json.gz",
-      "size": 46864,
-      "sha256": "c0f13ef5157863d6ba1fa5107d5f3eef8f819c449aaea01b34176eddccd9012e",
-      "fetched_at": "2026-09-07T22:59:15.540270+00:00"
+      "size": 46946,
+      "sha256": "1ae175e76ff0d6f70ca71e78cb3b93cf57ea5fe80830158bb254ef4ba57bd13b",
+      "fetched_at": "2026-09-08T22:56:42.159228+00:00"
     },
     {
       "path": "partitions/202607-28200.json.gz",
-      "size": 30008,
-      "sha256": "724279218e3459ef6032128cd4f41d4357afa23c852fdb0b341738b87b4fa258",
-      "fetched_at": "2026-09-07T22:59:15.905445+00:00"
+      "size": 30095,
+      "sha256": "e94db7acd658903c99bca37db8ad37298caeec4fcb3f1cb3fc0c583aa455df52",
+      "fetched_at": "2026-09-08T22:56:42.251030+00:00"
     },
     {
       "path": "partitions/202607-28237.json.gz",
-      "size": 40783,
-      "sha256": "33e57100d2fd2d754cdb0f15c55a528a14dd64fcf657bcb35bfc3aa76b0ca4d6",
-      "fetched_at": "2026-09-07T22:59:15.967786+00:00"
+      "size": 40959,
+      "sha256": "6df2a1170aeb4a2f9227aa50b764973d3ff089310dd5729841e9f0a6b0d37c7b",
+      "fetched_at": "2026-09-08T22:56:43.017901+00:00"
     },
     {
       "path": "partitions/202607-28245.json.gz",
-      "size": 17852,
-      "sha256": "b1a323cc93776a25e5b46bc9a818e4fa76a04201561639313d5ab6e33851ea94",
-      "fetched_at": "2026-09-07T22:59:16.463603+00:00"
+      "size": 17920,
+      "sha256": "293dbada67c9196d67b0d70dcb948eef8feb2670429bed4d3f521f8b413a5e3b",
+      "fetched_at": "2026-09-08T22:56:42.561522+00:00"
     },
     {
       "path": "partitions/202607-28275.json.gz",
-      "size": 25639,
-      "sha256": "8e9f7636783c779b28fa8cb7c863d0f568c23462d9e9d4d0e3f524cdbf6be057",
-      "fetched_at": "2026-09-07T22:59:16.415835+00:00"
+      "size": 25721,
+      "sha256": "ef2b1617728b91e67d3619ef9561a3557fcd8e44dc115be8438f7b5904302f1e",
+      "fetched_at": "2026-09-08T22:56:43.237004+00:00"
     },
     {
       "path": "partitions/202607-28290.json.gz",
-      "size": 27370,
-      "sha256": "e7552675ef2269c12d3e15462c85bcde9e8917f4b680ff9e732799ea09b95145",
-      "fetched_at": "2026-09-07T22:59:16.912841+00:00"
+      "size": 27458,
+      "sha256": "e4faeec43d3cab58ec315fba66bec9751eeafcab4c9d31071dfc70d66e42e5ba",
+      "fetched_at": "2026-09-08T22:56:43.844368+00:00"
     },
     {
       "path": "partitions/202607-28710.json.gz",
-      "size": 1408,
-      "sha256": "89c8945dd301e75e5fc756fe3b1cf9a8ef4657bcf3c0b944780fe32427199d13",
-      "fetched_at": "2026-09-07T22:59:16.635954+00:00"
+      "size": 1453,
+      "sha256": "02f794b3180c497bb86298b70f509e9bc02e59900079e882df50f3deb6af245a",
+      "fetched_at": "2026-09-08T22:56:43.522078+00:00"
     },
     {
       "path": "partitions/202607-28720.json.gz",
-      "size": 224,
-      "sha256": "1eb49ce6c35aea4641430074f46a6db8ded4939adb2a50c91afb95dc76f1d141",
-      "fetched_at": "2026-09-07T22:59:17.130118+00:00"
+      "size": 265,
+      "sha256": "4347dbf358a9f9ef3ca5aa718d81b4f38e1389abe3ee211a0ef1995ac6140e2d",
+      "fetched_at": "2026-09-08T22:56:44.021127+00:00"
     },
     {
       "path": "partitions/202607-41111.json.gz",
-      "size": 26167,
-      "sha256": "3202d77cbce8ae77ddb85bfa25a9f61bf4c03a5b2ddcef2cd2ffb8c290dc5e8c",
-      "fetched_at": "2026-09-07T22:59:17.412320+00:00"
+      "size": 26461,
+      "sha256": "30c02d508ac5d1f00f06db62c57b4186924d16ba8607a5a230b2e31578adf1e0",
+      "fetched_at": "2026-09-08T22:56:44.582241+00:00"
     },
     {
       "path": "partitions/202607-41113.json.gz",
-      "size": 57740,
-      "sha256": "23ededf7bef9b6ce8c6727350f172f2ffaade495d01b1f081e9b873649b53fca",
-      "fetched_at": "2026-09-07T22:59:18.252542+00:00"
+      "size": 57828,
+      "sha256": "b1fd6b4cef715f005a4b07405bcc385d14023a870b58c34345e8848a26e90cf3",
+      "fetched_at": "2026-09-08T22:56:44.968164+00:00"
     },
     {
       "path": "partitions/202607-41115.json.gz",
-      "size": 22146,
-      "sha256": "bc75c0ee90f5e9f3a9ec5654ae07c011a8f4e54c9dcbbe11b95b04c6b5d39292",
-      "fetched_at": "2026-09-07T22:59:17.915904+00:00"
+      "size": 22227,
+      "sha256": "d34152f0fbd2e84cc76d277903c698fcf462620e2853a9ad92b66f1493e1f517",
+      "fetched_at": "2026-09-08T22:56:45.236137+00:00"
     },
     {
       "path": "partitions/202607-41117.json.gz",
-      "size": 57123,
-      "sha256": "0cea0f775825b542394b5b44fc9132a64110d3ae399c1026fdabe3733a48d61f",
-      "fetched_at": "2026-09-07T22:59:18.614176+00:00"
+      "size": 57209,
+      "sha256": "3121f030fd2d5bc8d51c0e712876d5a88ed7c7cde2d838ec782963b780480859",
+      "fetched_at": "2026-09-08T22:56:45.658103+00:00"
     },
     {
       "path": "partitions/202607-41131.json.gz",
-      "size": 11289,
-      "sha256": "a95d99c7d98ca0b9b63d056f1c7da1fea4251c7293578757f0dd3a01245d680c",
-      "fetched_at": "2026-09-07T22:59:19.007281+00:00"
+      "size": 11357,
+      "sha256": "9b458ee362c4d7b9c766214b34baea53b01ffef363d165d14169c6be26dcbd81",
+      "fetched_at": "2026-09-08T22:56:45.844005+00:00"
     },
     {
       "path": "partitions/202607-41133.json.gz",
-      "size": 13339,
-      "sha256": "5be9b22c2f613d6b458c26aa62905b3e7e676d9557d26957853b3903daa26517",
-      "fetched_at": "2026-09-07T22:59:18.862499+00:00"
+      "size": 13404,
+      "sha256": "ac95283c9ecc2d96514ad7cefcac425c16b0873e4b60b9b05193ec5e8a231dcb",
+      "fetched_at": "2026-09-08T22:56:45.928500+00:00"
     },
     {
       "path": "partitions/202607-41135.json.gz",
-      "size": 41117,
-      "sha256": "f53e7c45eb23907f5930da77d0da4be6b7111f20958a987dd8cba64c9dbed277",
-      "fetched_at": "2026-09-07T22:59:19.642770+00:00"
+      "size": 41192,
+      "sha256": "680cc110b5490981869951e74883b9f0cd2a69e1f71c2608814e1de0dfdb4d8c",
+      "fetched_at": "2026-09-08T22:56:46.678551+00:00"
     },
     {
       "path": "partitions/202607-41150.json.gz",
-      "size": 51905,
-      "sha256": "f143e43ec61409d9fa62f09b709998fef4324b5312b982f781df51773150c28d",
-      "fetched_at": "2026-09-07T22:59:19.865335+00:00"
+      "size": 52098,
+      "sha256": "f22c1f427a6fda1253d83ccda3f600da6f0966e7129caec4ff7e144979e15569",
+      "fetched_at": "2026-09-08T22:56:46.830709+00:00"
     },
     {
       "path": "partitions/202607-41171.json.gz",
-      "size": 27897,
-      "sha256": "a5cd09e60d77b47a1c1513df9c743ef3e46e29388a39072bf859634bcc7e03e9",
-      "fetched_at": "2026-09-07T22:59:20.025718+00:00"
+      "size": 27983,
+      "sha256": "e890e634d40a41e8e5994e76790026132bd3879c01a747bbeaccf6da874cef69",
+      "fetched_at": "2026-09-08T22:56:47.355975+00:00"
     },
     {
       "path": "partitions/202607-41173.json.gz",
-      "size": 44938,
-      "sha256": "643f9278236f09b6a20ded338473d00cf64b551e4911d3964f53021d799c0319",
-      "fetched_at": "2026-09-07T22:59:20.564528+00:00"
+      "size": 45191,
+      "sha256": "55ed89722f37f5a3c8fcd5139e31149a72cf8d731792eb99d7d161a7f99f3f31",
+      "fetched_at": "2026-09-08T22:56:47.510687+00:00"
     },
     {
       "path": "partitions/202607-41192.json.gz",
-      "size": 44137,
-      "sha256": "6359d1793364da5a4b942fe3626d9ad5d4c55e3b6b340c8f3e78191b6e151ef6",
-      "fetched_at": "2026-09-07T22:59:20.667803+00:00"
+      "size": 44344,
+      "sha256": "4c1c1aeb2ba4a4cb03aa5a921706f5cbd55e2b4611e96734970ce989f555b491",
+      "fetched_at": "2026-09-08T22:56:48.080175+00:00"
     },
     {
       "path": "partitions/202607-41194.json.gz",
-      "size": 21219,
-      "sha256": "fcfe5d5e6581f32cb05252c2e3cccb12b53e58dca0963546b5d359e93a77cb76",
-      "fetched_at": "2026-09-07T22:59:20.991450+00:00"
+      "size": 21387,
+      "sha256": "5a93699912a2360cd751b387d0ecf68ba49b75c8da9ae79cb88e771fac890339",
+      "fetched_at": "2026-09-08T22:56:47.952351+00:00"
     },
     {
       "path": "partitions/202607-41196.json.gz",
-      "size": 5969,
-      "sha256": "2edf9999f2c56171ed7a3d630243aaeb9563693c010f401dcf45daffb70c25f3",
-      "fetched_at": "2026-09-07T22:59:20.890623+00:00"
+      "size": 6086,
+      "sha256": "3650fd6ef660d6ce97f404fec1975ed08a5ae3653635e3f84ef62f4d0de3900b",
+      "fetched_at": "2026-09-08T22:56:48.258433+00:00"
     },
     {
       "path": "partitions/202607-41210.json.gz",
-      "size": 25566,
-      "sha256": "c6c7c56a4bfd6cf310aec73208452b8211375d554209bed59b5b42a134148b85",
-      "fetched_at": "2026-09-07T22:59:21.547301+00:00"
+      "size": 25666,
+      "sha256": "8d51efd89134d0014b7ce13202e9c7ef9d9c5e63d5181d02146ce5ea7307ed45",
+      "fetched_at": "2026-09-08T22:56:48.756303+00:00"
     },
     {
       "path": "partitions/202607-41220.json.gz",
-      "size": 68668,
-      "sha256": "74f9e0e5a4520608097b3afa933b9024e8fa8d142d92325fab7e773e58cceb14",
-      "fetched_at": "2026-09-07T22:59:21.771637+00:00"
+      "size": 69007,
+      "sha256": "d082d784a9cc8b2082213e3a6c3ef762f817c9a569075778c9189a24d6da02bc",
+      "fetched_at": "2026-09-08T22:56:49.377193+00:00"
     },
     {
       "path": "partitions/202607-41250.json.gz",
-      "size": 7988,
-      "sha256": "9051183649a921e00b6e6d647dca370f026a39f76bbc936569a345f4423e39e0",
-      "fetched_at": "2026-09-07T22:59:21.896991+00:00"
+      "size": 8053,
+      "sha256": "2821cf1cc2efba6cef494254c02a59f14f3836202e5a26440a454226eb3cbcae",
+      "fetched_at": "2026-09-08T22:56:49.196607+00:00"
     },
     {
       "path": "partitions/202607-41271.json.gz",
-      "size": 10771,
-      "sha256": "64f1d6838a10f87ca7514d1fd43645a4e71c457bd85eeae761170bfe23ea035e",
-      "fetched_at": "2026-09-07T22:59:22.271402+00:00"
+      "size": 10838,
+      "sha256": "2de9a54c96bb1bef2a2d97d72d85bebb254de24a7db6635053e82cf9eca72ed9",
+      "fetched_at": "2026-09-08T22:56:49.906604+00:00"
     },
     {
       "path": "partitions/202607-41273.json.gz",
-      "size": 21166,
-      "sha256": "c6a1526a87cf206fdf80bbf113a411b0f9e2b46b625d7ee55ea45b188de3d521",
-      "fetched_at": "2026-09-07T22:59:22.537074+00:00"
+      "size": 21254,
+      "sha256": "efa82a41cd788ffe2afad73b085f49170b01d6789bd5a83dc178ff15ec75f152",
+      "fetched_at": "2026-09-08T22:56:49.833752+00:00"
     },
     {
       "path": "partitions/202607-41281.json.gz",
-      "size": 42518,
-      "sha256": "81b438bacaf2e923ebf1753ddc29f9f0756f4c63c1526de5b0a24c5ca626bac4",
-      "fetched_at": "2026-09-07T22:59:22.970639+00:00"
+      "size": 42597,
+      "sha256": "39f872abb830103f784ead2096791237ba8a2b917098241320aeeccf916b24bd",
+      "fetched_at": "2026-09-08T22:56:50.559051+00:00"
     },
     {
       "path": "partitions/202607-41285.json.gz",
-      "size": 15848,
-      "sha256": "7b6a98f8f765455b3f4aeaec5b08034ea11c183fc0a25da72ae936b3013fcae3",
-      "fetched_at": "2026-09-07T22:59:22.915223+00:00"
+      "size": 15916,
+      "sha256": "8ae0f56bc7ddd3b7f0e447b56464a95a138842c4ac3a21109b42da3c83755f34",
+      "fetched_at": "2026-09-08T22:56:50.517900+00:00"
     },
     {
       "path": "partitions/202607-41287.json.gz",
-      "size": 22990,
-      "sha256": "dfc2bb9ebf0b216d771ecb581db8dbde2f90f3efe7ce2f54e030033d5efe0fc1",
-      "fetched_at": "2026-09-07T22:59:23.539183+00:00"
+      "size": 23068,
+      "sha256": "47af036dbb480205c0010a009f8e0552e30321da3da27d132a0d14b5d862e906",
+      "fetched_at": "2026-09-08T22:56:51.208509+00:00"
     },
     {
       "path": "partitions/202607-41290.json.gz",
-      "size": 2065,
-      "sha256": "1dfd96dae4b0f775120871dd35b965fdd8a6fc0bbf570f8d3617f1b6fea57225",
-      "fetched_at": "2026-09-07T22:59:23.173845+00:00"
+      "size": 2110,
+      "sha256": "7b30b6a04940c756c903fe353117a9c3eb235b4247bf4fceb66e76cb1a77772c",
+      "fetched_at": "2026-09-08T22:56:50.788073+00:00"
     },
     {
       "path": "partitions/202607-41310.json.gz",
-      "size": 7464,
-      "sha256": "1e370c7ed92eeeb737421a72a55f6560dc4f53c20f438059366cecb3898f161e",
-      "fetched_at": "2026-09-07T22:59:23.812907+00:00"
+      "size": 7549,
+      "sha256": "dbc23a8f8e90bb0281de5734044973feb9b6bbb0adf160fa2589570903847206",
+      "fetched_at": "2026-09-08T22:56:51.299141+00:00"
     },
     {
       "path": "partitions/202607-41360.json.gz",
-      "size": 101175,
-      "sha256": "a641067db2a3aca13778611ebd9feffd22ad830f17ddb8bf8b659cf705003944",
-      "fetched_at": "2026-09-07T22:59:24.882523+00:00"
+      "size": 101700,
+      "sha256": "19907c594ab1e7e8d9540e54df2b618e93b37a7f79d8a91ef45698faa7b63523",
+      "fetched_at": "2026-09-08T22:56:53.137358+00:00"
     },
     {
       "path": "partitions/202607-41370.json.gz",
-      "size": 36941,
-      "sha256": "c9c4b359ffbfe368f67a1ce2f8bee33f7acdba69f7d5c1e86be4cf56ce97913a",
-      "fetched_at": "2026-09-07T22:59:24.578744+00:00"
+      "size": 37029,
+      "sha256": "6c47cbf0b56d51467ffac4f08909d18f5009a953d0c97d4142bad8578116d243",
+      "fetched_at": "2026-09-08T22:56:52.036922+00:00"
     },
     {
       "path": "partitions/202607-41390.json.gz",
-      "size": 52423,
-      "sha256": "f245ad6cac59387ba72f55f04c7c257339a6e79b2ff2800c1f4cbbafe7d44108",
-      "fetched_at": "2026-09-07T22:59:25.264335+00:00"
+      "size": 52688,
+      "sha256": "ffa8213d917e477f94b9a0bf74dd78cec62f7d54a0134b803681c798c60f9a52",
+      "fetched_at": "2026-09-08T22:56:52.728865+00:00"
     },
     {
       "path": "partitions/202607-41410.json.gz",
-      "size": 39876,
-      "sha256": "e1a5d5627c4a87dd9572f63c0e91f96220ba3a13ab35d7eaa800154749946f68",
-      "fetched_at": "2026-09-07T22:59:25.647244+00:00"
+      "size": 39954,
+      "sha256": "0ac88d48332826e67258277c314b04b9a6219b94585c17f4e3b0706057bd0249",
+      "fetched_at": "2026-09-08T22:56:53.384761+00:00"
     },
     {
       "path": "partitions/202607-41430.json.gz",
-      "size": 18543,
-      "sha256": "bfbcc1cf148ad0c7b91b546c3f870963d3e1a2e1d4a60d1c26c6d0b93cf865cf",
-      "fetched_at": "2026-09-07T22:59:25.763903+00:00"
+      "size": 18612,
+      "sha256": "0224284b891e92244b47867f374ee254edec6ee9d837924e889513b39f9c7ddc",
+      "fetched_at": "2026-09-08T22:56:53.997550+00:00"
     },
     {
       "path": "partitions/202607-41450.json.gz",
-      "size": 28316,
-      "sha256": "e7c8de3dc7912c34dcbace7ac0c7fe526a96bd1108d332916cdb439ce8cf9e5f",
-      "fetched_at": "2026-09-07T22:59:26.028936+00:00"
+      "size": 28591,
+      "sha256": "2d0e551e7b65f2d27903e45251d5a170c34f66cb4eab49836c6cb3cdd792247b",
+      "fetched_at": "2026-09-08T22:56:53.849917+00:00"
     },
     {
       "path": "partitions/202607-41461.json.gz",
-      "size": 25930,
-      "sha256": "1a0820c5779d56b9663752ba13ce3ace56c84b20b9c9c5069a8184767d751a84",
-      "fetched_at": "2026-09-07T22:59:26.279100+00:00"
+      "size": 26156,
+      "sha256": "cee7e69d35aa6216a0f4f75a0ef964fb500761eec3536c699c527904b399032c",
+      "fetched_at": "2026-09-08T22:56:54.332417+00:00"
     },
     {
       "path": "partitions/202607-41463.json.gz",
-      "size": 20804,
-      "sha256": "80953e995df8c4bfd4fac321657c8494d61f0ed3529a714dd51f5b4fb0bf86dd",
-      "fetched_at": "2026-09-07T22:59:26.508577+00:00"
+      "size": 20881,
+      "sha256": "a5037adbcd5794fa9132093525ead81f2c7b6f9f744caefaa62f3342c542bcff",
+      "fetched_at": "2026-09-08T22:56:54.806507+00:00"
     },
     {
       "path": "partitions/202607-41465.json.gz",
-      "size": 57344,
-      "sha256": "71d3002a2b00086760036b4191437e68ef3a647e544afbb398fbffac8be7c649",
-      "fetched_at": "2026-09-07T22:59:26.967758+00:00"
+      "size": 57574,
+      "sha256": "d0ec7787cab4a8bf1d39fadf25c62828a7bffae2c33ea4427caa0fb812e130e7",
+      "fetched_at": "2026-09-08T22:56:55.048362+00:00"
     },
     {
       "path": "partitions/202607-41480.json.gz",
-      "size": 39660,
-      "sha256": "cd92c57eebfbbde988ba65483426447ff58155128562206ff082abe4e79f5fdd",
-      "fetched_at": "2026-09-07T22:59:27.066772+00:00"
+      "size": 39745,
+      "sha256": "e02ef6f23305028c56b2c2d4a960fbe4317fcb190f1ea2a13397f59d7b3eacae",
+      "fetched_at": "2026-09-08T22:56:56.007254+00:00"
     },
     {
       "path": "partitions/202607-41500.json.gz",
-      "size": 14985,
-      "sha256": "5373541a6130090055f253961b3170a55929b4689a3549910c8bd6aa80a34ac9",
-      "fetched_at": "2026-09-07T22:59:27.499830+00:00"
+      "size": 15149,
+      "sha256": "41903379a784ca27213b353a714c252bcab38bf2a90583475e2b7ec75d750616",
+      "fetched_at": "2026-09-08T22:56:55.317710+00:00"
     },
     {
       "path": "partitions/202607-41550.json.gz",
-      "size": 14175,
-      "sha256": "ba8cec24b706f7e8ac31f5c3fde78cc0ec6b9076d05f40adabaaae9529bb7113",
-      "fetched_at": "2026-09-07T22:59:27.388347+00:00"
+      "size": 14243,
+      "sha256": "5451642f1eb063d78660f8ddc52fc1f539af81bd56e655777fe4f36809dacca8",
+      "fetched_at": "2026-09-08T22:56:55.811818+00:00"
     },
     {
       "path": "partitions/202607-41570.json.gz",
-      "size": 35997,
-      "sha256": "4cecb2d35ef8aa4b73d3abde47b5d944b899b1b4d1a238020c63b3c9cd686cd5",
-      "fetched_at": "2026-09-07T22:59:28.035446+00:00"
+      "size": 36171,
+      "sha256": "5df8be35f673c5fe5aa9a29918d9b34c0b7fa4a36e6751c35812c5865f786808",
+      "fetched_at": "2026-09-08T22:56:56.516735+00:00"
     },
     {
       "path": "partitions/202607-41591.json.gz",
-      "size": 10726,
-      "sha256": "2f517147b5477d23092c6decceecabfc01e5ae9bb19a4915fe74bfeb0e25b408",
-      "fetched_at": "2026-09-07T22:59:27.865008+00:00"
+      "size": 10792,
+      "sha256": "861729e4d1a6c75ab83f7c14c5eeb73289fe5976f2e5f8ef1d17bc44d803ab92",
+      "fetched_at": "2026-09-08T22:56:56.469677+00:00"
     },
     {
       "path": "partitions/202607-41593.json.gz",
-      "size": 17437,
-      "sha256": "db46afc6fe95017b0dd77d499053bdf77ada730032369fc86c23ee373c8b2e1f",
-      "fetched_at": "2026-09-07T22:59:28.509760+00:00"
+      "size": 17504,
+      "sha256": "c4757dbf4b3cb13704c56bfdde0c7731c502b629fff769cdff37e5a25d77e346",
+      "fetched_at": "2026-09-08T22:56:57.000657+00:00"
     },
     {
       "path": "partitions/202607-41595.json.gz",
-      "size": 40769,
-      "sha256": "7233268b264b7ae7b66b094de9d108728e2e1cf3ee26072e37642b0274bd94d0",
-      "fetched_at": "2026-09-07T22:59:28.677522+00:00"
+      "size": 40851,
+      "sha256": "2ee9e4626192e3b8223bb4f972ea618d353f1f8225c7d291cf3bf73cf678ca6d",
+      "fetched_at": "2026-09-08T22:56:57.213332+00:00"
     },
     {
       "path": "partitions/202607-41597.json.gz",
-      "size": 14784,
-      "sha256": "4a0a12874ba4acb64b6a983947f947b6f7be019db72c83f4aa28cfd4b1ec1e58",
-      "fetched_at": "2026-09-07T22:59:28.879692+00:00"
+      "size": 14961,
+      "sha256": "2705bbf9f020d26a9189a709f3c11eee766e97a4acb156dd2c132b58a573951c",
+      "fetched_at": "2026-09-08T22:56:57.627044+00:00"
     },
     {
       "path": "partitions/202607-41610.json.gz",
-      "size": 30687,
-      "sha256": "eb9868cd40092000f5d8b4b186df921618688d4ead26827e55f8b3f7fb502f3a",
-      "fetched_at": "2026-09-07T22:59:29.062471+00:00"
+      "size": 30816,
+      "sha256": "ec27774997530939a1034f46d9156cc09a46abf29d7be29fb75ffc5e73f47642",
+      "fetched_at": "2026-09-08T22:56:57.678143+00:00"
     },
     {
       "path": "partitions/202607-41630.json.gz",
-      "size": 25238,
-      "sha256": "fc89cb0bf24c4d123b719d382188e88fd3d58cb90e3539a7dd10d924870bd045",
-      "fetched_at": "2026-09-07T22:59:29.777047+00:00"
+      "size": 25320,
+      "sha256": "6ed182a2564afdbf052120923346fea05ccf762a534c4d59b62c619b2b2bb4ae",
+      "fetched_at": "2026-09-08T22:56:58.445154+00:00"
     },
     {
       "path": "partitions/202607-41650.json.gz",
-      "size": 6243,
-      "sha256": "085919a87f861d4cb24296cc84d22667106f411e6542aa59bff6d7d80f1d23c8",
-      "fetched_at": "2026-09-07T22:59:29.392116+00:00"
+      "size": 6303,
+      "sha256": "0519642b7ce52709ec319906774321c38cf74f414212d9190b0796efab934e34",
+      "fetched_at": "2026-09-08T22:56:57.954416+00:00"
     },
     {
       "path": "partitions/202607-41670.json.gz",
-      "size": 5756,
-      "sha256": "0b751e78de5298880e7583b8a2adf58d89c3ada5108ebee05787063e6ac208b2",
-      "fetched_at": "2026-09-07T22:59:29.898486+00:00"
+      "size": 5817,
+      "sha256": "74fb4cc3be18b8829961bd08bbb7f07fd8b99e4df06c0f723a5bb702fea3b304",
+      "fetched_at": "2026-09-08T22:56:58.458967+00:00"
     },
     {
       "path": "partitions/202607-41800.json.gz",
-      "size": 1004,
-      "sha256": "bd5f81ffa8b7bfed03d5cba5e947367809c9a0f30f17156f6570a158604f35d6",
-      "fetched_at": "2026-09-07T22:59:29.954121+00:00"
+      "size": 1047,
+      "sha256": "f0a6b56fba2957b5861c7c57759a6bee47b7d460399d263d92b9a44222cc2d37",
+      "fetched_at": "2026-09-08T22:56:58.665897+00:00"
     },
     {
       "path": "partitions/202607-41820.json.gz",
-      "size": 2131,
-      "sha256": "7010c8e8626c4f71710569a476d2886658ad89da5835ee1b3b7aa30507c059c1",
-      "fetched_at": "2026-09-07T22:59:30.378213+00:00"
+      "size": 2178,
+      "sha256": "2401a79bd25ec88491ee2ae94e9a6c3aa35fbf52937aeb93b6da9a615270ca40",
+      "fetched_at": "2026-09-08T22:56:58.947038+00:00"
     },
     {
       "path": "partitions/202607-41830.json.gz",
-      "size": 5011,
-      "sha256": "8e5c554c4a1b7386b59679b82713fcfea349b5527907af40d9fad272ff75d6aa",
-      "fetched_at": "2026-09-07T22:59:30.593565+00:00"
+      "size": 5063,
+      "sha256": "3f49b383596bd422865d88e464aa0d68e7bae867ea4262d4bbe7ec7203087884",
+      "fetched_at": "2026-09-08T22:56:59.357634+00:00"
     },
     {
       "path": "partitions/202608-11110.json.gz",
-      "size": 1530,
-      "sha256": "0f568bd32116db130237c391b231d3b277d305fbcb08c7e7a9c37da618ccba2e",
-      "fetched_at": "2026-09-07T22:59:30.870495+00:00"
+      "size": 1573,
+      "sha256": "7eccd415b15db334125a0665ee2223df15dd367f6c4f84cc344ad37b8f1843b9",
+      "fetched_at": "2026-09-08T22:56:59.466245+00:00"
     },
     {
       "path": "partitions/202608-11140.json.gz",
-      "size": 2900,
-      "sha256": "4fc5dad015fb43cc57a2075f041691f9c08e26190110061dbc02756e85f3a4dc",
-      "fetched_at": "2026-09-07T22:59:30.966115+00:00"
+      "size": 2946,
+      "sha256": "1d5b7e7220151be5296fffc7daae01981377c9e442e2d1ea1b00d0d3343955ef",
+      "fetched_at": "2026-09-08T22:56:59.860592+00:00"
     },
     {
       "path": "partitions/202608-11170.json.gz",
-      "size": 2775,
-      "sha256": "e3f704d18435675929d4e1c603f82fe30642dc793c9748d9ee07380d8676757c",
-      "fetched_at": "2026-09-07T22:59:31.389426+00:00"
+      "size": 2940,
+      "sha256": "a292ae7e237e6804c38848eacfbc32b1576336e00c6cbead1e2288c0c566b5b7",
+      "fetched_at": "2026-09-08T22:56:59.948538+00:00"
     },
     {
       "path": "partitions/202608-11200.json.gz",
-      "size": 4052,
-      "sha256": "6794fae2d85356294bedd3d164d9477c3e3bbe28e5f104bdc0091aadf0db9718",
-      "fetched_at": "2026-09-07T22:59:31.461188+00:00"
+      "size": 4264,
+      "sha256": "344938592e6e37bb034fd4cc849a8be6d1e990e18d77a548e80a339a80c9c01c",
+      "fetched_at": "2026-09-08T22:57:00.356988+00:00"
     },
     {
       "path": "partitions/202608-11215.json.gz",
-      "size": 3322,
-      "sha256": "9a64064f22340561ef94b2b9d810a490e019eec90e360c8298e0622410a6d460",
-      "fetched_at": "2026-09-07T22:59:31.885338+00:00"
+      "size": 3510,
+      "sha256": "99d799d28280a211f48f85a3d4dfa3104ee0a0b92f2d4d415f41ab819db67b84",
+      "fetched_at": "2026-09-08T22:57:00.451858+00:00"
     },
     {
       "path": "partitions/202608-11230.json.gz",
-      "size": 11471,
-      "sha256": "fee9c05c1fc7b31bca7b061826e7372b6fa666310f16fd0aea380890b0741726",
-      "fetched_at": "2026-09-07T22:59:32.113970+00:00"
+      "size": 11626,
+      "sha256": "59124647493d91f0eca6f765e4e620b4ebe7b30743221d07b2fccf5cf50e85ed",
+      "fetched_at": "2026-09-08T22:57:00.872621+00:00"
     },
     {
       "path": "partitions/202608-11260.json.gz",
-      "size": 14258,
-      "sha256": "2c5d018750162160a4715548646880a1c008cada0a8d3e3f5039e1c7f5bf0cf7",
-      "fetched_at": "2026-09-07T22:59:32.398782+00:00"
+      "size": 14524,
+      "sha256": "5aa692a872cb61a0c1a4c1c788f6b8ca5735fd3b3fc66af1edf94c121a6ca95a",
+      "fetched_at": "2026-09-08T22:57:00.970387+00:00"
     },
     {
       "path": "partitions/202608-11290.json.gz",
-      "size": 13324,
-      "sha256": "c2ff998e73d73d16d8793a87beb1caee71025d11a4085cb7c48b32764ab2634a",
-      "fetched_at": "2026-09-07T22:59:32.616908+00:00"
+      "size": 14034,
+      "sha256": "3cab5a2e884d11e5acf2f19fc5621963461d20b1fbeabd40c8280958d56d7f05",
+      "fetched_at": "2026-09-08T22:57:01.437087+00:00"
     },
     {
       "path": "partitions/202608-11305.json.gz",
-      "size": 5427,
-      "sha256": "e7709ff70ee0362fa5dd646cf9319baf2819c1802b2ea91b7a41df0a3099d532",
-      "fetched_at": "2026-09-07T22:59:32.881222+00:00"
+      "size": 5553,
+      "sha256": "fd9bd6a3209e3871e3768aa71ad355421aa0b8b619dc11a6845f95ef579fe02e",
+      "fetched_at": "2026-09-08T22:57:01.454482+00:00"
     },
     {
       "path": "partitions/202608-11320.json.gz",
-      "size": 16123,
-      "sha256": "174cbb316ea656fd748dd071a17de9984613a11917dfc62458836934447b8416",
-      "fetched_at": "2026-09-07T22:59:33.120953+00:00"
+      "size": 16652,
+      "sha256": "30a0dcc032395f6750ca6018314cf9e78fd05b0d13181f8d5bd128bf296a43ab",
+      "fetched_at": "2026-09-08T22:57:01.911947+00:00"
     },
     {
       "path": "partitions/202608-11350.json.gz",
-      "size": 27297,
-      "sha256": "27570e5892a385417af4254b57eb571204434e235fb832cdd8781d0e66b7e90e",
-      "fetched_at": "2026-09-07T22:59:33.547662+00:00"
+      "size": 28581,
+      "sha256": "a14b724173917a7ef00c5352fadcf9be6014bd1e077dec52c541c88786174889",
+      "fetched_at": "2026-09-08T22:57:02.175849+00:00"
     },
     {
       "path": "partitions/202608-11380.json.gz",
-      "size": 17099,
-      "sha256": "b579d0f8e1c015499e342f706f407ffab1458b2611d28c002a860d1af205108d",
-      "fetched_at": "2026-09-07T22:59:33.622726+00:00"
+      "size": 17412,
+      "sha256": "b0d9dba6b6d222d3a6990acabca673515f3287342e38376d0cfa545a2478fee9",
+      "fetched_at": "2026-09-08T22:57:02.579577+00:00"
     },
     {
       "path": "partitions/202608-11410.json.gz",
-      "size": 9450,
-      "sha256": "d519f8e4ea63aaf1a059c274cee3cb168b2b849ef6f4efabdac8474d32d9bdaf",
-      "fetched_at": "2026-09-07T22:59:33.902642+00:00"
+      "size": 10027,
+      "sha256": "763f74364d4344a525030e26e51dd6b1d843a79cc0eff0cf19f733b4736edb77",
+      "fetched_at": "2026-09-08T22:57:02.461613+00:00"
     },
     {
       "path": "partitions/202608-11440.json.gz",
-      "size": 7605,
-      "sha256": "1d781747ec5915b40bc676d1009a649cfbfee2f6d4ac972e6dce2ac3e9314c02",
-      "fetched_at": "2026-09-07T22:59:34.104305+00:00"
+      "size": 8235,
+      "sha256": "1431ea056f9906ee262c4dae787cc1fa613cfdeb286ddb2bb74a3ab7a69504cb",
+      "fetched_at": "2026-09-08T22:57:02.957354+00:00"
     },
     {
       "path": "partitions/202608-11470.json.gz",
-      "size": 10144,
-      "sha256": "83d982f7533089e4576ff0c6e9f4aafbf27580a678f0fb1d6c86302a55dfe03d",
-      "fetched_at": "2026-09-07T22:59:34.387222+00:00"
+      "size": 10670,
+      "sha256": "2f531ca30b995c8bc5417dc4c65da23e71e68ea42e91c27c0f4bac9936aaaa12",
+      "fetched_at": "2026-09-08T22:57:03.205555+00:00"
     },
     {
       "path": "partitions/202608-11500.json.gz",
-      "size": 19753,
-      "sha256": "69e4fe6818af0fc1c69c71d79d04d3c6fbb64838b50cdce6fa654561340c8d3b",
-      "fetched_at": "2026-09-07T22:59:34.635661+00:00"
+      "size": 20953,
+      "sha256": "352fbe570bc74759d1ce1a99a2921e5f5aa16afa59b1da71f623f8c47c350889",
+      "fetched_at": "2026-09-08T22:57:03.492716+00:00"
     },
     {
       "path": "partitions/202608-11530.json.gz",
-      "size": 16757,
-      "sha256": "259630e291ce457a75a2ffe11ee2371db8876eee51e55d2c75b70629c6e7aa20",
-      "fetched_at": "2026-09-07T22:59:34.921850+00:00"
+      "size": 17392,
+      "sha256": "0d8c431cce4d4459891383d9ee273b66f3bcfebac4a1599e8b3d948d850a8992",
+      "fetched_at": "2026-09-08T22:57:03.861116+00:00"
     },
     {
       "path": "partitions/202608-11545.json.gz",
-      "size": 7756,
-      "sha256": "6d9d1787e3305752eefe4fdd48e4425d9880054d30e1ae26539ac06b0f13b000",
-      "fetched_at": "2026-09-07T22:59:34.980576+00:00"
+      "size": 7975,
+      "sha256": "4f12ce6853a0224e7d83e4021f494a3d10c5a7569abb57f85ddf4843f0035fc1",
+      "fetched_at": "2026-09-08T22:57:03.957081+00:00"
     },
     {
       "path": "partitions/202608-11560.json.gz",
-      "size": 10788,
-      "sha256": "eb7db88f2d77f213f75ab3a8153a9b419e8eb1a9325b3e092f549271c0a25c53",
-      "fetched_at": "2026-09-07T22:59:35.405478+00:00"
+      "size": 11010,
+      "sha256": "ed01cc079d9fdee22171b3e76c270b1d952e8fd8d4d751ec610b0f10eb51bce3",
+      "fetched_at": "2026-09-08T22:57:04.458442+00:00"
     },
     {
       "path": "partitions/202608-11590.json.gz",
-      "size": 8253,
-      "sha256": "369595f64293242bf753b7fd9660592a3dd4d360f4e7fc247e03abbd7ad5ad59",
-      "fetched_at": "2026-09-07T22:59:35.595170+00:00"
+      "size": 9023,
+      "sha256": "4b97c0f642d8aa674f2ae46e8c0531ff6b7af1a31eaac8c5490f9826c003bfc2",
+      "fetched_at": "2026-09-08T22:57:04.467961+00:00"
     },
     {
       "path": "partitions/202608-11620.json.gz",
-      "size": 8865,
-      "sha256": "8b31d6fa1bca914d2fcd0b8c3853d06a2c5f1b25051b9a5cc3397809706a9f43",
-      "fetched_at": "2026-09-07T22:59:35.904027+00:00"
+      "size": 9026,
+      "sha256": "9bd6871227f148818dbbfbc6d47ec231fb0330e331deae73f19faf5b18f5c42d",
+      "fetched_at": "2026-09-08T22:57:05.057874+00:00"
     },
     {
       "path": "partitions/202608-11650.json.gz",
-      "size": 6104,
-      "sha256": "7a9043d248ebf487f59ff6cea12762ecc216351cef429ff9b7ea07b8b5c6eead",
-      "fetched_at": "2026-09-07T22:59:36.102197+00:00"
+      "size": 6444,
+      "sha256": "39c2210da2a174cf50a25709c2288b19d1440a7992e664decb89432b085667de",
+      "fetched_at": "2026-09-08T22:57:04.954630+00:00"
     },
     {
       "path": "partitions/202608-11680.json.gz",
-      "size": 6924,
-      "sha256": "69747ba6bdf8be8475eae73ee96aeba1c930cd8539ca299babb851ff544411c4",
-      "fetched_at": "2026-09-07T22:59:36.398524+00:00"
+      "size": 7425,
+      "sha256": "a676619b2d41541d278b7ce05d4ecc583726cbe1c2c43d68dcb9d37c90e5f1b7",
+      "fetched_at": "2026-09-08T22:57:05.454718+00:00"
     },
     {
       "path": "partitions/202608-11710.json.gz",
-      "size": 11831,
-      "sha256": "546482eba3339eb866e5c43f95ebab6344bb96b8a4630e339e3e59ce61ce3d35",
-      "fetched_at": "2026-09-07T22:59:36.622085+00:00"
+      "size": 12390,
+      "sha256": "8dbb4038a5193f1c23af9c41aa57df3eee5c1224ee057f4e09167293d5470309",
+      "fetched_at": "2026-09-08T22:57:05.837554+00:00"
     },
     {
       "path": "partitions/202608-11740.json.gz",
-      "size": 11029,
-      "sha256": "ae35f90ec663aa38ad49bce108741e1efe49748be3af15927484f46383eaa1db",
-      "fetched_at": "2026-09-07T22:59:36.892079+00:00"
+      "size": 12014,
+      "sha256": "044254e31a5d4182a7816bb7ea7748f024f97f752ecbd00fe75d85afbf7be86e",
+      "fetched_at": "2026-09-08T22:57:05.962249+00:00"
     },
     {
       "path": "partitions/202608-28125.json.gz",
-      "size": 4206,
-      "sha256": "a25734acbe8887d44c2c6bd25aee150e7d273bfb6bf78501a611749181cea597",
-      "fetched_at": "2026-09-07T22:59:37.101790+00:00"
+      "size": 4257,
+      "sha256": "4988ab03a87c070e90131df3f4acc9fcd55a9f2e18f14a86d559025052c415b6",
+      "fetched_at": "2026-09-08T22:57:06.241128+00:00"
     },
     {
       "path": "partitions/202608-28155.json.gz",
-      "size": 7416,
-      "sha256": "59839a081d74da343c4a102365735a96fa96bd5f79a8f1073091c3613597282c",
-      "fetched_at": "2026-09-07T22:59:37.402165+00:00"
+      "size": 7561,
+      "sha256": "71a59bc0ee2ab389e2a95760c5e0439ef0de57c7fb470fda1fb950da0c0bb7a4",
+      "fetched_at": "2026-09-08T22:57:06.455600+00:00"
     },
     {
       "path": "partitions/202608-28177.json.gz",
-      "size": 19633,
-      "sha256": "1429026bcb26aa08365c857f53f7696fdfce0b7cda90499014887b7803d12e80",
-      "fetched_at": "2026-09-07T22:59:37.746655+00:00"
+      "size": 20339,
+      "sha256": "03173c8c6474bb1f95fc5e4df7d5ca46d85290217351e376369f56341c4c214b",
+      "fetched_at": "2026-09-08T22:57:07.314805+00:00"
     },
     {
       "path": "partitions/202608-28185.json.gz",
-      "size": 33586,
-      "sha256": "107670bc17346d4c62447f03c62c45301120028cb506d9de8918d62f162eca62",
-      "fetched_at": "2026-09-07T22:59:38.075112+00:00"
+      "size": 34468,
+      "sha256": "ea79d2f98ea4f411a13d586d8080f6049ddb87f24e5a3d0255fc584b4a85d29b",
+      "fetched_at": "2026-09-08T22:57:07.173478+00:00"
     },
     {
       "path": "partitions/202608-28200.json.gz",
-      "size": 24506,
-      "sha256": "4637f94b81950dc615f1993ad9b790dae848db443d7f761f3e86c333b3a1d5dc",
-      "fetched_at": "2026-09-07T22:59:38.255472+00:00"
+      "size": 25342,
+      "sha256": "0048626222a11fcde10dfaaf3732a865263fe6a714acd4179f920acb9609d5ef",
+      "fetched_at": "2026-09-08T22:57:07.668125+00:00"
     },
     {
       "path": "partitions/202608-28237.json.gz",
-      "size": 29805,
-      "sha256": "9f8f0f6d4ee3f1fe9af92f3c4e4fe66adc0b051291a3fd15606e2e6b33e33bc4",
-      "fetched_at": "2026-09-07T22:59:38.562804+00:00"
+      "size": 30613,
+      "sha256": "4ab4f3ff4e3d4c638dc95a42b02c77f4d817d67a311a83280e358ed8cd81fea2",
+      "fetched_at": "2026-09-08T22:57:08.554709+00:00"
     },
     {
       "path": "partitions/202608-28245.json.gz",
-      "size": 15767,
-      "sha256": "5b14165787cbe8c266bb1d36ee8b838924bcb91436435e1b72d54538e51bc3ae",
-      "fetched_at": "2026-09-07T22:59:38.746016+00:00"
+      "size": 16174,
+      "sha256": "ea3c52719435f09b1b49280ace12babec20a6ff674d19a0fc00d276c4462f942",
+      "fetched_at": "2026-09-08T22:57:07.978592+00:00"
     },
     {
       "path": "partitions/202608-28275.json.gz",
-      "size": 19605,
-      "sha256": "0bc7c2552ae0c5100ae74d5af2fc842ba33bb88d05c12bc628c5424601da0c09",
-      "fetched_at": "2026-09-07T22:59:38.923360+00:00"
+      "size": 20288,
+      "sha256": "b4f5d73e84f1722908ae705b8dce236653fd53895dad39583dd9d39c633e86ae",
+      "fetched_at": "2026-09-08T22:57:08.481162+00:00"
     },
     {
       "path": "partitions/202608-28290.json.gz",
-      "size": 21104,
-      "sha256": "f4235b1da575fb8f8206f051e9a56cfd7cef63e57c15dfb8498257fbd1c58ed7",
-      "fetched_at": "2026-09-07T22:59:39.137812+00:00"
+      "size": 21272,
+      "sha256": "9d016babfdc023aa8393ef51f46af2dfa98f9de48d39910eca755d3af4877f26",
+      "fetched_at": "2026-09-08T22:57:09.152971+00:00"
     },
     {
       "path": "partitions/202608-28710.json.gz",
-      "size": 1249,
-      "sha256": "a590a6b635fab6fbf0d6c4ff64412c39024746d5bb6a5b0f8df031ce0b2b0a20",
-      "fetched_at": "2026-09-07T22:59:39.376960+00:00"
+      "size": 1292,
+      "sha256": "f1a8a06a444f334ce8d2e98d5b83e440c66b70fab4fc744f77cc579eccd62bc0",
+      "fetched_at": "2026-09-08T22:57:08.775869+00:00"
     },
     {
       "path": "partitions/202608-28720.json.gz",
-      "size": 224,
-      "sha256": "3f577ed06e3e71f66ff3152a829d9139a0c4d8e2fe6ff347708afa6cd4e2348d",
-      "fetched_at": "2026-09-07T22:59:39.451134+00:00"
+      "size": 266,
+      "sha256": "10664289076314f7f80824194fa5983335a55701eb52bcbcfaf8048f5bdc8d97",
+      "fetched_at": "2026-09-08T22:57:09.294585+00:00"
     },
     {
       "path": "partitions/202608-41111.json.gz",
-      "size": 15441,
-      "sha256": "319e047aaf7e717a154b8f2139a714accc230b90b94aa260b71c7d16510bc489",
-      "fetched_at": "2026-09-07T22:59:39.918741+00:00"
+      "size": 15897,
+      "sha256": "93cea0a263d735172f8ffa920879a983f076d6e71641407a81facc41638f078a",
+      "fetched_at": "2026-09-08T22:57:09.488235+00:00"
     },
     {
       "path": "partitions/202608-41113.json.gz",
-      "size": 39277,
-      "sha256": "d80f6840da33f3554220cdb69801775ccf9e41f12290597718620b540f7d25bb",
-      "fetched_at": "2026-09-07T22:59:40.296941+00:00"
+      "size": 40205,
+      "sha256": "bbfc39f551214cc859e30acdf7e494b718c3300fa0394613c6d3e289a444bdac",
+      "fetched_at": "2026-09-08T22:57:10.388996+00:00"
     },
     {
       "path": "partitions/202608-41115.json.gz",
-      "size": 14082,
-      "sha256": "6e7a7da3bb35e8012e81865d3ddcf6e81de7bd8668f5e9e8cc5d1420b24f9f86",
-      "fetched_at": "2026-09-07T22:59:40.420002+00:00"
+      "size": 14365,
+      "sha256": "f2a4c48794f9e47a4a07336c2d49c822190e9ece02eb199994efa4477d1be018",
+      "fetched_at": "2026-09-08T22:57:09.973114+00:00"
     },
     {
       "path": "partitions/202608-41117.json.gz",
-      "size": 29458,
-      "sha256": "0eae938261fd3bb4e727dd977548f1d801094e6b6ef7bdf5c045c300aa7c0ba7",
-      "fetched_at": "2026-09-07T22:59:40.811254+00:00"
+      "size": 30012,
+      "sha256": "38f0f05c32c1911fa8801e0f33bc89ce446a4a76ba6f76e4a1a1c6c221f92622",
+      "fetched_at": "2026-09-08T22:57:10.684911+00:00"
     },
     {
       "path": "partitions/202608-41131.json.gz",
-      "size": 3733,
-      "sha256": "a8ff8e686271ca7f129fcca72c85f93dbaa3b4c725b1a0aaae6b4bd533670495",
-      "fetched_at": "2026-09-07T22:59:40.890399+00:00"
+      "size": 3784,
+      "sha256": "ea59d98d521f55bfea7fee431a4ca3b4508c459ee6bc35d5926bbe26743f89fe",
+      "fetched_at": "2026-09-08T22:57:10.817320+00:00"
     },
     {
       "path": "partitions/202608-41133.json.gz",
-      "size": 7778,
-      "sha256": "f53474e4760c30c5accc9e926f9e41bd295274666db4f424317f1150b6896e34",
-      "fetched_at": "2026-09-07T22:59:41.135311+00:00"
+      "size": 7997,
+      "sha256": "5f6f754a516d0b6e1b5ae295969059583edee03521a4af025ad2f62bad5afcac",
+      "fetched_at": "2026-09-08T22:57:10.975557+00:00"
     },
     {
       "path": "partitions/202608-41135.json.gz",
-      "size": 11446,
-      "sha256": "db2648fe631de51cf8b98332157470a4d70029b931abba4bc8897931796a7c79",
-      "fetched_at": "2026-09-07T22:59:41.415916+00:00"
+      "size": 11942,
+      "sha256": "2729f852090075a8cfabcb28cc251d0409d99bc56873056dcac14b23b2ca206e",
+      "fetched_at": "2026-09-08T22:57:11.342136+00:00"
     },
     {
       "path": "partitions/202608-41150.json.gz",
-      "size": 38774,
-      "sha256": "31c181d2ccb2ee9391f510f6a5b3e1ffd019cd62adf39f1d61a984e69f02c7d6",
-      "fetched_at": "2026-09-07T22:59:41.821902+00:00"
+      "size": 39844,
+      "sha256": "7bfe14a6893f7a4aba2fab9859c739d4a1f736a4202fa5b0d495407742753b71",
+      "fetched_at": "2026-09-08T22:57:11.701533+00:00"
     },
     {
       "path": "partitions/202608-41171.json.gz",
-      "size": 18388,
-      "sha256": "9817c7e66d93e7249ab97b40cc7e87a8247b22cc16d53a0a741a4dbff4830e11",
-      "fetched_at": "2026-09-07T22:59:41.931516+00:00"
+      "size": 18936,
+      "sha256": "186a7c3ae46094e28249f05c39d8e64b5c797d683a6ac2839814959c665332f2",
+      "fetched_at": "2026-09-08T22:57:12.019600+00:00"
     },
     {
       "path": "partitions/202608-41173.json.gz",
-      "size": 24236,
-      "sha256": "c017086708a1ff0e4750385c6117d58b694d7cf340a34268e99169b331e14216",
-      "fetched_at": "2026-09-07T22:59:42.318754+00:00"
+      "size": 25053,
+      "sha256": "0a14e041a34dd10e373b020b473054a0e43fb6a6149d19da1a9728ec6f04b705",
+      "fetched_at": "2026-09-08T22:57:12.172462+00:00"
     },
     {
       "path": "partitions/202608-41192.json.gz",
-      "size": 32946,
-      "sha256": "0eab8d0bb4d3437d6364cc1a94fb207e653b5ae17fdd26a65244a56f24ebbb75",
-      "fetched_at": "2026-09-07T22:59:42.573235+00:00"
+      "size": 35484,
+      "sha256": "98befc9c5deea7b8be9a75f27eab09fc4e088cbcb514eb545e5693a3897316c0",
+      "fetched_at": "2026-09-08T22:57:13.577452+00:00"
     },
     {
       "path": "partitions/202608-41194.json.gz",
-      "size": 16051,
-      "sha256": "ce8673d909b8d85dedc307a885cb447f8288fd9eedadf90e454f76044960279c",
-      "fetched_at": "2026-09-07T22:59:42.844857+00:00"
+      "size": 16291,
+      "sha256": "89b8a5625f074a29843a920a4b13c7381c5a25af9abdf5b1506cc6a91ac3bd76",
+      "fetched_at": "2026-09-08T22:57:12.505113+00:00"
     },
     {
       "path": "partitions/202608-41196.json.gz",
-      "size": 3167,
-      "sha256": "ed05bc511ec8b5cf8d9e52f0cca341f7757e4fe55cb357b4b625fa7cf623c3e9",
-      "fetched_at": "2026-09-07T22:59:42.886038+00:00"
+      "size": 3280,
+      "sha256": "22d00db91d9578da3864a2130a84f97ecbc1820560dafbe5fc5bffa27c9ac8d1",
+      "fetched_at": "2026-09-08T22:57:12.954928+00:00"
     },
     {
       "path": "partitions/202608-41210.json.gz",
-      "size": 11772,
-      "sha256": "5b7e31a2b4f8688f2f820422fd4db45c7c6e564c9386e1ff048dae676b3b85ed",
-      "fetched_at": "2026-09-07T22:59:43.177677+00:00"
+      "size": 12320,
+      "sha256": "ccbc4650c4cb1aae527f4d44e3849fc17b383bb57a7e95ec94183dcd479b52b7",
+      "fetched_at": "2026-09-08T22:57:13.462827+00:00"
     },
     {
       "path": "partitions/202608-41220.json.gz",
-      "size": 50958,
-      "sha256": "5e9d18c474c57048e72a04267d9b2382a7d380559f3c899da16bfa574291a18f",
-      "fetched_at": "2026-09-07T22:59:43.712770+00:00"
+      "size": 51867,
+      "sha256": "76456813c98d4a050bc6ce95e3e50c10dfb8c4b77945e9a8d81c2c1333ec4987",
+      "fetched_at": "2026-09-08T22:57:14.376684+00:00"
     },
     {
       "path": "partitions/202608-41250.json.gz",
-      "size": 5755,
-      "sha256": "dc84bf1ad3e80fa188b2b0db12c728e6043b376d64b75de99d55f7479b51b4f3",
-      "fetched_at": "2026-09-07T22:59:43.653995+00:00"
+      "size": 6003,
+      "sha256": "2a721ced73e6b12442b3aac7b1b6120eee28ce78241ae7100762a105af309d3d",
+      "fetched_at": "2026-09-08T22:57:13.997603+00:00"
     },
     {
       "path": "partitions/202608-41271.json.gz",
-      "size": 8646,
-      "sha256": "ca0c9361544234118b40fd28ed68cf3ebc640b647959ae0773d11a8672fd19ae",
-      "fetched_at": "2026-09-07T22:59:44.161080+00:00"
+      "size": 8777,
+      "sha256": "24e060a4f93ddb8c12f73308027196b7ec92d1d4a6cf1c7398dc296e201d97d8",
+      "fetched_at": "2026-09-08T22:57:14.687679+00:00"
     },
     {
       "path": "partitions/202608-41273.json.gz",
-      "size": 15804,
-      "sha256": "bfa467fa94a8ab6e1d64f59034228ea05319509cf070ae066206c093deea287d",
-      "fetched_at": "2026-09-07T22:59:43.947887+00:00"
+      "size": 15873,
+      "sha256": "28553c5f7c92da52463997b9e69ab6549f5b0b5eea5b954ad8c682b85128e2a1",
+      "fetched_at": "2026-09-08T22:57:14.631009+00:00"
     },
     {
       "path": "partitions/202608-41281.json.gz",
-      "size": 37183,
-      "sha256": "5510ad5c73f6dc52ce9991ad13ba8d6da14e18ebb729f3ebab3b0e27e9780fd1",
-      "fetched_at": "2026-09-07T22:59:44.618067+00:00"
+      "size": 38029,
+      "sha256": "d11b5ac6d31bb14af9b6b6ddb0dd88df41b5c687b113be6b56590330cd03c0e6",
+      "fetched_at": "2026-09-08T22:57:15.357597+00:00"
     },
     {
       "path": "partitions/202608-41285.json.gz",
-      "size": 11202,
-      "sha256": "c3afb4dd07645a03df11f4596b3432539ad448ddf1d22f497a711a6a8a05cbbe",
-      "fetched_at": "2026-09-07T22:59:44.669459+00:00"
+      "size": 11268,
+      "sha256": "49b2395b58ed575776efb5ecc648dc7e0f17d028389fd8902672a06412f493df",
+      "fetched_at": "2026-09-08T22:57:15.278879+00:00"
     },
     {
       "path": "partitions/202608-41287.json.gz",
-      "size": 16758,
-      "sha256": "4ad957545b842e52ca00889510379fff98dde012d0e82dfb96a2d06b0fd7bac8",
-      "fetched_at": "2026-09-07T22:59:44.968140+00:00"
+      "size": 17367,
+      "sha256": "55f90164185efc47b8031d6cf44d90ce23f110617d4e182936e105a3ef18d58a",
+      "fetched_at": "2026-09-08T22:57:16.108501+00:00"
     },
     {
       "path": "partitions/202608-41290.json.gz",
-      "size": 1453,
-      "sha256": "15735ee80915bff539c03ab9c85306344f930c9b05531bb386a802425039945d",
-      "fetched_at": "2026-09-07T22:59:45.016462+00:00"
+      "size": 1558,
+      "sha256": "e30f7d95f81a8991c519a34d580ba87524734634526fb8f9f09124a463802c03",
+      "fetched_at": "2026-09-08T22:57:15.615233+00:00"
     },
     {
       "path": "partitions/202608-41310.json.gz",
-      "size": 6689,
-      "sha256": "8739e3723aad2e0f77eb00784194ee71d1f17eedccb3e5d301de1e36fb02386e",
-      "fetched_at": "2026-09-07T22:59:45.430579+00:00"
+      "size": 7052,
+      "sha256": "5b881639378ae8c52a483b07bc8ce3bfcdc7ec6d4f0deddbf331902314e33a40",
+      "fetched_at": "2026-09-08T22:57:16.138740+00:00"
     },
     {
       "path": "partitions/202608-41360.json.gz",
-      "size": 69383,
-      "sha256": "ef3d03d3f81f520a533c88fe3039895954c3d7cdc01c1743b242d81f5e904a7f",
-      "fetched_at": "2026-09-07T22:59:46.028925+00:00"
+      "size": 71023,
+      "sha256": "5da60a143746a9488431915253cb9d0a462f6a32066a96cf4af8d932640f62d4",
+      "fetched_at": "2026-09-08T22:57:17.334427+00:00"
     },
     {
       "path": "partitions/202608-41370.json.gz",
-      "size": 24904,
-      "sha256": "f5927f5aacdecd0f86514af59c3275b7927b739df99d11563462195837bc8be3",
-      "fetched_at": "2026-09-07T22:59:46.097866+00:00"
+      "size": 25939,
+      "sha256": "c176fc0279894fe8f0cf915731e1031783ecab06383ecd7e6cca90b680f9fe74",
+      "fetched_at": "2026-09-08T22:57:16.830804+00:00"
     },
     {
       "path": "partitions/202608-41390.json.gz",
-      "size": 42908,
-      "sha256": "9980d523dc3e7cff2e7b1b3554abb4fa293095c2054573fa3e64ab3c3705b679",
-      "fetched_at": "2026-09-07T22:59:46.621804+00:00"
+      "size": 43675,
+      "sha256": "b4a668719c79557e5292bc54694709d5f10d8ae26f7a51656d5e5b831ba2071a",
+      "fetched_at": "2026-09-08T22:57:17.385903+00:00"
     },
     {
       "path": "partitions/202608-41410.json.gz",
-      "size": 30299,
-      "sha256": "3ea54124afbf23b57ae5cd834152dcf48ee1195fb74ff35410566290c4f6943c",
-      "fetched_at": "2026-09-07T22:59:46.672241+00:00"
+      "size": 31793,
+      "sha256": "fd553c11daab8488b98e63fba28c0c43ff47adb2b56912200b50d64f8ee4bc64",
+      "fetched_at": "2026-09-08T22:57:18.213188+00:00"
     },
     {
       "path": "partitions/202608-41430.json.gz",
-      "size": 10752,
-      "sha256": "96cb524aa1fa27f73b502613c1fbab767b613292dcc53fef1069951d3112c482",
-      "fetched_at": "2026-09-07T22:59:46.993027+00:00"
+      "size": 11474,
+      "sha256": "1066c54e663b57e510dd538f845b83ce7a9f183163177068f9700286a86323a8",
+      "fetched_at": "2026-09-08T22:57:17.633109+00:00"
     },
     {
       "path": "partitions/202608-41450.json.gz",
-      "size": 19142,
-      "sha256": "00fea9f4571512593934900ea6792b6f7d8f14164a48e3bcf7d8f446ee5f4ba7",
-      "fetched_at": "2026-09-07T22:59:46.958291+00:00"
+      "size": 19692,
+      "sha256": "c22b133bef474d9bca11d001a422401ced3ef4abc6c7cb30d88d8b24d812fcf1",
+      "fetched_at": "2026-09-08T22:57:18.148554+00:00"
     },
     {
       "path": "partitions/202608-41461.json.gz",
-      "size": 18249,
-      "sha256": "f7e2d1a4ee3a7fec946b2cc12c2e0a2df76681b0ef8f86ecf9c82e00011437c7",
-      "fetched_at": "2026-09-07T22:59:47.469303+00:00"
+      "size": 18638,
+      "sha256": "2aa17ddcb41a2af4c32f94a6fd811d75ff11235067f66b32fe156ed640143c27",
+      "fetched_at": "2026-09-08T22:57:18.671833+00:00"
     },
     {
       "path": "partitions/202608-41463.json.gz",
-      "size": 22295,
-      "sha256": "b9af9303044037fad3dd8c389d36c81c10d0c5a6e6badf7cd4bd14e29696d854",
-      "fetched_at": "2026-09-07T22:59:47.566529+00:00"
+      "size": 23386,
+      "sha256": "54f7674293883637225cab6d907bd3011d547b49a5ee4d0ef9e728d349e66ee6",
+      "fetched_at": "2026-09-08T22:57:18.892070+00:00"
     },
     {
       "path": "partitions/202608-41465.json.gz",
-      "size": 30841,
-      "sha256": "d1f58eafe4a94256c8a928746edb664602720c5460cd01bd7287c9c90f460e0c",
-      "fetched_at": "2026-09-07T22:59:48.091603+00:00"
+      "size": 31786,
+      "sha256": "bb3fca17e44a33c3a3d06e1df6f29d79be68ced04a6195d9d46824280918885f",
+      "fetched_at": "2026-09-08T22:57:19.353765+00:00"
     },
     {
       "path": "partitions/202608-41480.json.gz",
-      "size": 30189,
-      "sha256": "05669d8db4b6361307f55cb1ce6355b692dd0e65dea78f1e2c777e2d661ae21d",
-      "fetched_at": "2026-09-07T22:59:48.150786+00:00"
+      "size": 30459,
+      "sha256": "e8510d003cb8d6824158bb902a3067e4958a2837c28e7168b4268e2f19681d19",
+      "fetched_at": "2026-09-08T22:57:19.543852+00:00"
     },
     {
       "path": "partitions/202608-41500.json.gz",
-      "size": 10725,
-      "sha256": "89f9c7809220eb00258737c88d97ac7f5c595165aee2492594fcd38e7e285f0a",
-      "fetched_at": "2026-09-07T22:59:48.433922+00:00"
+      "size": 11080,
+      "sha256": "82124fcaead058dde1b9e14d24c5ea8ebadf56d92a606cfb2eab29255e438e88",
+      "fetched_at": "2026-09-08T22:57:19.640699+00:00"
     },
     {
       "path": "partitions/202608-41550.json.gz",
-      "size": 15111,
-      "sha256": "81a2998970a86ebe891bcdff2edddd0b40c7f61ea04f1a3afe6f6c8304ddde17",
-      "fetched_at": "2026-09-07T22:59:48.634236+00:00"
+      "size": 15570,
+      "sha256": "3021026507c7623d38f3fa92b4eae9c23c3826bddfad785bd0cabf434cff7646",
+      "fetched_at": "2026-09-08T22:57:19.990061+00:00"
     },
     {
       "path": "partitions/202608-41570.json.gz",
-      "size": 31092,
-      "sha256": "c0e83847edef8dae4a7835cacf927c05c3c975b9d69aa174b6cd1480fe5eff4e",
-      "fetched_at": "2026-09-07T22:59:49.084883+00:00"
+      "size": 31278,
+      "sha256": "d951cd16e45ed066e88763172e7ce8bb4f6d6772a58044636cf734131acf6915",
+      "fetched_at": "2026-09-08T22:57:20.353168+00:00"
     },
     {
       "path": "partitions/202608-41591.json.gz",
-      "size": 7058,
-      "sha256": "339de915a0500452c80597bfcaa0beddb89a639f1b678d85ef2cf8af838b36fc",
-      "fetched_at": "2026-09-07T22:59:49.030440+00:00"
+      "size": 7399,
+      "sha256": "e0cdb936a58d795a1a694e1d378d8739e974fbfbf9b0237b5d927e069169642d",
+      "fetched_at": "2026-09-08T22:57:20.502123+00:00"
     },
     {
       "path": "partitions/202608-41593.json.gz",
-      "size": 14330,
-      "sha256": "267f623924e8d5b193e0f15772cf5784fe73346fe3ee3761ca6a9097a3bc2ea3",
-      "fetched_at": "2026-09-07T22:59:49.633012+00:00"
+      "size": 14397,
+      "sha256": "79bc4023d0815312fce8f0a6d2366bd5838f0d20357b912922c451b9dfc77246",
+      "fetched_at": "2026-09-08T22:57:20.640994+00:00"
     },
     {
       "path": "partitions/202608-41595.json.gz",
-      "size": 20730,
-      "sha256": "d9ee0b12efc603fb55ca65298c39f42a619f079caf8e0b00c0b61f125c043979",
-      "fetched_at": "2026-09-07T22:59:49.582610+00:00"
+      "size": 21129,
+      "sha256": "5d820b8d011fd891bab16bd48bef8038a8b294932b00e849c7ad5550ba17c353",
+      "fetched_at": "2026-09-08T22:57:21.180150+00:00"
     },
     {
       "path": "partitions/202608-41597.json.gz",
-      "size": 12262,
-      "sha256": "ccabb82dbc344e1ef56315adb1f928777c14203988760536038b8d3be1410d3e",
-      "fetched_at": "2026-09-07T22:59:49.937262+00:00"
+      "size": 12691,
+      "sha256": "dc6dd5a4e411dd8186a021ff03bd38075dd5a6de28650563239f989d18b82b8e",
+      "fetched_at": "2026-09-08T22:57:21.136360+00:00"
     },
     {
       "path": "partitions/202608-41610.json.gz",
-      "size": 26390,
-      "sha256": "794d1b34a285c319a10a82decab265b61314c4c9f99084aa2dc0db9d66a88a1d",
-      "fetched_at": "2026-09-07T22:59:50.153157+00:00"
+      "size": 26744,
+      "sha256": "cc12fc77df7a943643b087ab0304444aafa3afbdca2184b8470f6ccef678e8c5",
+      "fetched_at": "2026-09-08T22:57:21.843081+00:00"
     },
     {
       "path": "partitions/202608-41630.json.gz",
-      "size": 21782,
-      "sha256": "3add14a69cdf6a1ab298dfb206df0735097475169e2558472694693d18f42c60",
-      "fetched_at": "2026-09-07T22:59:50.570139+00:00"
+      "size": 22270,
+      "sha256": "34bb319d07296139f2b3bb9e6722c8be9e60bb380474f135930391e340daac34",
+      "fetched_at": "2026-09-08T22:57:21.980277+00:00"
     },
     {
       "path": "partitions/202608-41650.json.gz",
-      "size": 4125,
-      "sha256": "d82086a601c064199798f96fffe9f31c2891797df120dc309b211dea4b4774a4",
-      "fetched_at": "2026-09-07T22:59:50.492162+00:00"
+      "size": 4175,
+      "sha256": "19548023c05f069148d0be7e8d8c984cdbf31ffbec584b0385ca5529e5952d24",
+      "fetched_at": "2026-09-08T22:57:22.121579+00:00"
     },
     {
       "path": "partitions/202608-41670.json.gz",
-      "size": 5180,
-      "sha256": "31cfd27a995ca31c0316a88df8b4d32a64191a956d35063524479e540c018213",
-      "fetched_at": "2026-09-07T22:59:50.862650+00:00"
+      "size": 5234,
+      "sha256": "4f729d4b2800bc0a29b7e3471df4f6e4da9ce1f1262e9d785767e7f6b93c8c14",
+      "fetched_at": "2026-09-08T22:57:22.391449+00:00"
     },
     {
       "path": "partitions/202608-41800.json.gz",
-      "size": 1554,
-      "sha256": "1c8b64285ca89a7e14584eae30b5d78bb274475fe945be5afddc9cb4107e4764",
-      "fetched_at": "2026-09-07T22:59:50.915841+00:00"
+      "size": 1597,
+      "sha256": "4917893041e87d8f5caeb7b897ca231c32022018cb443e22559914c5a80fcb65",
+      "fetched_at": "2026-09-08T22:57:22.614338+00:00"
     },
     {
       "path": "partitions/202608-41820.json.gz",
-      "size": 2206,
-      "sha256": "5c9365114bb27e9d3eaa196e4b1d514db2b12feff4f87a7f3edc82b8802ac85a",
-      "fetched_at": "2026-09-07T22:59:51.348012+00:00"
+      "size": 2250,
+      "sha256": "c820bf3e7db88994f369a9a2c5b013fefce5a2fb46eb5f2369f24240e61e8ca9",
+      "fetched_at": "2026-09-08T22:57:22.696124+00:00"
     },
     {
       "path": "partitions/202608-41830.json.gz",
-      "size": 4296,
-      "sha256": "0f4d08187d06b159b13b9ddfea38d1b549c3730bb387723e7683eb68f9637b30",
-      "fetched_at": "2026-09-07T22:59:51.423387+00:00"
+      "size": 4348,
+      "sha256": "af474c7fdfa217cccc31f89dde28efd742eadb1c62e172750407904a52ee2c26",
+      "fetched_at": "2026-09-08T22:57:23.128675+00:00"
     },
     {
       "path": "partitions/202609-11110.json.gz",
-      "size": 224,
-      "sha256": "d5ccb1d49226e9a741329f98a058ba7efe06bd34fa6e9eeef58fa87fd3074f6b",
-      "fetched_at": "2026-09-07T22:59:51.844983+00:00"
+      "size": 266,
+      "sha256": "6dd199267acb371a469ac676fbb62e4810cceab779f022759cb2c9d237f96d27",
+      "fetched_at": "2026-09-08T22:57:23.198345+00:00"
     },
     {
       "path": "partitions/202609-11140.json.gz",
-      "size": 224,
-      "sha256": "237e0e2df4ded230a0ece3fdc189c34e8abc8bfc4053fb1a06d76a7edca944be",
-      "fetched_at": "2026-09-07T22:59:51.912218+00:00"
+      "size": 266,
+      "sha256": "fa9e756ef464a2722c477b0ff44c27c13788ffcdf6269b8e4ec007016e7bb19d",
+      "fetched_at": "2026-09-08T22:57:23.620153+00:00"
     },
     {
       "path": "partitions/202609-11170.json.gz",
-      "size": 225,
-      "sha256": "c06895c2a689dcf04bf787f7adb8f780feb49d9a7aa235ce2cd11f83c940df8a",
-      "fetched_at": "2026-09-07T22:59:52.343285+00:00"
+      "size": 733,
+      "sha256": "9586804c461d0afbc91fe29329ce9c490b0a5a4156e75b73912eb6c0a61dc50e",
+      "fetched_at": "2026-09-08T22:57:23.698054+00:00"
     },
     {
       "path": "partitions/202609-11200.json.gz",
-      "size": 224,
-      "sha256": "d180855ec0279cc1879a489984b559191150fbc0b7fb5463dd437d4b17bc3d03",
-      "fetched_at": "2026-09-07T22:59:52.411772+00:00"
+      "size": 629,
+      "sha256": "9d2ebfbf6067827d40efba817541e0acd93f0e6be4fe5e05dee4249df40cf7fc",
+      "fetched_at": "2026-09-08T22:57:24.116308+00:00"
     },
     {
       "path": "partitions/202609-11215.json.gz",
-      "size": 224,
-      "sha256": "e141ff17144a459d5b20ea9c0a170e5f2a792f2b933f019374e18822b5a95a20",
-      "fetched_at": "2026-09-07T22:59:52.846998+00:00"
+      "size": 266,
+      "sha256": "0b6c4fae8adf3ea486604dd1bfc574f67cb6f0df8a439c9cf0bc1dafcf27ae39",
+      "fetched_at": "2026-09-08T22:57:24.195323+00:00"
     },
     {
       "path": "partitions/202609-11230.json.gz",
-      "size": 796,
-      "sha256": "e32fe1495bedeb5227cecfa8312c7c6768461f12d7494e7ec9c192383fd16e4b",
-      "fetched_at": "2026-09-07T22:59:52.912700+00:00"
+      "size": 843,
+      "sha256": "0360290ef03d66bb4fab8a3952cc51d71094d112a3dbdb16d1f4aec493b3c5a8",
+      "fetched_at": "2026-09-08T22:57:24.613981+00:00"
     },
     {
       "path": "partitions/202609-11260.json.gz",
-      "size": 1944,
-      "sha256": "7033475667b7212b8664dd96d20782fe0d13bee8d5e06a5a345d64b5f1885825",
-      "fetched_at": "2026-09-07T22:59:53.347710+00:00"
+      "size": 2134,
+      "sha256": "53dc5dfc7fe43ec982d760b6b4788c3c2a2d0f921c1b6762e59aa9123da7a32e",
+      "fetched_at": "2026-09-08T22:57:24.731871+00:00"
     },
     {
       "path": "partitions/202609-11290.json.gz",
-      "size": 1452,
-      "sha256": "15d4923401ea25880e51dc148e5c089c6deb77662c7244c1512f70e741af4ea8",
-      "fetched_at": "2026-09-07T22:59:53.412484+00:00"
+      "size": 1849,
+      "sha256": "4e971fff2b59ce98ee3bcc7f65af855d98cc50785883ce580b930276c273d206",
+      "fetched_at": "2026-09-08T22:57:25.121474+00:00"
     },
     {
       "path": "partitions/202609-11305.json.gz",
-      "size": 1169,
-      "sha256": "2b0f90e12f7954e6c66bdb4d4f77f48693c221282503f11e1f897589c3200877",
-      "fetched_at": "2026-09-07T22:59:53.846174+00:00"
+      "size": 1298,
+      "sha256": "de9a6c50b82ebf181ef7df062dd08e33a8400a6e18d88add3b13d7c2a0d20f26",
+      "fetched_at": "2026-09-08T22:57:25.194043+00:00"
     },
     {
       "path": "partitions/202609-11320.json.gz",
-      "size": 1893,
-      "sha256": "bb1bb6f998dea1f5b50fae4dffda48654a37ebc9dcddaef57d0e4f156547f2bb",
-      "fetched_at": "2026-09-07T22:59:53.913536+00:00"
+      "size": 2405,
+      "sha256": "177c4fab0b34daeb67e9aa1e88656b2667861f4fa9c4d6bfec04d3ca4ac24c4f",
+      "fetched_at": "2026-09-08T22:57:25.629736+00:00"
     },
     {
       "path": "partitions/202609-11350.json.gz",
-      "size": 690,
-      "sha256": "0576ebb07964ee9500701b149ee0e0f2016d68a8e7f4305f78bf67ea03c089ae",
-      "fetched_at": "2026-09-07T22:59:54.347127+00:00"
+      "size": 926,
+      "sha256": "bf0010b690d2cbd40023bbe53c3581ad4f7f9088f03213de734cd490a355a95f",
+      "fetched_at": "2026-09-08T22:57:25.694318+00:00"
     },
     {
       "path": "partitions/202609-11380.json.gz",
-      "size": 4415,
-      "sha256": "2d076184575edd22067db06ed4628ecb94d71a90c732e1bba7932ab96db56eff",
-      "fetched_at": "2026-09-07T22:59:54.426295+00:00"
+      "size": 4660,
+      "sha256": "8b4d206747257aa01efd86f760b3f35af7f226aee255cac04e89a9f75f7d1d39",
+      "fetched_at": "2026-09-08T22:57:26.131293+00:00"
     },
     {
       "path": "partitions/202609-11410.json.gz",
-      "size": 847,
-      "sha256": "d6c3e934219f1d55aee1640ade880a3a3fc82ac73d542fa069249e6fe4233125",
-      "fetched_at": "2026-09-07T22:59:54.848999+00:00"
+      "size": 1259,
+      "sha256": "4ebb10dfd273e74831e5a4174a5c0b44bc4f535da15386680c3439afded5450d",
+      "fetched_at": "2026-09-08T22:57:26.194522+00:00"
     },
     {
       "path": "partitions/202609-11440.json.gz",
-      "size": 925,
-      "sha256": "a2b5f9166a37e0a166900644503b0ae6fc37cae4a4aa46f690050a5896eb88be",
-      "fetched_at": "2026-09-07T22:59:54.911825+00:00"
+      "size": 966,
+      "sha256": "8013abc402655af6498ab80ae86e38de863b98344480eec8b5ace78c65a4245b",
+      "fetched_at": "2026-09-08T22:57:26.617658+00:00"
     },
     {
       "path": "partitions/202609-11470.json.gz",
-      "size": 681,
-      "sha256": "84cffe5f8c4581cf6fa11d828d7848d4a65d142de25b415d489818f9667099b3",
-      "fetched_at": "2026-09-07T22:59:55.347698+00:00"
+      "size": 724,
+      "sha256": "f806ed9475539c490e27dcf91141db2bc1652d0fad6bdfa1bc8ee12454929719",
+      "fetched_at": "2026-09-08T22:57:26.697343+00:00"
     },
     {
       "path": "partitions/202609-11500.json.gz",
-      "size": 1160,
-      "sha256": "bb81358f48cf0c40c99a3fefe36d1a3f2d7709e66cf43be9d52d81bb66c1abce",
-      "fetched_at": "2026-09-07T22:59:55.411933+00:00"
+      "size": 1261,
+      "sha256": "a903c9f63eb027b2218cd1c97cd1ba37f6b751c7aad7c317846c057d7b5ba5cb",
+      "fetched_at": "2026-09-08T22:57:27.115758+00:00"
     },
     {
       "path": "partitions/202609-11530.json.gz",
-      "size": 1834,
-      "sha256": "7d95bbf4b01c64d8f8f7ca288f56ef80b741c175262a7370b449c2a3b1c4afad",
-      "fetched_at": "2026-09-07T22:59:55.881542+00:00"
+      "size": 2340,
+      "sha256": "450610a35b17651d1fd93e795d4b28963f59c18cae9ee352b25b212c809d6dfa",
+      "fetched_at": "2026-09-08T22:57:27.199816+00:00"
     },
     {
       "path": "partitions/202609-11545.json.gz",
-      "size": 713,
-      "sha256": "91ae477341fac71972a5f2dd2f16d1b6bc435cf5d825dc9881320d3efc518980",
-      "fetched_at": "2026-09-07T22:59:55.913836+00:00"
+      "size": 958,
+      "sha256": "ddaded235b0f12e973421e211048a91b1cc58d09a388baf1a57f083459d09b63",
+      "fetched_at": "2026-09-08T22:57:27.619052+00:00"
     },
     {
       "path": "partitions/202609-11560.json.gz",
-      "size": 717,
-      "sha256": "8a8685eb554a3ff6229f7183e1b6a64c39e67830c552b329b3d98890009e83c2",
-      "fetched_at": "2026-09-07T22:59:56.345774+00:00"
+      "size": 1043,
+      "sha256": "36d0f50baa663668ec08c5f06c64b0c7aae8e230b151cfb715076277f9cce3cb",
+      "fetched_at": "2026-09-08T22:57:27.695745+00:00"
     },
     {
       "path": "partitions/202609-11590.json.gz",
-      "size": 224,
-      "sha256": "fafc4b074331da05b7a72c74f3437996fa1208d3fbf836c6718fe17f2d6b65b2",
-      "fetched_at": "2026-09-07T22:59:56.411629+00:00"
+      "size": 656,
+      "sha256": "98d256d82d4818e6543cdfeb21767bf06191bf37a9740cfe9d90eb5832f24372",
+      "fetched_at": "2026-09-08T22:57:28.115888+00:00"
     },
     {
       "path": "partitions/202609-11620.json.gz",
-      "size": 1077,
-      "sha256": "46aebb84f94ed1998bf1fab1abaf599f49e7fd0c9fc364cc6a61e1839feb59c3",
-      "fetched_at": "2026-09-07T22:59:56.848186+00:00"
+      "size": 1661,
+      "sha256": "39f95fe327f6897e1276d42ac1b7d3dcdee3f9ecd6fd5cf81fc65c75ca4336f8",
+      "fetched_at": "2026-09-08T22:57:28.196074+00:00"
     },
     {
       "path": "partitions/202609-11650.json.gz",
-      "size": 699,
-      "sha256": "68d56e5a17cf9d6533c7b970fd242f277a85ce67426db863deda2637c41da4e5",
-      "fetched_at": "2026-09-07T22:59:56.911598+00:00"
+      "size": 1137,
+      "sha256": "39f7e91d06eb2706d6b43acd73b933e09deada2ff93f592afe92b60826eac77b",
+      "fetched_at": "2026-09-08T22:57:28.615543+00:00"
     },
     {
       "path": "partitions/202609-11680.json.gz",
-      "size": 729,
-      "sha256": "5b67a320a8d2fc9209f634703fdfebaa03f540ed19b2e411a9ff2b1ce388be8b",
-      "fetched_at": "2026-09-07T22:59:57.348789+00:00"
+      "size": 769,
+      "sha256": "8b1af080405ac95cc5f3aae8c4b73104f0cfc782ba911ac5d66e23630cb0ad76",
+      "fetched_at": "2026-09-08T22:57:28.694581+00:00"
     },
     {
       "path": "partitions/202609-11710.json.gz",
-      "size": 694,
-      "sha256": "4461073b290aa4f8fa780aed7645be75574c76f6d085bc269911760fd25d51fc",
-      "fetched_at": "2026-09-07T22:59:57.412201+00:00"
+      "size": 1120,
+      "sha256": "5ad5ded1e1ed754002e5fa6447fbe55d3efc49490cab5fd80ab7b3fb0c7b7597",
+      "fetched_at": "2026-09-08T22:57:29.120103+00:00"
     },
     {
       "path": "partitions/202609-11740.json.gz",
-      "size": 541,
-      "sha256": "74d974e0711d6d3501364e522a81f294a716eb9241acef11c689bdb3cbf37a77",
-      "fetched_at": "2026-09-07T22:59:57.848181+00:00"
+      "size": 716,
+      "sha256": "e5479190ef28fb67563c518a42335b38fc785f5233d172abeae29cdcd2ef4394",
+      "fetched_at": "2026-09-08T22:57:29.198333+00:00"
     },
     {
       "path": "partitions/202609-28125.json.gz",
-      "size": 1335,
-      "sha256": "bf267db1db59ba368eb676f22b3f298a2fc69496d2aba7d62d96de9b50b9dc46",
-      "fetched_at": "2026-09-07T22:59:57.913015+00:00"
+      "size": 1564,
+      "sha256": "3c9a1e00c5f9a27cde84915283da818c4b42a04d4754b654e379e25fed4a2af0",
+      "fetched_at": "2026-09-08T22:57:29.616955+00:00"
     },
     {
       "path": "partitions/202609-28155.json.gz",
-      "size": 1875,
-      "sha256": "95a2499b05fbbc94bd15d67360ddbb0a8bc6425754fbff70f18ae68be64c54ba",
-      "fetched_at": "2026-09-07T22:59:58.346961+00:00"
+      "size": 2273,
+      "sha256": "932f8dc9bc3e01d05ab3af35ad0fb1087ed4d4612eb198819b8b11631d38eba4",
+      "fetched_at": "2026-09-08T22:57:29.700333+00:00"
     },
     {
       "path": "partitions/202609-28177.json.gz",
-      "size": 3295,
-      "sha256": "ca49f4831dc41806cf603d01b86d4dada46c71a6e7f54f7c2bf24aac658437ec",
-      "fetched_at": "2026-09-07T22:59:58.422853+00:00"
+      "size": 3827,
+      "sha256": "2a4564aebe4875cae3c157972f03b1738986727af3b9a9493a57cc8e8070a514",
+      "fetched_at": "2026-09-08T22:57:30.124261+00:00"
     },
     {
       "path": "partitions/202609-28185.json.gz",
-      "size": 3178,
-      "sha256": "c3d5444af14f53fc0a68283983000ac4833e4c1333c2c5c0d2d0d631f3fb6ff1",
-      "fetched_at": "2026-09-07T22:59:58.984666+00:00"
+      "size": 4078,
+      "sha256": "8c13593beb335b72bb34e40b3a772a7b5340c998c97d1a06e2a1c3107a09b6ed",
+      "fetched_at": "2026-09-08T22:57:30.385318+00:00"
     },
     {
       "path": "partitions/202609-28200.json.gz",
-      "size": 5356,
-      "sha256": "9d3fb6a2780f89037d5e6a072fbb15db404a7408675fc8feee320d6b7358d1c6",
-      "fetched_at": "2026-09-07T22:59:58.924482+00:00"
+      "size": 6640,
+      "sha256": "297103259ae01073a705eb37eb12fdb9c6d92959bd9c65e38324996ef7278080",
+      "fetched_at": "2026-09-08T22:57:30.629120+00:00"
     },
     {
       "path": "partitions/202609-28237.json.gz",
-      "size": 4973,
-      "sha256": "4b0fa8dd477fc4b0b8238df7c9414f016cf52d6b6cd649f4f9fd28c6fad5c92c",
-      "fetched_at": "2026-09-07T22:59:59.424796+00:00"
+      "size": 5939,
+      "sha256": "ffb342d84b25462a81e8cd07d3e39e78800a304347fa4898fbf41de3c3f82140",
+      "fetched_at": "2026-09-08T22:57:30.891036+00:00"
     },
     {
       "path": "partitions/202609-28245.json.gz",
-      "size": 2620,
-      "sha256": "cdb1727c40f076142b559090d16f12f77be0abad8df79f0f230786e775f4ad7d",
-      "fetched_at": "2026-09-07T22:59:59.348161+00:00"
+      "size": 3212,
+      "sha256": "b0647bf5f1609870a21db4ded05661b764609a452769be787d16b923c0422d0a",
+      "fetched_at": "2026-09-08T22:57:31.120313+00:00"
     },
     {
       "path": "partitions/202609-28275.json.gz",
-      "size": 2674,
-      "sha256": "eb604e31bb28caf3b2213d96227d45252b43c312391372499de77d388c9d4c20",
-      "fetched_at": "2026-09-07T22:59:59.861088+00:00"
+      "size": 3218,
+      "sha256": "b9d22bf7ac91cefafd64e95cbe57dce2b962cf99c96dc53d47297358ac12dafc",
+      "fetched_at": "2026-09-08T22:57:31.227807+00:00"
     },
     {
       "path": "partitions/202609-28290.json.gz",
-      "size": 4428,
-      "sha256": "f03e06da5c57b00a89f5443a4c71052bc213ce746b315ba159e2c6a2ef4e89b7",
-      "fetched_at": "2026-09-07T22:59:59.924900+00:00"
+      "size": 5081,
+      "sha256": "ea700e91949f987e4328c7f44c0daebeeb0fcbbaa05438e75a7a91beb9effec3",
+      "fetched_at": "2026-09-08T22:57:31.624611+00:00"
     },
     {
       "path": "partitions/202609-28710.json.gz",
-      "size": 587,
-      "sha256": "ee6229defd2ddb8e293c7509e9159417e55703466c9639d1f0998dcbf9b78c9d",
-      "fetched_at": "2026-09-07T23:00:00.343990+00:00"
+      "size": 628,
+      "sha256": "b0c2de073e1451f6021b79068bad1596bca9d2c9544822498ea3b5d27e689b48",
+      "fetched_at": "2026-09-08T22:57:31.709108+00:00"
     },
     {
       "path": "partitions/202609-28720.json.gz",
-      "size": 224,
-      "sha256": "876b0c656f5b68483b0ea5198b44b7f84a4b8eb7fb0f711e114a1388fa0096c8",
-      "fetched_at": "2026-09-07T23:00:00.418973+00:00"
+      "size": 265,
+      "sha256": "6c42286aca02fae17233c538dab84757363d30cd409640d729d537edd25c3ed4",
+      "fetched_at": "2026-09-08T22:57:32.120543+00:00"
     },
     {
       "path": "partitions/202609-41111.json.gz",
-      "size": 1863,
-      "sha256": "62e240eea3ecee2ab20c9a1d249bde97d151ddab9d339f037576addfd0511a12",
-      "fetched_at": "2026-09-07T23:00:00.852193+00:00"
+      "size": 2075,
+      "sha256": "c7680c75e8229e6536a1f6ca3f921caf7e133f8ba6427308609201942b15707a",
+      "fetched_at": "2026-09-08T22:57:32.200890+00:00"
     },
     {
       "path": "partitions/202609-41113.json.gz",
-      "size": 5197,
-      "sha256": "dfafdb3eb0c085b4f9481306b717975dd7a1dbe3683bd5c34f5a519afea071b2",
-      "fetched_at": "2026-09-07T23:00:00.924035+00:00"
+      "size": 6668,
+      "sha256": "e27146c48f75f6ac86f150f15f657d13bc2989cfca15bd9f58da88ff294d7ef4",
+      "fetched_at": "2026-09-08T22:57:32.625965+00:00"
     },
     {
       "path": "partitions/202609-41115.json.gz",
-      "size": 1492,
-      "sha256": "6ebb7aae82dbc45c4eeb73fa2e917d941082e63642d5e65a46efd76db3d107d8",
-      "fetched_at": "2026-09-07T23:00:01.354617+00:00"
+      "size": 2096,
+      "sha256": "f87eac0d965a0db495a1d5baf4132c525b755b9abd4376e7f8f906a1aeb4c782",
+      "fetched_at": "2026-09-08T22:57:32.700742+00:00"
     },
     {
       "path": "partitions/202609-41117.json.gz",
-      "size": 2835,
-      "sha256": "35d6be5b3746e9543642546f2780ae57c9ec217de7e5d5ca76fe25fdecec882b",
-      "fetched_at": "2026-09-07T23:00:01.422516+00:00"
+      "size": 4626,
+      "sha256": "e7310208bb7d589f8e7a96d7d7a16ed86e09cc913371184113432f06194e128a",
+      "fetched_at": "2026-09-08T22:57:33.122036+00:00"
     },
     {
       "path": "partitions/202609-41131.json.gz",
-      "size": 1089,
-      "sha256": "525d1feaaaebd3f54c66514f0908ba5a0dd235111a4b9562bad43d41779db164",
-      "fetched_at": "2026-09-07T23:00:01.860301+00:00"
+      "size": 1218,
+      "sha256": "8e723d1b265d4a46b9b47d00ca0332c921552f77401a92060c19a191b8e0e40c",
+      "fetched_at": "2026-09-08T22:57:33.196429+00:00"
     },
     {
       "path": "partitions/202609-41133.json.gz",
-      "size": 607,
-      "sha256": "4483c62c558978cc73fcc0ac0437e3b7b1d11ace4d74c3706e71e8c30985f425",
-      "fetched_at": "2026-09-07T23:00:01.933654+00:00"
+      "size": 882,
+      "sha256": "a8376f8778c5b0e825327a23413a1418d6a376c58e205ece8f3ceffd6d5578de",
+      "fetched_at": "2026-09-08T22:57:33.668141+00:00"
     },
     {
       "path": "partitions/202609-41135.json.gz",
-      "size": 1060,
-      "sha256": "a0ea6fc742c04c52819f8fdc1867455301268be72d9387423e71d01a8751c523",
-      "fetched_at": "2026-09-07T23:00:02.365765+00:00"
+      "size": 1582,
+      "sha256": "f637f6446efc3e7dfd4b7babc720647a0a19d1c0e3b2a315e23e386503bec44c",
+      "fetched_at": "2026-09-08T22:57:33.698868+00:00"
     },
     {
       "path": "partitions/202609-41150.json.gz",
-      "size": 3888,
-      "sha256": "660d6a7b14bb76ad9ae0da17de032ddb5dcc8bc3eac5cceb5be62fe19e5b057e",
-      "fetched_at": "2026-09-07T23:00:02.427094+00:00"
+      "size": 5625,
+      "sha256": "50b7a82bf8953b980261e99a81da66c8fb91cd526430eb35cf24aeed97687c24",
+      "fetched_at": "2026-09-08T22:57:34.126593+00:00"
     },
     {
       "path": "partitions/202609-41171.json.gz",
-      "size": 1667,
-      "sha256": "50b092e564cfb71716d5d898423c64faa2d19136cdce99c66f4c8fbcf93dfaac",
-      "fetched_at": "2026-09-07T23:00:02.863167+00:00"
+      "size": 2007,
+      "sha256": "80c424f63f8095a737ee14cfe9c40a839bd794a2d66923c4bd6ce3a1e82bc02a",
+      "fetched_at": "2026-09-08T22:57:34.199689+00:00"
     },
     {
       "path": "partitions/202609-41173.json.gz",
-      "size": 1162,
-      "sha256": "99d4e18ec50ff01268bc9cc373e16030157ca2353116654fc17b48e8724255c7",
-      "fetched_at": "2026-09-07T23:00:02.924522+00:00"
+      "size": 1277,
+      "sha256": "715d379ee85d5904e45aba77d55e6a9f837dce18ad6c76771be360183d859f0c",
+      "fetched_at": "2026-09-08T22:57:34.622037+00:00"
     },
     {
       "path": "partitions/202609-41192.json.gz",
-      "size": 2939,
-      "sha256": "1bbcffb3abb40e1ca80cd3bb9171b88fb2085ec3fb5671ce0c1bda5ea4528a7d",
-      "fetched_at": "2026-09-07T23:00:03.390537+00:00"
+      "size": 3386,
+      "sha256": "41f63a96d5ac84b4f8e0c776631b707e2c0636024f08ee1f9dc460e99a1361ae",
+      "fetched_at": "2026-09-08T22:57:34.895278+00:00"
     },
     {
       "path": "partitions/202609-41194.json.gz",
-      "size": 2223,
-      "sha256": "abcd3aa80931c110c0fe2d5c9a0cdc4d637a758d70e77670ba145264a8b80f60",
-      "fetched_at": "2026-09-07T23:00:03.445093+00:00"
+      "size": 2666,
+      "sha256": "0b2f9e34b949de7ddd89f5a4e00a954adc5fe85f75947369df2171753b68f5ac",
+      "fetched_at": "2026-09-08T22:57:35.124181+00:00"
     },
     {
       "path": "partitions/202609-41196.json.gz",
-      "size": 1135,
-      "sha256": "5f0cba821ed6bc0098ac7bfa1aa6cb854c39bd28300eb27cefdb765d9629ffde",
-      "fetched_at": "2026-09-07T23:00:03.878486+00:00"
+      "size": 1178,
+      "sha256": "0e4807ab60e5785032bd02900f48b886f96861e42b91b9887a985296ea174ed8",
+      "fetched_at": "2026-09-08T22:57:35.198429+00:00"
     },
     {
       "path": "partitions/202609-41210.json.gz",
-      "size": 224,
-      "sha256": "bbbe40da358cd9e03d369bbb62e4df3de3291431d1be0522630931da7b32b5f6",
-      "fetched_at": "2026-09-07T23:00:03.925737+00:00"
+      "size": 627,
+      "sha256": "f95444c3d76670ab5ee3d1e38c239d5dd63363d8b98c391b88bb5f6d8a030474",
+      "fetched_at": "2026-09-08T22:57:35.622790+00:00"
     },
     {
       "path": "partitions/202609-41220.json.gz",
-      "size": 6676,
-      "sha256": "73d9d3e61f0421f961a66f3355881032f80596c4ec3072c9707b984b46e251d7",
-      "fetched_at": "2026-09-07T23:00:04.506121+00:00"
+      "size": 8127,
+      "sha256": "496bc571312d209a7c38f93be969ca4c106af02ef0c7d533fe3e889434beffa0",
+      "fetched_at": "2026-09-08T22:57:35.900697+00:00"
     },
     {
       "path": "partitions/202609-41250.json.gz",
-      "size": 1301,
-      "sha256": "af578eb0cf9b891f55fff233f76cb6dfe05318f8a476a864ff1442eb5208b5a5",
-      "fetched_at": "2026-09-07T23:00:04.425863+00:00"
+      "size": 1496,
+      "sha256": "60c4769b710bec25bd309b0f70f2ab84c8848af20970800538f4d077dec4d2c4",
+      "fetched_at": "2026-09-08T22:57:36.119850+00:00"
     },
     {
       "path": "partitions/202609-41271.json.gz",
-      "size": 1572,
-      "sha256": "1190532918115403c079ccf82cfe9cbe3a4d59e1bcda040e9189ce6c1382c50b",
-      "fetched_at": "2026-09-07T23:00:04.919283+00:00"
+      "size": 1838,
+      "sha256": "00c3fecaff7c03a3692c5d2bc1183ebde44b88b516b9a8eb80305b79ec7a2130",
+      "fetched_at": "2026-09-08T22:57:36.200140+00:00"
     },
     {
       "path": "partitions/202609-41273.json.gz",
-      "size": 2595,
-      "sha256": "9a5215f1e0be13078ae2fd82c6027d311a9bc96b9f0ade1aabba155c5fd1f2d1",
-      "fetched_at": "2026-09-07T23:00:04.862917+00:00"
+      "size": 3340,
+      "sha256": "5a1dd46ec5152279752e2c6a5abdbcdcfc0961ceb471f0f72f156a435b099837",
+      "fetched_at": "2026-09-08T22:57:36.624580+00:00"
     },
     {
       "path": "partitions/202609-41281.json.gz",
-      "size": 5307,
-      "sha256": "ef548b2f5c9f93226883c360a15bef03925dc35923c63428f6bf4ce28414ba41",
-      "fetched_at": "2026-09-07T23:00:05.485914+00:00"
+      "size": 6445,
+      "sha256": "03a507ba62e3d8ec80a14340b5c86cfb4c9ce6f0b2787b281231083a01ff16a4",
+      "fetched_at": "2026-09-08T22:57:36.895001+00:00"
     },
     {
       "path": "partitions/202609-41285.json.gz",
-      "size": 2191,
-      "sha256": "3dfe27f12610cb2e4e272738d1923433fdf46ef217a8779c5b3331f61dfbcd35",
-      "fetched_at": "2026-09-07T23:00:05.418668+00:00"
+      "size": 2236,
+      "sha256": "2daa34bc98a65bb8490e09f0bf75cef150fb7e64ec25f5f65ffe792c837f22c6",
+      "fetched_at": "2026-09-08T22:57:37.123230+00:00"
     },
     {
       "path": "partitions/202609-41287.json.gz",
-      "size": 3131,
-      "sha256": "29b5a0bf66fdbf19999b3671d856273c83defccb0daf4a1e3fcf71e9602c09af",
-      "fetched_at": "2026-09-07T23:00:05.928717+00:00"
+      "size": 3852,
+      "sha256": "47cf1b41a80f1462f70a8a8de70b49ddd35620c31dc9db7652ab1b7385721fdc",
+      "fetched_at": "2026-09-08T22:57:37.402663+00:00"
     },
     {
       "path": "partitions/202609-41290.json.gz",
-      "size": 568,
-      "sha256": "4feec49105f18e22c81aa840203a18eb00654c2e3d19b28cebd0976cd80d5a9e",
-      "fetched_at": "2026-09-07T23:00:05.849936+00:00"
+      "size": 682,
+      "sha256": "8fdc4521bf4e320c382c194ab39b69766319ea103bcd7ab8110127ab54215542",
+      "fetched_at": "2026-09-08T22:57:37.619784+00:00"
     },
     {
       "path": "partitions/202609-41310.json.gz",
-      "size": 831,
-      "sha256": "73a91a6759abbf09daa2b9066c9ea4859483b82b191b7810e347006791863de8",
-      "fetched_at": "2026-09-07T23:00:06.354306+00:00"
+      "size": 1188,
+      "sha256": "209dc4cfdc4705e21885a4c21911c1c684de33d724ebf7d055ed01b1252a13c8",
+      "fetched_at": "2026-09-08T22:57:37.700834+00:00"
     },
     {
       "path": "partitions/202609-41360.json.gz",
-      "size": 7523,
-      "sha256": "5841f3522ebf980802b3a32629ef8d7cf3928d156dc032c5a382995c566219d5",
-      "fetched_at": "2026-09-07T23:00:06.438287+00:00"
+      "size": 9300,
+      "sha256": "ff9cc672dd01ccfa2d031845c0a42f4412d8d58f2e4c28a3298a53fdfeb414eb",
+      "fetched_at": "2026-09-08T22:57:38.135366+00:00"
     },
     {
       "path": "partitions/202609-41370.json.gz",
-      "size": 3713,
-      "sha256": "c3e04cb4684b797b2d76847309743a3bfa6f55f6f70f282bb366b00ff132de9a",
-      "fetched_at": "2026-09-07T23:00:06.992604+00:00"
+      "size": 5979,
+      "sha256": "5c90f8f6d6d5bd19aa26f14adcb390e236026553f6490cd990b4f4d32678ec87",
+      "fetched_at": "2026-09-08T22:57:38.390934+00:00"
     },
     {
       "path": "partitions/202609-41390.json.gz",
-      "size": 7173,
-      "sha256": "c8eb7ad9b51b4d0e35e25f358fb58812eba5f8fb3e001753a52ea0bb2b7aac60",
-      "fetched_at": "2026-09-07T23:00:06.936702+00:00"
+      "size": 8447,
+      "sha256": "eedafe527b8fe628a5399715d397f19efd24f90f3188d1304f5a6becbc9792e2",
+      "fetched_at": "2026-09-08T22:57:38.644357+00:00"
     },
     {
       "path": "partitions/202609-41410.json.gz",
-      "size": 2424,
-      "sha256": "7d5bf8a8148a9923690642223880812433ed6fdea151f78afd4ab924184ded55",
-      "fetched_at": "2026-09-07T23:00:07.421486+00:00"
+      "size": 5228,
+      "sha256": "d53c8a8966e2fbdf177a97c87143526b6d34d931cb0ba312d811d39611dcfe36",
+      "fetched_at": "2026-09-08T22:57:38.891076+00:00"
     },
     {
       "path": "partitions/202609-41430.json.gz",
-      "size": 951,
-      "sha256": "2d57e99f765e3f36536e8fce31797244e30bb6fa2dde5d6a12782fa4311a744d",
-      "fetched_at": "2026-09-07T23:00:07.365960+00:00"
+      "size": 1190,
+      "sha256": "4018c47e2457747abc88c594903018517843edd28ba61fc4af69e8cb6731f8df",
+      "fetched_at": "2026-09-08T22:57:39.141014+00:00"
     },
     {
       "path": "partitions/202609-41450.json.gz",
-      "size": 1480,
-      "sha256": "a1f73c007a16c876fb80c36b6dbc574151e876af92d1b777999384d4e24cf43a",
-      "fetched_at": "2026-09-07T23:00:07.852605+00:00"
+      "size": 2275,
+      "sha256": "37246b69035b328b2d46f828e8a9f8f8423c65ddde25dde6f56bc7e9d83329a7",
+      "fetched_at": "2026-09-08T22:57:39.203091+00:00"
     },
     {
       "path": "partitions/202609-41461.json.gz",
-      "size": 2383,
-      "sha256": "3a88c17bf581c6203a1738ed8cdae39f2ed173ca987c60986a4a85f60b49844f",
-      "fetched_at": "2026-09-07T23:00:07.925285+00:00"
+      "size": 3029,
+      "sha256": "c7ae92b01e4348b59846461195a1771b74ff16f66e9384df935bc87222e11740",
+      "fetched_at": "2026-09-08T22:57:39.627215+00:00"
     },
     {
       "path": "partitions/202609-41463.json.gz",
-      "size": 1954,
-      "sha256": "6a8cc370ee34214108c8bd6666d83bfcfbcb779512da1dce8226bd21c5c33aee",
-      "fetched_at": "2026-09-07T23:00:08.354996+00:00"
+      "size": 2900,
+      "sha256": "2955cddf42ffdde723d39f4d3c0a6a943a8e2a1992ef9b071a59797c363d765b",
+      "fetched_at": "2026-09-08T22:57:39.703295+00:00"
     },
     {
       "path": "partitions/202609-41465.json.gz",
-      "size": 2202,
-      "sha256": "ad21d3efb0f5ec2be230006d361461dd5f2e8c772f6e740a18527f4f4eb999dc",
-      "fetched_at": "2026-09-07T23:00:08.418698+00:00"
+      "size": 2678,
+      "sha256": "2cb3d8b3da46bd945dc6948e4fd0d60d81d22bdd1e9edd583ebb7d29004eabbf",
+      "fetched_at": "2026-09-08T22:57:40.126136+00:00"
     },
     {
       "path": "partitions/202609-41480.json.gz",
-      "size": 5979,
-      "sha256": "29845d07ee66fc663094a17b4f763567f8e73e9383b6274f30cbf4ec9e532658",
-      "fetched_at": "2026-09-07T23:00:08.987805+00:00"
+      "size": 6250,
+      "sha256": "ae0d0167ec8bf86e7d1769d61654ffb3cde1f5d3cb0d1901eaf388d97888e0b9",
+      "fetched_at": "2026-09-08T22:57:40.580152+00:00"
     },
     {
       "path": "partitions/202609-41500.json.gz",
-      "size": 1883,
-      "sha256": "8926e33ad0330909540dd3b508d8a3e6d8df052481ed94c8889dd8b72fd1573b",
-      "fetched_at": "2026-09-07T23:00:08.918478+00:00"
+      "size": 2585,
+      "sha256": "9edf6950612fa5061a49d105e4f33214500a5199735011c311fca46c7d6b85fa",
+      "fetched_at": "2026-09-08T22:57:40.624212+00:00"
     },
     {
       "path": "partitions/202609-41550.json.gz",
-      "size": 1741,
-      "sha256": "464e9e9ca92746061d32e8db406a10f5557ccad2fae56623b21930e0df2c33b0",
-      "fetched_at": "2026-09-07T23:00:09.422324+00:00"
+      "size": 2636,
+      "sha256": "225b3b8bab81a1fcf3d1ef1786038d998978e1e1d88e12e40216b45060cfe2b1",
+      "fetched_at": "2026-09-08T22:57:40.790361+00:00"
     },
     {
       "path": "partitions/202609-41570.json.gz",
-      "size": 2629,
-      "sha256": "d3c4cae9d00fabf0856e95c53962a6729ca9f7d9054ca4536fd9f28772cbe0fd",
-      "fetched_at": "2026-09-07T23:00:09.353013+00:00"
+      "size": 3219,
+      "sha256": "5bb527ebbe96510adb6120485a355988ac8dfe159cf45a52191e9f7d7a066c1f",
+      "fetched_at": "2026-09-08T22:57:41.129903+00:00"
     },
     {
       "path": "partitions/202609-41591.json.gz",
-      "size": 1396,
-      "sha256": "ff15fdb531368bd7302c30794ef9d98889d201bfbd21dbcccd88addcb701ddf2",
-      "fetched_at": "2026-09-07T23:00:09.855815+00:00"
+      "size": 1901,
+      "sha256": "8583c19bd06b1840b5377b3488113684de370e29edb700cf057862b775aaea2e",
+      "fetched_at": "2026-09-08T22:57:41.290326+00:00"
     },
     {
       "path": "partitions/202609-41593.json.gz",
-      "size": 2780,
-      "sha256": "2744de7f7a70955d7a357e0eeec6c8a19dc35fe6b0f779ff14953b80343862a6",
-      "fetched_at": "2026-09-07T23:00:09.921167+00:00"
+      "size": 3054,
+      "sha256": "542da474d85b9e85847c6d1c09b66aede6329afae67388967e76d49e8c20259c",
+      "fetched_at": "2026-09-08T22:57:41.641131+00:00"
     },
     {
       "path": "partitions/202609-41595.json.gz",
-      "size": 4062,
-      "sha256": "81c969219d138bb7c8cc6ad0e36a1112c7102ee25e0ce550d802ad93cc2c888a",
-      "fetched_at": "2026-09-07T23:00:10.485937+00:00"
+      "size": 5124,
+      "sha256": "60471952402ed1edfbf80d3e21356f3bcf4ac883cb3499a3184c7844a5299d93",
+      "fetched_at": "2026-09-08T22:57:41.975506+00:00"
     },
     {
       "path": "partitions/202609-41597.json.gz",
-      "size": 1545,
-      "sha256": "bb95bab907627af136ad2a8495c60d03ce1eafe891e82ce344e3d74833c7d1ca",
-      "fetched_at": "2026-09-07T23:00:10.416230+00:00"
+      "size": 2434,
+      "sha256": "714480ef618ec42b61914a49f40b9591aa73be7329574a8077bc71a7ffd38166",
+      "fetched_at": "2026-09-08T22:57:42.123594+00:00"
     },
     {
       "path": "partitions/202609-41610.json.gz",
-      "size": 4417,
-      "sha256": "de25a8e6de3a1b25bb7300058578ed6991fe047da6bc547afc771454c446c085",
-      "fetched_at": "2026-09-07T23:00:10.927666+00:00"
+      "size": 4972,
+      "sha256": "7d7a3e5f4b2e771fafe32ddd28eacd5a8022270db24988aff1e4d8669088d65d",
+      "fetched_at": "2026-09-08T22:57:42.478229+00:00"
     },
     {
       "path": "partitions/202609-41630.json.gz",
-      "size": 2906,
-      "sha256": "2ec99b69f40b86311ac9d6c7afd0cfa49d389d7eb8e5b4e48f132267cbaae373",
-      "fetched_at": "2026-09-07T23:00:10.852579+00:00"
+      "size": 3415,
+      "sha256": "0f46918bd5b9d4ac2e367d3bec918a2f204d1b851e33640e9e22e94d5723a7be",
+      "fetched_at": "2026-09-08T22:57:42.626747+00:00"
     },
     {
       "path": "partitions/202609-41650.json.gz",
-      "size": 811,
-      "sha256": "25c44e7b50d8244ce875548ace098242e055bcc8b9cea4951669ccfc20701299",
-      "fetched_at": "2026-09-07T23:00:11.353471+00:00"
+      "size": 967,
+      "sha256": "a4e8bd2cc3a7a4ee8340d416ed17d1d5ddf9fd7138b75c38775c154a61327d77",
+      "fetched_at": "2026-09-08T22:57:42.787005+00:00"
     },
     {
       "path": "partitions/202609-41670.json.gz",
-      "size": 1137,
-      "sha256": "7f3bbab3cc8e7717c5eef1167cab84ef204d2bfbf30b53a7d6aa69102fdbaf01",
-      "fetched_at": "2026-09-07T23:00:11.420121+00:00"
+      "size": 1473,
+      "sha256": "f6354336bade2b8f5dd1f23f9f846211c08c9997685558356bc6a24796cb8fa1",
+      "fetched_at": "2026-09-08T22:57:43.125812+00:00"
     },
     {
       "path": "partitions/202609-41800.json.gz",
-      "size": 686,
-      "sha256": "bacc61556a0745b358aa282dec5d77edc2412a0b9b0955de35404299646b7757",
-      "fetched_at": "2026-09-07T23:00:11.850544+00:00"
+      "size": 923,
+      "sha256": "5dc5d3d45631dd6996314eebe8eecdbeb3785f7ab494d72d88635d58f3993523",
+      "fetched_at": "2026-09-08T22:57:43.283838+00:00"
     },
     {
       "path": "partitions/202609-41820.json.gz",
-      "size": 716,
-      "sha256": "a937d049a22d09d1344aa1583dcd3632fcf19d32596727df174c9eb3dcc146f9",
-      "fetched_at": "2026-09-07T23:00:11.916332+00:00"
+      "size": 865,
+      "sha256": "e380075d7a3ca21f13918fdc56a0d106724334d664ee2c3fa9184fcc253722f1",
+      "fetched_at": "2026-09-08T22:57:43.621359+00:00"
     },
     {
       "path": "partitions/202609-41830.json.gz",
-      "size": 957,
-      "sha256": "c7b249d7278ead2ea20bf0d648de82e37c22b99d14adef77829bdd5c71849ab8",
-      "fetched_at": "2026-09-07T23:00:12.356427+00:00"
+      "size": 1068,
+      "sha256": "c7c63bdf9e8c468b24577c6358391e742f8a3bf08840d017d1c4c48896c68e4a",
+      "fetched_at": "2026-09-08T22:57:43.788717+00:00"
     }
   ]
 }
