@@ -18,14 +18,20 @@
   },
   "csv_expansion": {
     "planned_partitions": 81,
-    "completed_partitions": 7,
-    "remaining_partitions": 74,
-    "raw_rows": 985295,
-    "sale_rows": 803924,
+    "completed_partitions": 8,
+    "remaining_partitions": 73,
+    "raw_rows": 1079941,
+    "sale_rows": 898570,
     "rental_rows": 181371,
     "pure_jeonse_rows": 139547,
     "monthly_rent_rows": 41824,
     "completed": [
+      {
+        "region": "경기",
+        "kind": "rent",
+        "year": 2011,
+        "rows": 181371
+      },
       {
         "region": "경기",
         "kind": "sale",
@@ -46,12 +52,6 @@
       },
       {
         "region": "경기",
-        "kind": "rent",
-        "year": 2011,
-        "rows": 181371
-      },
-      {
-        "region": "경기",
         "kind": "sale",
         "year": 2009,
         "rows": 140861
@@ -67,15 +67,40 @@
         "kind": "sale",
         "year": 2011,
         "rows": 129870
+      },
+      {
+        "region": "경기",
+        "kind": "sale",
+        "year": 2012,
+        "rows": 94646
       }
     ],
-    "state_commit": "8fac09133e43a7638cae0fef971d75e72a379a91",
+    "state_commit": "d35dd09844a88070e7d103ec4919d4e9296e8df3",
     "previous_failure": {
       "partition": "gyeonggi/sale/2009/2009-01-01_2009-12-31",
       "expected_rows": 140861,
       "error": "Non-CSV response; possible server error or access challenge",
       "actual_error_kind": "undetermined; response body was not retained",
       "run": 34298091259
+    },
+    "failure": {
+      "partition": "gyeonggi/sale/2013/2013-01-01_2013-12-31",
+      "error": "Transport request failed (URLError; timeout; errno=None)",
+      "diagnostic": {
+        "phase": "initialize",
+        "request": {
+          "category": "timeout",
+          "certificate_verify_code": null,
+          "elapsed_seconds": 20.387,
+          "endpoint": "/pt/xls/xls.do?mobileAt=",
+          "errno": null,
+          "exception_type": "URLError",
+          "method": "GET",
+          "reason_type": "TimeoutError",
+          "started_at": "2026-09-09T05:57:00.487300+00:00"
+        }
+      },
+      "run": 34316872452
     }
   },
   "api_current_access_check": {
@@ -179,14 +204,21 @@
     "tests_passed": 102
   },
   "remote_collection": {
-    "run_id": 34316872452,
+    "run_id": 34317109648,
     "workflow": "research-capital-batches.yml",
-    "status_at_last_check": "in_progress",
-    "remaining_at_start": 74,
+    "status_at_last_check": "queued",
+    "completed_at_start": 8,
+    "remaining_at_start": 73,
     "max_parallel": 1,
     "stop_on_failure": true,
     "job_timeout_minutes": 8,
     "collection_timeout_seconds": 90,
+    "request_timeout_seconds": 45,
+    "transport_retries": 0,
+    "previous_run": 34316872452,
+    "previous_failure_phase": "initialize",
+    "previous_failure_reason": "timeout after 20.387 seconds",
+    "automatic_workflow_restarts": false,
     "authoritative_live_checkpoint": "estate-capital-history-state:collection/manifest.json"
   }
 }
