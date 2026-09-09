@@ -1,0 +1,86 @@
+{
+  "2023": {
+    "all_history": {
+      "transactions": 127920,
+      "complexes": 11427,
+      "mape_pct": 8.501,
+      "complex_balanced_mape_pct": 13.386,
+      "median_ape_pct": 5.437,
+      "mae_oku": 0.499,
+      "bias_pct": 4.415,
+      "within10_pct": 72.83
+    },
+    "recency_four_years": {
+      "transactions": 127920,
+      "complexes": 11427,
+      "mape_pct": 8.344,
+      "complex_balanced_mape_pct": 12.951,
+      "median_ape_pct": 5.294,
+      "mae_oku": 0.4916,
+      "bias_pct": 3.954,
+      "within10_pct": 73.64
+    },
+    "relative_uniform": {
+      "transactions": 127920,
+      "complexes": 11427,
+      "mape_pct": 7.767,
+      "complex_balanced_mape_pct": 12.053,
+      "median_ape_pct": 5.112,
+      "mae_oku": 0.4364,
+      "bias_pct": 4.275,
+      "within10_pct": 75.34
+    },
+    "relative_recency_four_years": {
+      "transactions": 127920,
+      "complexes": 11427,
+      "mape_pct": 7.666,
+      "complex_balanced_mape_pct": 11.953,
+      "median_ape_pct": 4.923,
+      "mae_oku": 0.4409,
+      "bias_pct": 3.614,
+      "within10_pct": 76.21
+    }
+  },
+  "2024": {
+    "all_history": {
+      "transactions": 169216,
+      "complexes": 12515,
+      "mape_pct": 6.286,
+      "complex_balanced_mape_pct": 10.734,
+      "median_ape_pct": 4.585,
+      "mae_oku": 0.4151,
+      "bias_pct": 3.474,
+      "within10_pct": 83.33
+    },
+    "recency_four_years": {
+      "transactions": 169216,
+      "complexes": 12515,
+      "mape_pct": 6.108,
+      "complex_balanced_mape_pct": 10.301,
+      "median_ape_pct": 4.433,
+      "mae_oku": 0.4063,
+      "bias_pct": 3.194,
+      "within10_pct": 83.92
+    },
+    "relative_uniform": {
+      "transactions": 169216,
+      "complexes": 12515,
+      "mape_pct": 5.398,
+      "complex_balanced_mape_pct": 9.503,
+      "median_ape_pct": 3.732,
+      "mae_oku": 0.3617,
+      "bias_pct": 1.916,
+      "within10_pct": 87.16
+    },
+    "relative_recency_four_years": {
+      "transactions": 169216,
+      "complexes": 12515,
+      "mape_pct": 5.388,
+      "complex_balanced_mape_pct": 9.162,
+      "median_ape_pct": 3.752,
+      "mae_oku": 0.3625,
+      "bias_pct": 1.863,
+      "within10_pct": 87.05
+    }
+  }
+}

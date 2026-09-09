@@ -1,0 +1,11 @@
+{
+  "method": "relative_recency_four_years",
+  "scores": {
+    "recency_four_years": 0.9727837205293606,
+    "relative_uniform": 0.8829103568855069,
+    "relative_recency_four_years": 0.8758370013370009
+  },
+  "rule": "Mean 2023/2024 MAE and complex-balanced MAPE ratios to uniform full history; lower wins.",
+  "development_improved": true,
+  "evaluation_years_used_for_selection": []
+}
