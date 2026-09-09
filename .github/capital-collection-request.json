@@ -1,6 +1,6 @@
 {
-  "request": "finish-incheon-sales-incheon/sale/2009/2009-01-01_2009-12-31-attempt-1",
+  "request": "finish-incheon-sales-incheon/sale/2010/2010-01-01_2010-12-31-attempt-1",
   "max_files": 1,
-  "baseline_completed": 19,
+  "baseline_completed": 20,
   "deferred": "all_remaining_rentals"
 }
