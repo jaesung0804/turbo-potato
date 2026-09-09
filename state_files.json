@@ -97,8 +97,8 @@
       "file": "collection/incheon/sale/2007/2007-01-01_2007-12-31.csv.gz"
     },
     "manifest.json": {
-      "size": 85874,
-      "sha256": "d103fd6fb9530c785a59047de26b8d6e094e67f145b4b00a17e1d0b44722ccf4",
+      "size": 87281,
+      "sha256": "a8ddbabd1ab5ea73ac2df521a0a078d7f49512c8a300ea06a2aa74f6b3681a04",
       "file": "collection/manifest.json"
     },
     "probe_gyeonggi_rent_2011.json": {
