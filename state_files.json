@@ -112,8 +112,8 @@
       "file": "collection/incheon/sale/2010/2010-01-01_2010-12-31.csv.gz"
     },
     "manifest.json": {
-      "size": 100673,
-      "sha256": "ccd0d76a0fa8312a913092412ae70f9de3971f8488551b524fe293bfefbf08fc",
+      "size": 101639,
+      "sha256": "80a761fae76bec1557097292f652e60705093d95066232a094973f97f49417fa",
       "file": "collection/manifest.json"
     },
     "probe_gyeonggi_rent_2011.json": {

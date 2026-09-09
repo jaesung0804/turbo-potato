@@ -3067,7 +3067,7 @@
     "same_anonymous_session": true,
     "http_and_validation_errors_retried": false
   },
-  "updated_at": "2026-09-09T07:51:04.818816+00:00",
+  "updated_at": "2026-09-09T07:53:42.048361+00:00",
   "initialization_failures": [
     {
       "failed_at": "2026-09-09T05:57:20.874576+00:00",
@@ -3276,6 +3276,38 @@
         "certificate_verify_code": null,
         "elapsed_seconds": 30.298
       }
+    },
+    {
+      "failed_at": "2026-09-09T07:53:07.003481+00:00",
+      "attempt": 1,
+      "retry_scheduled": true,
+      "request": {
+        "endpoint": "/pt/xls/xls.do?mobileAt=",
+        "method": "GET",
+        "started_at": "2026-09-09T07:52:36.423231+00:00",
+        "category": "timeout",
+        "exception_type": "URLError",
+        "reason_type": "TimeoutError",
+        "errno": null,
+        "certificate_verify_code": null,
+        "elapsed_seconds": 30.58
+      }
+    },
+    {
+      "failed_at": "2026-09-09T07:53:42.045017+00:00",
+      "attempt": 2,
+      "retry_scheduled": false,
+      "request": {
+        "endpoint": "/pt/xls/xls.do?mobileAt=",
+        "method": "GET",
+        "started_at": "2026-09-09T07:53:12.008175+00:00",
+        "category": "timeout",
+        "exception_type": "URLError",
+        "reason_type": "TimeoutError",
+        "errno": null,
+        "certificate_verify_code": null,
+        "elapsed_seconds": 30.037
+      }
     }
   ],
   "failed_key": "incheon/sale/2011/2011-01-01_2011-12-31",
@@ -3285,13 +3317,13 @@
     "request": {
       "endpoint": "/pt/xls/xls.do?mobileAt=",
       "method": "GET",
-      "started_at": "2026-09-09T07:50:34.517283+00:00",
+      "started_at": "2026-09-09T07:53:12.008175+00:00",
       "category": "timeout",
       "exception_type": "URLError",
       "reason_type": "TimeoutError",
       "errno": null,
       "certificate_verify_code": null,
-      "elapsed_seconds": 30.298
+      "elapsed_seconds": 30.037
     }
   }
 }
