@@ -1,5 +1,5 @@
 {
-  "completed_count": 15,
+  "completed_count": 16,
   "coverage_bounds": {
     "sale_source_start": "2006-01-01",
     "rent_source_start": "2011-01-01",
@@ -2126,6 +2126,144 @@
         "date": "Wed, 09 Sep 2026 07:31:16 GMT"
       },
       "completed_at": "2026-09-09T07:31:34.753118+00:00"
+    },
+    "gyeonggi/sale/2020/2020-01-01_2020-12-31": {
+      "query": {
+        "region": "gyeonggi",
+        "kind": "sale",
+        "start": "2020-01-01",
+        "end": "2020-12-31"
+      },
+      "request_fields": {
+        "mobileAt": "",
+        "srhSggCd": "",
+        "srhEmdCd": "",
+        "srhRoadNm": "",
+        "srhLoadCd": "",
+        "srhHsmpCd": "",
+        "srhArea": "",
+        "srhLrArea": "",
+        "srhFromAmount": "",
+        "srhToAmount": "",
+        "srhThingNo": "A",
+        "srhDelngSecd": "1",
+        "srhAddrGbn": "1",
+        "srhLfstsSecd": "1",
+        "sidoNm": "경기도",
+        "sggNm": "전체",
+        "emdNm": "전체",
+        "loadNm": "전체",
+        "areaNm": "전체",
+        "hsmpNm": "전체",
+        "srhFromDt": "2020-01-01",
+        "srhToDt": "2020-12-31",
+        "srhSidoCd": "41000"
+      },
+      "status": "complete",
+      "started_at": "2026-09-09T07:32:43.947341+00:00",
+      "data_cutoff": "2026-09-09",
+      "expected_count": 257810,
+      "count_checked_at": "2026-09-09T07:32:47.652848+00:00",
+      "encoding": "cp949",
+      "columns": [
+        "NO",
+        "시군구",
+        "번지",
+        "본번",
+        "부번",
+        "단지명",
+        "전용면적(㎡)",
+        "계약년월",
+        "계약일",
+        "거래금액(만원)",
+        "동",
+        "층",
+        "매수자",
+        "매도자",
+        "건축년도",
+        "도로명",
+        "해제사유발생일",
+        "거래유형",
+        "중개사소재지",
+        "등기일자"
+      ],
+      "header_row": 16,
+      "metadata_rows": [
+        [
+          "□ 본 서비스에서 제공하는 정보는 법적인 효력이 없으므로 참고용으로만 활용하시기 바랍니다."
+        ],
+        [
+          "□ 신고정보가 실시간 변경, 해제되어 제공시점에 따라 공개건수 및 내용이 상이할 수 있는 점 참고하시기 바랍니다."
+        ],
+        [
+          "□ 본 자료는 계약일 기준입니다. (※ 7월 계약, 8월 신고건 → 7월 거래건으로  제공)"
+        ],
+        [
+          "□ 통계자료 활용시에는 수치가 왜곡될 수 있으니 참고자료로만 활용하시기  바라며,  외부 공개시에는 반드시 신고일 기준으로 집계되는 공식통계를 이용하여 주시기 바랍니다."
+        ],
+        [
+          ""
+        ],
+        [
+          "* 국토교통부 실거래가 공개시스템의 궁금하신 점이나 문의사항은 콜센터 1533-2949로 연락 주시기 바랍니다."
+        ],
+        [
+          "□ 검색조건"
+        ],
+        [
+          "계약일자 : 2020-01-01 ~ 2020-12-31"
+        ],
+        [
+          "실거래구분 : 아파트(매매)"
+        ],
+        [
+          "주소구분 : 지번주소"
+        ],
+        [
+          "시도 : 경기도"
+        ],
+        [
+          "시군구 : 전체"
+        ],
+        [
+          "읍면동 : 전체"
+        ],
+        [
+          "면적 : 전체"
+        ],
+        [
+          "금액선택 : 전체"
+        ]
+      ],
+      "row_count": 257810,
+      "minimum_contract_date": "2020-01-01",
+      "maximum_contract_date": "2020-12-31",
+      "cancellation_marked_rows": 11767,
+      "deduplication_applied": false,
+      "contract_month_counts": {
+        "202001": 20800,
+        "202002": 32483,
+        "202003": 17275,
+        "202004": 13375,
+        "202005": 17789,
+        "202006": 37110,
+        "202007": 23371,
+        "202008": 14887,
+        "202009": 14309,
+        "202010": 18619,
+        "202011": 22381,
+        "202012": 25411
+      },
+      "raw_bytes": 42065822,
+      "raw_sha256": "83b742a3a13353a9a1d33f9eab3e0ce8c100bbd08afe79a4c991ad84cf036155",
+      "file": "gyeonggi/sale/2020/2020-01-01_2020-12-31.csv.gz",
+      "gzip_sha256": "91bc56aa5ceed6772e8aeb735766eefc796f3b13e641bf92f15fb3c543dff474",
+      "gzip_bytes": 8357040,
+      "downloaded_at": "2026-09-09T07:33:05.983119+00:00",
+      "response_headers": {
+        "date": "Wed, 09 Sep 2026 07:32:48 GMT"
+      },
+      "completed_at": "2026-09-09T07:33:18.193678+00:00"
     }
   },
   "format_version": 1,
@@ -2239,7 +2377,7 @@
     "same_anonymous_session": true,
     "http_and_validation_errors_retried": false
   },
-  "updated_at": "2026-09-09T07:31:34.756461+00:00",
+  "updated_at": "2026-09-09T07:33:18.196141+00:00",
   "initialization_failures": [
     {
       "failed_at": "2026-09-09T05:57:20.874576+00:00",
@@ -2387,5 +2525,5 @@
     }
   ],
   "pause_reason": "batch_limit",
-  "next_key": "gyeonggi/sale/2020/2020-01-01_2020-12-31"
+  "next_key": "incheon/sale/2006/2006-01-01_2006-12-31"
 }
