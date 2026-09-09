@@ -156,6 +156,18 @@ def test_replay_rejects_in_sample_training_and_keeps_uncovered_properties():
     assert model['recommendations'][0]['transaction_valuation']['status'] == 'no_supported_contracts'
 
 
+def test_new_policy_replay_keeps_prices_and_explicitly_labels_retrospective_choice():
+    artifact = {'trained_through': '2025-12-31', 'selected': 'ew90', 'model': None}
+    spec = {'prediction_year': '2026', 'score_error_scale': .1, 'sha256': 'test'}
+    old = replay_transactions(transaction_frame(), artifact, spec, '2026-04')
+    new = replay_transactions(transaction_frame(), artifact, {**spec,
+        'policy_selected_at': '2026-09-09', 'feature_engine': 'array_equivalent_v1'}, '2026-04')
+    assert new['by_key']['exact']['recent_transactions'] == old['by_key']['exact']['recent_transactions']
+    assert new['by_key']['exact']['monthly'] == old['by_key']['exact']['monthly']
+    assert new['by_key']['exact']['method'] == 'retrospective_policy_revaluation'
+    assert new['metadata']['retrospective_policy_revaluation'] is True
+
+
 def test_score_has_same_precision_contract_as_public_javascript():
     import subprocess
     cases = [(f, p, .08094263165106064)

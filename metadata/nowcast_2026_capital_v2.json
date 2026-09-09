@@ -1,0 +1,94 @@
+{
+  "version": "estate-nowcast-capital-v2",
+  "prediction_year": "2026",
+  "trained_through": "2025-12-31",
+  "selection_year": 2024,
+  "sha256": "f902e7a30ccc012f56563c5f3798b7a1998de38335fc0a7c14a1d700bd6c7fd7",
+  "score_error_scale": 0.08094263165106064,
+  "assumed_reporting_lag_days": 31,
+  "note": "전체 과거의 가격 입력을 당시 기준가 대비 비율로 변환하고 48개월 반감기 양수 가중치로 학습. 서울·경기만 채택. 31일 신고 지연 가정, 월별 입력 갱신.",
+  "validation": {
+    "transactions": 325084,
+    "regional": [
+      {
+        "year": 2025,
+        "region": "경기도",
+        "legacy_mae_oku": 0.2638,
+        "full_history_mae_oku": 0.2611,
+        "active_mae_oku": 0.2611,
+        "legacy_complex_mape_pct": 8.047,
+        "full_history_complex_mape_pct": 8.353
+      },
+      {
+        "year": 2025,
+        "region": "서울특별시",
+        "legacy_mae_oku": 0.8285,
+        "full_history_mae_oku": 0.77,
+        "active_mae_oku": 0.77,
+        "legacy_complex_mape_pct": 11.925,
+        "full_history_complex_mape_pct": 14.404
+      },
+      {
+        "year": 2025,
+        "region": "인천광역시",
+        "legacy_mae_oku": 0.1939,
+        "full_history_mae_oku": 0.2021,
+        "active_mae_oku": 0.1939,
+        "legacy_complex_mape_pct": 9.208,
+        "full_history_complex_mape_pct": 10.015
+      },
+      {
+        "year": 2026,
+        "region": "경기도",
+        "legacy_mae_oku": 0.3511,
+        "full_history_mae_oku": 0.3091,
+        "active_mae_oku": 0.3091,
+        "legacy_complex_mape_pct": 7.803,
+        "full_history_complex_mape_pct": 7.857
+      },
+      {
+        "year": 2026,
+        "region": "서울특별시",
+        "legacy_mae_oku": 1.0146,
+        "full_history_mae_oku": 0.8778,
+        "active_mae_oku": 0.8778,
+        "legacy_complex_mape_pct": 10.734,
+        "full_history_complex_mape_pct": 11.9
+      },
+      {
+        "year": 2026,
+        "region": "인천광역시",
+        "legacy_mae_oku": 0.1946,
+        "full_history_mae_oku": 0.2019,
+        "active_mae_oku": 0.1946,
+        "legacy_complex_mape_pct": 8.733,
+        "full_history_complex_mape_pct": 9.527
+      }
+    ],
+    "note": "2025·2026년 결과를 확인한 뒤 지역별 적용 정책을 결정한 재사용 검증입니다. 실제 거래 층 기준이며 현재 대표 층 가격의 오차와 다를 수 있습니다. 거래가 적은 단지의 오차 악화는 남아 있습니다."
+  },
+  "policy_selected_at": "2026-09-09",
+  "regional_models": {
+    "서울특별시": "estate-nowcast-full-history-v2",
+    "경기도": "estate-nowcast-full-history-v2",
+    "인천광역시": "estate-nowcast-v1"
+  },
+  "fallback_model": "estate-nowcast-v1",
+  "release_note": "서울·경기 전체 과거 재학습 모델 적용 · 인천 기존 모델 유지",
+  "candidate_source_sha256": "d83e2601fed1674cfd61a6b7a50830c456b05c353e01b600ca77531cbd4a9b6a",
+  "legacy_artifact_sha256": "88b7f49924f841797a39f0149bd897a3ed24d9585cb6fe027ab746f3462dadeb",
+  "training": {
+    "stage": "reused_evaluation",
+    "year": 2026,
+    "method": "relative_recency_four_years",
+    "rows": 3762716,
+    "positive_weight_rows": 3762716,
+    "first_year": 2007,
+    "last_year": 2025,
+    "min_weight": 0.13713467110764904,
+    "max_weight": 3.5336649919025516,
+    "effective_sample_size": 2146516.5346007687
+  },
+  "score_note": "가격 점수의 계산식과 오차 척도는 v1 그대로 유지합니다. 등급은 별도 검증 후 표시합니다.",
+  "feature_engine": "array_equivalent_v1"
+}

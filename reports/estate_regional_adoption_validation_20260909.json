@@ -1,0 +1,18 @@
+{
+  "asof": "2026-09-09",
+  "scope": "exact frozen 2026 Mar-Jul transactions",
+  "transactions": 119313,
+  "new_component_exact_matches": 106548,
+  "legacy_component_exact_matches": 12765,
+  "metric": {
+    "transactions": 119313,
+    "complexes": 12135,
+    "mape_pct": 5.732,
+    "complex_balanced_mape_pct": 9.538,
+    "median_ape_pct": 3.83,
+    "mae_oku": 0.451,
+    "bias_pct": 0.827,
+    "within10_pct": 85.65
+  },
+  "retrospective_policy_choice": true
+}

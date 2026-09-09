@@ -26,7 +26,13 @@ async function loadGuide(){
  if(m.model.nowcast){
   const n=m.model.nowcast;
   document.getElementById('model-status').textContent=`현재 가격 ${n.version} · ${n.month}월 · 거래자료 ${m.generated_at} · 이전 연간 기록 ${m.model.model_version}`;
-  document.getElementById('nowcast-info').innerHTML=`<p class="score-note">월별 기준가 ${f(n.available_types)} / ${f(n.total_types)}개 평형 산출. 산출되지 않은 평형은 점수를 비워 둡니다. 가격 비교의 기준가는 연간 가격으로 대체하지 않습니다.</p><p class="score-note">325,084건 별도 시계열 검증에서 총액 평균 절대오차: 2025년 0.8714억 → 0.4335억, 2026년 3~7월 0.7521억 → 0.5142억. 실제 거래 층 기준 검증이며, 상세 화면에서 현재 대표 층과 최근 계약의 실제 층을 구분합니다.</p>`;
+  const regions=n.validation?.regional;
+  const validation=regions?`<div class="table-scroll"><table><thead><tr><th>기간</th><th>지역</th><th>기존 MAE 억</th><th>현재 적용 MAE 억</th></tr></thead><tbody>${regions.map(r=>`<tr><th>${r.year}</th><td>${esc(r.region)}</td><td>${r.legacy_mae_oku.toFixed(4)}</td><td>${r.active_mae_oku.toFixed(4)}</td></tr>`).join('')}</tbody></table></div><p class="score-note">${esc(n.validation.note)}</p>`:`<p class="score-note">325,084건 별도 시계열 검증에서 총액 평균 절대오차: 2025년 0.4335억, 2026년 3~7월 0.5142억. 실제 거래 층 기준입니다.</p>`;
+  document.getElementById('nowcast-info').innerHTML=`<p><b>${esc(n.release_note??'기존 월별 가격 모델')}</b></p><p class="score-note">월별 기준가 ${f(n.available_types)} / ${f(n.total_types)}개 평형 산출. 미산출 평형은 점수를 비워 둡니다. ${esc(n.note??'')}</p>${validation}`;
+  if(n.regional_models){
+   document.getElementById('capital-retraining-status').textContent=n.release_note+' · 검색·지도·상세·CSV의 기준가에 반영';
+   document.getElementById('capital-retraining-results').innerHTML='<p><b>현재 적용:</b> 9월 9일 사용자 요청에 따라 서울·경기는 전체 과거 재학습 사양을 채택했습니다. 인천은 기존 모델을 유지합니다. 아래 표는 적용 결정 전 실험 기록이며, 당시의 전체 지역 일괄 교체 기준과 현재의 지역별 채택을 구분합니다. 희소 단지의 오차 악화는 후속 검증 대상입니다.</p>'+document.getElementById('capital-retraining-results').innerHTML;
+  }
  }
  if(m.model.model_version==='estate-reference-v4')document.getElementById('reference-method').textContent='v4 모델입니다. 동일 평형 전년도 가격 → 최근 3년 이력 → 유사 면적의 동·구·시도 가격 → 기존 주변 가격 순으로 비교 기준을 보완합니다. LightGBM은 이 기준에서의 가격 차이를 학습하고, 이전 연도에서 혼합 비중을 선택합니다. 모델은 버전·월별로 고정됩니다.';
  const folds=m.model.validation;

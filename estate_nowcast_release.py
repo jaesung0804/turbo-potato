@@ -12,9 +12,10 @@ import pandas as pd
 
 from estate_nowcast import load_transactions, predict_sample
 from estate_valuation import attach_current_comparisons, attach_recent_comparison_prices, canonical_price
+from estate_regional_nowcast import ARTIFACT as ACTIVE_ARTIFACT, MANIFEST as ACTIVE_MANIFEST, component_version
 
-ARTIFACT = Path('metadata/nowcast_2026.joblib')
-MANIFEST = Path('metadata/nowcast_2026.json')
+ARTIFACT = Path(ACTIVE_ARTIFACT)
+MANIFEST = Path(ACTIVE_MANIFEST)
 
 
 def attach_nowcast(model, source, artifact_path=ARTIFACT, manifest_path=MANIFEST):
@@ -48,6 +49,7 @@ def attach_nowcast(model, source, artifact_path=ARTIFACT, manifest_path=MANIFEST
     predicted = predict_sample(d, sample, artifact, month,
                                int(spec.get('assumed_reporting_lag_days', 31))) if sample else pd.DataFrame()
     by_key = {r['key']: r for r in predicted.to_dict('records')}
+    regions = d.groupby('key', sort=False).region.first().to_dict() if 'region' in d else {}
     for rec in model['recommendations']:
         r = by_key.get(rec['building_key'])
         if not r or not np.isfinite(r['estimated_price_oku']) or r['estimated_price_oku'] <= 0:
@@ -56,6 +58,8 @@ def attach_nowcast(model, source, artifact_path=ARTIFACT, manifest_path=MANIFEST
         rec['current_valuation'] = {
             'status': 'available', 'price_billion': canonical_price(r['estimated_price_oku']),
             'raw_price_billion': float(r['estimated_price_oku']),
+            'model_version': component_version(spec, regions.get(rec['building_key'])),
+            'release_version': spec.get('version'),
             'month': month, 'feature_cutoff': r['feature_cutoff'],
             'floor': float(r['floor']) if np.isfinite(r['floor']) else None,
             'floor_basis': 'previous_observable_365_day_median',

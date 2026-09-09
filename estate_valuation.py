@@ -13,10 +13,11 @@ import hashlib
 import json
 import math
 from pathlib import Path
+from estate_regional_nowcast import ARTIFACT, MANIFEST, component_version
 
 SCORE_VERSION = 'estate-discount-v1'
 REPLAY_VERSION = 'estate-transaction-replay-v1'
-DEFAULT_REPLAY = Path('metadata/transaction_valuation_2026.json.gz')
+DEFAULT_REPLAY = Path('metadata/transaction_valuation_2026_capital_v2.json.gz')
 RECENT_COMPARISON_DAYS = 90
 MIN_EXPLORATION_TRADES = 3
 
@@ -132,7 +133,7 @@ def attach_current_comparisons(model):
                                   evidence_level='recent_evidence' if enough else 'sparse_history',
                                   min_evidence_trades=MIN_EXPLORATION_TRADES,
                                   valuation_month=v['month'], feature_cutoff=v['feature_cutoff'],
-                                  model_version=model.get('nowcast', {}).get('version'))
+                                  model_version=v.get('model_version') or model.get('nowcast', {}).get('version'))
                 available += 1
                 recent_evidence += int(enough)
         rec['valuation_comparison'] = comparison
@@ -150,7 +151,7 @@ def attach_current_comparisons(model):
         'score_formula': '50 + 40 * tanh(log(F50 / price) / score_error_scale)',
         'score_note': '50점은 표시된 기준가와 같은 가격입니다. 할인율이 클수록 점수가 높으며 거래수는 점수를 낮추지 않고 자료 품질로 따로 표시합니다.',
         'discount_note': '할인율 = (기준가 - 비교가격) / 기준가 × 100. 양수는 기준가보다 낮은 가격입니다.',
-        'comparison_note': '현재 월 기준가와 자료마감일까지 최근 90일 실거래 중앙가를 비교합니다. 90일 거래가 없으면 미산출하며 연간 중앙가로 대체하지 않습니다. 각 계약 당시의 저평가 여부는 계약월별 재평가에서 별도로 산출합니다.',
+        'comparison_note': '현재 월 기준가와 자료마감일까지 최근 90일 실거래 중앙가를 비교합니다. 90일 거래가 없으면 미산출하며 연간 중앙가로 대체하지 않습니다. 계약월별 재평가는 현재 선택한 모델 사양을 과거 월의 입력에 적용한 소급 분석입니다.',
         'evidence_note': '기본 탐색은 기준가 입력 이력과 비교 90일 거래가 각각 3건 이상인 평형입니다. 3건은 정확도 보장 기준이 아니며, 전체 평형 보기로 희소 자료도 조회할 수 있습니다.',
         'legacy_annual_scores': 'audit_only',
     }
@@ -183,7 +184,11 @@ def replay_transactions(d, artifact, spec, month):
     first, lag = f'{year}-03', int(spec.get('assumed_reporting_lag_days', 31))
     end = pd.Period(month).end_time
     source = d[d.date <= end].copy()
-    features = build_features(source, lag, first, month)
+    if spec.get('feature_engine') == 'array_equivalent_v1':
+        from estate_retraining_features import monthly_features
+        features = monthly_features(source, first, month, policy=False, uniform_lag=lag)
+    else:
+        features = build_features(source, lag, first, month)
     wanted = source[source.month.between(first, month)]
     total = len(wanted)
     if features.empty:
@@ -223,7 +228,10 @@ def replay_transactions(d, artifact, spec, month):
             'recent_trade_count': int(r.n90),
         } for r in recent.itertuples()]
         rows[key] = {
-            'status': 'available', 'method': 'contract_month_ex_ante',
+            'status': 'available',
+            'method': 'retrospective_policy_revaluation' if spec.get('policy_selected_at') else 'contract_month_ex_ante',
+            'policy_selected_at': spec.get('policy_selected_at'),
+            'model_version': component_version(spec, group.region.iloc[0]) if 'region' in group else spec.get('version'),
             'trade_count': len(group), 'period_start': str(group.contract_date.min()),
             'period_end': str(group.contract_date.max()),
             'median_score': round(float(group.score.median()), 1),
@@ -234,6 +242,8 @@ def replay_transactions(d, artifact, spec, month):
     meta = {
         'version': REPLAY_VERSION, 'score_version': SCORE_VERSION,
         'model_version': spec.get('version'), 'artifact_sha256': spec['sha256'],
+        'policy_selected_at': spec.get('policy_selected_at'),
+        'retrospective_policy_revaluation': bool(spec.get('policy_selected_at')),
         'score_error_scale': spec['score_error_scale'],
         'trained_through': artifact['trained_through'], 'model_month': month,
         'period_start': first, 'data_through': str(source.date.max().date()),
@@ -242,15 +252,15 @@ def replay_transactions(d, artifact, spec, month):
         'unavailable_transactions': total - len(features), 'available_types': len(rows),
         'mean_absolute_error_oku': round(float((error * features.observed).mean()), 4),
         'median_absolute_pct_error': round(float(error.median() * 100), 3),
-        'note': '각 계약월 시작일보다 31일 앞선 계약까지 사용하고 실제 거래 층을 입력했습니다. 1~2월과 학습 연도는 제외합니다. 최종 공개 자료의 해제 상태를 사용하므로 당시 공개 원본의 완전한 재현은 아닙니다.',
+        'note': ('모델 사양은 2026-09-09에 선택했습니다. 과거 월의 입력으로 다시 계산한 소급 분석이며 당시 공개했던 예측이 아닙니다. ' if spec.get('policy_selected_at') else '') + '각 계약월 시작일보다 31일 앞선 계약까지 사용하고 실제 거래 층을 입력했습니다. 1~2월과 학습 연도는 제외합니다. 최종 공개 자료의 해제 상태를 사용하므로 당시 공개 원본의 완전한 재현은 아닙니다.',
         'aggregation_note': '연간·월별 점수는 계약별 점수의 중앙값입니다. 중앙 거래가와 중앙 기준가를 재입력한 점수와는 일반적으로 다릅니다. 최근 계약 표는 개별 가격으로 정확히 재현됩니다.',
     }
     return {'metadata': meta, 'by_key': rows}
 
 
 def build_transaction_replay(source, output=DEFAULT_REPLAY, month='2026-09',
-                             artifact_path=Path('metadata/nowcast_2026.joblib'),
-                             manifest_path=Path('metadata/nowcast_2026.json')):
+                             artifact_path=Path(ARTIFACT),
+                             manifest_path=Path(MANIFEST)):
     import joblib
     from estate_nowcast import load_transactions
     source, output = Path(source), Path(output)
