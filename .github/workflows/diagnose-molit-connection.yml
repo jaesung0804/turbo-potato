@@ -11,6 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 4
     steps:
+      - uses: actions/checkout@v4
       - name: Measure public export page twice without downloading CSV
         timeout-minutes: 3
         shell: bash
@@ -41,4 +42,21 @@ jobs:
               stream.write("\\n".join(json.dumps(r) for r in results))
           if not any(r.get("http_code") == "200" and r["curl_exit"] == 0 for r in results):
               raise SystemExit(1)
+          PY
+      - name: Compare the actual Python collector on the same runner
+        if: always()
+        timeout-minutes: 2
+        shell: bash
+        run: |
+          timeout --signal=TERM --kill-after=5s 75s python -u - <<'PY'
+          import json
+          from collect_molit_capital_csv import PublicCSVClient
+          class Probe(PublicCSVClient):
+              def _request(self, path, fields=None):
+                  try:
+                      return super()._request(path, fields)
+                  finally:
+                      print(json.dumps(self.last_request), flush=True)
+          Probe(timeout=30, pause=1).initialize()
+          print("Python collector initialization succeeded; no CSV requested", flush=True)
           PY
