@@ -1,5 +1,5 @@
 {
-  "request": "finish-incheon-sales-incheon/sale/2011/2011-01-01_2011-12-31-attempt-1",
+  "request": "finish-incheon-sales-incheon/sale/2011/2011-01-01_2011-12-31-attempt-2",
   "max_files": 1,
   "baseline_completed": 21,
   "deferred": "all_remaining_rentals"
