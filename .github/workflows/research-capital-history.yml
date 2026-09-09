@@ -1,0 +1,236 @@
+name: Collect and normalize capital area apartment history
+on:
+  workflow_dispatch:
+# Resume deliberately after confirming the public export service is healthy.
+# Code/documentation pushes must not repeat the stopped non-CSV request.
+permissions:
+  contents: write
+concurrency:
+  group: estate-capital-history
+  cancel-in-progress: false
+jobs:
+  collect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 110
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Test the public CSV collector without network requests
+        run: |
+          python -m pip install pytest
+          python -m pytest -q tests/test_molit_capital_csv.py tests/test_capital_csv_state.py
+      - name: Restore prior download checkpoints
+        id: restore
+        run: |
+          set -euo pipefail
+          mkdir -p .work/capital-history
+          state_dir=.work/capital-history-state
+          set +e
+          git ls-remote --exit-code --heads origin estate-capital-history-state > /dev/null
+          state_status=$?
+          set -e
+          if [ "$state_status" -eq 0 ]; then
+            git fetch origin estate-capital-history-state
+            git worktree add --detach "$state_dir" FETCH_HEAD
+            python capital_csv_state.py restore --state "$state_dir" --output .work/capital-history
+          elif [ "$state_status" -eq 2 ]; then
+            git worktree add --detach "$state_dir" "$GITHUB_SHA"
+            git -C "$state_dir" checkout --orphan estate-capital-history-state
+            git -C "$state_dir" rm -rf --quiet .
+          else
+            exit "$state_status"
+          fi
+      - name: Collect missing history and a current 2026 vintage
+        # One anonymous session, sequential annual CSV requests, no API key.
+        # The collector must stop on a server quota/block response.
+        run: >-
+          timeout --signal=INT --kill-after=30s 95m
+          python collect_molit_capital_csv.py
+          --output .work/capital-history
+          --cutoff 2026-09-09
+          --include-current-sales
+          --daily-limit 90
+          --prior-downloads-today 2
+          --timeout 180
+          --pause 1.0
+          --transport-retries 2
+          --retry-delay 10
+      - name: Preserve verified raw files and incomplete checkpoints
+        if: always() && steps.restore.outcome == 'success'
+        env:
+          SNAPSHOT_ID: ${{ github.run_id }}-${{ github.run_attempt }}
+        run: |
+          set -euo pipefail
+          state_dir=.work/capital-history-state
+          test -f .work/capital-history/manifest.json
+          test -f "$state_dir/.git"
+          mkdir -p "$state_dir/snapshots/$SNAPSHOT_ID"
+          python capital_csv_state.py pack --source .work/capital-history --state "$state_dir"
+          cp .work/capital-history/manifest.json "$state_dir/snapshots/$SNAPSHOT_ID/manifest.json"
+          python - <<'PY'
+          import json, os
+          from pathlib import Path
+          state = Path('.work/capital-history-state')
+          run = {'run_id': os.environ['GITHUB_RUN_ID'],
+                 'run_attempt': os.environ['GITHUB_RUN_ATTEMPT'],
+                 'collector_commit': os.environ['GITHUB_SHA'],
+                 'requested_through': '2026-09-09',
+                 'production_inputs_modified': False}
+          (state / 'snapshots' / os.environ['SNAPSHOT_ID'] / 'run.json').write_text(
+              json.dumps(run, indent=2) + '\n')
+          (state / '.gitattributes').write_text('*.gz -text\n*.part -text\n*.json text eol=lf\n')
+          (state / 'README.md').write_text(
+              '# Official capital area apartment CSV research data\n\n'
+              'Public MOLIT CSV downloads, preserved separately from production inputs.\n'
+              'Use collection/manifest.json to distinguish completed, missing and unsupported coverage.\n'
+              'A successful state commit can contain an incomplete collection checkpoint.\n'
+              'Raw rows retain cancellations and identical-row multiplicity.\n'
+              'Historical downloads are current revised data, not historical publication vintages.\n'
+              'Sales begin in 2006; rental data begin in 2011; September 2026 is partial.\n'
+              'Each commit preserves the exact raw payloads referenced by its manifests.\n')
+          PY
+          git -C "$state_dir" config user.name 'github-actions[bot]'
+          git -C "$state_dir" config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git -C "$state_dir" add -A
+          git -C "$state_dir" commit -m "Preserve official capital CSV collection checkpoint $SNAPSHOT_ID"
+          git -C "$state_dir" push origin HEAD:estate-capital-history-state
+      - uses: actions/upload-artifact@v4
+        if: always()
+        continue-on-error: true
+        with:
+          name: capital-history-csv-${{ github.run_id }}-${{ github.run_attempt }}
+          path: .work/capital-history/
+          retention-days: 90
+          compression-level: 0
+  normalize:
+    needs: collect
+    runs-on: ubuntu-latest
+    timeout-minutes: 100
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Test normalization without network calls
+        run: |
+          python -m pip install pytest
+          python -m pytest -q tests/test_molit_capital_normalization.py
+      - name: Restore verified source snapshots
+        id: sources
+        run: |
+          set -euo pipefail
+          git fetch origin refs/heads/estate-capital-history-state:refs/remotes/origin/estate-capital-history-state
+          git worktree add --detach .work/csv-state origin/estate-capital-history-state
+          echo "csv_commit=$(git -C .work/csv-state rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+          python capital_csv_state.py restore --state .work/csv-state --output .work/csv-input
+          python - <<'PY'
+          from datetime import date
+          import json
+          from pathlib import Path
+          from collect_molit_capital_csv import expansion_requests, ExportRequest, REGIONS
+          cutoff = date(2026, 9, 9)
+          expected = expansion_requests(cutoff) + [
+              ExportRequest(region, 'sale', date(2026, 1, 1), cutoff) for region in REGIONS]
+          keys = {request.key for request in expected}
+          manifest = json.loads(Path('.work/csv-input/manifest.json').read_text())
+          assert manifest['status'] == 'complete', 'Raw collection is not complete'
+          assert manifest['data_cutoff'] == cutoff.isoformat()
+          assert len(manifest['planned_keys']) == len(keys) == 81
+          assert set(manifest['planned_keys']) == keys
+          assert all(manifest['entries'][key]['status'] == 'complete' for key in keys)
+          print('Verified the complete 81-partition collection plan')
+          PY
+          git fetch origin 890e937419182652bf2b8e04a6f9c17f776d3002 2221cc29004f0dcc7132cca43dd4c5955f08ae4d e1e48354f7cb2f15f2b4c045c7ce48569869688b
+          git worktree add --detach .work/recent-state 890e937419182652bf2b8e04a6f9c17f776d3002
+          git worktree add --detach .work/history-state 2221cc29004f0dcc7132cca43dd4c5955f08ae4d
+          git worktree add --detach .work/older-state e1e48354f7cb2f15f2b4c045c7ce48569869688b
+          python prepare_capital_history_inputs.py --older-state .work/older-state --history-state .work/history-state --raw-state .work/recent-state --output .work/existing-inputs
+      - name: Normalize every raw row and build disjoint research sales
+        run: >-
+          timeout --signal=INT --kill-after=30s 70m
+          python normalize_molit_capital_history.py
+          --source-dir .work/csv-input
+          --out .work/capital-normalized
+          --as-of 2026-09-09
+          --existing-history .work/existing-inputs/transactions_2006_2020.csv
+          --existing-recent .work/existing-inputs/data/capital_area_apt_trade_transactions.csv
+          --existing-history-source-commit 2221cc29004f0dcc7132cca43dd4c5955f08ae4d
+          --existing-history-source-commit e1e48354f7cb2f15f2b4c045c7ce48569869688b
+          --existing-recent-source-commit 890e937419182652bf2b8e04a6f9c17f776d3002
+      - name: Verify and preserve the complete research output
+        env:
+          CSV_SOURCE_COMMIT: ${{ steps.sources.outputs.csv_commit }}
+          SNAPSHOT_ID: ${{ github.run_id }}-${{ github.run_attempt }}
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import hashlib, json, os
+          from pathlib import Path
+          root = Path('.work/capital-normalized')
+          manifest = json.loads((root / 'normalization_manifest.json').read_text())
+          assert manifest['complete'] is True and manifest['replace_existing_2026'] is True
+          assert len(manifest['sources']) == 81 and len(manifest['existing_inputs']) == 2
+          raw = json.loads(Path('.work/csv-input/manifest.json').read_text())
+          for kind in ('sale', 'rent'):
+              expected = sum(entry['row_count'] for entry in raw['entries'].values()
+                             if entry['query']['kind'] == kind)
+              assert manifest['counts'][kind + '_canonical_rows'] == expected
+          for name, item in manifest['outputs'].items():
+              path = root / name
+              assert path.resolve().is_relative_to(root.resolve())
+              assert path.stat().st_size == item['bytes'] < 95 * 1024 * 1024
+              with path.open('rb') as stream:
+                  assert hashlib.file_digest(stream, 'sha256').hexdigest() == item['sha256']
+          provenance = {'raw_csv_source_commit': os.environ['CSV_SOURCE_COMMIT'],
+                        'normalizer_commit': os.environ['GITHUB_SHA'],
+                        'workflow_run': os.environ['GITHUB_RUN_ID'],
+                        'production_inputs_modified': False,
+                        'new_model_backtest_run': False}
+          (root / 'provenance.json').write_text(json.dumps(provenance, indent=2) + '\n')
+          print(json.dumps(manifest['counts'], ensure_ascii=False))
+          PY
+          cp .work/csv-input/manifest.json .work/capital-normalized/raw_collection_manifest.json
+          cp .work/existing-inputs/inputs_manifest.json .work/capital-normalized/existing_inputs_manifest.json
+          state_dir=.work/normalized-state
+          set +e
+          git ls-remote --exit-code --heads origin estate-capital-normalized-state > /dev/null
+          state_status=$?
+          set -e
+          if [ "$state_status" -eq 0 ]; then
+            git fetch origin estate-capital-normalized-state
+            git worktree add --detach "$state_dir" FETCH_HEAD
+          elif [ "$state_status" -eq 2 ]; then
+            git worktree add --detach "$state_dir" "$GITHUB_SHA"
+            git -C "$state_dir" checkout --orphan estate-capital-normalized-state
+            git -C "$state_dir" rm -rf --quiet .
+          else
+            exit "$state_status"
+          fi
+          snapshot_dir="$state_dir/snapshots/$SNAPSHOT_ID"
+          test ! -e "$snapshot_dir"
+          mkdir -p "$snapshot_dir"
+          cp -a .work/capital-normalized/. "$snapshot_dir/"
+          python - <<'PY'
+          import json, os
+          from pathlib import Path
+          state = Path('.work/normalized-state')
+          (state / 'latest.json').write_text(json.dumps({'snapshot': 'snapshots/' + os.environ['SNAPSHOT_ID']}, indent=2) + '\n')
+          (state / '.gitattributes').write_text('*.gz -text\n*.json text eol=lf\n')
+          (state / 'README.md').write_text('# Capital area apartment research inputs\n\nFollow latest.json to the verified, immutable snapshot.\nCanonical files preserve all new MOLIT CSV rows; trade files use disjoint sources.\nRead the coverage, exclusions and source vintages in normalization_manifest.json.\nThis snapshot does not imply model validation or production deployment.\n')
+          PY
+          git -C "$state_dir" config user.name 'github-actions[bot]'
+          git -C "$state_dir" config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git -C "$state_dir" add -A
+          git -C "$state_dir" commit -m "Preserve verified capital history research snapshot $SNAPSHOT_ID"
+          git -C "$state_dir" push origin HEAD:estate-capital-normalized-state
+      - uses: actions/upload-artifact@v4
+        if: always()
+        continue-on-error: true
+        with:
+          name: capital-normalization-audit-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            .work/capital-normalized/*.json
+            .work/existing-inputs/inputs_manifest.json
+          retention-days: 90

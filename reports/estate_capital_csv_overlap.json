@@ -1,0 +1,713 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-09-09T01:11:49.588094+00:00",
+  "scope": {
+    "region": "경기도 광명시",
+    "district_code": "41210",
+    "contract_start": "2006-01-01",
+    "contract_end": "2006-12-31",
+    "comparison": "Entire overlap, not a sample; multiset intersection preserves multiplicity"
+  },
+  "sources": {
+    "csv": {
+      "path": ".work/molit-expansion/csv-probe/gyeonggi-sale-2006.csv.gz",
+      "metadata_path": ".work/molit-expansion/csv-probe/gyeonggi-sale-2006.json",
+      "raw_sha256": "92b378acc445a633a69046c5f5bfa9686100abb20718b751c4dff2d3e65178cb",
+      "gzip_sha256": "fc4f20afd00ab6d195808c34dd8e66b80aac41fbca57bc7c39f8f1793bf9aadb",
+      "metadata_sha256": "8a2a1514eb05ce0eb031fd1a3ac816465d68a32f91974b2c7150316f4c3bc42f",
+      "downloaded_at": "2026-09-09T00:48:19.229159+00:00",
+      "source_total_rows": 206224,
+      "selection": "시군구 begins with exact 경기도 광명시 plus a space",
+      "request": {
+        "srhThingNo": "A",
+        "srhDelngSecd": "1",
+        "srhAddrGbn": "1",
+        "srhLfstsSecd": "1",
+        "sidoNm": "경기도",
+        "sggNm": "전체",
+        "emdNm": "전체",
+        "loadNm": "전체",
+        "areaNm": "전체",
+        "hsmpNm": "전체",
+        "mobileAt": "",
+        "srhFromDt": "2006-01-01",
+        "srhToDt": "2006-12-31",
+        "srhSidoCd": "41000",
+        "srhSggCd": "",
+        "srhEmdCd": "",
+        "srhRoadNm": "",
+        "srhLoadCd": "",
+        "srhHsmpCd": "",
+        "srhArea": "",
+        "srhLrArea": "",
+        "srhFromAmount": "",
+        "srhToAmount": ""
+      }
+    },
+    "api": {
+      "path": ".work/history/transactions_2006_2020.csv",
+      "sha256": "4c1ac90600207f51ee230185c797b90197d3dcbf901b33057707f7e970a0ffc4",
+      "source_total_rows": 1217848,
+      "selection": "CGG_CD == 41210 and CTRT_DAY begins 2006",
+      "original_history_commit": "e1e48354f7cb2f15f2b4c045c7ce48569869688b",
+      "original_history_sha256": "182fd217f38d7211ed10e1ca10af3073c6f5692028116176e07283da65b18a1b",
+      "original_history_gzip_sha256": "80f5b792c7d46d4d65c94155760ea761e1f525859259fb6a689fb48a1a8f899f",
+      "original_history_metadata_path": ".work/older-history-state/research-older-history.json",
+      "original_history_metadata_sha256": "07304e3cfc73e42cede6d68c8b1214822b1bddaf5176ad64097a249cc880298b",
+      "original_history_collected_at": "2026-09-08T16:38:33.669901+00:00",
+      "matched_source_partitions": [
+        {
+          "month": "200601",
+          "code": "41210",
+          "count": 287,
+          "rows_sha256": "ed5401e119b6d8c62e5709c52304bafe9f8a0616560d1aa289b3a81feb3b8c75",
+          "fetched_at": "2026-09-08T16:31:03.606736+00:00"
+        },
+        {
+          "month": "200602",
+          "code": "41210",
+          "count": 287,
+          "rows_sha256": "b9668a655cee0245df1c81e679cd5127e81a97f3cdf54ffc81fd0ee51e46d371",
+          "fetched_at": "2026-09-08T16:31:06.635136+00:00"
+        },
+        {
+          "month": "200603",
+          "code": "41210",
+          "count": 261,
+          "rows_sha256": "5f51422ef03e7f5d8613bc690f6260f9546c965758bcecf864938e166841ed19",
+          "fetched_at": "2026-09-08T16:31:10.134938+00:00"
+        },
+        {
+          "month": "200604",
+          "code": "41210",
+          "count": 410,
+          "rows_sha256": "68425cb5ece7a18b7512fe36c1779762a4ca31883fbea502f79eea73d38c74dc",
+          "fetched_at": "2026-09-08T16:31:13.358152+00:00"
+        },
+        {
+          "month": "200605",
+          "code": "41210",
+          "count": 319,
+          "rows_sha256": "ae57df6877f6f89d97527f3260e11041eeb999fd487ef947b2c599c3205e5ad5",
+          "fetched_at": "2026-09-08T16:31:16.861550+00:00"
+        },
+        {
+          "month": "200606",
+          "code": "41210",
+          "count": 216,
+          "rows_sha256": "e4ac6978ee85de20dffa81656ff4bb355ae0ce42e04fc6d5d832fb570810a514",
+          "fetched_at": "2026-09-08T16:31:19.765359+00:00"
+        },
+        {
+          "month": "200607",
+          "code": "41210",
+          "count": 192,
+          "rows_sha256": "9b366945171f5de0321f19b9c4fcb1ff8c9f6d95474d961736499fa89161ef42",
+          "fetched_at": "2026-09-08T16:31:23.207144+00:00"
+        },
+        {
+          "month": "200608",
+          "code": "41210",
+          "count": 348,
+          "rows_sha256": "4c0d11375447011dfb7d1667eb7d8ba974d7d2be2b5a714d2c05609458344d57",
+          "fetched_at": "2026-09-08T16:31:26.400936+00:00"
+        },
+        {
+          "month": "200609",
+          "code": "41210",
+          "count": 525,
+          "rows_sha256": "77b99dae5ffa6a6df62a5fc7dbbe84c33e7872046afb9e0662a90d2e43e1237e",
+          "fetched_at": "2026-09-08T16:31:30.301336+00:00"
+        },
+        {
+          "month": "200610",
+          "code": "41210",
+          "count": 1082,
+          "rows_sha256": "c8ed6e05532f403658892dfc1904bc7d52cdedbb9fc5fe1554baa86d2ca9db18",
+          "fetched_at": "2026-09-08T16:31:36.823632+00:00"
+        },
+        {
+          "month": "200611",
+          "code": "41210",
+          "count": 819,
+          "rows_sha256": "926e73e5d645ccf1481b48b0761366404391f2e984c7eb5d13be0cb74822fd1a",
+          "fetched_at": "2026-09-08T16:31:40.697576+00:00"
+        },
+        {
+          "month": "200612",
+          "code": "41210",
+          "count": 558,
+          "rows_sha256": "68d0544176e50c4984ec80dffa15d97dd31da3f41b5de21bb9f591b4043e1417",
+          "fetched_at": "2026-09-08T16:31:44.755841+00:00"
+        }
+      ]
+    }
+  },
+  "normalization": {
+    "signature_fields": [
+      "district_code",
+      "district_name",
+      "legal_dong_name",
+      "lot_is_mountain",
+      "lot_main",
+      "lot_sub",
+      "apartment_name",
+      "contract_date",
+      "amount_10k_krw",
+      "area_sqm",
+      "floor",
+      "built_year",
+      "property_type",
+      "cancelled",
+      "cancellation_date",
+      "deal_type"
+    ],
+    "decimals": "Parse comma-free Decimal; format fixed point and remove only insignificant trailing decimal zeros. No rounding, binary float, or area binning. 59.9700 equals 59.97. Unit: 10000 KRW and square metres.",
+    "dates": "CSV contract YYYYMM + day and API YYYYMMDD become ISO dates.",
+    "lot": "Preserve 산 as a separate mountain flag. Strip numeric leading zeros. API blank sublot and CSV 0000 both become 0.",
+    "names": "Strip outer whitespace only. Legal dong and apartment names compare exactly; no aliases, fuzzy matches, address rewriting, or renaming.",
+    "cancellation": "Empty, dash, and double dash mean unmarked in this snapshot. Other values are marked; parse full dates to ISO if recognized and retain otherwise. Cancellation flag and date both enter the signature.",
+    "deal_type": "Empty, dash, and double dash become unknown, never inferred as mediated/direct.",
+    "excluded_fields": "CSV NO is an export ordinal, not transaction ID. API RCPT_YR is contract-year output, not verified receipt year. Fields absent from the other source (road, buyer/seller, registration day, building unit) do not establish overlap identity.",
+    "multiplicity": "Counter per complete normalized signature. Intersection sums min(left count,right count); subtraction retains all excess copies. No rows are deleted or matched to invented physical contracts."
+  },
+  "results": {
+    "csv_rows": 5304,
+    "api_rows": 5304,
+    "common_multiplicity": 5304,
+    "csv_only_rows": 0,
+    "api_only_rows": 0,
+    "csv_distinct_signatures": 5190,
+    "api_distinct_signatures": 5190,
+    "common_distinct_signatures": 5190,
+    "csv_repeated_signature_groups": 71,
+    "api_repeated_signature_groups": 71,
+    "csv_excess_multiplicity_over_distinct": 114,
+    "api_excess_multiplicity_over_distinct": 114,
+    "maximum_signature_multiplicity": 7,
+    "all_multiset_rows_equal": true
+  },
+  "monthly_counts": [
+    {
+      "month": "2006-01",
+      "csv_rows": 287,
+      "api_rows": 287
+    },
+    {
+      "month": "2006-02",
+      "csv_rows": 287,
+      "api_rows": 287
+    },
+    {
+      "month": "2006-03",
+      "csv_rows": 261,
+      "api_rows": 261
+    },
+    {
+      "month": "2006-04",
+      "csv_rows": 410,
+      "api_rows": 410
+    },
+    {
+      "month": "2006-05",
+      "csv_rows": 319,
+      "api_rows": 319
+    },
+    {
+      "month": "2006-06",
+      "csv_rows": 216,
+      "api_rows": 216
+    },
+    {
+      "month": "2006-07",
+      "csv_rows": 192,
+      "api_rows": 192
+    },
+    {
+      "month": "2006-08",
+      "csv_rows": 348,
+      "api_rows": 348
+    },
+    {
+      "month": "2006-09",
+      "csv_rows": 525,
+      "api_rows": 525
+    },
+    {
+      "month": "2006-10",
+      "csv_rows": 1082,
+      "api_rows": 1082
+    },
+    {
+      "month": "2006-11",
+      "csv_rows": 819,
+      "api_rows": 819
+    },
+    {
+      "month": "2006-12",
+      "csv_rows": 558,
+      "api_rows": 558
+    }
+  ],
+  "source_format_counts": {
+    "csv": {
+      "area_decimal_places_4": 5304,
+      "amount_with_commas": 5304,
+      "cancelled": 0,
+      "mountain_lot": 0
+    },
+    "api": {
+      "area_decimal_places_2": 4143,
+      "amount_with_commas": 0,
+      "cancelled": 0,
+      "mountain_lot": 0,
+      "area_decimal_places_1": 632,
+      "area_decimal_places_4": 205,
+      "area_decimal_places_3": 321,
+      "area_decimal_places_0": 3
+    }
+  },
+  "format_equivalence_examples": [
+    {
+      "contract_date": "2006-01-05",
+      "apartment_name": "광명한진타운",
+      "csv_area_raw": "59.9300",
+      "api_area_raw": "59.93",
+      "area_normalized": "59.93",
+      "csv_amount_raw": "17,450",
+      "api_amount_raw": "17450",
+      "amount_normalized": "17450",
+      "csv_lot_main_raw": "0200",
+      "api_lot_main_raw": "200",
+      "csv_lot_sub_raw": "0006",
+      "api_lot_sub_raw": "6"
+    },
+    {
+      "contract_date": "2006-01-09",
+      "apartment_name": "광명한진타운",
+      "csv_area_raw": "84.9500",
+      "api_area_raw": "84.95",
+      "area_normalized": "84.95",
+      "csv_amount_raw": "26,000",
+      "api_amount_raw": "26000",
+      "amount_normalized": "26000",
+      "csv_lot_main_raw": "0200",
+      "api_lot_main_raw": "200",
+      "csv_lot_sub_raw": "0006",
+      "api_lot_sub_raw": "6"
+    },
+    {
+      "contract_date": "2006-01-09",
+      "apartment_name": "광명한진타운",
+      "csv_area_raw": "84.9500",
+      "api_area_raw": "84.95",
+      "area_normalized": "84.95",
+      "csv_amount_raw": "27,400",
+      "api_amount_raw": "27400",
+      "amount_normalized": "27400",
+      "csv_lot_main_raw": "0200",
+      "api_lot_main_raw": "200",
+      "csv_lot_sub_raw": "0006",
+      "api_lot_sub_raw": "6"
+    },
+    {
+      "contract_date": "2006-01-14",
+      "apartment_name": "광명한진타운",
+      "csv_area_raw": "59.9300",
+      "api_area_raw": "59.93",
+      "area_normalized": "59.93",
+      "csv_amount_raw": "18,800",
+      "api_amount_raw": "18800",
+      "amount_normalized": "18800",
+      "csv_lot_main_raw": "0200",
+      "api_lot_main_raw": "200",
+      "csv_lot_sub_raw": "0006",
+      "api_lot_sub_raw": "6"
+    },
+    {
+      "contract_date": "2006-01-15",
+      "apartment_name": "광명한진타운",
+      "csv_area_raw": "84.9500",
+      "api_area_raw": "84.95",
+      "area_normalized": "84.95",
+      "csv_amount_raw": "25,350",
+      "api_amount_raw": "25350",
+      "amount_normalized": "25350",
+      "csv_lot_main_raw": "0200",
+      "api_lot_main_raw": "200",
+      "csv_lot_sub_raw": "0006",
+      "api_lot_sub_raw": "6"
+    }
+  ],
+  "repeated_signature_examples": [
+    {
+      "signature": {
+        "district_code": "41210",
+        "district_name": "광명시",
+        "legal_dong_name": "광명동",
+        "lot_is_mountain": false,
+        "lot_main": "778",
+        "lot_sub": "0",
+        "apartment_name": "영화아이닉스",
+        "contract_date": "2006-10-25",
+        "amount_10k_krw": "24000",
+        "area_sqm": "79.04",
+        "floor": "12",
+        "built_year": "2005",
+        "property_type": "아파트",
+        "cancelled": false,
+        "cancellation_date": null,
+        "deal_type": null
+      },
+      "multiplicity": 2,
+      "csv_example": {
+        "row_number": 54576,
+        "raw": {
+          "NO": "54576",
+          "시군구": "경기도 광명시 광명동",
+          "번지": "778",
+          "본번": "0778",
+          "부번": "0000",
+          "단지명": "영화아이닉스",
+          "전용면적(㎡)": "79.0400",
+          "계약년월": "200610",
+          "계약일": "25",
+          "거래금액(만원)": "24,000",
+          "동": "-",
+          "층": "12",
+          "매수자": "-",
+          "매도자": "-",
+          "건축년도": "2005",
+          "도로명": "광명로848번길 66",
+          "해제사유발생일": "-",
+          "거래유형": "-",
+          "중개사소재지": "-",
+          "등기일자": "-"
+        }
+      },
+      "api_example": {
+        "row_number": 90217,
+        "raw": {
+          "RCPT_YR": "2006",
+          "CGG_CD": "41210",
+          "CGG_NM": "광명시",
+          "STDG_CD": "",
+          "STDG_NM": "광명동",
+          "LOTNO_SE": "",
+          "LOTNO_SE_NM": "",
+          "MNO": "778",
+          "SNO": "",
+          "BLDG_NM": "영화아이닉스",
+          "CTRT_DAY": "20061025",
+          "THING_AMT": "24000",
+          "ARCH_AREA": "79.04",
+          "LAND_AREA": "",
+          "FLR": "12",
+          "RGHT_SE": "",
+          "RTRCN_DAY": "",
+          "ARCH_YR": "2005",
+          "BLDG_USG": "아파트",
+          "DCLR_SE": "",
+          "OPBIZ_RESTAGNT_SGG_NM": ""
+        }
+      }
+    },
+    {
+      "signature": {
+        "district_code": "41210",
+        "district_name": "광명시",
+        "legal_dong_name": "광명동",
+        "lot_is_mountain": false,
+        "lot_main": "778",
+        "lot_sub": "0",
+        "apartment_name": "영화아이닉스",
+        "contract_date": "2006-11-06",
+        "amount_10k_krw": "17500",
+        "area_sqm": "54.66",
+        "floor": "10",
+        "built_year": "2005",
+        "property_type": "아파트",
+        "cancelled": false,
+        "cancellation_date": null,
+        "deal_type": null
+      },
+      "multiplicity": 2,
+      "csv_example": {
+        "row_number": 37263,
+        "raw": {
+          "NO": "37263",
+          "시군구": "경기도 광명시 광명동",
+          "번지": "778",
+          "본번": "0778",
+          "부번": "0000",
+          "단지명": "영화아이닉스",
+          "전용면적(㎡)": "54.6600",
+          "계약년월": "200611",
+          "계약일": "06",
+          "거래금액(만원)": "17,500",
+          "동": "-",
+          "층": "10",
+          "매수자": "-",
+          "매도자": "-",
+          "건축년도": "2005",
+          "도로명": "광명로848번길 66",
+          "해제사유발생일": "-",
+          "거래유형": "-",
+          "중개사소재지": "-",
+          "등기일자": "-"
+        }
+      },
+      "api_example": {
+        "row_number": 107093,
+        "raw": {
+          "RCPT_YR": "2006",
+          "CGG_CD": "41210",
+          "CGG_NM": "광명시",
+          "STDG_CD": "",
+          "STDG_NM": "광명동",
+          "LOTNO_SE": "",
+          "LOTNO_SE_NM": "",
+          "MNO": "778",
+          "SNO": "",
+          "BLDG_NM": "영화아이닉스",
+          "CTRT_DAY": "20061106",
+          "THING_AMT": "17500",
+          "ARCH_AREA": "54.66",
+          "LAND_AREA": "",
+          "FLR": "10",
+          "RGHT_SE": "",
+          "RTRCN_DAY": "",
+          "ARCH_YR": "2005",
+          "BLDG_USG": "아파트",
+          "DCLR_SE": "",
+          "OPBIZ_RESTAGNT_SGG_NM": ""
+        }
+      }
+    },
+    {
+      "signature": {
+        "district_code": "41210",
+        "district_name": "광명시",
+        "legal_dong_name": "광명동",
+        "lot_is_mountain": false,
+        "lot_main": "779",
+        "lot_sub": "0",
+        "apartment_name": "현진에버빌",
+        "contract_date": "2006-03-02",
+        "amount_10k_krw": "26000",
+        "area_sqm": "84.284",
+        "floor": "7",
+        "built_year": "2005",
+        "property_type": "아파트",
+        "cancelled": false,
+        "cancellation_date": null,
+        "deal_type": null
+      },
+      "multiplicity": 2,
+      "csv_example": {
+        "row_number": 188654,
+        "raw": {
+          "NO": "188654",
+          "시군구": "경기도 광명시 광명동",
+          "번지": "779",
+          "본번": "0779",
+          "부번": "0000",
+          "단지명": "현진에버빌",
+          "전용면적(㎡)": "84.2840",
+          "계약년월": "200603",
+          "계약일": "02",
+          "거래금액(만원)": "26,000",
+          "동": "-",
+          "층": "7",
+          "매수자": "-",
+          "매도자": "-",
+          "건축년도": "2005",
+          "도로명": "목감로 88",
+          "해제사유발생일": "-",
+          "거래유형": "-",
+          "중개사소재지": "-",
+          "등기일자": "-"
+        }
+      },
+      "api_example": {
+        "row_number": 20611,
+        "raw": {
+          "RCPT_YR": "2006",
+          "CGG_CD": "41210",
+          "CGG_NM": "광명시",
+          "STDG_CD": "",
+          "STDG_NM": "광명동",
+          "LOTNO_SE": "",
+          "LOTNO_SE_NM": "",
+          "MNO": "779",
+          "SNO": "",
+          "BLDG_NM": "현진에버빌",
+          "CTRT_DAY": "20060302",
+          "THING_AMT": "26000",
+          "ARCH_AREA": "84.284",
+          "LAND_AREA": "",
+          "FLR": "7",
+          "RGHT_SE": "",
+          "RTRCN_DAY": "",
+          "ARCH_YR": "2005",
+          "BLDG_USG": "아파트",
+          "DCLR_SE": "",
+          "OPBIZ_RESTAGNT_SGG_NM": ""
+        }
+      }
+    },
+    {
+      "signature": {
+        "district_code": "41210",
+        "district_name": "광명시",
+        "legal_dong_name": "광명동",
+        "lot_is_mountain": false,
+        "lot_main": "779",
+        "lot_sub": "0",
+        "apartment_name": "현진에버빌",
+        "contract_date": "2006-04-03",
+        "amount_10k_krw": "14539",
+        "area_sqm": "59.8074",
+        "floor": "1",
+        "built_year": "2005",
+        "property_type": "아파트",
+        "cancelled": false,
+        "cancellation_date": null,
+        "deal_type": null
+      },
+      "multiplicity": 3,
+      "csv_example": {
+        "row_number": 171544,
+        "raw": {
+          "NO": "171544",
+          "시군구": "경기도 광명시 광명동",
+          "번지": "779",
+          "본번": "0779",
+          "부번": "0000",
+          "단지명": "현진에버빌",
+          "전용면적(㎡)": "59.8074",
+          "계약년월": "200604",
+          "계약일": "03",
+          "거래금액(만원)": "14,539",
+          "동": "-",
+          "층": "1",
+          "매수자": "-",
+          "매도자": "-",
+          "건축년도": "2005",
+          "도로명": "목감로 88",
+          "해제사유발생일": "-",
+          "거래유형": "-",
+          "중개사소재지": "-",
+          "등기일자": "-"
+        }
+      },
+      "api_example": {
+        "row_number": 29915,
+        "raw": {
+          "RCPT_YR": "2006",
+          "CGG_CD": "41210",
+          "CGG_NM": "광명시",
+          "STDG_CD": "",
+          "STDG_NM": "광명동",
+          "LOTNO_SE": "",
+          "LOTNO_SE_NM": "",
+          "MNO": "779",
+          "SNO": "",
+          "BLDG_NM": "현진에버빌",
+          "CTRT_DAY": "20060403",
+          "THING_AMT": "14539",
+          "ARCH_AREA": "59.8074",
+          "LAND_AREA": "",
+          "FLR": "1",
+          "RGHT_SE": "",
+          "RTRCN_DAY": "",
+          "ARCH_YR": "2005",
+          "BLDG_USG": "아파트",
+          "DCLR_SE": "",
+          "OPBIZ_RESTAGNT_SGG_NM": ""
+        }
+      }
+    },
+    {
+      "signature": {
+        "district_code": "41210",
+        "district_name": "광명시",
+        "legal_dong_name": "광명동",
+        "lot_is_mountain": false,
+        "lot_main": "779",
+        "lot_sub": "0",
+        "apartment_name": "현진에버빌",
+        "contract_date": "2006-04-03",
+        "amount_10k_krw": "14539",
+        "area_sqm": "59.8074",
+        "floor": "10",
+        "built_year": "2005",
+        "property_type": "아파트",
+        "cancelled": false,
+        "cancellation_date": null,
+        "deal_type": null
+      },
+      "multiplicity": 3,
+      "csv_example": {
+        "row_number": 171555,
+        "raw": {
+          "NO": "171555",
+          "시군구": "경기도 광명시 광명동",
+          "번지": "779",
+          "본번": "0779",
+          "부번": "0000",
+          "단지명": "현진에버빌",
+          "전용면적(㎡)": "59.8074",
+          "계약년월": "200604",
+          "계약일": "03",
+          "거래금액(만원)": "14,539",
+          "동": "-",
+          "층": "10",
+          "매수자": "-",
+          "매도자": "-",
+          "건축년도": "2005",
+          "도로명": "목감로 88",
+          "해제사유발생일": "-",
+          "거래유형": "-",
+          "중개사소재지": "-",
+          "등기일자": "-"
+        }
+      },
+      "api_example": {
+        "row_number": 29932,
+        "raw": {
+          "RCPT_YR": "2006",
+          "CGG_CD": "41210",
+          "CGG_NM": "광명시",
+          "STDG_CD": "",
+          "STDG_NM": "광명동",
+          "LOTNO_SE": "",
+          "LOTNO_SE_NM": "",
+          "MNO": "779",
+          "SNO": "",
+          "BLDG_NM": "현진에버빌",
+          "CTRT_DAY": "20060403",
+          "THING_AMT": "14539",
+          "ARCH_AREA": "59.8074",
+          "LAND_AREA": "",
+          "FLR": "10",
+          "RGHT_SE": "",
+          "RTRCN_DAY": "",
+          "ARCH_YR": "2005",
+          "BLDG_USG": "아파트",
+          "DCLR_SE": "",
+          "OPBIZ_RESTAGNT_SGG_NM": ""
+        }
+      }
+    }
+  ],
+  "csv_only": [],
+  "api_only": [],
+  "interpretation": {
+    "observed_discrepancies": "No content or multiplicity discrepancy after explicitly stated representation normalization.",
+    "mountain_or_address_change_cause": "No mountain lots or differing district/dong/apartment names remain in this bounded overlap.",
+    "coverage_limit": "This verifies Gwangmyeong 2006 only; it does not prove all years/provinces or recover publication-time historical vintages.",
+    "snapshot_limit": "Both sources are current retrospective snapshots obtained in September 2026. Agreement on 2006 contracts does not imply they were observed or public in 2006.",
+    "merge_implication": "Use new CSV for Gyeonggi 2006–2020 and retain only Seoul from existing older history. Appending both Gwangmyeong slices would add 5304 duplicated observations in 2006."
+  }
+}
