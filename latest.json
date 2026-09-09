@@ -1,0 +1,8 @@
+{
+  "snapshot": "snapshots/available-20260909",
+  "full_requested_scope_complete": false,
+  "available_partitions": 4,
+  "planned_partitions": 81,
+  "raw_source_commit": "1747755718e829d8f581f88854337702eb284072",
+  "existing_api_inputs_merged": false
+}

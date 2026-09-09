@@ -1,0 +1,1371 @@
+{
+  "schema_version": 1,
+  "complete": true,
+  "complete_scope": "Normalization completed for the four available verified partitions only; original 81-partition dataset remains incomplete.",
+  "as_of_contract_cutoff": "2026-09-09",
+  "generated_at": "2026-09-09T01:29:30.899607+00:00",
+  "counts": {
+    "sale_canonical_rows": 433442,
+    "rent_canonical_rows": 181371,
+    "rent_pure_jeonse_rows": 139547,
+    "rent_monthly_rent_rows": 41824,
+    "rent_financials_unknown_rows": 0,
+    "rent_other_known_financials_rows": 0,
+    "dashboard_rows": 432222
+  },
+  "contract_type_counts": {
+    "신규": 20141,
+    "갱신": 3508,
+    "미상": 157722
+  },
+  "sources": [
+    {
+      "source_id": "molit-csv:rent:41:2011-01-01:2011-12-31:3507f398faa5626e6013c87d48f614ae10af6600d5b433362123ae9ccf05c340",
+      "kind": "rent",
+      "sido": "경기도",
+      "sido_code": "41",
+      "start": "2011-01-01",
+      "end": "2011-12-31",
+      "sha256": "3507f398faa5626e6013c87d48f614ae10af6600d5b433362123ae9ccf05c340",
+      "observed_at": "2026-09-09T00:47:22.018938+00:00",
+      "path": "/workspace/scratch/9a01f13b6580/estate-model/.work/capital-history-restored/gyeonggi/rent/2011/2011-01-01_2011-12-31.csv.gz",
+      "metadata_path": "/workspace/scratch/9a01f13b6580/estate-model/.work/capital-history-restored/available-subset.manifest.json",
+      "metadata": {
+        "encoding": "cp949",
+        "columns": [
+          "NO",
+          "시군구",
+          "번지",
+          "본번",
+          "부번",
+          "단지명",
+          "전월세구분",
+          "전용면적(㎡)",
+          "계약년월",
+          "계약일",
+          "보증금(만원)",
+          "월세금(만원)",
+          "층",
+          "건축년도",
+          "도로명",
+          "계약기간",
+          "계약구분",
+          "갱신요구권 사용",
+          "종전계약 보증금(만원)",
+          "종전계약 월세(만원)",
+          "주택유형"
+        ],
+        "header_row": 16,
+        "metadata_rows": [
+          [
+            "□ 본 서비스에서 제공하는 정보는 법적인 효력이 없으므로 참고용으로만 활용하시기 바랍니다."
+          ],
+          [
+            "□ 신고정보가 실시간 변경, 해제되어 제공시점에 따라 공개건수 및 내용이 상이할 수 있는 점 참고하시기 바랍니다."
+          ],
+          [
+            "□ 본 자료는 계약일 기준입니다. (※ 7월 계약, 8월 신고건 → 7월 거래건으로  제공)"
+          ],
+          [
+            "□ 통계자료 활용시에는 수치가 왜곡될 수 있으니 참고자료로만 활용하시기  바라며,  외부 공개시에는 반드시 신고일 기준으로 집계되는 공식통계를 이용하여 주시기 바랍니다."
+          ],
+          [
+            ""
+          ],
+          [
+            "* 국토교통부 실거래가 공개시스템의 궁금하신 점이나 문의사항은 콜센터 1533-2949로 연락 주시기 바랍니다."
+          ],
+          [
+            "□ 검색조건"
+          ],
+          [
+            "계약일자 : 2011-01-01 ~ 2011-12-31"
+          ],
+          [
+            "실거래구분 : 아파트(전월세)"
+          ],
+          [
+            "주소구분 : 지번주소"
+          ],
+          [
+            "시도 : 경기도"
+          ],
+          [
+            "시군구 : 전체"
+          ],
+          [
+            "읍면동 : 전체"
+          ],
+          [
+            "면적 : 전체"
+          ],
+          [
+            "금액선택 : 전체"
+          ]
+        ],
+        "row_count": 181371,
+        "minimum_contract_date": "2011-01-01",
+        "maximum_contract_date": "2011-12-31",
+        "cancellation_marked_rows": 0,
+        "deduplication_applied": false,
+        "contract_month_counts": {
+          "201101": 16959,
+          "201102": 17509,
+          "201103": 17449,
+          "201104": 14612,
+          "201105": 13410,
+          "201106": 14166,
+          "201107": 14363,
+          "201108": 15783,
+          "201109": 14964,
+          "201110": 15160,
+          "201111": 13046,
+          "201112": 13950
+        },
+        "raw_bytes": 31458642,
+        "raw_sha256": "3507f398faa5626e6013c87d48f614ae10af6600d5b433362123ae9ccf05c340",
+        "query": {
+          "region": "gyeonggi",
+          "kind": "rent",
+          "start": "2011-01-01",
+          "end": "2011-12-31"
+        },
+        "request_fields": {
+          "srhThingNo": "A",
+          "srhDelngSecd": "2",
+          "srhAddrGbn": "1",
+          "srhLfstsSecd": "1",
+          "sidoNm": "경기도",
+          "sggNm": "전체",
+          "emdNm": "전체",
+          "loadNm": "전체",
+          "areaNm": "전체",
+          "hsmpNm": "전체",
+          "mobileAt": "",
+          "srhFromDt": "2011-01-01",
+          "srhToDt": "2011-12-31",
+          "srhSidoCd": "41000",
+          "srhSggCd": "",
+          "srhEmdCd": "",
+          "srhRoadNm": "",
+          "srhLoadCd": "",
+          "srhHsmpCd": "",
+          "srhArea": "",
+          "srhLrArea": "",
+          "srhFromAmount": "",
+          "srhToAmount": ""
+        },
+        "status": "complete",
+        "file": "gyeonggi/rent/2011/2011-01-01_2011-12-31.csv.gz",
+        "expected_count": 181371,
+        "expected_count_evidence": "Initial public count query verified against the saved probe before import",
+        "gzip_sha256": "8702f7718462fee29d72a734aa7ba41cbde7b15a53c3ef6e7a3d1c2214c0f48e",
+        "gzip_bytes": 6242040,
+        "downloaded_at": "2026-09-09T00:47:22.018938+00:00",
+        "data_cutoff": "2026-09-09",
+        "imported_at": "2026-09-09T01:24:45.142918+00:00",
+        "import_provenance": {
+          "probe_metadata": "probe_gyeonggi_rent_2011.json",
+          "probe_metadata_sha256": "9978123802a496a004e0d90500d90832b8a9c01e5d7c13e50eb5cd40684de7ec",
+          "new_network_downloads": 0,
+          "already_in_prior_downloads_today": true
+        },
+        "kind": "rent",
+        "request": {
+          "srhThingNo": "A",
+          "srhDelngSecd": "2",
+          "srhAddrGbn": "1",
+          "srhLfstsSecd": "1",
+          "sidoNm": "경기도",
+          "sggNm": "전체",
+          "emdNm": "전체",
+          "loadNm": "전체",
+          "areaNm": "전체",
+          "hsmpNm": "전체",
+          "mobileAt": "",
+          "srhFromDt": "2011-01-01",
+          "srhToDt": "2011-12-31",
+          "srhSidoCd": "41000",
+          "srhSggCd": "",
+          "srhEmdCd": "",
+          "srhRoadNm": "",
+          "srhLoadCd": "",
+          "srhHsmpCd": "",
+          "srhArea": "",
+          "srhLrArea": "",
+          "srhFromAmount": "",
+          "srhToAmount": ""
+        },
+        "sha256": "3507f398faa5626e6013c87d48f614ae10af6600d5b433362123ae9ccf05c340"
+      },
+      "metadata_sha256": "d4a36ecdd28d2eee0c9520e70550113e4a3fddacfc19b3ba9fc556a8921d6bc2",
+      "counts": {
+        "pure_jeonse_rows": 139547,
+        "monthly_rent_rows": 41824,
+        "lease_financials_unknown_rows": 0,
+        "other_known_financials_rows": 0,
+        "canonical_rows": 181371
+      },
+      "quality_flags": {
+        "contract_type_unknown": 157722,
+        "previous_deposit_missing": 177863,
+        "previous_monthly_rent_missing": 177863,
+        "cancellation_status_unavailable": 181371,
+        "lot_source_disagrees": 354,
+        "lease_type_financials_disagree": 13
+      },
+      "address_matches": {
+        "unique_exact_registry_name": 181371
+      },
+      "dashboard_exclusions": {},
+      "contract_type_counts": {
+        "신규": 20141,
+        "갱신": 3508,
+        "미상": 157722
+      },
+      "unresolved_address_examples": [],
+      "contract_min": "2011-01-01",
+      "contract_max": "2011-12-31"
+    },
+    {
+      "source_id": "molit-csv:sale:41:2006-01-01:2006-12-31:92b378acc445a633a69046c5f5bfa9686100abb20718b751c4dff2d3e65178cb",
+      "kind": "sale",
+      "sido": "경기도",
+      "sido_code": "41",
+      "start": "2006-01-01",
+      "end": "2006-12-31",
+      "sha256": "92b378acc445a633a69046c5f5bfa9686100abb20718b751c4dff2d3e65178cb",
+      "observed_at": "2026-09-09T01:00:14.292253+00:00",
+      "path": "/workspace/scratch/9a01f13b6580/estate-model/.work/capital-history-restored/gyeonggi/sale/2006/2006-01-01_2006-12-31.csv.gz",
+      "metadata_path": "/workspace/scratch/9a01f13b6580/estate-model/.work/capital-history-restored/available-subset.manifest.json",
+      "metadata": {
+        "query": {
+          "region": "gyeonggi",
+          "kind": "sale",
+          "start": "2006-01-01",
+          "end": "2006-12-31"
+        },
+        "request_fields": {
+          "mobileAt": "",
+          "srhSggCd": "",
+          "srhEmdCd": "",
+          "srhRoadNm": "",
+          "srhLoadCd": "",
+          "srhHsmpCd": "",
+          "srhArea": "",
+          "srhLrArea": "",
+          "srhFromAmount": "",
+          "srhToAmount": "",
+          "srhThingNo": "A",
+          "srhDelngSecd": "1",
+          "srhAddrGbn": "1",
+          "srhLfstsSecd": "1",
+          "sidoNm": "경기도",
+          "sggNm": "전체",
+          "emdNm": "전체",
+          "loadNm": "전체",
+          "areaNm": "전체",
+          "hsmpNm": "전체",
+          "srhFromDt": "2006-01-01",
+          "srhToDt": "2006-12-31",
+          "srhSidoCd": "41000"
+        },
+        "status": "complete",
+        "started_at": "2026-09-09T00:59:56.222866+00:00",
+        "data_cutoff": "2026-09-09",
+        "expected_count": 206224,
+        "count_checked_at": "2026-09-09T00:59:59.172561+00:00",
+        "encoding": "cp949",
+        "columns": [
+          "NO",
+          "시군구",
+          "번지",
+          "본번",
+          "부번",
+          "단지명",
+          "전용면적(㎡)",
+          "계약년월",
+          "계약일",
+          "거래금액(만원)",
+          "동",
+          "층",
+          "매수자",
+          "매도자",
+          "건축년도",
+          "도로명",
+          "해제사유발생일",
+          "거래유형",
+          "중개사소재지",
+          "등기일자"
+        ],
+        "header_row": 16,
+        "metadata_rows": [
+          [
+            "□ 본 서비스에서 제공하는 정보는 법적인 효력이 없으므로 참고용으로만 활용하시기 바랍니다."
+          ],
+          [
+            "□ 신고정보가 실시간 변경, 해제되어 제공시점에 따라 공개건수 및 내용이 상이할 수 있는 점 참고하시기 바랍니다."
+          ],
+          [
+            "□ 본 자료는 계약일 기준입니다. (※ 7월 계약, 8월 신고건 → 7월 거래건으로  제공)"
+          ],
+          [
+            "□ 통계자료 활용시에는 수치가 왜곡될 수 있으니 참고자료로만 활용하시기  바라며,  외부 공개시에는 반드시 신고일 기준으로 집계되는 공식통계를 이용하여 주시기 바랍니다."
+          ],
+          [
+            ""
+          ],
+          [
+            "* 국토교통부 실거래가 공개시스템의 궁금하신 점이나 문의사항은 콜센터 1533-2949로 연락 주시기 바랍니다."
+          ],
+          [
+            "□ 검색조건"
+          ],
+          [
+            "계약일자 : 2006-01-01 ~ 2006-12-31"
+          ],
+          [
+            "실거래구분 : 아파트(매매)"
+          ],
+          [
+            "주소구분 : 지번주소"
+          ],
+          [
+            "시도 : 경기도"
+          ],
+          [
+            "시군구 : 전체"
+          ],
+          [
+            "읍면동 : 전체"
+          ],
+          [
+            "면적 : 전체"
+          ],
+          [
+            "금액선택 : 전체"
+          ]
+        ],
+        "row_count": 206224,
+        "minimum_contract_date": "2006-01-01",
+        "maximum_contract_date": "2006-12-31",
+        "cancellation_marked_rows": 0,
+        "deduplication_applied": false,
+        "contract_month_counts": {
+          "200601": 6481,
+          "200602": 10413,
+          "200603": 16320,
+          "200604": 15127,
+          "200605": 15328,
+          "200606": 11799,
+          "200607": 10304,
+          "200608": 14667,
+          "200609": 26956,
+          "200610": 34221,
+          "200611": 28441,
+          "200612": 16167
+        },
+        "raw_bytes": 32854916,
+        "raw_sha256": "92b378acc445a633a69046c5f5bfa9686100abb20718b751c4dff2d3e65178cb",
+        "file": "gyeonggi/sale/2006/2006-01-01_2006-12-31.csv.gz",
+        "gzip_sha256": "fc4f20afd00ab6d195808c34dd8e66b80aac41fbca57bc7c39f8f1793bf9aadb",
+        "gzip_bytes": 6001520,
+        "downloaded_at": "2026-09-09T01:00:14.292253+00:00",
+        "response_headers": {
+          "date": "Wed, 09 Sep 2026 01:00:00 GMT"
+        },
+        "completed_at": "2026-09-09T01:00:24.192739+00:00",
+        "kind": "sale",
+        "request": {
+          "mobileAt": "",
+          "srhSggCd": "",
+          "srhEmdCd": "",
+          "srhRoadNm": "",
+          "srhLoadCd": "",
+          "srhHsmpCd": "",
+          "srhArea": "",
+          "srhLrArea": "",
+          "srhFromAmount": "",
+          "srhToAmount": "",
+          "srhThingNo": "A",
+          "srhDelngSecd": "1",
+          "srhAddrGbn": "1",
+          "srhLfstsSecd": "1",
+          "sidoNm": "경기도",
+          "sggNm": "전체",
+          "emdNm": "전체",
+          "loadNm": "전체",
+          "areaNm": "전체",
+          "hsmpNm": "전체",
+          "srhFromDt": "2006-01-01",
+          "srhToDt": "2006-12-31",
+          "srhSidoCd": "41000"
+        },
+        "sha256": "92b378acc445a633a69046c5f5bfa9686100abb20718b751c4dff2d3e65178cb"
+      },
+      "metadata_sha256": "d4a36ecdd28d2eee0c9520e70550113e4a3fddacfc19b3ba9fc556a8921d6bc2",
+      "counts": {
+        "canonical_rows": 206224,
+        "dashboard_rows": 205695
+      },
+      "quality_flags": {
+        "deal_type_unknown": 206224,
+        "lot_source_disagrees": 529
+      },
+      "address_matches": {
+        "unique_exact_registry_name": 206224
+      },
+      "dashboard_exclusions": {
+        "lot_source_disagrees": 529
+      },
+      "contract_type_counts": {},
+      "unresolved_address_examples": [],
+      "contract_min": "2006-01-01",
+      "contract_max": "2006-12-31"
+    },
+    {
+      "source_id": "molit-csv:sale:41:2007-01-01:2007-12-31:5ffd8e9309a9961f08a1dc382bc73c59ffeda9a74c5200ce925d62da1fb0dda8",
+      "kind": "sale",
+      "sido": "경기도",
+      "sido_code": "41",
+      "start": "2007-01-01",
+      "end": "2007-12-31",
+      "sha256": "5ffd8e9309a9961f08a1dc382bc73c59ffeda9a74c5200ce925d62da1fb0dda8",
+      "observed_at": "2026-09-09T01:00:37.757205+00:00",
+      "path": "/workspace/scratch/9a01f13b6580/estate-model/.work/capital-history-restored/gyeonggi/sale/2007/2007-01-01_2007-12-31.csv.gz",
+      "metadata_path": "/workspace/scratch/9a01f13b6580/estate-model/.work/capital-history-restored/available-subset.manifest.json",
+      "metadata": {
+        "query": {
+          "region": "gyeonggi",
+          "kind": "sale",
+          "start": "2007-01-01",
+          "end": "2007-12-31"
+        },
+        "request_fields": {
+          "mobileAt": "",
+          "srhSggCd": "",
+          "srhEmdCd": "",
+          "srhRoadNm": "",
+          "srhLoadCd": "",
+          "srhHsmpCd": "",
+          "srhArea": "",
+          "srhLrArea": "",
+          "srhFromAmount": "",
+          "srhToAmount": "",
+          "srhThingNo": "A",
+          "srhDelngSecd": "1",
+          "srhAddrGbn": "1",
+          "srhLfstsSecd": "1",
+          "sidoNm": "경기도",
+          "sggNm": "전체",
+          "emdNm": "전체",
+          "loadNm": "전체",
+          "areaNm": "전체",
+          "hsmpNm": "전체",
+          "srhFromDt": "2007-01-01",
+          "srhToDt": "2007-12-31",
+          "srhSidoCd": "41000"
+        },
+        "status": "complete",
+        "started_at": "2026-09-09T01:00:24.194075+00:00",
+        "data_cutoff": "2026-09-09",
+        "expected_count": 117164,
+        "count_checked_at": "2026-09-09T01:00:26.289867+00:00",
+        "encoding": "cp949",
+        "columns": [
+          "NO",
+          "시군구",
+          "번지",
+          "본번",
+          "부번",
+          "단지명",
+          "전용면적(㎡)",
+          "계약년월",
+          "계약일",
+          "거래금액(만원)",
+          "동",
+          "층",
+          "매수자",
+          "매도자",
+          "건축년도",
+          "도로명",
+          "해제사유발생일",
+          "거래유형",
+          "중개사소재지",
+          "등기일자"
+        ],
+        "header_row": 16,
+        "metadata_rows": [
+          [
+            "□ 본 서비스에서 제공하는 정보는 법적인 효력이 없으므로 참고용으로만 활용하시기 바랍니다."
+          ],
+          [
+            "□ 신고정보가 실시간 변경, 해제되어 제공시점에 따라 공개건수 및 내용이 상이할 수 있는 점 참고하시기 바랍니다."
+          ],
+          [
+            "□ 본 자료는 계약일 기준입니다. (※ 7월 계약, 8월 신고건 → 7월 거래건으로  제공)"
+          ],
+          [
+            "□ 통계자료 활용시에는 수치가 왜곡될 수 있으니 참고자료로만 활용하시기  바라며,  외부 공개시에는 반드시 신고일 기준으로 집계되는 공식통계를 이용하여 주시기 바랍니다."
+          ],
+          [
+            ""
+          ],
+          [
+            "* 국토교통부 실거래가 공개시스템의 궁금하신 점이나 문의사항은 콜센터 1533-2949로 연락 주시기 바랍니다."
+          ],
+          [
+            "□ 검색조건"
+          ],
+          [
+            "계약일자 : 2007-01-01 ~ 2007-12-31"
+          ],
+          [
+            "실거래구분 : 아파트(매매)"
+          ],
+          [
+            "주소구분 : 지번주소"
+          ],
+          [
+            "시도 : 경기도"
+          ],
+          [
+            "시군구 : 전체"
+          ],
+          [
+            "읍면동 : 전체"
+          ],
+          [
+            "면적 : 전체"
+          ],
+          [
+            "금액선택 : 전체"
+          ]
+        ],
+        "row_count": 117164,
+        "minimum_contract_date": "2007-01-01",
+        "maximum_contract_date": "2007-12-31",
+        "cancellation_marked_rows": 0,
+        "deduplication_applied": false,
+        "contract_month_counts": {
+          "200701": 10682,
+          "200702": 9143,
+          "200703": 10863,
+          "200704": 8945,
+          "200705": 7630,
+          "200706": 10488,
+          "200707": 10244,
+          "200708": 9914,
+          "200709": 8720,
+          "200710": 11705,
+          "200711": 10024,
+          "200712": 8806
+        },
+        "raw_bytes": 18513630,
+        "raw_sha256": "5ffd8e9309a9961f08a1dc382bc73c59ffeda9a74c5200ce925d62da1fb0dda8",
+        "file": "gyeonggi/sale/2007/2007-01-01_2007-12-31.csv.gz",
+        "gzip_sha256": "48768b68d976fadd605eece76316f751b53d9f6dc05da34efe58d4e6ed0f59a5",
+        "gzip_bytes": 3570147,
+        "downloaded_at": "2026-09-09T01:00:37.757205+00:00",
+        "response_headers": {
+          "date": "Wed, 09 Sep 2026 01:00:27 GMT"
+        },
+        "completed_at": "2026-09-09T01:00:43.423357+00:00",
+        "kind": "sale",
+        "request": {
+          "mobileAt": "",
+          "srhSggCd": "",
+          "srhEmdCd": "",
+          "srhRoadNm": "",
+          "srhLoadCd": "",
+          "srhHsmpCd": "",
+          "srhArea": "",
+          "srhLrArea": "",
+          "srhFromAmount": "",
+          "srhToAmount": "",
+          "srhThingNo": "A",
+          "srhDelngSecd": "1",
+          "srhAddrGbn": "1",
+          "srhLfstsSecd": "1",
+          "sidoNm": "경기도",
+          "sggNm": "전체",
+          "emdNm": "전체",
+          "loadNm": "전체",
+          "areaNm": "전체",
+          "hsmpNm": "전체",
+          "srhFromDt": "2007-01-01",
+          "srhToDt": "2007-12-31",
+          "srhSidoCd": "41000"
+        },
+        "sha256": "5ffd8e9309a9961f08a1dc382bc73c59ffeda9a74c5200ce925d62da1fb0dda8"
+      },
+      "metadata_sha256": "d4a36ecdd28d2eee0c9520e70550113e4a3fddacfc19b3ba9fc556a8921d6bc2",
+      "counts": {
+        "canonical_rows": 117164,
+        "dashboard_rows": 116809
+      },
+      "quality_flags": {
+        "deal_type_unknown": 117164,
+        "lot_source_disagrees": 355
+      },
+      "address_matches": {
+        "unique_exact_registry_name": 117164
+      },
+      "dashboard_exclusions": {
+        "lot_source_disagrees": 355
+      },
+      "contract_type_counts": {},
+      "unresolved_address_examples": [],
+      "contract_min": "2007-01-01",
+      "contract_max": "2007-12-31"
+    },
+    {
+      "source_id": "molit-csv:sale:41:2008-01-01:2008-12-31:005394ba971dcaf264cb914797ba1fd8cd9ce6d158dd62281f0f5dc1afc7ffd4",
+      "kind": "sale",
+      "sido": "경기도",
+      "sido_code": "41",
+      "start": "2008-01-01",
+      "end": "2008-12-31",
+      "sha256": "005394ba971dcaf264cb914797ba1fd8cd9ce6d158dd62281f0f5dc1afc7ffd4",
+      "observed_at": "2026-09-09T01:10:53.854658+00:00",
+      "path": "/workspace/scratch/9a01f13b6580/estate-model/.work/capital-history-restored/gyeonggi/sale/2008/2008-01-01_2008-12-31.csv.gz",
+      "metadata_path": "/workspace/scratch/9a01f13b6580/estate-model/.work/capital-history-restored/available-subset.manifest.json",
+      "metadata": {
+        "query": {
+          "region": "gyeonggi",
+          "kind": "sale",
+          "start": "2008-01-01",
+          "end": "2008-12-31"
+        },
+        "request_fields": {
+          "mobileAt": "",
+          "srhSggCd": "",
+          "srhEmdCd": "",
+          "srhRoadNm": "",
+          "srhLoadCd": "",
+          "srhHsmpCd": "",
+          "srhArea": "",
+          "srhLrArea": "",
+          "srhFromAmount": "",
+          "srhToAmount": "",
+          "srhThingNo": "A",
+          "srhDelngSecd": "1",
+          "srhAddrGbn": "1",
+          "srhLfstsSecd": "1",
+          "sidoNm": "경기도",
+          "sggNm": "전체",
+          "emdNm": "전체",
+          "loadNm": "전체",
+          "areaNm": "전체",
+          "hsmpNm": "전체",
+          "srhFromDt": "2008-01-01",
+          "srhToDt": "2008-12-31",
+          "srhSidoCd": "41000"
+        },
+        "status": "complete",
+        "started_at": "2026-09-09T01:10:41.987710+00:00",
+        "data_cutoff": "2026-09-09",
+        "expected_count": 110054,
+        "count_checked_at": "2026-09-09T01:10:44.158862+00:00",
+        "encoding": "cp949",
+        "columns": [
+          "NO",
+          "시군구",
+          "번지",
+          "본번",
+          "부번",
+          "단지명",
+          "전용면적(㎡)",
+          "계약년월",
+          "계약일",
+          "거래금액(만원)",
+          "동",
+          "층",
+          "매수자",
+          "매도자",
+          "건축년도",
+          "도로명",
+          "해제사유발생일",
+          "거래유형",
+          "중개사소재지",
+          "등기일자"
+        ],
+        "header_row": 16,
+        "metadata_rows": [
+          [
+            "□ 본 서비스에서 제공하는 정보는 법적인 효력이 없으므로 참고용으로만 활용하시기 바랍니다."
+          ],
+          [
+            "□ 신고정보가 실시간 변경, 해제되어 제공시점에 따라 공개건수 및 내용이 상이할 수 있는 점 참고하시기 바랍니다."
+          ],
+          [
+            "□ 본 자료는 계약일 기준입니다. (※ 7월 계약, 8월 신고건 → 7월 거래건으로  제공)"
+          ],
+          [
+            "□ 통계자료 활용시에는 수치가 왜곡될 수 있으니 참고자료로만 활용하시기  바라며,  외부 공개시에는 반드시 신고일 기준으로 집계되는 공식통계를 이용하여 주시기 바랍니다."
+          ],
+          [
+            ""
+          ],
+          [
+            "* 국토교통부 실거래가 공개시스템의 궁금하신 점이나 문의사항은 콜센터 1533-2949로 연락 주시기 바랍니다."
+          ],
+          [
+            "□ 검색조건"
+          ],
+          [
+            "계약일자 : 2008-01-01 ~ 2008-12-31"
+          ],
+          [
+            "실거래구분 : 아파트(매매)"
+          ],
+          [
+            "주소구분 : 지번주소"
+          ],
+          [
+            "시도 : 경기도"
+          ],
+          [
+            "시군구 : 전체"
+          ],
+          [
+            "읍면동 : 전체"
+          ],
+          [
+            "면적 : 전체"
+          ],
+          [
+            "금액선택 : 전체"
+          ]
+        ],
+        "row_count": 110054,
+        "minimum_contract_date": "2008-01-01",
+        "maximum_contract_date": "2008-12-31",
+        "cancellation_marked_rows": 0,
+        "deduplication_applied": false,
+        "contract_month_counts": {
+          "200801": 10574,
+          "200802": 9845,
+          "200803": 16572,
+          "200804": 14259,
+          "200805": 13558,
+          "200806": 11141,
+          "200807": 8926,
+          "200808": 7451,
+          "200809": 6393,
+          "200810": 3853,
+          "200811": 3643,
+          "200812": 3839
+        },
+        "raw_bytes": 17511118,
+        "raw_sha256": "005394ba971dcaf264cb914797ba1fd8cd9ce6d158dd62281f0f5dc1afc7ffd4",
+        "file": "gyeonggi/sale/2008/2008-01-01_2008-12-31.csv.gz",
+        "gzip_sha256": "e83007eecb355f0ae90296cd75439b86ac74dadd391ba5b5ce19f9e2e5735b89",
+        "gzip_bytes": 3385003,
+        "downloaded_at": "2026-09-09T01:10:53.854658+00:00",
+        "response_headers": {
+          "date": "Wed, 09 Sep 2026 01:10:45 GMT"
+        },
+        "completed_at": "2026-09-09T01:10:59.594592+00:00",
+        "kind": "sale",
+        "request": {
+          "mobileAt": "",
+          "srhSggCd": "",
+          "srhEmdCd": "",
+          "srhRoadNm": "",
+          "srhLoadCd": "",
+          "srhHsmpCd": "",
+          "srhArea": "",
+          "srhLrArea": "",
+          "srhFromAmount": "",
+          "srhToAmount": "",
+          "srhThingNo": "A",
+          "srhDelngSecd": "1",
+          "srhAddrGbn": "1",
+          "srhLfstsSecd": "1",
+          "sidoNm": "경기도",
+          "sggNm": "전체",
+          "emdNm": "전체",
+          "loadNm": "전체",
+          "areaNm": "전체",
+          "hsmpNm": "전체",
+          "srhFromDt": "2008-01-01",
+          "srhToDt": "2008-12-31",
+          "srhSidoCd": "41000"
+        },
+        "sha256": "005394ba971dcaf264cb914797ba1fd8cd9ce6d158dd62281f0f5dc1afc7ffd4"
+      },
+      "metadata_sha256": "d4a36ecdd28d2eee0c9520e70550113e4a3fddacfc19b3ba9fc556a8921d6bc2",
+      "counts": {
+        "canonical_rows": 110054,
+        "dashboard_rows": 109718
+      },
+      "quality_flags": {
+        "deal_type_unknown": 110054,
+        "lot_source_disagrees": 336
+      },
+      "address_matches": {
+        "unique_exact_registry_name": 110054
+      },
+      "dashboard_exclusions": {
+        "lot_source_disagrees": 336
+      },
+      "contract_type_counts": {},
+      "unresolved_address_examples": [],
+      "contract_min": "2008-01-01",
+      "contract_max": "2008-12-31"
+    }
+  ],
+  "existing_inputs": [],
+  "replace_existing_2026": false,
+  "historical_publication_vintages": false,
+  "canonical_scope": "new MOLIT CSV source rows, including unresolved addresses and all lease types",
+  "multiplicity": "All source rows retained. Repeated files and overlapping source partitions rejected. No contract IDs invented.",
+  "row_number_policy": "One-based nonblank data-record ordinal after the CSV header; source NO remains in raw.",
+  "ownership": {
+    "2006_2020_Seoul": "existing_history",
+    "2006_2020_Gyeonggi_Incheon": "molit_csv",
+    "2021_2025_capital": "existing_recent",
+    "2026_capital": "existing_recent"
+  },
+  "address_policy": "Unique exact project-registry prefix only; source address is not a verified contract-time address or property ID.",
+  "partition_max_rows": 100000,
+  "normalizer_sha256": "c628383f6ca5c70902aaf027dfd59a00d5ba050dfc015aedfd9866149de966c5",
+  "registry_entries": [
+    [
+      "11110",
+      "서울특별시",
+      "종로구"
+    ],
+    [
+      "11140",
+      "서울특별시",
+      "중구"
+    ],
+    [
+      "11170",
+      "서울특별시",
+      "용산구"
+    ],
+    [
+      "11200",
+      "서울특별시",
+      "성동구"
+    ],
+    [
+      "11215",
+      "서울특별시",
+      "광진구"
+    ],
+    [
+      "11230",
+      "서울특별시",
+      "동대문구"
+    ],
+    [
+      "11260",
+      "서울특별시",
+      "중랑구"
+    ],
+    [
+      "11290",
+      "서울특별시",
+      "성북구"
+    ],
+    [
+      "11305",
+      "서울특별시",
+      "강북구"
+    ],
+    [
+      "11320",
+      "서울특별시",
+      "도봉구"
+    ],
+    [
+      "11350",
+      "서울특별시",
+      "노원구"
+    ],
+    [
+      "11380",
+      "서울특별시",
+      "은평구"
+    ],
+    [
+      "11410",
+      "서울특별시",
+      "서대문구"
+    ],
+    [
+      "11440",
+      "서울특별시",
+      "마포구"
+    ],
+    [
+      "11470",
+      "서울특별시",
+      "양천구"
+    ],
+    [
+      "11500",
+      "서울특별시",
+      "강서구"
+    ],
+    [
+      "11530",
+      "서울특별시",
+      "구로구"
+    ],
+    [
+      "11545",
+      "서울특별시",
+      "금천구"
+    ],
+    [
+      "11560",
+      "서울특별시",
+      "영등포구"
+    ],
+    [
+      "11590",
+      "서울특별시",
+      "동작구"
+    ],
+    [
+      "11620",
+      "서울특별시",
+      "관악구"
+    ],
+    [
+      "11650",
+      "서울특별시",
+      "서초구"
+    ],
+    [
+      "11680",
+      "서울특별시",
+      "강남구"
+    ],
+    [
+      "11710",
+      "서울특별시",
+      "송파구"
+    ],
+    [
+      "11740",
+      "서울특별시",
+      "강동구"
+    ],
+    [
+      "28110",
+      "인천광역시",
+      "중구"
+    ],
+    [
+      "28125",
+      "인천광역시",
+      "제물포구"
+    ],
+    [
+      "28140",
+      "인천광역시",
+      "동구"
+    ],
+    [
+      "28155",
+      "인천광역시",
+      "영종구"
+    ],
+    [
+      "28177",
+      "인천광역시",
+      "미추홀구"
+    ],
+    [
+      "28185",
+      "인천광역시",
+      "연수구"
+    ],
+    [
+      "28200",
+      "인천광역시",
+      "남동구"
+    ],
+    [
+      "28237",
+      "인천광역시",
+      "부평구"
+    ],
+    [
+      "28245",
+      "인천광역시",
+      "계양구"
+    ],
+    [
+      "28260",
+      "인천광역시",
+      "서구"
+    ],
+    [
+      "28275",
+      "인천광역시",
+      "서해구"
+    ],
+    [
+      "28290",
+      "인천광역시",
+      "검단구"
+    ],
+    [
+      "28710",
+      "인천광역시",
+      "강화군"
+    ],
+    [
+      "28720",
+      "인천광역시",
+      "옹진군"
+    ],
+    [
+      "41111",
+      "경기도",
+      "수원시 장안구"
+    ],
+    [
+      "41113",
+      "경기도",
+      "수원시 권선구"
+    ],
+    [
+      "41115",
+      "경기도",
+      "수원시 팔달구"
+    ],
+    [
+      "41117",
+      "경기도",
+      "수원시 영통구"
+    ],
+    [
+      "41131",
+      "경기도",
+      "성남시 수정구"
+    ],
+    [
+      "41133",
+      "경기도",
+      "성남시 중원구"
+    ],
+    [
+      "41135",
+      "경기도",
+      "성남시 분당구"
+    ],
+    [
+      "41150",
+      "경기도",
+      "의정부시"
+    ],
+    [
+      "41171",
+      "경기도",
+      "안양시 만안구"
+    ],
+    [
+      "41173",
+      "경기도",
+      "안양시 동안구"
+    ],
+    [
+      "41192",
+      "경기도",
+      "부천시 원미구"
+    ],
+    [
+      "41194",
+      "경기도",
+      "부천시 소사구"
+    ],
+    [
+      "41196",
+      "경기도",
+      "부천시 오정구"
+    ],
+    [
+      "41210",
+      "경기도",
+      "광명시"
+    ],
+    [
+      "41220",
+      "경기도",
+      "평택시"
+    ],
+    [
+      "41250",
+      "경기도",
+      "동두천시"
+    ],
+    [
+      "41271",
+      "경기도",
+      "안산시 상록구"
+    ],
+    [
+      "41273",
+      "경기도",
+      "안산시 단원구"
+    ],
+    [
+      "41281",
+      "경기도",
+      "고양시 덕양구"
+    ],
+    [
+      "41285",
+      "경기도",
+      "고양시 일산동구"
+    ],
+    [
+      "41287",
+      "경기도",
+      "고양시 일산서구"
+    ],
+    [
+      "41290",
+      "경기도",
+      "과천시"
+    ],
+    [
+      "41310",
+      "경기도",
+      "구리시"
+    ],
+    [
+      "41360",
+      "경기도",
+      "남양주시"
+    ],
+    [
+      "41370",
+      "경기도",
+      "오산시"
+    ],
+    [
+      "41390",
+      "경기도",
+      "시흥시"
+    ],
+    [
+      "41410",
+      "경기도",
+      "군포시"
+    ],
+    [
+      "41430",
+      "경기도",
+      "의왕시"
+    ],
+    [
+      "41450",
+      "경기도",
+      "하남시"
+    ],
+    [
+      "41461",
+      "경기도",
+      "용인시 처인구"
+    ],
+    [
+      "41463",
+      "경기도",
+      "용인시 기흥구"
+    ],
+    [
+      "41465",
+      "경기도",
+      "용인시 수지구"
+    ],
+    [
+      "41480",
+      "경기도",
+      "파주시"
+    ],
+    [
+      "41500",
+      "경기도",
+      "이천시"
+    ],
+    [
+      "41550",
+      "경기도",
+      "안성시"
+    ],
+    [
+      "41570",
+      "경기도",
+      "김포시"
+    ],
+    [
+      "41590",
+      "경기도",
+      "화성시"
+    ],
+    [
+      "41591",
+      "경기도",
+      "화성시 만세구"
+    ],
+    [
+      "41593",
+      "경기도",
+      "화성시 효행구"
+    ],
+    [
+      "41595",
+      "경기도",
+      "화성시 병점구"
+    ],
+    [
+      "41597",
+      "경기도",
+      "화성시 동탄구"
+    ],
+    [
+      "41610",
+      "경기도",
+      "광주시"
+    ],
+    [
+      "41630",
+      "경기도",
+      "양주시"
+    ],
+    [
+      "41650",
+      "경기도",
+      "포천시"
+    ],
+    [
+      "41670",
+      "경기도",
+      "여주시"
+    ],
+    [
+      "41800",
+      "경기도",
+      "연천군"
+    ],
+    [
+      "41820",
+      "경기도",
+      "가평군"
+    ],
+    [
+      "41830",
+      "경기도",
+      "양평군"
+    ]
+  ],
+  "outputs": {
+    "canonical/rent/41/2011/2011-01-01_2011-12-31/part-0001.jsonl.gz": {
+      "sha256": "98a7721dc8902bc9077af8444003046f9da8d266f1c46eff25fa36984fdf833e",
+      "bytes": 8730565,
+      "rows": 100000,
+      "transport_recompression": {
+        "reason": "MCP JSON request body limit is 16 MiB; original gzip base64 exceeded it.",
+        "gzip_compresslevel": 9,
+        "original_gzip_sha256": "1653709d8235f22ea495d8bde0f222b3a2e9b0a899dde3da02068560f458dd1d",
+        "original_gzip_bytes": 12721912,
+        "canonical_uncompressed_sha256": "48c5a6c034ef47d90c0fd5ef0099dd67709dd8157a3195138e69f09dfaa666c6",
+        "canonical_rows_unchanged": 100000
+      }
+    },
+    "canonical/rent/41/2011/2011-01-01_2011-12-31/part-0002.jsonl.gz": {
+      "sha256": "5e8fa7a88b04c77bef4857f9240950e938141a7e26c53840fb5c431253eb068f",
+      "bytes": 10347414,
+      "rows": 81371
+    },
+    "canonical/sale/41/2006/2006-01-01_2006-12-31/part-0001.jsonl.gz": {
+      "sha256": "6f3eb915a3b90cda592fab5cd92a9e54166e1132176cd26f6fbfcde397d20864",
+      "bytes": 9302355,
+      "rows": 100000
+    },
+    "trade/41/2006/part-0001.csv.gz": {
+      "sha256": "2a61d6acab70e42d33e69c65770b55f5fda151bcc1200e61e47db0c2fe6ffd0b",
+      "bytes": 2217453,
+      "rows": 100000
+    },
+    "canonical/sale/41/2006/2006-01-01_2006-12-31/part-0002.jsonl.gz": {
+      "sha256": "fc5aa7311c7f84bb7c01ee45b71dd830b70ee29ec53bcc5469645965aa8d2bb7",
+      "bytes": 10174858,
+      "rows": 100000
+    },
+    "trade/41/2006/part-0002.csv.gz": {
+      "sha256": "cb444ec1c134ba7476d122ce3b0c74cd16af641663a751e5ae6cb07995757c7f",
+      "bytes": 2501520,
+      "rows": 100000
+    },
+    "canonical/sale/41/2006/2006-01-01_2006-12-31/part-0003.jsonl.gz": {
+      "sha256": "2825f3641f5927a4f005b6a71c0ae708cb0a1ac5518e78a3d7c9b94813a49001",
+      "bytes": 635202,
+      "rows": 6224
+    },
+    "trade/41/2006/part-0003.csv.gz": {
+      "sha256": "b48642860636d21748da4b3b6fc79a022fb3a2f31722e4fcb9a18fe248aac878",
+      "bytes": 140846,
+      "rows": 5695
+    },
+    "canonical/sale/41/2007/2007-01-01_2007-12-31/part-0001.jsonl.gz": {
+      "sha256": "c98683734601ab71390084502d3eb97dbe4a58987cb3dcaa8113567e859ceda6",
+      "bytes": 10186521,
+      "rows": 100000
+    },
+    "trade/41/2007/part-0001.csv.gz": {
+      "sha256": "62bd7ba5fd71a8c5c8b87be49eb93f34db9f5420ac66408d98ba057516a55654",
+      "bytes": 2441721,
+      "rows": 100000
+    },
+    "canonical/sale/41/2007/2007-01-01_2007-12-31/part-0002.jsonl.gz": {
+      "sha256": "4bf53c8e5c0565a014e016b09b5872f4e8cc7be50dc96f4e358f2f5e651a0653",
+      "bytes": 1699033,
+      "rows": 17164
+    },
+    "trade/41/2007/part-0002.csv.gz": {
+      "sha256": "3f734e6010af6546090debf0e8c45a46bbc8aa4aa998c8f70b33de14e4c5bde3",
+      "bytes": 391486,
+      "rows": 16809
+    },
+    "canonical/sale/41/2008/2008-01-01_2008-12-31/part-0001.jsonl.gz": {
+      "sha256": "953a2176bb336b5600b096ed366bfe397dfac8bef53024f8d8c594321445a91f",
+      "bytes": 10367142,
+      "rows": 100000
+    },
+    "trade/41/2008/part-0001.csv.gz": {
+      "sha256": "04cc74d8237c4564cd09a0a4a8f5a84264e513f83bb3b546a696672eda0c9df2",
+      "bytes": 2493299,
+      "rows": 100000
+    },
+    "canonical/sale/41/2008/2008-01-01_2008-12-31/part-0002.jsonl.gz": {
+      "sha256": "3dbe93ee0193f97ef4c71ce89a152f3ec8070ab05fd2b9a6082092e45512317d",
+      "bytes": 1006347,
+      "rows": 10054
+    },
+    "trade/41/2008/part-0002.csv.gz": {
+      "sha256": "e6db218d2fddec9dbbc43aa2074e73aea6a8fc8b51c2aa0d3a9ef937cd989db8",
+      "bytes": 232018,
+      "rows": 9718
+    }
+  },
+  "full_requested_scope_complete": false,
+  "originalplanned": 81,
+  "available": 4,
+  "original_planned_partitions": 81,
+  "available_partitions": 4,
+  "raw_source_commit": "1747755718e829d8f581f88854337702eb284072",
+  "original_collection_status": "failed",
+  "available_subset_manifest_sha256": "d4a36ecdd28d2eee0c9520e70550113e4a3fddacfc19b3ba9fc556a8921d6bc2",
+  "original_collection_manifest_sha256": "cef86a3e1c89807d210aef8a2ce97b49b864a9186e38af4e5944d030c521135d",
+  "historical_api_inputs_merged": false
+}
