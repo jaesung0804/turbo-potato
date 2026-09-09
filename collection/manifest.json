@@ -3101,6 +3101,21 @@
     "All original rows preserved; no deduplication or cancellation filtering"
   ],
   "planned_keys": [
+    "incheon/sale/2020/2020-01-01_2020-12-31",
+    "incheon/sale/2019/2019-01-01_2019-12-31",
+    "incheon/sale/2018/2018-01-01_2018-12-31",
+    "incheon/sale/2017/2017-01-01_2017-12-31",
+    "incheon/sale/2016/2016-01-01_2016-12-31",
+    "incheon/sale/2015/2015-01-01_2015-12-31",
+    "incheon/sale/2014/2014-01-01_2014-12-31",
+    "incheon/sale/2013/2013-01-01_2013-12-31",
+    "incheon/sale/2012/2012-01-01_2012-12-31",
+    "incheon/sale/2011/2011-01-01_2011-12-31",
+    "incheon/sale/2010/2010-01-01_2010-12-31",
+    "incheon/sale/2009/2009-01-01_2009-12-31",
+    "incheon/sale/2008/2008-01-01_2008-12-31",
+    "incheon/sale/2007/2007-01-01_2007-12-31",
+    "incheon/sale/2006/2006-01-01_2006-12-31",
     "gyeonggi/sale/2006/2006-01-01_2006-12-31",
     "gyeonggi/sale/2007/2007-01-01_2007-12-31",
     "gyeonggi/sale/2008/2008-01-01_2008-12-31",
@@ -3116,21 +3131,6 @@
     "gyeonggi/sale/2018/2018-01-01_2018-12-31",
     "gyeonggi/sale/2019/2019-01-01_2019-12-31",
     "gyeonggi/sale/2020/2020-01-01_2020-12-31",
-    "incheon/sale/2006/2006-01-01_2006-12-31",
-    "incheon/sale/2007/2007-01-01_2007-12-31",
-    "incheon/sale/2008/2008-01-01_2008-12-31",
-    "incheon/sale/2009/2009-01-01_2009-12-31",
-    "incheon/sale/2010/2010-01-01_2010-12-31",
-    "incheon/sale/2011/2011-01-01_2011-12-31",
-    "incheon/sale/2012/2012-01-01_2012-12-31",
-    "incheon/sale/2013/2013-01-01_2013-12-31",
-    "incheon/sale/2014/2014-01-01_2014-12-31",
-    "incheon/sale/2015/2015-01-01_2015-12-31",
-    "incheon/sale/2016/2016-01-01_2016-12-31",
-    "incheon/sale/2017/2017-01-01_2017-12-31",
-    "incheon/sale/2018/2018-01-01_2018-12-31",
-    "incheon/sale/2019/2019-01-01_2019-12-31",
-    "incheon/sale/2020/2020-01-01_2020-12-31",
     "seoul/rent/2011/2011-01-01_2011-12-31",
     "seoul/rent/2012/2012-01-01_2012-12-31",
     "seoul/rent/2013/2013-01-01_2013-12-31",
@@ -3205,7 +3205,7 @@
     "same_anonymous_session": true,
     "http_and_validation_errors_retried": false
   },
-  "updated_at": "2026-09-09T08:04:26.322066+00:00",
+  "updated_at": "2026-09-09T08:18:31.084753+00:00",
   "initialization_failures": [
     {
       "failed_at": "2026-09-09T05:57:20.874576+00:00",
@@ -3510,22 +3510,54 @@
         "certificate_verify_code": null,
         "elapsed_seconds": 30.286
       }
+    },
+    {
+      "failed_at": "2026-09-09T08:17:55.656901+00:00",
+      "attempt": 1,
+      "retry_scheduled": true,
+      "request": {
+        "endpoint": "/pt/xls/xls.do?mobileAt=",
+        "method": "GET",
+        "started_at": "2026-09-09T08:17:25.141379+00:00",
+        "category": "timeout",
+        "exception_type": "URLError",
+        "reason_type": "TimeoutError",
+        "errno": null,
+        "certificate_verify_code": null,
+        "elapsed_seconds": 30.516
+      }
+    },
+    {
+      "failed_at": "2026-09-09T08:18:31.074563+00:00",
+      "attempt": 2,
+      "retry_scheduled": false,
+      "request": {
+        "endpoint": "/pt/xls/xls.do?mobileAt=",
+        "method": "GET",
+        "started_at": "2026-09-09T08:18:00.747557+00:00",
+        "category": "timeout",
+        "exception_type": "URLError",
+        "reason_type": "TimeoutError",
+        "errno": null,
+        "certificate_verify_code": null,
+        "elapsed_seconds": 30.327
+      }
     }
   ],
-  "failed_key": "incheon/sale/2012/2012-01-01_2012-12-31",
+  "failed_key": "incheon/sale/2020/2020-01-01_2020-12-31",
   "error": "Transport request failed (URLError; timeout; errno=None)",
   "failure_diagnostic": {
     "phase": "initialize",
     "request": {
       "endpoint": "/pt/xls/xls.do?mobileAt=",
       "method": "GET",
-      "started_at": "2026-09-09T08:03:56.032911+00:00",
+      "started_at": "2026-09-09T08:18:00.747557+00:00",
       "category": "timeout",
       "exception_type": "URLError",
       "reason_type": "TimeoutError",
       "errno": null,
       "certificate_verify_code": null,
-      "elapsed_seconds": 30.286
+      "elapsed_seconds": 30.327
     }
   }
 }
