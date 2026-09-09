@@ -63,7 +63,7 @@ jobs:
         name: Collect at most one new CSV
         run: >-
           timeout --signal=INT --kill-after=5s 240s
-          python -u collect_molit_capital_csv.py
+          python -u trace_molit_transport.py
           --output .work/batch-input --cutoff 2026-09-09
           --include-current-sales --max-new-partitions 1 --cache-hashes-only
           --metadata-timeout 30 --csv-timeout 120 --pause 1
@@ -89,3 +89,13 @@ jobs:
               f.write(f"Status: {m['status']}; completed: {m['completed_count']}/81; raw rows: {rows}\n")
           print('Status:', m['status'], 'completed:', m['completed_count'], 'rows:', rows)
           PY
+      - name: Diagnose connection on this failed runner without CSV
+        if: failure() && steps.collect.outcome == 'failure'
+        timeout-minutes: 1
+        shell: bash
+        run: |
+          set +e
+          curl --silent --show-error --output /dev/null --connect-timeout 10 --max-time 20 --max-filesize 2097152 --user-agent 'Python-urllib/3.12' --referer 'https://rt.molit.go.kr/pt/xls/xls.do?mobileAt=' --write-out 'http=%{http_code} dns=%{time_namelookup} tcp=%{time_connect} tls=%{time_appconnect} first_byte=%{time_starttransfer} total=%{time_total}\n' 'https://rt.molit.go.kr/pt/xls/xls.do?mobileAt='
+          result=$?
+          echo "Diagnostic curl exit: $result"
+          exit 0

@@ -1,6 +1,1 @@
-{
-  "request": "serial-five-from-gyeonggi-sale-2015",
-  "max_files": 5,
-  "baseline_completed": 10,
-  "cutoff": "2026-09-09"
-}
+{"request":"trace-real-connection-2015","max_files":1,"baseline_completed":10}
