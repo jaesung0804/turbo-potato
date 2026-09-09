@@ -1,0 +1,44 @@
+name: Diagnose MOLIT connection phases
+on:
+  workflow_dispatch:
+  push:
+    branches: [codex/estate-capital-history]
+    paths: [.github/workflows/diagnose-molit-connection.yml]
+permissions:
+  contents: read
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    timeout-minutes: 4
+    steps:
+      - name: Measure public export page twice without downloading CSV
+        timeout-minutes: 3
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json, subprocess, os, time
+          url = "https://rt.molit.go.kr/pt/xls/xls.do?mobileAt="
+          fields = ["http_code", "time_namelookup", "time_connect", "time_appconnect",
+                    "time_starttransfer", "time_total", "size_download"]
+          fmt = "\\n".join(k + "=%{" + k + "}" for k in fields)
+          results = []
+          for attempt in (1, 2):
+              result = subprocess.run(
+                  ["curl", "--silent", "--show-error", "--output", "/dev/null",
+                   "--connect-timeout", "15", "--max-time", "60", "--max-filesize", "2097152",
+                   "--user-agent", "Python-urllib/3.12", "--referer", url,
+                   "--write-out", fmt, url],
+                  capture_output=True, text=True, timeout=65)
+              record = {"attempt": attempt, "curl_exit": result.returncode}
+              record.update(dict(line.split("=", 1) for line in result.stdout.splitlines() if "=" in line))
+              # Do not emit response bodies, cookies or environment variables.
+              print(json.dumps(record), flush=True)
+              results.append(record)
+              if attempt == 1:
+                  time.sleep(2)
+          with open(os.environ["GITHUB_STEP_SUMMARY"], "a") as stream:
+              stream.write("MOLIT public-page timings; no CSV requested.\\n\\n")
+              stream.write("\\n".join(json.dumps(r) for r in results))
+          if not any(r.get("http_code") == "200" and r["curl_exit"] == 0 for r in results):
+              raise SystemExit(1)
+          PY
