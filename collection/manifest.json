@@ -1,5 +1,5 @@
 {
-  "completed_count": 18,
+  "completed_count": 19,
   "coverage_bounds": {
     "sale_source_start": "2006-01-01",
     "rent_source_start": "2011-01-01",
@@ -2540,6 +2540,144 @@
         "date": "Wed, 09 Sep 2026 07:39:21 GMT"
       },
       "completed_at": "2026-09-09T07:39:28.002242+00:00"
+    },
+    "incheon/sale/2008/2008-01-01_2008-12-31": {
+      "query": {
+        "region": "incheon",
+        "kind": "sale",
+        "start": "2008-01-01",
+        "end": "2008-12-31"
+      },
+      "request_fields": {
+        "mobileAt": "",
+        "srhSggCd": "",
+        "srhEmdCd": "",
+        "srhRoadNm": "",
+        "srhLoadCd": "",
+        "srhHsmpCd": "",
+        "srhArea": "",
+        "srhLrArea": "",
+        "srhFromAmount": "",
+        "srhToAmount": "",
+        "srhThingNo": "A",
+        "srhDelngSecd": "1",
+        "srhAddrGbn": "1",
+        "srhLfstsSecd": "1",
+        "sidoNm": "인천광역시",
+        "sggNm": "전체",
+        "emdNm": "전체",
+        "loadNm": "전체",
+        "areaNm": "전체",
+        "hsmpNm": "전체",
+        "srhFromDt": "2008-01-01",
+        "srhToDt": "2008-12-31",
+        "srhSidoCd": "28000"
+      },
+      "status": "complete",
+      "started_at": "2026-09-09T07:46:34.191191+00:00",
+      "data_cutoff": "2026-09-09",
+      "expected_count": 30743,
+      "count_checked_at": "2026-09-09T07:46:36.320280+00:00",
+      "encoding": "cp949",
+      "columns": [
+        "NO",
+        "시군구",
+        "번지",
+        "본번",
+        "부번",
+        "단지명",
+        "전용면적(㎡)",
+        "계약년월",
+        "계약일",
+        "거래금액(만원)",
+        "동",
+        "층",
+        "매수자",
+        "매도자",
+        "건축년도",
+        "도로명",
+        "해제사유발생일",
+        "거래유형",
+        "중개사소재지",
+        "등기일자"
+      ],
+      "header_row": 16,
+      "metadata_rows": [
+        [
+          "□ 본 서비스에서 제공하는 정보는 법적인 효력이 없으므로 참고용으로만 활용하시기 바랍니다."
+        ],
+        [
+          "□ 신고정보가 실시간 변경, 해제되어 제공시점에 따라 공개건수 및 내용이 상이할 수 있는 점 참고하시기 바랍니다."
+        ],
+        [
+          "□ 본 자료는 계약일 기준입니다. (※ 7월 계약, 8월 신고건 → 7월 거래건으로  제공)"
+        ],
+        [
+          "□ 통계자료 활용시에는 수치가 왜곡될 수 있으니 참고자료로만 활용하시기  바라며,  외부 공개시에는 반드시 신고일 기준으로 집계되는 공식통계를 이용하여 주시기 바랍니다."
+        ],
+        [
+          ""
+        ],
+        [
+          "* 국토교통부 실거래가 공개시스템의 궁금하신 점이나 문의사항은 콜센터 1533-2949로 연락 주시기 바랍니다."
+        ],
+        [
+          "□ 검색조건"
+        ],
+        [
+          "계약일자 : 2008-01-01 ~ 2008-12-31"
+        ],
+        [
+          "실거래구분 : 아파트(매매)"
+        ],
+        [
+          "주소구분 : 지번주소"
+        ],
+        [
+          "시도 : 인천광역시"
+        ],
+        [
+          "시군구 : 전체"
+        ],
+        [
+          "읍면동 : 전체"
+        ],
+        [
+          "면적 : 전체"
+        ],
+        [
+          "금액선택 : 전체"
+        ]
+      ],
+      "row_count": 30743,
+      "minimum_contract_date": "2008-01-01",
+      "maximum_contract_date": "2008-12-31",
+      "cancellation_marked_rows": 0,
+      "deduplication_applied": false,
+      "contract_month_counts": {
+        "200801": 2940,
+        "200802": 2984,
+        "200803": 4833,
+        "200804": 3960,
+        "200805": 3583,
+        "200806": 3271,
+        "200807": 2666,
+        "200808": 2469,
+        "200809": 1660,
+        "200810": 951,
+        "200811": 776,
+        "200812": 650
+      },
+      "raw_bytes": 4829042,
+      "raw_sha256": "8afd2ad2abdef773cbe50f59e63e733a4f4c02e8309bb0357e6e1b202670424a",
+      "file": "incheon/sale/2008/2008-01-01_2008-12-31.csv.gz",
+      "gzip_sha256": "f031bb4b8cfa81b22d0a753d903a389a9685b10df2520fd0f34946be086d819c",
+      "gzip_bytes": 805472,
+      "downloaded_at": "2026-09-09T07:46:41.600708+00:00",
+      "response_headers": {
+        "date": "Wed, 09 Sep 2026 07:46:36 GMT"
+      },
+      "completed_at": "2026-09-09T07:46:42.972663+00:00"
     }
   },
   "format_version": 1,
@@ -2646,14 +2784,14 @@
     "incheon": "28000"
   },
   "source": "https://rt.molit.go.kr/pt/xls/xls.do?mobileAt=",
-  "status": "failed",
+  "status": "paused",
   "transport_retry_policy": {
     "max_retries_per_partition": 1,
     "delay_seconds": 5.0,
     "same_anonymous_session": true,
     "http_and_validation_errors_retried": false
   },
-  "updated_at": "2026-09-09T07:41:34.418849+00:00",
+  "updated_at": "2026-09-09T07:46:42.975061+00:00",
   "initialization_failures": [
     {
       "failed_at": "2026-09-09T05:57:20.874576+00:00",
@@ -2832,20 +2970,6 @@
       }
     }
   ],
-  "failed_key": "incheon/sale/2008/2008-01-01_2008-12-31",
-  "error": "Transport request failed (URLError; timeout; errno=None)",
-  "failure_diagnostic": {
-    "phase": "initialize",
-    "request": {
-      "endpoint": "/pt/xls/xls.do?mobileAt=",
-      "method": "GET",
-      "started_at": "2026-09-09T07:41:04.126837+00:00",
-      "category": "timeout",
-      "exception_type": "URLError",
-      "reason_type": "TimeoutError",
-      "errno": null,
-      "certificate_verify_code": null,
-      "elapsed_seconds": 30.288
-    }
-  }
+  "pause_reason": "batch_limit",
+  "next_key": "incheon/sale/2009/2009-01-01_2009-12-31"
 }
