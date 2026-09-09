@@ -18,10 +18,10 @@
   },
   "csv_expansion": {
     "planned_partitions": 81,
-    "completed_partitions": 5,
-    "remaining_partitions": 76,
-    "raw_rows": 755674,
-    "sale_rows": 574303,
+    "completed_partitions": 6,
+    "remaining_partitions": 75,
+    "raw_rows": 855425,
+    "sale_rows": 674054,
     "rental_rows": 181371,
     "pure_jeonse_rows": 139547,
     "monthly_rent_rows": 41824,
@@ -55,9 +55,15 @@
         "kind": "sale",
         "year": 2009,
         "rows": 140861
+      },
+      {
+        "region": "경기",
+        "kind": "sale",
+        "year": 2010,
+        "rows": 99751
       }
     ],
-    "state_commit": "de8bd939eed594efd9bad670cf47aee737978d71",
+    "state_commit": "b30b1ba87e4aaa3e1e57e544e4aaa4b642be6192",
     "previous_failure": {
       "partition": "gyeonggi/sale/2009/2009-01-01_2009-12-31",
       "expected_rows": 140861,
@@ -154,5 +160,16 @@
     "new_annual_download_verified": true,
     "github_runner_recovery_verified": false,
     "tests_passed": 100
+  },
+  "latest_batch": {
+    "max_new_partitions": 1,
+    "process_deadline_seconds": 90,
+    "request_timeout_seconds": 20,
+    "transport_retries": 0,
+    "status": "paused",
+    "pause_reason": "batch_limit",
+    "next_key": "gyeonggi/sale/2011/2011-01-01_2011-12-31",
+    "tests_passed": 101,
+    "active_collection": false
   }
 }
