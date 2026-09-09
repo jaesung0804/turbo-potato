@@ -2,7 +2,8 @@
 
 Only the documented capital-area expansion is planned by default: Gyeonggi and
 Incheon sales in 2006–2020, and all three capital-area leases in 2011–cutoff.
-No API key, authenticated account, session rotation, or automatic retry is used.
+No API key, authenticated account, or session rotation is used. Optional bounded
+retries apply only to transport failures and retain the same anonymous session.
 Original CP949/UTF-8 bytes, including notices, cancellations and repeated rows,
 are retained in deterministic gzip files. The manifest is the completion gate.
 """
@@ -18,6 +19,7 @@ from decimal import Decimal, InvalidOperation
 import fcntl
 import gzip
 import hashlib
+import http.client
 import http.cookiejar
 import io
 import json
@@ -47,6 +49,10 @@ FORMAT_VERSION = 1
 
 class CollectionError(RuntimeError):
     """Stop this collection; do not retry or bypass the server's response."""
+
+
+class TransportError(CollectionError):
+    """A network transport failure eligible for an explicitly bounded retry."""
 
 
 def utc_now() -> str:
@@ -280,8 +286,8 @@ class PublicCSVClient:
                 return raw, safe_headers
         except urllib.error.HTTPError as exc:
             raise CollectionError(f"Server HTTP {exc.code}; collection stopped without retry") from None
-        except (urllib.error.URLError, TimeoutError, OSError) as exc:
-            raise CollectionError(f"Network request failed ({type(exc).__name__}); resume explicitly") from None
+        except (urllib.error.URLError, TimeoutError, http.client.RemoteDisconnected, OSError) as exc:
+            raise TransportError(f"Transport request failed ({type(exc).__name__})") from None
 
     def _json(self, path: str, fields: dict[str, str]) -> Any:
         raw, _ = self._request(path, fields)
@@ -378,16 +384,58 @@ def _verify_cached(output: Path, request: ExportRequest, entry: dict[str, Any]) 
     inspect_csv(raw, request, entry["expected_count"])
 
 
+def _checked_download(client: PublicCSVClient, fields: dict[str, str], request: ExportRequest,
+                      ledger: DownloadLedger, entry: dict[str, Any], manifest: dict[str, Any],
+                      manifest_path: Path, transport_retries: int,
+                      retry_delay: float) -> tuple[int, bytes | None, dict[str, str]]:
+    """Repeat count+download only for transport failures, never server/CSV errors."""
+    for attempt in range(transport_retries + 1):
+        phase = "count"
+        entry["status"] = "checking"
+        try:
+            expected_count = client.count(fields)
+            entry.update({"expected_count": expected_count, "count_checked_at": utc_now()})
+            if expected_count == 0:
+                return expected_count, None, {}
+            # Every attempted CSV request consumes quota, even when transport fails.
+            ledger.reserve(request.key)
+            phase = "download"
+            entry["status"] = "downloading"
+            atomic_json(manifest_path, manifest)
+            raw, headers = client.download(fields)
+            return expected_count, raw, headers
+        except TransportError as exc:
+            retry = attempt < transport_retries
+            entry.setdefault("transport_failures", []).append({
+                "failed_at": utc_now(), "phase": phase, "attempt": attempt + 1,
+                "error": str(exc), "retry_scheduled": retry,
+            })
+            entry["status"] = "retry_wait" if retry else "failed"
+            manifest["updated_at"] = utc_now()
+            atomic_json(manifest_path, manifest)
+            if not retry:
+                raise
+            print(f"transport retry {request.key} retry={attempt + 1}/{transport_retries} "
+                  f"phase={phase} delay={retry_delay:g}s", flush=True)
+            time.sleep(retry_delay)
+    raise AssertionError("Bounded transport retry loop ended without a result")
+
+
 def collect(requests: list[ExportRequest], output: Path, cutoff: date,
             client: PublicCSVClient | None = None, daily_limit: int = DAILY_LIMIT,
-            prior_downloads: int = 0) -> dict[str, Any]:
-    """Resume an explicit plan; stop at the first error and preserve completed files."""
+            prior_downloads: int = 0, transport_retries: int = 0,
+            retry_delay: float = 10) -> dict[str, Any]:
+    """Resume a plan; optionally retry transport only and retain completed files."""
     if len({request.key for request in requests}) != len(requests):
         raise ValueError("Collection plan contains duplicate requests")
     if any(request.end > cutoff for request in requests):
         raise ValueError("Collection plan extends beyond the explicit data cutoff")
     if not 1 <= daily_limit <= DAILY_LIMIT or not 0 <= prior_downloads <= DAILY_LIMIT:
         raise ValueError("Daily limit must be 1–100; prior downloads must be 0–100")
+    if isinstance(transport_retries, bool) or not isinstance(transport_retries, int) or not 0 <= transport_retries <= 2:
+        raise ValueError("Transport retries must be an integer from 0 to 2")
+    if not 0 <= retry_delay <= 60:
+        raise ValueError("Retry delay must be between 0 and 60 seconds")
     output = Path(output)
     output.mkdir(parents=True, exist_ok=True)
     with (output / ".collection.lock").open("a+") as lock:
@@ -407,6 +455,10 @@ def collect(requests: list[ExportRequest], output: Path, cutoff: date,
             raise CollectionError("Unsupported manifest format")
         manifest.update({"status": "running", "data_cutoff": cutoff.isoformat(),
                          "planned_keys": [request.key for request in requests], "updated_at": utc_now()})
+        manifest["transport_retry_policy"] = {"max_retries_per_partition": transport_retries,
+                                               "delay_seconds": retry_delay,
+                                               "same_anonymous_session": True,
+                                               "http_and_validation_errors_retried": False}
         manifest["coverage_bounds"] = {
             "sale_source_start": "2006-01-01", "rent_source_start": "2011-01-01",
             "unsupported_rent_interval": {"start": "2006-01-01", "end": "2010-12-31"},
@@ -438,20 +490,18 @@ def collect(requests: list[ExportRequest], output: Path, cutoff: date,
                 entry: dict[str, Any] = {"query": request.as_dict(), "request_fields": fields,
                                          "status": "checking", "started_at": utc_now(),
                                          "data_cutoff": cutoff.isoformat()}
-                if cached and cached.get("validation_failures"):
-                    entry["validation_failures"] = cached["validation_failures"]
+                for history in ("validation_failures", "transport_failures"):
+                    if cached and cached.get(history):
+                        entry[history] = cached[history]
                 manifest["entries"][request.key] = entry
                 atomic_json(manifest_path, manifest)
-                expected_count = client.count(fields)
-                entry.update({"expected_count": expected_count, "count_checked_at": utc_now()})
+                expected_count, raw, headers = _checked_download(
+                    client, fields, request, ledger, entry, manifest, manifest_path,
+                    transport_retries, retry_delay)
                 if expected_count == 0:
                     entry.update({"status": "complete", "row_count": 0, "file": None,
                                   "completed_at": utc_now(), "empty_confirmed_by_count_endpoint": True})
                 else:
-                    ledger.reserve(request.key)
-                    entry["status"] = "downloading"
-                    atomic_json(manifest_path, manifest)
-                    raw, headers = client.download(fields)
                     downloaded_at = utc_now()
                     try:
                         checked = inspect_csv(raw, request, expected_count, headers.get("content-type", ""))
@@ -516,10 +566,16 @@ def main(argv: list[str] | None = None) -> int:
                         help="Conservative floor for already-used daily quota, including manual probes")
     parser.add_argument("--timeout", type=float, default=180)
     parser.add_argument("--pause", type=float, default=1.0)
+    parser.add_argument("--transport-retries", type=int, choices=(0, 1, 2), default=0,
+                        help="Retry transport failures only, retaining one anonymous session")
+    parser.add_argument("--retry-delay", type=float, default=10,
+                        help="Seconds before an allowed transport retry (0–60)")
     parser.add_argument("--plan-only", action="store_true", help="Print the plan without network or file writes")
     args = parser.parse_args(argv)
     if args.pause < 0 or args.pause > 60 or args.timeout <= 0:
         parser.error("pause must be 0–60 seconds and timeout must be positive")
+    if not 0 <= args.retry_delay <= 60:
+        parser.error("retry-delay must be between 0 and 60 seconds")
     requests = [request for request in expansion_requests(args.cutoff, args.include_current_sales)
                 if request.region in args.regions and request.kind in args.kinds
                 and (args.years is None or request.start.year in args.years)]
@@ -531,7 +587,8 @@ def main(argv: list[str] | None = None) -> int:
         return 0
     try:
         collect(requests, args.output, args.cutoff, PublicCSVClient(args.timeout, args.pause),
-                args.daily_limit, args.prior_downloads_today)
+                args.daily_limit, args.prior_downloads_today,
+                args.transport_retries, args.retry_delay)
     except (CollectionError, ValueError) as exc:
         print(f"STOP: {exc}", file=sys.stderr)
         return 1

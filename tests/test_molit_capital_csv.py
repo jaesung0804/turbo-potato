@@ -4,10 +4,12 @@ import csv
 from datetime import date
 import gzip
 import hashlib
+import http.client
 import io
 import json
 from pathlib import Path
 import socket
+import urllib.error
 
 import pytest
 
@@ -442,3 +444,195 @@ def test_count_endpoint_rejects_ambiguous_or_invalid_count(count, monkeypatch):
     monkeypatch.setattr(client, "_json", lambda path, fields: {"cnt": count})
     with pytest.raises(collector.CollectionError, match="nonnegative integer"):
         client.count({})
+
+
+@pytest.fixture
+def sleep_calls(monkeypatch):
+    calls = []
+    monkeypatch.setattr(collector.time, "sleep", calls.append)
+    return calls
+
+
+class RetryClient(FakeClient):
+    def __init__(self, exports, *, count_errors=(), download_errors=()):
+        super().__init__(exports)
+        self.count_errors = list(count_errors)
+        self.download_errors = list(download_errors)
+
+    def count(self, fields):
+        if self.count_errors:
+            self.calls.append(("count", self.key(fields)))
+            raise self.count_errors.pop(0)
+        return super().count(fields)
+
+    def download(self, fields):
+        if self.download_errors:
+            self.calls.append(("download", self.key(fields)))
+            raise self.download_errors.pop(0)
+        return super().download(fields)
+
+
+def download_attempts(output):
+    path = output / "download-ledger.json"
+    if not path.exists():
+        return 0
+    return read_json(path)["days"].get(collector.korea_day(), {}).get("attempts", 0)
+
+
+def test_transport_download_retry_rechecks_count_in_same_client_session(tmp_path, sleep_calls):
+    req = request()
+    client = RetryClient({req.key: csv_bytes()},
+                         download_errors=[collector.TransportError("connection closed")])
+    result = collector.collect([req], tmp_path, CUTOFF, client,
+                               transport_retries=2, retry_delay=10)
+    assert result["status"] == "complete"
+    assert client.calls == [("initialize", None), ("count", req.key), ("download", req.key),
+                            ("count", req.key), ("download", req.key)]
+    assert sleep_calls == [10]
+    assert download_attempts(tmp_path) == 2
+    failures = result["entries"][req.key]["transport_failures"]
+    assert len(failures) == 1
+    assert failures[0]["phase"] == "download"
+    assert failures[0]["attempt"] == 1
+    assert failures[0]["retry_scheduled"] is True
+    assert failures[0]["error"] == "connection closed"
+    assert failures[0]["failed_at"]
+    assert gzip.decompress((tmp_path / req.relative_path).read_bytes()) == csv_bytes()
+
+
+def test_transport_count_retry_does_not_spend_download_budget(tmp_path, sleep_calls):
+    req = request()
+    client = RetryClient({req.key: csv_bytes()},
+                         count_errors=[collector.TransportError("count connection closed")])
+    result = collector.collect([req], tmp_path, CUTOFF, client,
+                               transport_retries=2, retry_delay=10)
+    assert result["status"] == "complete"
+    assert client.calls == [("initialize", None), ("count", req.key),
+                            ("count", req.key), ("download", req.key)]
+    assert sleep_calls == [10]
+    assert download_attempts(tmp_path) == 1
+    failures = result["entries"][req.key]["transport_failures"]
+    assert len(failures) == 1
+    assert failures[0]["phase"] == "count"
+    assert failures[0]["retry_scheduled"] is True
+    assert read_json(tmp_path / "manifest.json")["entries"][req.key]["transport_failures"] == failures
+
+
+@pytest.mark.parametrize("stage, expected_downloads", [("count", 0), ("download", 3)])
+def test_three_transport_failures_stop_at_retry_cap(tmp_path, sleep_calls, stage, expected_downloads):
+    req = request()
+    errors = [collector.TransportError("transport disconnected") for _ in range(3)]
+    client = RetryClient({req.key: csv_bytes()}, **{stage + "_errors": errors})
+    with pytest.raises(collector.TransportError, match="transport disconnected"):
+        collector.collect([req], tmp_path, CUTOFF, client, transport_retries=2, retry_delay=10)
+    assert client.calls.count(("initialize", None)) == 1
+    assert client.calls.count(("count", req.key)) == 3
+    assert client.calls.count(("download", req.key)) == expected_downloads
+    assert download_attempts(tmp_path) == expected_downloads
+    assert sleep_calls == [10, 10]
+    manifest = read_json(tmp_path / "manifest.json")
+    assert manifest["status"] == "failed"
+    assert manifest["entries"][req.key]["status"] == "failed"
+    failures = manifest["entries"][req.key]["transport_failures"]
+    assert [failure["phase"] for failure in failures] == [stage] * 3
+    assert [failure["attempt"] for failure in failures] == [1, 2, 3]
+    assert [failure["retry_scheduled"] for failure in failures] == [True, True, False]
+    assert not (tmp_path / req.relative_path).exists()
+
+
+def test_transport_failure_has_no_automatic_retry_by_default(tmp_path, sleep_calls):
+    req = request()
+    client = RetryClient({req.key: csv_bytes()},
+                         download_errors=[collector.TransportError("connection closed")])
+    with pytest.raises(collector.TransportError):
+        collector.collect([req], tmp_path, CUTOFF, client)
+    assert client.calls == [("initialize", None), ("count", req.key), ("download", req.key)]
+    assert download_attempts(tmp_path) == 1
+    assert sleep_calls == []
+
+
+def test_retry_respects_remaining_daily_download_budget(tmp_path, sleep_calls):
+    req = request()
+    client = RetryClient({req.key: csv_bytes()},
+                         download_errors=[collector.TransportError("connection closed")])
+    with pytest.raises(collector.CollectionError, match="budget exhausted"):
+        collector.collect([req], tmp_path, CUTOFF, client, prior_downloads=99,
+                          transport_retries=2, retry_delay=10)
+    assert client.calls.count(("initialize", None)) == 1
+    assert client.calls.count(("download", req.key)) == 1
+    assert download_attempts(tmp_path) == 100
+    assert read_json(tmp_path / "manifest.json")["status"] == "failed"
+    assert not (tmp_path / req.relative_path).exists()
+
+
+@pytest.mark.parametrize("stage", ["count", "download"])
+@pytest.mark.parametrize("message", ["Server HTTP 403; collection stopped",
+                                      "Server HTTP 429; collection stopped",
+                                      "Official service returned an error or quota restriction; stopped"])
+def test_nontransport_service_errors_never_retry(tmp_path, sleep_calls, stage, message):
+    req = request()
+    client = RetryClient({req.key: csv_bytes()},
+                         **{stage + "_errors": [collector.CollectionError(message)]})
+    with pytest.raises(collector.CollectionError, match=message):
+        collector.collect([req], tmp_path, CUTOFF, client, transport_retries=2, retry_delay=10)
+    assert client.calls.count(("count", req.key)) == 1
+    assert client.calls.count(("download", req.key)) == (1 if stage == "download" else 0)
+    assert sleep_calls == []
+
+
+@pytest.mark.parametrize("body, expected_count", [
+    (csv_bytes(), 2), (b"<html>access denied</html>", 1), (b'{"error": "quota exceeded"}', 1)])
+def test_validation_and_html_json_download_errors_never_retry(tmp_path, sleep_calls, body, expected_count):
+    req = request()
+    client = FakeClient({req.key: body}, count_override={req.key: expected_count})
+    with pytest.raises(collector.CollectionError):
+        collector.collect([req], tmp_path, CUTOFF, client, transport_retries=2, retry_delay=10)
+    assert client.calls == [("initialize", None), ("count", req.key), ("download", req.key)]
+    assert download_attempts(tmp_path) == 1
+    assert sleep_calls == []
+
+
+@pytest.mark.parametrize("error", [urllib.error.URLError("connection interrupted"),
+                                  TimeoutError("timed out"),
+                                  http.client.RemoteDisconnected("closed without response"),
+                                  OSError("socket failure")])
+def test_request_classifies_only_transport_errors_for_retry(monkeypatch, sleep_calls, error):
+    client = collector.PublicCSVClient(pause=0)
+    calls = []
+
+    def fail_open(*args, **kwargs):
+        calls.append(args[0])
+        raise error
+
+    monkeypatch.setattr(client.opener, "open", fail_open)
+    with pytest.raises(collector.TransportError):
+        client._request(collector.COUNT_PATH, {})
+    assert len(calls) == 1
+
+
+@pytest.mark.parametrize("status", [403, 429, 500])
+def test_http_errors_are_not_classified_as_transport_errors(monkeypatch, sleep_calls, status):
+    client = collector.PublicCSVClient(pause=0)
+
+    def fail_open(*args, **kwargs):
+        raise urllib.error.HTTPError(collector.ORIGIN + collector.COUNT_PATH,
+                                     status, "service rejection", {}, None)
+
+    monkeypatch.setattr(client.opener, "open", fail_open)
+    with pytest.raises(collector.CollectionError, match=f"HTTP {status}") as caught:
+        client._request(collector.COUNT_PATH, {})
+    assert not isinstance(caught.value, collector.TransportError)
+
+
+@pytest.mark.parametrize("options", [["--transport-retries", "-1"],
+                                     ["--transport-retries", "3"],
+                                     ["--retry-delay", "-1"], ["--retry-delay", "61"]])
+def test_cli_rejects_unbounded_transport_retry_options(options):
+    with pytest.raises(SystemExit) as caught:
+        collector.main(["--plan-only", *options])
+    assert caught.value.code == 2
+
+
+def test_cli_accepts_explicit_bounded_transport_retry_options(capsys):
+    assert collector.main(["--plan-only", "--transport-retries", "2", "--retry-delay", "60"]) == 0
+    assert json.loads(capsys.readouterr().out)["count"] == 78

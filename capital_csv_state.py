@@ -91,6 +91,8 @@ def separate(left: Path, right: Path) -> None:
 def pack(source: Path, state: Path, threshold: int = THRESHOLD,
          chunk_size: int = CHUNK_SIZE) -> None:
     separate(source, state)
+    if not source.is_dir():
+        raise ValueError("Checkpoint source directory does not exist")
     if not 0 < chunk_size < threshold <= THRESHOLD:
         raise ValueError("Require 0 < chunk size < threshold <= 95 MiB")
     index = {"version": 1, "files": {}}
