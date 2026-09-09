@@ -1,0 +1,57 @@
+{
+  "filename": "estate_full_history_adaptation_checkpoint_20260909.zip",
+  "bytes": 28819903,
+  "sha256": "f067fee7b21aba6347d6629096fdba01f6ecc3fbddf3fac7243f29610dfe3721",
+  "contents": {
+    "schema_version": 1,
+    "protocol_commit": "387280bebf1a0249842e194be84709bc440c394a",
+    "selection_commit": "933b100aad75e2a6bc85ca1e581453b1e075b10a",
+    "input": {
+      "schema_version": 1,
+      "status": "exploratory_followup_after_inspecting_2025_2026",
+      "feature_sha256": "f9fe072af15733619321aba69c7707e16e40e7c61eb8a6d95414bb8e60504355",
+      "implementation_sha256": "cf6dc79a26787f0257fea3190dcf3bfc3a6ddc71275f97f78baf2380e75c75ec",
+      "protocol_sha256": "cc76a728660115380493e120a894f91526a8228f876ad728d4ef44156b595974",
+      "development_years": [
+        2023,
+        2024
+      ],
+      "reused_evaluation_years": [
+        2025,
+        2026
+      ],
+      "methods": [
+        "all_history",
+        "recency_four_years",
+        "relative_uniform",
+        "relative_recency_four_years"
+      ],
+      "half_life_months": 48,
+      "all_data_meaning": "All eligible 2007+ training rows, same warmup and March-December design as first comparison; 2006 and Jan-Feb observations remain in historical inputs."
+    },
+    "results_sha256": "216bd6b8353628b888ef839434bef2a8955469cbf58d8382ff08ac38d7d1775b",
+    "files": [
+      {
+        "filename": "development_predictions.parquet",
+        "bytes": 16420796,
+        "sha256": "d6d4b277a861e44d7453d3f8216199c16c14e7f51d12d8ee518160d4e09c9da9"
+      },
+      {
+        "filename": "evaluation_predictions.parquet",
+        "bytes": 11857771,
+        "sha256": "95daf83e6fffeaae5edde4acffbca01114dadc92783cdb623c5d0cd065987c77"
+      },
+      {
+        "filename": "relative_recency_four_years_2025.joblib",
+        "bytes": 269543,
+        "sha256": "56951faf9a5ff527dd0b12c58e76c7db4209d6fed1f6ae61d881d9b044a73e29"
+      },
+      {
+        "filename": "relative_recency_four_years_2026.joblib",
+        "bytes": 269250,
+        "sha256": "d83e2601fed1674cfd61a6b7a50830c456b05c353e01b600ca77531cbd4a9b6a"
+      }
+    ]
+  },
+  "status": "research_only_not_operational"
+}

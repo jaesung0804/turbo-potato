@@ -1,0 +1,379 @@
+{
+  "schema_version": 1,
+  "asof": "2026-09-09",
+  "status": "exploratory_followup_after_inspecting_2025_2026",
+  "input": {
+    "schema_version": 1,
+    "status": "exploratory_followup_after_inspecting_2025_2026",
+    "feature_sha256": "f9fe072af15733619321aba69c7707e16e40e7c61eb8a6d95414bb8e60504355",
+    "implementation_sha256": "cf6dc79a26787f0257fea3190dcf3bfc3a6ddc71275f97f78baf2380e75c75ec",
+    "protocol_sha256": "cc76a728660115380493e120a894f91526a8228f876ad728d4ef44156b595974",
+    "development_years": [
+      2023,
+      2024
+    ],
+    "reused_evaluation_years": [
+      2025,
+      2026
+    ],
+    "methods": [
+      "all_history",
+      "recency_four_years",
+      "relative_uniform",
+      "relative_recency_four_years"
+    ],
+    "half_life_months": 48,
+    "all_data_meaning": "All eligible 2007+ training rows, same warmup and March-December design as first comparison; 2006 and Jan-Feb observations remain in historical inputs."
+  },
+  "development": {
+    "2023": {
+      "all_history": {
+        "transactions": 127920,
+        "complexes": 11427,
+        "mape_pct": 8.501,
+        "complex_balanced_mape_pct": 13.386,
+        "median_ape_pct": 5.437,
+        "mae_oku": 0.499,
+        "bias_pct": 4.415,
+        "within10_pct": 72.83
+      },
+      "recency_four_years": {
+        "transactions": 127920,
+        "complexes": 11427,
+        "mape_pct": 8.344,
+        "complex_balanced_mape_pct": 12.951,
+        "median_ape_pct": 5.294,
+        "mae_oku": 0.4916,
+        "bias_pct": 3.954,
+        "within10_pct": 73.64
+      },
+      "relative_uniform": {
+        "transactions": 127920,
+        "complexes": 11427,
+        "mape_pct": 7.767,
+        "complex_balanced_mape_pct": 12.053,
+        "median_ape_pct": 5.112,
+        "mae_oku": 0.4364,
+        "bias_pct": 4.275,
+        "within10_pct": 75.34
+      },
+      "relative_recency_four_years": {
+        "transactions": 127920,
+        "complexes": 11427,
+        "mape_pct": 7.666,
+        "complex_balanced_mape_pct": 11.953,
+        "median_ape_pct": 4.923,
+        "mae_oku": 0.4409,
+        "bias_pct": 3.614,
+        "within10_pct": 76.21
+      }
+    },
+    "2024": {
+      "all_history": {
+        "transactions": 169216,
+        "complexes": 12515,
+        "mape_pct": 6.286,
+        "complex_balanced_mape_pct": 10.734,
+        "median_ape_pct": 4.585,
+        "mae_oku": 0.4151,
+        "bias_pct": 3.474,
+        "within10_pct": 83.33
+      },
+      "recency_four_years": {
+        "transactions": 169216,
+        "complexes": 12515,
+        "mape_pct": 6.108,
+        "complex_balanced_mape_pct": 10.301,
+        "median_ape_pct": 4.433,
+        "mae_oku": 0.4063,
+        "bias_pct": 3.194,
+        "within10_pct": 83.92
+      },
+      "relative_uniform": {
+        "transactions": 169216,
+        "complexes": 12515,
+        "mape_pct": 5.398,
+        "complex_balanced_mape_pct": 9.503,
+        "median_ape_pct": 3.732,
+        "mae_oku": 0.3617,
+        "bias_pct": 1.916,
+        "within10_pct": 87.16
+      },
+      "relative_recency_four_years": {
+        "transactions": 169216,
+        "complexes": 12515,
+        "mape_pct": 5.388,
+        "complex_balanced_mape_pct": 9.162,
+        "median_ape_pct": 3.752,
+        "mae_oku": 0.3625,
+        "bias_pct": 1.863,
+        "within10_pct": 87.05
+      }
+    }
+  },
+  "selection": {
+    "method": "relative_recency_four_years",
+    "scores": {
+      "recency_four_years": 0.9727837205293606,
+      "relative_uniform": 0.8829103568855069,
+      "relative_recency_four_years": 0.8758370013370009
+    },
+    "rule": "Mean 2023/2024 MAE and complex-balanced MAPE ratios to uniform full history; lower wins.",
+    "development_improved": true,
+    "evaluation_years_used_for_selection": []
+  },
+  "training": [
+    {
+      "stage": "development",
+      "year": 2023,
+      "method": "all_history",
+      "rows": 3259809,
+      "positive_weight_rows": 3259809,
+      "first_year": 2007,
+      "last_year": 2022,
+      "min_weight": 1.0,
+      "max_weight": 1.0,
+      "effective_sample_size": 3259809.0
+    },
+    {
+      "stage": "development",
+      "year": 2023,
+      "method": "recency_four_years",
+      "rows": 3259809,
+      "positive_weight_rows": 3259809,
+      "first_year": 2007,
+      "last_year": 2022,
+      "min_weight": 0.19299569326879124,
+      "max_weight": 2.9570129445582425,
+      "effective_sample_size": 2282231.448264664
+    },
+    {
+      "stage": "development",
+      "year": 2023,
+      "method": "relative_uniform",
+      "rows": 3259809,
+      "positive_weight_rows": 3259809,
+      "first_year": 2007,
+      "last_year": 2022,
+      "min_weight": 1.0,
+      "max_weight": 1.0,
+      "effective_sample_size": 3259809.0
+    },
+    {
+      "stage": "development",
+      "year": 2023,
+      "method": "relative_recency_four_years",
+      "rows": 3259809,
+      "positive_weight_rows": 3259809,
+      "first_year": 2007,
+      "last_year": 2022,
+      "min_weight": 0.19299569326879124,
+      "max_weight": 2.9570129445582425,
+      "effective_sample_size": 2282231.448264664
+    },
+    {
+      "stage": "development",
+      "year": 2024,
+      "method": "all_history",
+      "rows": 3387729,
+      "positive_weight_rows": 3387729,
+      "first_year": 2007,
+      "last_year": 2023,
+      "min_weight": 1.0,
+      "max_weight": 1.0,
+      "effective_sample_size": 3387729.0
+    },
+    {
+      "stage": "development",
+      "year": 2024,
+      "method": "recency_four_years",
+      "rows": 3387729,
+      "positive_weight_rows": 3387729,
+      "first_year": 2007,
+      "last_year": 2023,
+      "min_weight": 0.17771241315196792,
+      "max_weight": 3.2380300216423468,
+      "effective_sample_size": 2243828.6598187615
+    },
+    {
+      "stage": "development",
+      "year": 2024,
+      "method": "relative_uniform",
+      "rows": 3387729,
+      "positive_weight_rows": 3387729,
+      "first_year": 2007,
+      "last_year": 2023,
+      "min_weight": 1.0,
+      "max_weight": 1.0,
+      "effective_sample_size": 3387729.0
+    },
+    {
+      "stage": "development",
+      "year": 2024,
+      "method": "relative_recency_four_years",
+      "rows": 3387729,
+      "positive_weight_rows": 3387729,
+      "first_year": 2007,
+      "last_year": 2023,
+      "min_weight": 0.17771241315196792,
+      "max_weight": 3.2380300216423468,
+      "effective_sample_size": 2243828.6598187615
+    },
+    {
+      "stage": "reused_evaluation",
+      "year": 2025,
+      "method": "relative_recency_four_years",
+      "rows": 3556945,
+      "positive_weight_rows": 3556945,
+      "first_year": 2007,
+      "last_year": 2024,
+      "min_weight": 0.15823148139931037,
+      "max_weight": 3.4285737821609246,
+      "effective_sample_size": 2187288.06862472
+    },
+    {
+      "stage": "reused_evaluation",
+      "year": 2026,
+      "method": "relative_recency_four_years",
+      "rows": 3762716,
+      "positive_weight_rows": 3762716,
+      "first_year": 2007,
+      "last_year": 2025,
+      "min_weight": 0.13713467110764904,
+      "max_weight": 3.5336649919025516,
+      "effective_sample_size": 2146516.5346007687
+    }
+  ],
+  "evaluation": {
+    "2025": {
+      "transactions": 205771,
+      "complexes": 13274,
+      "mape_pct": 5.213,
+      "complex_balanced_mape_pct": 10.989,
+      "median_ape_pct": 3.449,
+      "mae_oku": 0.4145,
+      "bias_pct": 1.173,
+      "within10_pct": 88.27
+    },
+    "2026": {
+      "transactions": 119313,
+      "complexes": 12135,
+      "mape_pct": 5.773,
+      "complex_balanced_mape_pct": 9.635,
+      "median_ape_pct": 3.853,
+      "mae_oku": 0.4518,
+      "bias_pct": 1.01,
+      "within10_pct": 85.47
+    }
+  },
+  "regions": [
+    {
+      "year": 2025,
+      "region": "경기도",
+      "transactions": 118656,
+      "complexes": 6282,
+      "mape_pct": 4.803,
+      "complex_balanced_mape_pct": 8.353,
+      "median_ape_pct": 3.313,
+      "mae_oku": 0.2611,
+      "bias_pct": 1.551,
+      "within10_pct": 89.63
+    },
+    {
+      "year": 2025,
+      "region": "서울특별시",
+      "transactions": 64630,
+      "complexes": 5323,
+      "mape_pct": 5.834,
+      "complex_balanced_mape_pct": 14.404,
+      "median_ape_pct": 3.637,
+      "mae_oku": 0.77,
+      "bias_pct": -0.046,
+      "within10_pct": 86.52
+    },
+    {
+      "year": 2025,
+      "region": "인천광역시",
+      "transactions": 22485,
+      "complexes": 1669,
+      "mape_pct": 5.595,
+      "complex_balanced_mape_pct": 10.015,
+      "median_ape_pct": 3.705,
+      "mae_oku": 0.2021,
+      "bias_pct": 2.677,
+      "within10_pct": 86.17
+    },
+    {
+      "year": 2026,
+      "region": "경기도",
+      "transactions": 74197,
+      "complexes": 5924,
+      "mape_pct": 5.277,
+      "complex_balanced_mape_pct": 7.857,
+      "median_ape_pct": 3.647,
+      "mae_oku": 0.3091,
+      "bias_pct": 0.799,
+      "within10_pct": 87.26
+    },
+    {
+      "year": 2026,
+      "region": "서울특별시",
+      "transactions": 32351,
+      "complexes": 4722,
+      "mape_pct": 7.03,
+      "complex_balanced_mape_pct": 11.9,
+      "median_ape_pct": 4.578,
+      "mae_oku": 0.8778,
+      "bias_pct": 0.846,
+      "within10_pct": 80.88
+    },
+    {
+      "year": 2026,
+      "region": "인천광역시",
+      "transactions": 12765,
+      "complexes": 1489,
+      "mape_pct": 5.47,
+      "complex_balanced_mape_pct": 9.527,
+      "median_ape_pct": 3.443,
+      "mae_oku": 0.2019,
+      "bias_pct": 2.651,
+      "within10_pct": 86.69
+    }
+  ],
+  "gates": [
+    {
+      "year": 2025,
+      "gain_vs_frozen_pct": 4.382929642445221,
+      "gain_vs_uniform_full_history_pct": 9.458278724333768,
+      "three_percent_vs_frozen_and_recent": true,
+      "complex_balanced_not_worse": false,
+      "region_deterioration_within_two_percent": false
+    },
+    {
+      "year": 2026,
+      "gain_vs_frozen_pct": 12.13535589264878,
+      "gain_vs_uniform_full_history_pct": 8.984689766317489,
+      "three_percent_vs_frozen_and_recent": true,
+      "complex_balanced_not_worse": false,
+      "region_deterioration_within_two_percent": false
+    }
+  ],
+  "numerical_gate_passed": false,
+  "paired_gain": {
+    "gain_mae_oku": 0.034960594661422525,
+    "paired_complex_bootstrap_95pct": [
+      0.030814612127588112,
+      0.039269118300157356
+    ],
+    "clusters": 14705,
+    "draws": 2000,
+    "limitation": "Complex dependence across both years retained; not independent market-cycle uncertainty."
+  },
+  "production_changed": false,
+  "limitations": [
+    "Design motivated by already inspected 2025/2026 results; development-only selection does not restore independent confirmation.",
+    "Final corrected source records and assumed 61/31-day publication lags; historical boundaries remain unaudited.",
+    "All eligible past rows retain positive weight, but time weighting intentionally changes their influence.",
+    "Actual transaction-floor conditional valuation; does not establish operational representative-floor accuracy."
+  ]
+}

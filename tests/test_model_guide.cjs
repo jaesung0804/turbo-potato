@@ -20,6 +20,13 @@ async function check(version,includeComparison){
   for(const row of retraining.price_rows)assert.ok(elements['capital-retraining-results'].innerHTML.includes(row.all_history.toFixed(4)));
   assert.ok(elements['capital-retraining-results'].innerHTML.includes('실제 거래 층'));
   assert.ok(elements['capital-retraining-results'].innerHTML.includes('과거 경계'));
+  if(retraining.full_history_followup){
+   const followup=retraining.full_history_followup;
+   assert.equal(followup.production_changed,false);
+   assert.ok(elements['capital-retraining-results'].innerHTML.includes(followup.selected_method));
+   for(const row of followup.price_rows)assert.ok(elements['capital-retraining-results'].innerHTML.includes(row.adapted.toFixed(4)));
+   assert.ok(elements['capital-retraining-results'].innerHTML.includes('새로운 독립 검증'));
+  }
   assert.equal((elements['comparison-rows'].innerHTML.match(/<tr>/g)||[]).length,3);
   assert.match(elements['comparison-segments'].innerHTML,/전년도 동일 평형 거래 없음/);
   assert.ok(elements['comparison-status'].textContent.includes(comparison.pooled_mae.v4.toLocaleString('ko-KR')));

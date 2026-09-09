@@ -1,0 +1,54 @@
+{
+  "status": "post_evaluation_descriptive_audit",
+  "segments": [
+    {
+      "year": 2025,
+      "segment": "평가 거래 1~2건",
+      "complexes": 3884,
+      "trades": 5197,
+      "original_complex_mape_pct": 18.65943597870524,
+      "adapted_complex_mape_pct": 22.521165277730244
+    },
+    {
+      "year": 2025,
+      "segment": "평가 거래 3~9건",
+      "complexes": 3684,
+      "trades": 19805,
+      "original_complex_mape_pct": 7.9216905632336285,
+      "adapted_complex_mape_pct": 8.146002673315355
+    },
+    {
+      "year": 2025,
+      "segment": "평가 거래 10건 이상",
+      "complexes": 5706,
+      "trades": 180769,
+      "original_complex_mape_pct": 4.8613638368919245,
+      "adapted_complex_mape_pct": 4.973794556972767
+    },
+    {
+      "year": 2026,
+      "segment": "평가 거래 1~2건",
+      "complexes": 4148,
+      "trades": 5563,
+      "original_complex_mape_pct": 14.002515227543487,
+      "adapted_complex_mape_pct": 16.11693039510277
+    },
+    {
+      "year": 2026,
+      "segment": "평가 거래 3~9건",
+      "complexes": 4149,
+      "trades": 22296,
+      "original_complex_mape_pct": 7.413824660330394,
+      "adapted_complex_mape_pct": 7.319674065847153
+    },
+    {
+      "year": 2026,
+      "segment": "평가 거래 10건 이상",
+      "complexes": 3838,
+      "trades": 91454,
+      "original_complex_mape_pct": 5.490182225482386,
+      "adapted_complex_mape_pct": 5.132368848050896
+    }
+  ],
+  "limitation": "Groups use counts in the evaluated transactions, not pre-forecast known liquidity or a proven causal mechanism."
+}

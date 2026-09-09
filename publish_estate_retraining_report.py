@@ -83,6 +83,8 @@ def publish(source, reports):
         'boundary_note':'위 건수는 잘못된 거래 수가 아니라 당시 경계와의 대응 확인이 필요한 주소 표기 건수입니다. 현재 구 이름이 과거 계약에도 붙어 있어 같은 지역 비교군이 달라질 수 있습니다. 불명확한 단지·지번을 임의로 합치지 않았습니다.',
         'potential':potential_summary,
         'limitations':'현재 정정본과 이미 사용한 가격 평가 표본을 활용한 회고 연구입니다. 데이터 증가만으로 독립 검증이나 미래 수익률이 확보되지는 않습니다. 기존 5년·다중 경로 미통과 기록과 2026년 9월 고정 예측을 보존했습니다.'}
+    from publish_estate_full_history_report import attach_full_history
+    summary=attach_full_history(summary,reports)
     reports.mkdir(parents=True,exist_ok=True)
     write_json(reports/'estate_retraining_summary_20260909.json',summary,indent=2)
     for original,target in [('data_audit.json','estate_retraining_data_audit_20260909.json'),
@@ -93,7 +95,8 @@ def publish(source, reports):
         shutil.copyfile(source/original,reports/target)
     report=[
         '# 2026-09-09 실거래가 확장 재학습·검증 결과',
-        headline,
+        '기존 구조에 과거 자료를 단순 통합한 1차 비교는 채택 기준을 충족하지 못했습니다. 현재 운영 모델 유지는 과거 자료의 폐기 결정이 아닙니다.',
+        '[전체 과거를 유지하는 후속 개선 비교](estate_full_history_adaptation_20260909.md)',
         '사용자가 승인한 자료 감사, 가격 재학습 비교, 잠재력 지역 확대 진단을 실행했다. 운영 가격 모델 `estate-nowcast-v1`과 서울·광명 잠재력 v2를 유지한다. 회고 비교의 개선/미개선과 앞으로 검증할 사항을 구분한다.',
         '## 1. 입력과 정규화',summary['data_note'],summary['normalization_note'],
         f"새 CSV에서 지번 표기와 본번·부번이 일치하지 않는 {sum(sum(s['dashboard_exclusions'].values()) for s in audit['exclusions']):,}행은 원본에 보존하고 단지 키 연구 입력에서 제외했다. 정규화 통합본 이후 취소 {audit['quality']['cancelled']:,}행, 남은 직거래 {audit['quality']['direct_excluded']:,}행을 제외했다. 거래 구분 미상 {audit['quality']['unknown_deal_type']:,}행은 유지했으므로 오래된 직거래가 완전히 배제됐다는 뜻은 아니다.",
