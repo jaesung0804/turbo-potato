@@ -17,11 +17,14 @@ jobs:
         env:
           MOLIT_API_KEY: ${{ secrets.MOLIT_API_KEY }}
         run: |
-          import datetime, http.client, json, os, pathlib, re, ssl
+          import datetime, http.client, json, os, pathlib, re, ssl, sys
           import urllib.parse, xml.etree.ElementTree as ET
-          key = os.environ.get('MOLIT_API_KEY', '').strip()
+          sys.path.insert(0, os.getcwd())
+          from collect_estate_transactions import existing_key
+          key = existing_key()
           if not key:
               raise SystemExit('The project API key is unavailable; no request made')
+          print('::add-mask::' + key, flush=True)
           results = []
           context = ssl.create_default_context()
           context.maximum_version = ssl.TLSVersion.TLSv1_2
