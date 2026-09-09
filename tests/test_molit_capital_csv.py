@@ -690,3 +690,17 @@ def test_certificate_failures_do_not_retry(monkeypatch):
         client._request(collector.PAGE_PATH)
     assert not isinstance(caught.value, collector.TransportError)
     assert client.last_request["category"] == "certificate_verification_failed"
+
+
+def test_single_partition_batches_preserve_full_plan_and_resume(tmp_path):
+    requests = [collector.ExportRequest("gyeonggi", "sale", date(y, 1, 1), date(y, 12, 31))
+                for y in (2018, 2019, 2020)]
+    client = FakeClient({}, count_override={r.key: 0 for r in requests})
+    for completed in (1, 2, 3):
+        result = collector.collect(requests, tmp_path, CUTOFF, client, max_new_partitions=1)
+        assert result["completed_count"] == completed
+        assert len(result["planned_keys"]) == 3
+        assert result["status"] == ("complete" if completed == 3 else "paused")
+    assert "next_key" not in result
+    assert sum(phase == "count" for phase, key in client.calls) == 3
+    assert download_attempts(tmp_path) == 0

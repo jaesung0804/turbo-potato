@@ -463,10 +463,13 @@ def _checked_download(client: PublicCSVClient, fields: dict[str, str], request: 
 def collect(requests: list[ExportRequest], output: Path, cutoff: date,
             client: PublicCSVClient | None = None, daily_limit: int = DAILY_LIMIT,
             prior_downloads: int = 0, transport_retries: int = 0,
-            retry_delay: float = 10) -> dict[str, Any]:
+            retry_delay: float = 10, max_new_partitions: int | None = None) -> dict[str, Any]:
     """Resume a plan; optionally retry transport only and retain completed files."""
     if len({request.key for request in requests}) != len(requests):
         raise ValueError("Collection plan contains duplicate requests")
+    if max_new_partitions is not None and (isinstance(max_new_partitions, bool)
+            or not isinstance(max_new_partitions, int) or max_new_partitions < 1):
+        raise ValueError("max_new_partitions must be a positive integer")
     if any(request.end > cutoff for request in requests):
         raise ValueError("Collection plan extends beyond the explicit data cutoff")
     if not 1 <= daily_limit <= DAILY_LIMIT or not 0 <= prior_downloads <= DAILY_LIMIT:
@@ -509,10 +512,13 @@ def collect(requests: list[ExportRequest], output: Path, cutoff: date,
         manifest.pop("failed_key", None)
         manifest.pop("completed_at", None)
         manifest.pop("failure_diagnostic", None)
+        manifest.pop("pause_reason", None)
+        manifest.pop("next_key", None)
         atomic_json(manifest_path, manifest)
         ledger = DownloadLedger(output / "download-ledger.json", daily_limit, prior_downloads)
         active_key: str | None = None
         initialized = False
+        new_partitions = 0
         phase = "cache_verification"
         try:
             for request in requests:
@@ -523,6 +529,14 @@ def collect(requests: list[ExportRequest], output: Path, cutoff: date,
                     _verify_cached(output, request, cached)
                     print(f"reuse {request.key} rows={cached['row_count']}", flush=True)
                     continue
+                if max_new_partitions is not None and new_partitions >= max_new_partitions:
+                    manifest.update({"status": "paused", "pause_reason": "batch_limit",
+                        "next_key": request.key, "updated_at": utc_now(),
+                        "completed_count": sum(manifest["entries"].get(r.key, {}).get("status") == "complete"
+                                               for r in requests)})
+                    atomic_json(manifest_path, manifest)
+                    print(f"PAUSED: batch saved; next={request.key}", flush=True)
+                    return manifest
                 if not initialized:
                     client = client or PublicCSVClient()
                     phase = "initialize"
@@ -593,6 +607,7 @@ def collect(requests: list[ExportRequest], output: Path, cutoff: date,
                                   "response_headers": headers, "completed_at": utc_now()})
                 manifest["updated_at"] = utc_now()
                 atomic_json(manifest_path, manifest)
+                new_partitions += 1
                 print(f"complete {request.key} rows={entry['row_count']}", flush=True)
             manifest.update({"status": "complete", "completed_at": utc_now(),
                              "completed_count": len(requests), "updated_at": utc_now()})
@@ -631,6 +646,8 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--retry-delay", type=float, default=10,
                         help="Seconds before an allowed transport retry (0–60)")
     parser.add_argument("--plan-only", action="store_true", help="Print the plan without network or file writes")
+    parser.add_argument("--max-new-partitions", type=int,
+                        help="Stop after this many newly completed exports, preserving the full plan")
     args = parser.parse_args(argv)
     if args.pause < 0 or args.pause > 60 or args.timeout <= 0:
         parser.error("pause must be 0–60 seconds and timeout must be positive")
@@ -648,7 +665,7 @@ def main(argv: list[str] | None = None) -> int:
     try:
         collect(requests, args.output, args.cutoff, PublicCSVClient(args.timeout, args.pause),
                 args.daily_limit, args.prior_downloads_today,
-                args.transport_retries, args.retry_delay)
+                args.transport_retries, args.retry_delay, args.max_new_partitions)
     except (CollectionError, ValueError) as exc:
         print(f"STOP: {exc}", file=sys.stderr)
         return 1
