@@ -1,0 +1,107 @@
+name: Collect official capital area apartment history
+on:
+  workflow_dispatch:
+  push:
+    branches: [codex/estate-capital-history]
+    paths:
+      - collect_molit_capital_csv.py
+      - capital_csv_state.py
+      - .github/workflows/research-capital-history.yml
+permissions:
+  contents: write
+concurrency:
+  group: estate-capital-history
+  cancel-in-progress: false
+jobs:
+  collect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 110
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Test the public CSV collector without network requests
+        run: |
+          python -m pip install pytest
+          python -m pytest -q tests/test_molit_capital_csv.py tests/test_capital_csv_state.py
+      - name: Restore prior download checkpoints
+        run: |
+          set -euo pipefail
+          mkdir -p .work/capital-history
+          state_dir=.work/capital-history-state
+          set +e
+          git ls-remote --exit-code --heads origin estate-capital-history-state > /dev/null
+          state_status=$?
+          set -e
+          if [ "$state_status" -eq 0 ]; then
+            git fetch origin estate-capital-history-state
+            git worktree add --detach "$state_dir" FETCH_HEAD
+            python capital_csv_state.py restore --state "$state_dir" --output .work/capital-history
+          elif [ "$state_status" -eq 2 ]; then
+            git worktree add --detach "$state_dir" "$GITHUB_SHA"
+            git -C "$state_dir" checkout --orphan estate-capital-history-state
+            git -C "$state_dir" rm -rf --quiet .
+          else
+            exit "$state_status"
+          fi
+      - name: Collect missing history and a current 2026 vintage
+        # One anonymous session, sequential annual CSV requests, no API key.
+        # The collector must stop on a server quota/block response.
+        run: >-
+          timeout --signal=INT --kill-after=30s 95m
+          python collect_molit_capital_csv.py
+          --output .work/capital-history
+          --cutoff 2026-09-09
+          --include-current-sales
+          --daily-limit 90
+          --prior-downloads-today 2
+          --timeout 180
+          --pause 1.0
+      - name: Preserve verified raw files and incomplete checkpoints
+        if: always()
+        env:
+          SNAPSHOT_ID: ${{ github.run_id }}-${{ github.run_attempt }}
+        run: |
+          set -euo pipefail
+          state_dir=.work/capital-history-state
+          test -f .work/capital-history/manifest.json
+          test -f "$state_dir/.git"
+          mkdir -p "$state_dir/snapshots/$SNAPSHOT_ID"
+          python capital_csv_state.py pack --source .work/capital-history --state "$state_dir"
+          cp .work/capital-history/manifest.json "$state_dir/snapshots/$SNAPSHOT_ID/manifest.json"
+          python - <<'PY'
+          import json, os
+          from pathlib import Path
+          state = Path('.work/capital-history-state')
+          run = {'run_id': os.environ['GITHUB_RUN_ID'],
+                 'run_attempt': os.environ['GITHUB_RUN_ATTEMPT'],
+                 'collector_commit': os.environ['GITHUB_SHA'],
+                 'requested_through': '2026-09-09',
+                 'production_inputs_modified': False}
+          (state / 'snapshots' / os.environ['SNAPSHOT_ID'] / 'run.json').write_text(
+              json.dumps(run, indent=2) + '\n')
+          (state / '.gitattributes').write_text('*.gz -text\n*.part -text\n*.json text eol=lf\n')
+          (state / 'README.md').write_text(
+              '# Official capital area apartment CSV research data\n\n'
+              'Public MOLIT CSV downloads, preserved separately from production inputs.\n'
+              'Use collection/manifest.json to distinguish completed, missing and unsupported coverage.\n'
+              'A successful state commit can contain an incomplete collection checkpoint.\n'
+              'Raw rows retain cancellations and identical-row multiplicity.\n'
+              'Historical downloads are current revised data, not historical publication vintages.\n'
+              'Sales begin in 2006; rental data begin in 2011; September 2026 is partial.\n'
+              'Each commit preserves the exact raw payloads referenced by its manifests.\n')
+          PY
+          git -C "$state_dir" config user.name 'github-actions[bot]'
+          git -C "$state_dir" config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git -C "$state_dir" add -A
+          git -C "$state_dir" commit -m "Preserve official capital CSV collection checkpoint $SNAPSHOT_ID"
+          git -C "$state_dir" push origin HEAD:estate-capital-history-state
+      - uses: actions/upload-artifact@v4
+        if: always()
+        continue-on-error: true
+        with:
+          name: capital-history-csv-${{ github.run_id }}-${{ github.run_attempt }}
+          path: .work/capital-history/
+          retention-days: 90
+          compression-level: 0
