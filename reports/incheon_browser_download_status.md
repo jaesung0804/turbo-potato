@@ -1,21 +1,28 @@
-# 인천 매매 공식 브라우저 다운로드 확보 현황
+# Incheon historical sale CSV import — 2026-09-09
 
-기준일: 2026-09-09
+Completed: official apartment-sale CSVs for Incheon 2012–2020 are now imported into `estate-capital-history-state`, commit `4c33f9eee4b0ed9b0dd0ed1bb9b894d2d8b5aa5d`.
 
-GitHub 실행 환경의 반복적인 초기 TCP 시간 초과와 별도로, 국토교통부 공식 자료제공 화면에서 CSV를 내려받았다.
+The user supplied seven original annual files (2012–2018, 256,144 rows). Two prior official browser downloads supplied 2019–2020 (91,111 rows). Original CP949 bytes, repeated rows and cancellation-marked records are retained in deterministic gzip files; no duplicate annual partition was appended.
 
-| 연도 | 원본 행 수 | SHA256 |
+| Year | Raw rows | Source |
 | --- | ---: | --- |
-| 2019 | 34,278 | 67b1deacd50d0414d9d088491089453006ff65eefa3bcc842117fd4c38e804f7 |
-| 2020 | 56,833 | e3f1d6bdee99eec098f6028b227d84306c1d26e16a90fa61489fbd49762e8987 |
+| 2012 | 20,553 | User-provided CSV |
+| 2013 | 34,603 | User-provided CSV |
+| 2014 | 42,320 | User-provided CSV |
+| 2015 | 49,116 | User-provided CSV |
+| 2016 | 42,929 | User-provided CSV |
+| 2017 | 36,338 | User-provided CSV |
+| 2018 | 30,285 | User-provided CSV |
+| 2019 | 34,278 | Official browser download |
+| 2020 | 56,833 | Official browser download |
 
-합계 91,111행. 원본 CSV와 manifest.json을 포함한 incheon_sales_2019_2020_verified.zip을 별도로 영구 저장했다.
+Added: **9 files / 347,255 rows**. Incheon historical sales now cover **2006–2020, 15 files / 523,725 rows**, with no missing annual partitions in this interval. The shared checkpoint now contains **31 completed partitions / 3,003,844 raw rows** (including existing Gyeonggi sales and 2011 Gyeonggi rent).
 
-검증: 인천광역시·아파트 매매·연간 계약기간, 모든 거래일의 해당 연도 포함 여부, 양수 가격, 순차 NO, 원본 SHA256, 압축 해제 후 동일 해시. 별도의 서버 조회 건수와 대조한 것은 아니다. 2020년 해제일 표시 2,495행을 포함해 원본을 보존했으며 임의 중복 제거하지 않았다.
+## Validation and integration boundary
 
-이 두 파일은 아직 estate-capital-history-state의 collection/manifest.json과 state_files.json에 통합하지 않았다. 기존 GitHub 확보량 22개·2,656,589행과 별도 관리한다. 신규 파일을 포함한 확보 원본 합계는 2,747,700행이다. 모델 학습 및 홈페이지 반영은 수행하지 않았다.
-
-남은 인천 과거 매매 연도: 2012~2018년. 전월세 보류 유지.
-브라우저의 후속 다운로드에서 조작/완료 알림 오류가 발생해 2018·2017년 파일은 확보로 계산하지 않았다.
-
-원문: https://rt.molit.go.kr/pt/xls/xls.do?mobileAt=
+- Validated annual query metadata, Incheon province, all-district selection, apartment-sale schema, every contract date, positive sale price and floor area, sequential NO, and record widths.
+- Compared each uploaded Git blob SHA and byte size with the locally compressed source. Confirmed manifest SHA, updated `state_files.json` alongside it, and read the published manifest after the branch update.
+- `expected_count` records the observed CSV row count for cache compatibility. Each new entry explicitly sets `independent_server_count_checked: false`; no independent count-endpoint reconciliation is claimed.
+- Existing completed partitions and checkpoint index entries were preserved. Import made no additional MOLIT network downloads. Rentals remain deferred by user instruction; the full 81-partition expansion is not marked complete.
+- These are revised records available at extraction time, not historical publication vintages.
+- Raw checkpoint import is complete. Model ingestion/retraining, backtests and website deployment have not been performed as part of this import.
