@@ -1,1 +1,5 @@
-{"request":"supervised-one-file-gyeonggi-2020","max_files":1,"baseline_completed":15}
+{
+  "request": "supervised-incheon/sale/2006/2006-01-01_2006-12-31",
+  "max_files": 1,
+  "baseline_completed": 16
+}
