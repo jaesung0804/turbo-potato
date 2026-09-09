@@ -2,11 +2,12 @@ const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/st
 const html=fs.readFileSync('web/model.html','utf8');
 const ids=[...html.matchAll(/\bid="([^"]+)"/g)].map(x=>x[1]);
 const comparison=JSON.parse(fs.readFileSync('reports/estate_model_comparison.json','utf8'));
+const retraining=JSON.parse(fs.readFileSync('reports/estate_retraining_summary_20260909.json','utf8'));
 async function check(version,includeComparison){
  const elements=Object.fromEntries(ids.map(id=>[id,{textContent:'',innerHTML:''}]));
  const manifest={generated_at:'2026-09-05',coverage:{all:{source_trades:10,represented_trades:10,available_types:3,complete:true}},
   model:{model_version:version,model_month:'2026-09',trained_through:'2025-12-31',ml_weight:.25,validation:comparison.folds.map(f=>f.v3)}};
- if(includeComparison)manifest.model_comparison=comparison;
+ if(includeComparison){manifest.model_comparison=comparison;manifest.retraining_research=retraining;}
  const context=vm.createContext({document:{getElementById(id){assert.ok(elements[id],`Missing guide element ${id}`);return elements[id];}},
   fetch:async()=>({ok:true,json:async()=>manifest})});
  vm.runInContext(fs.readFileSync('web/result-pages.js','utf8'),context);
@@ -15,6 +16,10 @@ async function check(version,includeComparison){
  assert.match(elements['model-status'].textContent,new RegExp(version));
  assert.ok(elements['validation-rows'].innerHTML.includes('2025'));
  if(includeComparison){
+  assert.equal(elements['capital-retraining-status'].textContent,retraining.headline);
+  for(const row of retraining.price_rows)assert.ok(elements['capital-retraining-results'].innerHTML.includes(row.all_history.toFixed(4)));
+  assert.ok(elements['capital-retraining-results'].innerHTML.includes('실제 거래 층'));
+  assert.ok(elements['capital-retraining-results'].innerHTML.includes('과거 경계'));
   assert.equal((elements['comparison-rows'].innerHTML.match(/<tr>/g)||[]).length,3);
   assert.match(elements['comparison-segments'].innerHTML,/전년도 동일 평형 거래 없음/);
   assert.ok(elements['comparison-status'].textContent.includes(comparison.pooled_mae.v4.toLocaleString('ko-KR')));

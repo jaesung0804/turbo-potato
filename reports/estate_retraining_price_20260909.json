@@ -1,0 +1,547 @@
+{
+  "schema_version": 1,
+  "status": "retrospective_reused_sample",
+  "methods": {
+    "frozen_original": {
+      "2025": {
+        "transactions": 205771,
+        "complexes": 13274,
+        "mape_pct": 5.077,
+        "complex_balanced_mape_pct": 9.748,
+        "median_ape_pct": 3.407,
+        "mae_oku": 0.4335,
+        "bias_pct": -0.388,
+        "within10_pct": 88.22
+      },
+      "2026": {
+        "transactions": 119313,
+        "complexes": 12135,
+        "mape_pct": 6.063,
+        "complex_balanced_mape_pct": 9.058,
+        "median_ape_pct": 4.186,
+        "mae_oku": 0.5142,
+        "bias_pct": -1.099,
+        "within10_pct": 82.74
+      }
+    },
+    "recent_refit": {
+      "2025": {
+        "transactions": 205771,
+        "complexes": 13274,
+        "mape_pct": 5.169,
+        "complex_balanced_mape_pct": 10.85,
+        "median_ape_pct": 3.407,
+        "mae_oku": 0.4385,
+        "bias_pct": -0.212,
+        "within10_pct": 88.15
+      },
+      "2026": {
+        "transactions": 119313,
+        "complexes": 12135,
+        "mape_pct": 6.146,
+        "complex_balanced_mape_pct": 9.775,
+        "median_ape_pct": 4.177,
+        "mae_oku": 0.5176,
+        "bias_pct": -0.878,
+        "within10_pct": 82.82
+      }
+    },
+    "all_history": {
+      "2025": {
+        "transactions": 205771,
+        "complexes": 13274,
+        "mape_pct": 5.873,
+        "complex_balanced_mape_pct": 11.241,
+        "median_ape_pct": 4.149,
+        "mae_oku": 0.4578,
+        "bias_pct": 2.52,
+        "within10_pct": 85.64
+      },
+      "2026": {
+        "transactions": 119313,
+        "complexes": 12135,
+        "mape_pct": 6.247,
+        "complex_balanced_mape_pct": 10.001,
+        "median_ape_pct": 4.299,
+        "mae_oku": 0.4964,
+        "bias_pct": 1.361,
+        "within10_pct": 83.17
+      }
+    },
+    "rolling_five_years": {
+      "2025": {
+        "transactions": 205771,
+        "complexes": 13274,
+        "mape_pct": 5.872,
+        "complex_balanced_mape_pct": 11.409,
+        "median_ape_pct": 4.102,
+        "mae_oku": 0.4585,
+        "bias_pct": 2.387,
+        "within10_pct": 85.21
+      },
+      "2026": {
+        "transactions": 119313,
+        "complexes": 12135,
+        "mape_pct": 6.219,
+        "complex_balanced_mape_pct": 9.902,
+        "median_ape_pct": 4.253,
+        "mae_oku": 0.5022,
+        "bias_pct": 0.705,
+        "within10_pct": 82.85
+      }
+    }
+  },
+  "regions": [
+    {
+      "year": 2025,
+      "region": "경기도",
+      "method": "frozen_original",
+      "transactions": 118656,
+      "complexes": 6282,
+      "mape_pct": 4.616,
+      "complex_balanced_mape_pct": 8.047,
+      "median_ape_pct": 3.201,
+      "mae_oku": 0.2638,
+      "bias_pct": 0.079,
+      "within10_pct": 90.37
+    },
+    {
+      "year": 2025,
+      "region": "경기도",
+      "method": "recent_refit",
+      "transactions": 118656,
+      "complexes": 6282,
+      "mape_pct": 4.635,
+      "complex_balanced_mape_pct": 8.248,
+      "median_ape_pct": 3.202,
+      "mae_oku": 0.2644,
+      "bias_pct": 0.149,
+      "within10_pct": 90.35
+    },
+    {
+      "year": 2025,
+      "region": "경기도",
+      "method": "all_history",
+      "transactions": 118656,
+      "complexes": 6282,
+      "mape_pct": 5.57,
+      "complex_balanced_mape_pct": 9.337,
+      "median_ape_pct": 4.097,
+      "mae_oku": 0.3024,
+      "bias_pct": 3.046,
+      "within10_pct": 86.8
+    },
+    {
+      "year": 2025,
+      "region": "경기도",
+      "method": "rolling_five_years",
+      "transactions": 118656,
+      "complexes": 6282,
+      "mape_pct": 5.572,
+      "complex_balanced_mape_pct": 9.282,
+      "median_ape_pct": 4.043,
+      "mae_oku": 0.3051,
+      "bias_pct": 2.903,
+      "within10_pct": 86.18
+    },
+    {
+      "year": 2025,
+      "region": "서울특별시",
+      "method": "frozen_original",
+      "transactions": 64630,
+      "complexes": 5323,
+      "mape_pct": 5.874,
+      "complex_balanced_mape_pct": 11.925,
+      "median_ape_pct": 3.799,
+      "mae_oku": 0.8285,
+      "bias_pct": -1.644,
+      "within10_pct": 84.34
+    },
+    {
+      "year": 2025,
+      "region": "서울특별시",
+      "method": "recent_refit",
+      "transactions": 64630,
+      "complexes": 5323,
+      "mape_pct": 6.121,
+      "complex_balanced_mape_pct": 14.347,
+      "median_ape_pct": 3.802,
+      "mae_oku": 0.8429,
+      "bias_pct": -1.234,
+      "within10_pct": 84.19
+    },
+    {
+      "year": 2025,
+      "region": "서울특별시",
+      "method": "all_history",
+      "transactions": 64630,
+      "complexes": 5323,
+      "mape_pct": 6.277,
+      "complex_balanced_mape_pct": 13.632,
+      "median_ape_pct": 4.135,
+      "mae_oku": 0.8195,
+      "bias_pct": 1.172,
+      "within10_pct": 84.37
+    },
+    {
+      "year": 2025,
+      "region": "서울특별시",
+      "method": "rolling_five_years",
+      "transactions": 64630,
+      "complexes": 5323,
+      "mape_pct": 6.227,
+      "complex_balanced_mape_pct": 13.977,
+      "median_ape_pct": 4.08,
+      "mae_oku": 0.8153,
+      "bias_pct": 0.974,
+      "within10_pct": 84.46
+    },
+    {
+      "year": 2025,
+      "region": "인천광역시",
+      "method": "frozen_original",
+      "transactions": 22485,
+      "complexes": 1669,
+      "mape_pct": 5.222,
+      "complex_balanced_mape_pct": 9.208,
+      "median_ape_pct": 3.541,
+      "mae_oku": 0.1939,
+      "bias_pct": 0.756,
+      "within10_pct": 87.97
+    },
+    {
+      "year": 2025,
+      "region": "인천광역시",
+      "method": "recent_refit",
+      "transactions": 22485,
+      "complexes": 1669,
+      "mape_pct": 5.248,
+      "complex_balanced_mape_pct": 9.49,
+      "median_ape_pct": 3.54,
+      "mae_oku": 0.1943,
+      "bias_pct": 0.815,
+      "within10_pct": 87.91
+    },
+    {
+      "year": 2025,
+      "region": "인천광역시",
+      "method": "all_history",
+      "transactions": 22485,
+      "complexes": 1669,
+      "mape_pct": 6.308,
+      "complex_balanced_mape_pct": 10.778,
+      "median_ape_pct": 4.422,
+      "mae_oku": 0.2377,
+      "bias_pct": 3.62,
+      "within10_pct": 83.22
+    },
+    {
+      "year": 2025,
+      "region": "인천광역시",
+      "method": "rolling_five_years",
+      "transactions": 22485,
+      "complexes": 1669,
+      "mape_pct": 6.437,
+      "complex_balanced_mape_pct": 11.226,
+      "median_ape_pct": 4.508,
+      "mae_oku": 0.2427,
+      "bias_pct": 3.728,
+      "within10_pct": 82.21
+    },
+    {
+      "year": 2026,
+      "region": "경기도",
+      "method": "frozen_original",
+      "transactions": 74197,
+      "complexes": 5924,
+      "mape_pct": 5.572,
+      "complex_balanced_mape_pct": 7.803,
+      "median_ape_pct": 3.906,
+      "mae_oku": 0.3511,
+      "bias_pct": -1.442,
+      "within10_pct": 84.95
+    },
+    {
+      "year": 2026,
+      "region": "경기도",
+      "method": "recent_refit",
+      "transactions": 74197,
+      "complexes": 5924,
+      "mape_pct": 5.59,
+      "complex_balanced_mape_pct": 8.054,
+      "median_ape_pct": 3.899,
+      "mae_oku": 0.3505,
+      "bias_pct": -1.359,
+      "within10_pct": 85.01
+    },
+    {
+      "year": 2026,
+      "region": "경기도",
+      "method": "all_history",
+      "transactions": 74197,
+      "complexes": 5924,
+      "mape_pct": 5.756,
+      "complex_balanced_mape_pct": 8.608,
+      "median_ape_pct": 4.083,
+      "mae_oku": 0.3365,
+      "bias_pct": 1.306,
+      "within10_pct": 85.19
+    },
+    {
+      "year": 2026,
+      "region": "경기도",
+      "method": "rolling_five_years",
+      "transactions": 74197,
+      "complexes": 5924,
+      "mape_pct": 5.699,
+      "complex_balanced_mape_pct": 8.343,
+      "median_ape_pct": 4.006,
+      "mae_oku": 0.3381,
+      "bias_pct": 0.547,
+      "within10_pct": 84.99
+    },
+    {
+      "year": 2026,
+      "region": "서울특별시",
+      "method": "frozen_original",
+      "transactions": 32351,
+      "complexes": 4722,
+      "mape_pct": 7.573,
+      "complex_balanced_mape_pct": 10.734,
+      "median_ape_pct": 5.423,
+      "mae_oku": 1.0146,
+      "bias_pct": -1.117,
+      "within10_pct": 75.46
+    },
+    {
+      "year": 2026,
+      "region": "서울특별시",
+      "method": "recent_refit",
+      "transactions": 32351,
+      "complexes": 4722,
+      "mape_pct": 7.813,
+      "complex_balanced_mape_pct": 12.16,
+      "median_ape_pct": 5.383,
+      "mae_oku": 1.028,
+      "bias_pct": -0.525,
+      "within10_pct": 75.62
+    },
+    {
+      "year": 2026,
+      "region": "서울특별시",
+      "method": "all_history",
+      "transactions": 32351,
+      "complexes": 4722,
+      "mape_pct": 7.466,
+      "complex_balanced_mape_pct": 11.699,
+      "median_ape_pct": 5.025,
+      "mae_oku": 0.9694,
+      "bias_pct": 0.681,
+      "within10_pct": 77.96
+    },
+    {
+      "year": 2026,
+      "region": "서울특별시",
+      "method": "rolling_five_years",
+      "transactions": 32351,
+      "complexes": 4722,
+      "mape_pct": 7.564,
+      "complex_balanced_mape_pct": 11.864,
+      "median_ape_pct": 5.115,
+      "mae_oku": 0.9899,
+      "bias_pct": 0.308,
+      "within10_pct": 77.08
+    },
+    {
+      "year": 2026,
+      "region": "인천광역시",
+      "method": "frozen_original",
+      "transactions": 12765,
+      "complexes": 1489,
+      "mape_pct": 5.091,
+      "complex_balanced_mape_pct": 8.733,
+      "median_ape_pct": 3.26,
+      "mae_oku": 0.1946,
+      "bias_pct": 0.943,
+      "within10_pct": 88.37
+    },
+    {
+      "year": 2026,
+      "region": "인천광역시",
+      "method": "recent_refit",
+      "transactions": 12765,
+      "complexes": 1489,
+      "mape_pct": 5.15,
+      "complex_balanced_mape_pct": 9.057,
+      "median_ape_pct": 3.269,
+      "mae_oku": 0.1957,
+      "bias_pct": 1.024,
+      "within10_pct": 88.31
+    },
+    {
+      "year": 2026,
+      "region": "인천광역시",
+      "method": "all_history",
+      "transactions": 12765,
+      "complexes": 1489,
+      "mape_pct": 6.009,
+      "complex_balanced_mape_pct": 10.159,
+      "median_ape_pct": 3.991,
+      "mae_oku": 0.2267,
+      "bias_pct": 3.41,
+      "within10_pct": 84.63
+    },
+    {
+      "year": 2026,
+      "region": "인천광역시",
+      "method": "rolling_five_years",
+      "transactions": 12765,
+      "complexes": 1489,
+      "mape_pct": 5.833,
+      "complex_balanced_mape_pct": 9.88,
+      "median_ape_pct": 3.816,
+      "mae_oku": 0.2203,
+      "bias_pct": 2.628,
+      "within10_pct": 85.05
+    }
+  ],
+  "training": [
+    {
+      "method": "recent_refit",
+      "evaluation_year": 2025,
+      "first_year": 2023,
+      "last_year": 2024,
+      "rows": 297136,
+      "months": 20
+    },
+    {
+      "method": "all_history",
+      "evaluation_year": 2025,
+      "first_year": 2007,
+      "last_year": 2024,
+      "rows": 3556945,
+      "months": 180
+    },
+    {
+      "method": "rolling_five_years",
+      "evaluation_year": 2025,
+      "first_year": 2020,
+      "last_year": 2024,
+      "rows": 822295,
+      "months": 50
+    },
+    {
+      "method": "recent_refit",
+      "evaluation_year": 2026,
+      "first_year": 2023,
+      "last_year": 2025,
+      "rows": 502907,
+      "months": 30
+    },
+    {
+      "method": "all_history",
+      "evaluation_year": 2026,
+      "first_year": 2007,
+      "last_year": 2025,
+      "rows": 3762716,
+      "months": 190
+    },
+    {
+      "method": "rolling_five_years",
+      "evaluation_year": 2026,
+      "first_year": 2021,
+      "last_year": 2025,
+      "rows": 728093,
+      "months": 50
+    }
+  ],
+  "gates": [
+    {
+      "year": 2025,
+      "gain_vs_frozen_pct": -5.605536332179928,
+      "gain_vs_recent_refit_pct": -4.401368301026221,
+      "three_percent_vs_both": false,
+      "complex_balanced_not_worse": false,
+      "region_deterioration_within_two_percent": false
+    },
+    {
+      "year": 2026,
+      "gain_vs_frozen_pct": 3.46168805912096,
+      "gain_vs_recent_refit_pct": 4.095826893353927,
+      "three_percent_vs_both": true,
+      "complex_balanced_not_worse": false,
+      "region_deterioration_within_two_percent": false
+    }
+  ],
+  "primary_candidate": "all_history",
+  "primary_gate_passed": false,
+  "paired_gain": {
+    "recent_refit": {
+      "gain_mae_oku": -0.00437936382416006,
+      "paired_complex_bootstrap_95pct": [
+        -0.005277834385781798,
+        -0.0035541740210798213
+      ],
+      "clusters": 14705,
+      "draws": 2000,
+      "limitation": "Complex dependence across both years retained; not independent market-cycle uncertainty."
+    },
+    "all_history": {
+      "gain_mae_oku": -0.008794155570423854,
+      "paired_complex_bootstrap_95pct": [
+        -0.011493418917376116,
+        -0.00614773759010358
+      ],
+      "clusters": 14705,
+      "draws": 2000,
+      "limitation": "Complex dependence across both years retained; not independent market-cycle uncertainty."
+    },
+    "rolling_five_years": {
+      "gain_mae_oku": -0.011428472996090426,
+      "paired_complex_bootstrap_95pct": [
+        -0.014096082792195938,
+        -0.008807130555758982
+      ],
+      "clusters": 14705,
+      "draws": 2000,
+      "limitation": "Complex dependence across both years retained; not independent market-cycle uncertainty."
+    }
+  },
+  "input_refresh_2026": {
+    "original_rows": 119313,
+    "refreshed_rows": 119333,
+    "common_rows": 119298,
+    "old_rows_unmatched": 15,
+    "old_inputs": {
+      "transactions": 119298,
+      "complexes": 12134,
+      "mape_pct": 6.063,
+      "complex_balanced_mape_pct": 9.054,
+      "median_ape_pct": 4.186,
+      "mae_oku": 0.5142,
+      "bias_pct": -1.098,
+      "within10_pct": 82.74
+    },
+    "refreshed_inputs": {
+      "transactions": 119298,
+      "complexes": 12134,
+      "mape_pct": 6.029,
+      "complex_balanced_mape_pct": 8.823,
+      "median_ape_pct": 4.188,
+      "mae_oku": 0.5133,
+      "bias_pct": -1.237,
+      "within10_pct": 82.7
+    },
+    "matching": "key, month, actual floor, age, amount and multiplicity; legacy cache has no contract day",
+    "normalization": "same units and feature equations; updated observations and older fallback history"
+  },
+  "operational_decision": "retain_estate_nowcast_v1",
+  "evaluation": "fixed original transactions and original features; 2025 Mar-Dec, 2026 Mar-Jul",
+  "limitations": [
+    "Previously inspected test periods; this is not new independent confirmation.",
+    "Conditional on actual sale floor; not accuracy of representative-floor app prices.",
+    "Training inputs use final corrected records and assumed historical publication lag.",
+    "Existing price baseline uses archived predictions; refits use current library versions.",
+    "January and February remain outside the original evaluation design."
+  ]
+}

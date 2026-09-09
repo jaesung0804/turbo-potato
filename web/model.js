@@ -1,6 +1,13 @@
 async function loadGuide(){
  const response=await fetch('data/dashboard_manifest.json',{cache:'no-cache'});if(!response.ok)throw Error('자료를 불러오지 못했습니다.');
  const m=await response.json(),f=n=>n==null?'—':Number(n).toLocaleString('ko-KR'),pct=n=>n==null?'—':`${(n*100).toFixed(1)}%`,esc=ResultPages.escape;
+ const retraining=m.retraining_research;
+ if(retraining){
+  document.getElementById('capital-retraining-status').textContent=retraining.headline;
+  const rows=retraining.price_rows.map(r=>`<tr><th>${esc(r.period)}</th><td>${f(r.trades)}</td><td>${r.original.toFixed(4)}</td><td>${r.recent.toFixed(4)}</td><td>${r.all_history.toFixed(4)}</td><td>${r.rolling_five_years.toFixed(4)}</td></tr>`).join('');
+  const boundaries=retraining.boundary_rows.map(r=>`<tr><th>${esc(r.label)}</th><td>${f(r.rows)}</td></tr>`).join('');
+  document.getElementById('capital-retraining-results').innerHTML=`<p>${esc(retraining.data_note)}</p><h3>같은 거래에서 비교한 가격 오차</h3><p>거래당 총액 평균 절대오차(억원). 낮을수록 정확합니다.</p><div class="table-scroll"><table><thead><tr><th>평가 기간</th><th>거래 수</th><th>기존 고정</th><th>최근 자료 재학습</th><th>전체 과거 재학습</th><th>최근 5년 재학습</th></tr></thead><tbody>${rows}</tbody></table></div><p>${esc(retraining.price_note)}</p><p>${esc(retraining.input_refresh_note)}</p><h3>수집일과 가격 정규화</h3><p>${esc(retraining.normalization_note)}</p><div class="table-scroll"><table><thead><tr><th>과거 경계 확인이 필요한 표기</th><th>해당 거래 수</th></tr></thead><tbody>${boundaries}</tbody></table></div><p>${esc(retraining.boundary_note)}</p><h3>18~24개월 잠재력의 지역 확대</h3><p>${esc(retraining.potential.headline)}</p><p>${esc(retraining.potential.detail)}</p><p><a href="potential.html#capital-expansion-validation">잠재력 진단과 현재 후보 →</a></p><p class="score-note">${esc(retraining.limitations)}</p>`;
+ }else document.getElementById('capital-retraining-status').textContent='이 배포본에는 확장 재학습 결과가 아직 포함되지 않았습니다.';
  const research=m.market_research;
  if(research){
   document.getElementById('market-research-status').textContent=research.headline;

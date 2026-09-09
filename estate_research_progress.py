@@ -9,6 +9,12 @@ from pathlib import Path
 
 def attach_research_progress(potential, root=Path('.')):
     result = dict(potential)
+    path = root / 'reports/estate_retraining_summary_20260909.json'
+    if path.exists():
+        summary = json.loads(path.read_text())
+        if summary.get('production_changed') is not False:
+            raise ValueError('Retraining research must not overwrite frozen forecasts')
+        result['capital_retraining'] = summary['potential']
     path = root / 'reports/estate_potential_path_summary.json'
     if path.exists():
         raw = path.read_bytes()
