@@ -2,6 +2,8 @@ import json
 from pathlib import Path
 import tempfile
 import unittest
+from unittest.mock import patch
+import capital_csv_state
 
 from capital_csv_state import pack, restore
 
@@ -51,6 +53,35 @@ class CapitalCSVStateTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "SHA256 mismatch"):
             restore(self.state, self.output)
         self.assertEqual(target.read_bytes(), b"previous verified file")
+
+    def test_incremental_does_not_rewrite_unchanged_raw_file(self):
+        pack(self.source, self.state)
+        (self.source / "manifest.json").write_text('{"status":"complete"}')
+        with patch("capital_csv_state.copy_verified", wraps=capital_csv_state.copy_verified) as copy:
+            pack(self.source, self.state, incremental=True)
+        self.assertEqual(len(copy.call_args_list), 1)
+        self.assertEqual(copy.call_args.args[1].name, "manifest.json")
+        restore(self.state, self.output)
+        self.assertEqual((self.output / self.relative).read_bytes(),
+                         (self.source / self.relative).read_bytes())
+
+    def test_incremental_repairs_corrupt_stored_bytes(self):
+        pack(self.source, self.state)
+        (self.state / "collection" / self.relative).write_bytes(b"corrupt")
+        pack(self.source, self.state, incremental=True)
+        restore(self.state, self.output)
+        self.assertEqual((self.output / self.relative).read_bytes(),
+                         (self.source / self.relative).read_bytes())
+
+    def test_incremental_adds_new_file_and_preserves_old(self):
+        pack(self.source, self.state)
+        new = self.source / "incheon/sale/2013/new.csv.gz"
+        new.parent.mkdir(parents=True)
+        new.write_bytes(b"new raw bytes")
+        pack(self.source, self.state, incremental=True)
+        restore(self.state, self.output)
+        self.assertEqual((self.output / new.relative_to(self.source)).read_bytes(), b"new raw bytes")
+        self.assertTrue((self.output / self.relative).exists())
 
     def test_index_path_escape_is_rejected(self):
         index = self.packed()

@@ -1,9 +1,6 @@
 name: Capital history - one file per job
 on:
   workflow_dispatch:
-  push:
-    branches: [codex/estate-capital-history]
-    paths: [.github/workflows/research-capital-batches.yml]
 permissions:
   contents: write
 concurrency:
@@ -33,7 +30,7 @@ jobs:
           remaining = sum(m['entries'].get(r.key, {}).get('status') != 'complete' for r in plan)
           with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
               f.write('remaining=' + str(remaining) + '\n')
-              f.write('batches=' + json.dumps(list(range(remaining)) or [0]) + '\n')
+              f.write('batches=' + json.dumps([0]) + '\n')
           print('Remaining annual/province exports:', remaining)
           PY
   batch:
@@ -49,12 +46,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - id: restore
-        name: Restore the last saved checkpoint
+        name: Restore the last saved checkpoint (bounded)
+        timeout-minutes: 2
         shell: bash
         run: |
           git fetch --depth=1 origin estate-capital-history-state
           git worktree add --detach .work/batch-state FETCH_HEAD
-          python capital_csv_state.py restore --state .work/batch-state --output .work/batch-input
+          timeout --signal=TERM --kill-after=5s 60s python capital_csv_state.py restore --state .work/batch-state --output .work/batch-input
       - id: collect
         name: Collect at most one new CSV
         run: >-
@@ -63,11 +61,12 @@ jobs:
           --output .work/batch-input --cutoff 2026-09-09
           --include-current-sales --max-new-partitions 1 --cache-hashes-only
           --timeout 45 --pause 1 --transport-retries 0 --daily-limit 90
-      - name: Save this checkpoint before the next job
+      - name: Save new or changed checkpoint files
+        timeout-minutes: 2
         if: always() && steps.restore.outcome == 'success' && steps.collect.outcome != 'skipped'
         shell: bash
         run: |
-          python capital_csv_state.py pack --source .work/batch-input --state .work/batch-state
+          timeout --signal=TERM --kill-after=5s 60s python capital_csv_state.py pack --source .work/batch-input --state .work/batch-state --incremental
           git -C .work/batch-state config user.name 'github-actions[bot]'
           git -C .work/batch-state config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git -C .work/batch-state add -A

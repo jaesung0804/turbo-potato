@@ -89,17 +89,33 @@ def separate(left: Path, right: Path) -> None:
 
 
 def pack(source: Path, state: Path, threshold: int = THRESHOLD,
-         chunk_size: int = CHUNK_SIZE) -> None:
+         chunk_size: int = CHUNK_SIZE, incremental: bool = False) -> None:
     separate(source, state)
     if not source.is_dir():
         raise ValueError("Checkpoint source directory does not exist")
     if not 0 < chunk_size < threshold <= THRESHOLD:
         raise ValueError("Require 0 < chunk size < threshold <= 95 MiB")
+    previous = {}
+    index_path = safe(state, "state_files.json")
+    if incremental and index_path.exists():
+        saved = json.loads(index_path.read_text())
+        if saved.get("version") != 1:
+            raise ValueError("Unsupported checkpoint index")
+        previous = saved["files"]
     index = {"version": 1, "files": {}}
     for relative, path in files(source):
         size, sha = digest(path)
         entry = {"size": size, "sha256": sha}
         target = safe(state, "collection/" + relative)
+        old = previous.get(relative, {})
+        # Reuse verified stored bytes instead of rewriting the full checkpoint.
+        # Split objects retain the existing full-pack path.
+        if (incremental and size < threshold
+                and old == {"size": size, "sha256": sha,
+                            "file": "collection/" + relative}
+                and target.is_file() and digest(target) == (size, sha)):
+            index["files"][relative] = old
+            continue
         if size < threshold:
             copy_verified([path], target, size, sha)
             entry["file"] = "collection/" + relative
@@ -143,8 +159,10 @@ def main() -> None:
         child = sub.add_parser(command)
         child.add_argument("--state", type=Path, required=True)
         child.add_argument(argument, type=Path, required=True)
+        if command == "pack":
+            child.add_argument("--incremental", action="store_true")
     args = parser.parse_args()
-    pack(args.source, args.state) if args.command == "pack" else restore(args.state, args.output)
+    pack(args.source, args.state, incremental=args.incremental) if args.command == "pack" else restore(args.state, args.output)
 
 
 if __name__ == "__main__":
