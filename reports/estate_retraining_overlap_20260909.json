@@ -1,0 +1,345 @@
+{
+  "scope_A": "Previously used Seoul/Gwangmyeong development records",
+  "price": "All 325084 evaluated transaction rows are preserved prior evaluations, not new holdout rows",
+  "scope_B_origins": [
+    {
+      "origin": "2007-01-01",
+      "scope": "B",
+      "all_outcomes_before_2021": true,
+      "overlaps_existing_capital_price_source_period": false,
+      "common_sufficient_observation": false,
+      "model_evaluated": false
+    },
+    {
+      "origin": "2007-07-01",
+      "scope": "B",
+      "all_outcomes_before_2021": true,
+      "overlaps_existing_capital_price_source_period": false,
+      "common_sufficient_observation": false,
+      "model_evaluated": false
+    },
+    {
+      "origin": "2008-01-01",
+      "scope": "B",
+      "all_outcomes_before_2021": true,
+      "overlaps_existing_capital_price_source_period": false,
+      "common_sufficient_observation": false,
+      "model_evaluated": false
+    },
+    {
+      "origin": "2008-07-01",
+      "scope": "B",
+      "all_outcomes_before_2021": true,
+      "overlaps_existing_capital_price_source_period": false,
+      "common_sufficient_observation": false,
+      "model_evaluated": false
+    },
+    {
+      "origin": "2009-01-01",
+      "scope": "B",
+      "all_outcomes_before_2021": true,
+      "overlaps_existing_capital_price_source_period": false,
+      "common_sufficient_observation": false,
+      "model_evaluated": false
+    },
+    {
+      "origin": "2009-07-01",
+      "scope": "B",
+      "all_outcomes_before_2021": true,
+      "overlaps_existing_capital_price_source_period": false,
+      "common_sufficient_observation": false,
+      "model_evaluated": false
+    },
+    {
+      "origin": "2010-01-01",
+      "scope": "B",
+      "all_outcomes_before_2021": true,
+      "overlaps_existing_capital_price_source_period": false,
+      "common_sufficient_observation": false,
+      "model_evaluated": false
+    },
+    {
+      "origin": "2010-07-01",
+      "scope": "B",
+      "all_outcomes_before_2021": true,
+      "overlaps_existing_capital_price_source_period": false,
+      "common_sufficient_observation": true,
+      "model_evaluated": true
+    },
+    {
+      "origin": "2011-01-01",
+      "scope": "B",
+      "all_outcomes_before_2021": true,
+      "overlaps_existing_capital_price_source_period": false,
+      "common_sufficient_observation": true,
+      "model_evaluated": true
+    },
+    {
+      "origin": "2011-07-01",
+      "scope": "B",
+      "all_outcomes_before_2021": true,
+      "overlaps_existing_capital_price_source_period": false,
+      "common_sufficient_observation": true,
+      "model_evaluated": true
+    },
+    {
+      "origin": "2012-01-01",
+      "scope": "B",
+      "all_outcomes_before_2021": true,
+      "overlaps_existing_capital_price_source_period": false,
+      "common_sufficient_observation": true,
+      "model_evaluated": true
+    },
+    {
+      "origin": "2012-07-01",
+      "scope": "B",
+      "all_outcomes_before_2021": true,
+      "overlaps_existing_capital_price_source_period": false,
+      "common_sufficient_observation": true,
+      "model_evaluated": true
+    },
+    {
+      "origin": "2013-01-01",
+      "scope": "B",
+      "all_outcomes_before_2021": true,
+      "overlaps_existing_capital_price_source_period": false,
+      "common_sufficient_observation": true,
+      "model_evaluated": true
+    },
+    {
+      "origin": "2013-07-01",
+      "scope": "B",
+      "all_outcomes_before_2021": true,
+      "overlaps_existing_capital_price_source_period": false,
+      "common_sufficient_observation": true,
+      "model_evaluated": true
+    },
+    {
+      "origin": "2014-01-01",
+      "scope": "B",
+      "all_outcomes_before_2021": true,
+      "overlaps_existing_capital_price_source_period": false,
+      "common_sufficient_observation": true,
+      "model_evaluated": true
+    },
+    {
+      "origin": "2014-07-01",
+      "scope": "B",
+      "all_outcomes_before_2021": true,
+      "overlaps_existing_capital_price_source_period": false,
+      "common_sufficient_observation": true,
+      "model_evaluated": true
+    },
+    {
+      "origin": "2015-01-01",
+      "scope": "B",
+      "all_outcomes_before_2021": true,
+      "overlaps_existing_capital_price_source_period": false,
+      "common_sufficient_observation": true,
+      "model_evaluated": true
+    },
+    {
+      "origin": "2015-07-01",
+      "scope": "B",
+      "all_outcomes_before_2021": true,
+      "overlaps_existing_capital_price_source_period": false,
+      "common_sufficient_observation": false,
+      "model_evaluated": true
+    },
+    {
+      "origin": "2016-01-01",
+      "scope": "B",
+      "all_outcomes_before_2021": true,
+      "overlaps_existing_capital_price_source_period": false,
+      "common_sufficient_observation": false,
+      "model_evaluated": true
+    },
+    {
+      "origin": "2016-07-01",
+      "scope": "B",
+      "all_outcomes_before_2021": true,
+      "overlaps_existing_capital_price_source_period": false,
+      "common_sufficient_observation": false,
+      "model_evaluated": true
+    },
+    {
+      "origin": "2017-01-01",
+      "scope": "B",
+      "all_outcomes_before_2021": true,
+      "overlaps_existing_capital_price_source_period": false,
+      "common_sufficient_observation": false,
+      "model_evaluated": true
+    },
+    {
+      "origin": "2017-07-01",
+      "scope": "B",
+      "all_outcomes_before_2021": true,
+      "overlaps_existing_capital_price_source_period": false,
+      "common_sufficient_observation": false,
+      "model_evaluated": true
+    },
+    {
+      "origin": "2018-01-01",
+      "scope": "B",
+      "all_outcomes_before_2021": true,
+      "overlaps_existing_capital_price_source_period": false,
+      "common_sufficient_observation": true,
+      "model_evaluated": true
+    },
+    {
+      "origin": "2018-07-01",
+      "scope": "B",
+      "all_outcomes_before_2021": true,
+      "overlaps_existing_capital_price_source_period": false,
+      "common_sufficient_observation": true,
+      "model_evaluated": true
+    },
+    {
+      "origin": "2019-01-01",
+      "scope": "B",
+      "all_outcomes_before_2021": false,
+      "overlaps_existing_capital_price_source_period": true,
+      "common_sufficient_observation": true,
+      "model_evaluated": true
+    },
+    {
+      "origin": "2019-07-01",
+      "scope": "B",
+      "all_outcomes_before_2021": false,
+      "overlaps_existing_capital_price_source_period": true,
+      "common_sufficient_observation": true,
+      "model_evaluated": true
+    },
+    {
+      "origin": "2020-01-01",
+      "scope": "B",
+      "all_outcomes_before_2021": false,
+      "overlaps_existing_capital_price_source_period": true,
+      "common_sufficient_observation": false,
+      "model_evaluated": true
+    },
+    {
+      "origin": "2020-07-01",
+      "scope": "B",
+      "all_outcomes_before_2021": false,
+      "overlaps_existing_capital_price_source_period": true,
+      "common_sufficient_observation": false,
+      "model_evaluated": true
+    },
+    {
+      "origin": "2021-01-01",
+      "scope": "B",
+      "all_outcomes_before_2021": false,
+      "overlaps_existing_capital_price_source_period": true,
+      "common_sufficient_observation": false,
+      "model_evaluated": true
+    },
+    {
+      "origin": "2021-07-01",
+      "scope": "B",
+      "all_outcomes_before_2021": false,
+      "overlaps_existing_capital_price_source_period": true,
+      "common_sufficient_observation": false,
+      "model_evaluated": true
+    },
+    {
+      "origin": "2022-01-01",
+      "scope": "B",
+      "all_outcomes_before_2021": false,
+      "overlaps_existing_capital_price_source_period": true,
+      "common_sufficient_observation": false,
+      "model_evaluated": true
+    },
+    {
+      "origin": "2022-07-01",
+      "scope": "B",
+      "all_outcomes_before_2021": false,
+      "overlaps_existing_capital_price_source_period": true,
+      "common_sufficient_observation": false,
+      "model_evaluated": true
+    },
+    {
+      "origin": "2023-01-01",
+      "scope": "B",
+      "all_outcomes_before_2021": false,
+      "overlaps_existing_capital_price_source_period": true,
+      "common_sufficient_observation": false,
+      "model_evaluated": true
+    },
+    {
+      "origin": "2023-07-01",
+      "scope": "B",
+      "all_outcomes_before_2021": false,
+      "overlaps_existing_capital_price_source_period": true,
+      "common_sufficient_observation": true,
+      "model_evaluated": true
+    },
+    {
+      "origin": "2024-01-01",
+      "scope": "B",
+      "all_outcomes_before_2021": false,
+      "overlaps_existing_capital_price_source_period": true,
+      "common_sufficient_observation": true,
+      "model_evaluated": true
+    },
+    {
+      "origin": "2024-07-01",
+      "scope": "B",
+      "all_outcomes_before_2021": false,
+      "overlaps_existing_capital_price_source_period": true,
+      "common_sufficient_observation": true,
+      "model_evaluated": true
+    }
+  ],
+  "scope_B_comparison": [
+    {
+      "period_group": "결과창이 2020년까지인 신규 과거 원점",
+      "method": "learned_price",
+      "origins": 12,
+      "median_excess_pct": 1.4092324113667194
+    },
+    {
+      "period_group": "결과창이 2020년까지인 신규 과거 원점",
+      "method": "laggard",
+      "origins": 12,
+      "median_excess_pct": 2.128404877097206
+    },
+    {
+      "period_group": "결과창이 2020년까지인 신규 과거 원점",
+      "method": "cheap_peer",
+      "origins": 12,
+      "median_excess_pct": 1.0942892258171582
+    },
+    {
+      "period_group": "결과창이 2020년까지인 신규 과거 원점",
+      "method": "momentum",
+      "origins": 12,
+      "median_excess_pct": -2.1892177652392464
+    },
+    {
+      "period_group": "2021년 이후 기존 가격 자료와 기간 중첩 가능",
+      "method": "learned_price",
+      "origins": 5,
+      "median_excess_pct": 0.2752129162699134
+    },
+    {
+      "period_group": "2021년 이후 기존 가격 자료와 기간 중첩 가능",
+      "method": "laggard",
+      "origins": 5,
+      "median_excess_pct": 0.582353039999883
+    },
+    {
+      "period_group": "2021년 이후 기존 가격 자료와 기간 중첩 가능",
+      "method": "cheap_peer",
+      "origins": 5,
+      "median_excess_pct": -3.5770426742377746
+    },
+    {
+      "period_group": "2021년 이후 기존 가격 자료와 기간 중첩 가능",
+      "method": "momentum",
+      "origins": 5,
+      "median_excess_pct": -1.4875037644529157
+    }
+  ],
+  "limitations": "Period overlap, not proof that each underlying record was individually inspected; current boundary diagnostics remain retrospective."
+}

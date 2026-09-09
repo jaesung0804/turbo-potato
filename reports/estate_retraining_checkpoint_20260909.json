@@ -1,0 +1,35 @@
+{
+  "filename": "estate_retraining_checkpoint_20260909.zip",
+  "bytes": 47499999,
+  "sha256": "5a5dc80de81972f9186fb52483bc418b1caa1853b144fca9fe569e69e9ca6e7b",
+  "files": {
+    "all_history.joblib": {
+      "sha256": "62b8333ad35d2aabd126abdde26dbda3fd3fd57c99fef24f2272196c4d244243",
+      "bytes": 210296
+    },
+    "potential_predictions_B.parquet": {
+      "sha256": "48ed5ff1cdf0204468956342e9da521fa25d3e3ad7f0b91571a4d5efa62ed3bf",
+      "bytes": 6246629
+    },
+    "potential_test_B.parquet": {
+      "sha256": "320fa4d756e778c77ea5c159a893dd457a303e810a632ed115477b27482b4875",
+      "bytes": 17168669
+    },
+    "potential_train_A.parquet": {
+      "sha256": "815d624f9d7f7f9025a679c31ef43b7f148e9bb5b2c9b61398ae15d2aacc4148",
+      "bytes": 7165417
+    },
+    "price_predictions.parquet": {
+      "sha256": "3ae2ffb3b1ce64b98c4113eddc9c7fdd64967ff9d0c11c6fdbce2e59e8429afc",
+      "bytes": 16913446
+    },
+    "recent_refit.joblib": {
+      "sha256": "752e61fbc5b2f85a2277e9c0ce17a806dda277baa1637d6d364ec3df050480b0",
+      "bytes": 194474
+    },
+    "rolling_five_years.joblib": {
+      "sha256": "9a94cb477f2e88d896e228caf3438d5e7df08d1f419caf38490176d8f48f216c",
+      "bytes": 197735
+    }
+  }
+}

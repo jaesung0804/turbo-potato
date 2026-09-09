@@ -1,0 +1,23 @@
+{
+  "sha256": "f9fe072af15733619321aba69c7707e16e40e7c61eb8a6d95414bb8e60504355",
+  "manifest": {
+    "source": {
+      "raw_rows": 5117435,
+      "used_rows": 4993270,
+      "cancelled": 76299,
+      "direct_excluded": 47866,
+      "unknown_deal_type": 4168603,
+      "source_sha256": "ce90177fc97c3d7240367bbbf303bc090c7963d374d884e1441ee31ad602e4f3",
+      "min_date": "2006-01-01",
+      "max_date": "2026-09-08"
+    },
+    "rows": 3883579,
+    "first": "2007-03",
+    "last": "2026-07",
+    "feature_sha256": "f9fe072af15733619321aba69c7707e16e40e7c61eb8a6d95414bb8e60504355",
+    "implementation_sha256": "c6d4ac04cc4191b2309a9eb5d91102753f91476608c12882ec7751213f176743",
+    "availability_policy": "historical_61_31",
+    "normalization": "log nominal 10000 KRW per sqm; no fitted scaler",
+    "january_february": "excluded to preserve original validation design"
+  }
+}

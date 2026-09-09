@@ -1,0 +1,152 @@
+"""Render completed research outputs into the website's dated evidence summary."""
+from __future__ import annotations
+
+import argparse
+import json
+from pathlib import Path
+import shutil
+import statistics
+
+from estate_io import write_json
+from normalize_molit_capital_history import file_sha256
+
+LABELS={'frozen_original':'기존 고정 모델','recent_refit':'최근 자료 재학습',
+        'all_history':'전체 과거 재학습','rolling_five_years':'최근 5년 재학습',
+        'learned_price':'기존 잠재력 사양','laggard':'단순 소외 규칙',
+        'cheap_peer':'주변 대비 저가 규칙','momentum':'상대 추세 규칙'}
+BOUNDARIES={'incheon_2026_new_gu_on_older_contracts':'인천 개편 전 거래에 2026년 신설 구 표기',
+            'hwaseong_2026_gu_on_older_contracts':'화성 구 설치 전 거래에 신설 구 표기',
+            'bucheon_gu_during_abolished_period':'부천 구 폐지 기간 거래에 구 표기'}
+
+
+def table(headers,rows):
+    return '\n'.join(['| '+' | '.join(headers)+' |','| '+' | '.join(['---']*len(headers))+' |']+
+                     ['| '+' | '.join(str(x) for x in row)+' |' for row in rows])
+
+
+def publish(source, reports):
+    source,reports=Path(source),Path(reports)
+    price=json.loads((source/'price_results.json').read_text())
+    potential=json.loads((source/'potential_results.json').read_text())
+    audit=json.loads((source/'data_audit.json').read_text())
+    inputs=json.loads((source/'input_manifest.json').read_text())
+    rows=[]
+    for year,period in [('2025','2025년 3~12월'),('2026','2026년 3~7월')]:
+        rows.append({'period':period,'trades':price['methods']['frozen_original'][year]['transactions'],
+            'original':price['methods']['frozen_original'][year]['mae_oku'],
+            'recent':price['methods']['recent_refit'][year]['mae_oku'],
+            'all_history':price['methods']['all_history'][year]['mae_oku'],
+            'rolling_five_years':price['methods']['rolling_five_years'][year]['mae_oku']})
+    boundaries=[{'label':BOUNDARIES[r['issue']],'rows':r['rows']} for r in audit['boundary_issues']]
+    comparison=[{'label':LABELS[r['method']],'excess_pct':r['median_origin_complex_excess_pct'],
+                 'observation_rate_pct':r['median_observation_rate_pct']} for r in potential['comparison_same_model_eligible_origins']]
+    common=potential['common_sufficiently_observed_origins']
+    method_results=potential['results']
+    grouped={}
+    for item in method_results:
+        grouped.setdefault(item['origin'],[]).append(item)
+    overlap=[]
+    for origin,items in sorted(grouped.items()):
+        has_model=any(r['method']=='learned_price' for r in items)
+        enough=has_model and all(r['observation_rate_pct']>=50 and r['observed_complexes']>=20 for r in items)
+        overlap.append({'origin':origin,'scope':'B','all_outcomes_before_2021':origin<='2018-07-01',
+                        'overlaps_existing_capital_price_source_period':origin>'2018-07-01',
+                        'common_sufficient_observation':enough,'model_evaluated':has_model})
+    overlap_comparison=[]
+    for older,label in [(True,'결과창이 2020년까지인 신규 과거 원점'),(False,'2021년 이후 기존 가격 자료와 기간 중첩 가능')]:
+        origins={r['origin'] for r in overlap if r['all_outcomes_before_2021']==older and r['common_sufficient_observation']}
+        for method in ('learned_price','laggard','cheap_peer','momentum'):
+            values=[r['complex_median_excess_pct'] for r in method_results if r['method']==method and r['origin'] in origins]
+            overlap_comparison.append({'period_group':label,'method':method,'origins':len(values),
+                                       'median_excess_pct':statistics.median(values) if values else None})
+    write_json(reports/'estate_retraining_overlap_20260909.json',{'scope_A':'Previously used Seoul/Gwangmyeong development records',
+        'price':'All 325084 evaluated transaction rows are preserved prior evaluations, not new holdout rows',
+        'scope_B_origins':overlap,'scope_B_comparison':overlap_comparison,
+        'limitations':'Period overlap, not proof that each underlying record was individually inspected; current boundary diagnostics remain retrospective.'},indent=2)
+    potential_summary={
+        'headline':'경기·인천 회고 진단을 완료했습니다. 현재 후보는 서울·광명 18~24개월 모델을 유지합니다.',
+        'detail':f"서울·광명에서만 학습한 고정 사양을 나머지 경기·인천의 {potential['model_evaluated_origins']}개 반기 판단 시점에 적용했습니다. 모델과 세 단순 규칙 모두 선정 후보 관측률 50%·관측 단지 20개 조건을 충족한 시점은 {common}개입니다. 과거 경계·단지 연결 확인이 남아 있어 정식 지역 확대 확인시험은 보류합니다.",
+        'comparison':comparison,
+        'comparison_note':f'현재 원본의 주소 경계로 계산한 회고 진단입니다. 각 시점에 상위 10%를 먼저 선택하고, 결과가 관측된 단지별 상대 변화의 중앙값을 구한 뒤 공통 {common}개 시점의 중앙값을 표시했습니다. 무거래 등 미관측 결과는 비워 두었고, 겹치는 시점들을 독립적인 시장 국면으로 세지 않습니다. 실제 매매 수익률을 뜻하지 않습니다.',
+        'primary_confirmation':'pending_historical_boundaries', 'production_changed':False}
+    refresh=price['input_refresh_2026']
+    passed=price['primary_gate_passed']
+    headline=('전체 과거 재학습에서 회고 개선 기준을 충족했습니다. 운영 교체는 앞으로의 예측 검증까지 보류합니다.' if passed else
+              '과거 자료를 더 학습했지만 채택 기준을 충족하지 못했습니다. 현재 가격 모델을 유지합니다.')
+    summary={'schema_version':1,'asof':'2026-09-09','production_changed':False,'headline':headline,
+        'data_note':f"경기·인천 2006~2020년 원본 {audit['new_csv_rows']:,}건을 기존 자료와 통합했습니다. 정규화된 {audit['raw_rows']:,}건 중 취소·직거래·유효하지 않은 가격 등을 제외한 {audit['quality']['used_rows']:,}건을 연구 입력으로 사용했습니다. 올려주신 CSV 7개는 저장된 원본과 해시가 모두 일치했습니다. 기존 검색 목록의 계약 범위는 2021년 이후이며, 추가 과거 자료는 이번 연구에 사용했습니다.",
+        'price_rows':rows,
+        'price_note':'이미 보존된 동일 거래·동일 월별 입력·실제 거래 층에서 학습 범위의 효과를 비교했습니다. 각 평가 연도 전년 말까지의 거래만 학습했습니다. 주 후보의 사전 기준은 두 연도 모두 기존 및 최근 재학습 대비 MAE 3% 이상 개선, 단지 균등 오차 악화 없음, 지역별 MAE 악화 2% 이내입니다.',
+        'input_refresh_note':f"수집본 교체 효과는 별도 점검했습니다. 2026년 공통 {refresh['common_rows']:,}건에 같은 고정 모델을 적용하면, 기존 입력의 MAE {refresh['old_inputs']['mae_oku']:.4f}억 → 새 입력 {refresh['refreshed_inputs']['mae_oku']:.4f}억입니다. 이전 표본 중 {refresh['old_rows_unmatched']:,}건은 새 입력과 대응되지 않아 이 비교에서 제외했습니다.",
+        'normalization_note':'금액은 만원, 면적은 정확한 ㎡로 통일한 뒤 ㎡당 가격의 로그를 사용합니다. 파일별 평균·표준편차나 수집일 기준 가격 지수로 다시 맞추는 방식이 아니므로 수집일 차이에 따른 스케일러 불일치는 없었습니다. 과거 사용 가능 시점은 계약별 61일/31일 지연 가정으로 구분했습니다. 업로드·다운로드 날짜를 실제 당시 공개일로 바꾸지는 않았습니다.',
+        'boundary_rows':boundaries,
+        'boundary_note':'위 건수는 잘못된 거래 수가 아니라 당시 경계와의 대응 확인이 필요한 주소 표기 건수입니다. 현재 구 이름이 과거 계약에도 붙어 있어 같은 지역 비교군이 달라질 수 있습니다. 불명확한 단지·지번을 임의로 합치지 않았습니다.',
+        'potential':potential_summary,
+        'limitations':'현재 정정본과 이미 사용한 가격 평가 표본을 활용한 회고 연구입니다. 데이터 증가만으로 독립 검증이나 미래 수익률이 확보되지는 않습니다. 기존 5년·다중 경로 미통과 기록과 2026년 9월 고정 예측을 보존했습니다.'}
+    reports.mkdir(parents=True,exist_ok=True)
+    write_json(reports/'estate_retraining_summary_20260909.json',summary,indent=2)
+    for original,target in [('data_audit.json','estate_retraining_data_audit_20260909.json'),
+                            ('price_results.json','estate_retraining_price_20260909.json'),
+                            ('potential_results.json','estate_retraining_potential_20260909.json'),
+                            ('input_manifest.json','estate_retraining_inputs_20260909.json'),
+                            ('price_feature_input_manifest.json','estate_retraining_feature_input_20260909.json')]:
+        shutil.copyfile(source/original,reports/target)
+    report=[
+        '# 2026-09-09 실거래가 확장 재학습·검증 결과',
+        headline,
+        '사용자가 승인한 자료 감사, 가격 재학습 비교, 잠재력 지역 확대 진단을 실행했다. 운영 가격 모델 `estate-nowcast-v1`과 서울·광명 잠재력 v2를 유지한다. 회고 비교의 개선/미개선과 앞으로 검증할 사항을 구분한다.',
+        '## 1. 입력과 정규화',summary['data_note'],summary['normalization_note'],
+        f"새 CSV에서 지번 표기와 본번·부번이 일치하지 않는 {sum(sum(s['dashboard_exclusions'].values()) for s in audit['exclusions']):,}행은 원본에 보존하고 단지 키 연구 입력에서 제외했다. 정규화 통합본 이후 취소 {audit['quality']['cancelled']:,}행, 남은 직거래 {audit['quality']['direct_excluded']:,}행을 제외했다. 거래 구분 미상 {audit['quality']['unknown_deal_type']:,}행은 유지했으므로 오래된 직거래가 완전히 배제됐다는 뜻은 아니다.",
+        '출처별 지역·기간 소유권을 고정하여 광명 과거 CSV와 기존 API를 이중 합산하지 않았다. 고유 계약 ID가 없으므로 같은 공개 조건의 행도 별도 계약일 수 있어 중복도를 보존했다. 30개 연도 파일의 요청 범위·행수·원본 및 압축 지문을 확인했다. 모든 원본이 서버 독립 총계와 대조됐다는 의미는 아니다.',
+        '압축 출력은 종료·CRC 검사를 추가했다. 저장 중 불완전하게 생성된 임시 출력 두 차례는 실험에서 사용하지 않았고, 최종 134개 파티션과 합본 행수가 검증된 입력만 사용했다.',
+        '## 2. 현재 가격 재학습',summary['price_note'],
+        table(['기간','거래 수','기존 고정','최근 재학습','전체 과거','최근 5년'],
+              [[r['period'],f"{r['trades']:,}",*[f"{r[k]:.4f}" for k in ('original','recent','all_history','rolling_five_years')]] for r in rows]),
+        '단위: 거래당 총액 MAE, 억원. 기존 테스트 피처를 고정했으므로 위 표는 학습 범위 변화의 비교다. 주 후보는 전체 과거이며, 최근 5년은 사전에 정한 민감도다. 사후에 좋은 연도나 학습 범위를 골라 주 결과로 바꾸지 않았다.',
+        table(['사양','평가 연도','학습 연도','학습 거래'],[[LABELS[r['method']],r['evaluation_year'],f"{r['first_year']}~{r['last_year']}",f"{r['rows']:,}"] for r in price['training']]),
+        table(['연도','기존 대비 MAE 개선','최근 재학습 대비 개선','3% 조건','단지 균등 조건','지역 조건'],
+              [[r['year'],f"{r['gain_vs_frozen_pct']:+.2f}%",f"{r['gain_vs_recent_refit_pct']:+.2f}%",*[('충족' if r[k] else '미충족') for k in ('three_percent_vs_both','complex_balanced_not_worse','region_deterioration_within_two_percent')]] for r in price['gates']]),
+        summary['input_refresh_note'],
+        '공통 표본 대응은 단지·정확 면적·월·층·연령·금액과 중복 순번을 사용했다. 과거 체크포인트에 계약 일자가 없으므로 같은 달 동일 조건 거래의 개별 계약 ID 대응을 입증한 것은 아니다. 같은 월의 동일 조건 거래는 입력 피처가 같으며, 표본 탈락을 숨기지 않았다.',
+        '단지 의존성을 유지한 대응 부트스트랩(2,000회) 결과는 상세 JSON에 저장했다. 두 연도를 가로질러 같은 단지를 함께 재표집한다. 이는 독립적인 시장 국면의 불확실성을 완전히 측정하지 않으며, 이미 사용한 평가 구간을 새 독립 시험으로 만들지 않는다.',
+        '### 지역별 MAE',
+        table(['연도','지역','사양','거래','MAE 억','단지 균등 MAPE %'],
+              [[r['year'],r['region'],LABELS[r['method']],f"{r['transactions']:,}",f"{r['mae_oku']:.4f}",f"{r['complex_balanced_mape_pct']:.3f}"] for r in price['regions']]),
+        '## 3. 잠재력의 경기·인천 확장',potential_summary['detail'],
+        '학습 지역 A는 서울·광명으로 제한하고, 평가 지역 B는 광명을 제외한 경기 전체와 인천 전체다. B 단지와 B의 결과 가격이 학습 목표 또는 학습 비교군에 들어가지 않도록 라벨을 지역별로 계산했다. 2007년 1월~2024년 7월 반기 원점에서 18~24개월 결과창을 사용하며, 학습 시점에 성숙한 이전 라벨만 사용했다. 최소 학습 500행·3개 원점, 180일 진입 3건, 3~20층, 정확 면적, 다른 단지 5개 비교군을 유지했다.',
+        table(['사양','공통 시점','상대 변화 중앙값','선정 후보 관측률 중앙값'],
+              [[r['label'],common,'미관측' if r['excess_pct'] is None else f"{r['excess_pct']:+.2f}%",'미관측' if r['observation_rate_pct'] is None else f"{r['observation_rate_pct']:.2f}%"] for r in comparison]),
+        potential_summary['comparison_note'],
+        '### 기존 자료와의 기간 중첩',
+        '모든 가격 평가 거래는 기존 평가 표본이다. A(서울·광명)는 기존 가설 개발 자료다. B는 결과창이 2020년 안에 끝나는 원점과, 기존 수도권 가격 자료의 2021년 이후 기간을 포함하는 원점으로 나눴다. 아래도 같은 관측 조건의 고정 진단이며 더 좋은 구간을 주 결과로 선택하지 않았다.',
+        table(['기간 구획','사양','공통 원점','상대 변화 중앙값'],
+              [[r['period_group'],LABELS[r['method']],r['origins'],'미관측' if r['median_excess_pct'] is None else f"{r['median_excess_pct']:+.2f}%"] for r in overlap_comparison]),
+        '**정식 지리 확인시험은 보류다.** 현재 원본 주소의 비교군을 사용한 사전 지정 회고 진단이며, 역사 경계·단지 식별 정합성을 확인하지 못한 상태에서 정식 확대 승격을 하지 않았다. 모델의 우위가 입증됐다는 결론도 내리지 않는다. 단순 소외 신호가 양수인 일부 결과를 인과효과나 실행 가능한 수익률로 해석하지 않는다.',
+        '## 4. 수집 시점보다 먼저 해결할 경계·관측 시점',
+        table(['확인 대상','거래 수'],[[r['label'],f"{r['rows']:,}"] for r in boundaries]),
+        summary['boundary_note'],
+        '인천은 2026-07-01 구 개편을 안내하고, 부천은 2016-07-04 구 폐지와 2024-01-01 복귀를 기록한다. 화성 4개 구 설치 전 계약에 현재 구가 붙는 경우도 별도 집계했다. 출처: [인천시 개편 안내](https://www.incheon.go.kr/IC01070101), [부천 소사구 행정구역 변천](https://sosa.bucheon.go.kr/site/homepage/menu/viewMenu?menuid=171001002003002), [화성시 연혁](https://www.hscity.go.kr/www/intro/gnrlSttus/ctyhllHist.jsp).',
+        '2026년에 처음 관측한 과거 CSV를 “당시 사용 가능이 입증된 자료”로 엄격히 제한하면 과거 원점에서 사용할 수 없다. 그래서 이번 결과는 61/31일을 가정한 회고 분석이라고 명시한다. 수집일을 계약일로 바꾸거나 신규 정규화 기준일을 임의로 만들어 이 문제를 해결하지 않았다. 현행 단지 키가 2021년 이전에도 있는지의 단순 연속성은 감사 JSON에 담았지만, 키 부재를 연결 오류로 단정하지 않았다.',
+        '## 5. 운영 반영과 보존',
+        '홈페이지에 재학습 비교표, 정규화 설명, 경계 확인 건수, 경기·인천 잠재력 진단과 유지 결정을 추가했다. 기존 가격 가중치·대표 층 정의·점수 50 기준과 잠재력 범위를 유지한다. 기존 2026-09 v1/v2 예측, 5년 및 다중 경로 미통과 결과를 보존한다. 추가 지역의 현재 순위를 임의로 생성·공개하지 않는다.',
+        '남은 확인은 역사 경계와 단지·지번 연결, 실제 최초 관측 기록, 새로 고정한 이후의 미래 예측 성과다. 이번 실험의 재학습 모델과 행별 예측은 별도 연구 체크포인트로 보존한다.',
+        '## 6. 고정 기준과 재현',
+        f"[결과 계산 전 공개한 실행 기준](https://github.com/jaesung0804/turbo-potato/blob/{inputs['protocol_commit']}/reports/estate_retraining_protocol_20260909.md). 입력·학습·평가 지문은 `estate_retraining_inputs_20260909.json`, `estate_retraining_feature_input_20260909.json`에 있다. 원본 수집 상태는 매매만 완료한 범위이며, 전세를 포함한 전체 수집 완료로 바꾸지 않았다.",
+        '원본 상태의 고정 커밋: 경기·인천 CSV `4c33f9eee4b0ed9b0dd0ed1bb9b894d2d8b5aa5d`, 서울 2006~2015 `e1e48354f7cb2f15f2b4c045c7ce48569869688b`, 서울 2016~2020 `2221cc29004f0dcc7132cca43dd4c5955f08ae4d`, 최근 수도권 `890e937419182652bf2b8e04a6f9c17f776d3002`.',
+        'Python 3.12, `requirements-nowcast.txt`의 고정 버전을 사용했다. 이전 보존 평가 체크포인트 `estate_nowcast_checkpoint_20260907.zip`을 `.work/previous-nowcast`에 풀어 사용한다. 원본 상태를 각각 `.work/capital-source`, `.work/older-history-state`, `.work/history-state`, `.work/raw-state`에 복원한 뒤 빈 출력 폴더에서 실행한다.',
+        '```bash\npython prepare_capital_history_inputs.py --older-state .work/older-history-state --history-state .work/history-state --raw-state .work/raw-state --output .work/retrain-inputs\npython prepare_estate_retraining.py --output .work/retraining-v3\npython estate_retraining_features.py --source .work/retraining-v3/transactions_extended.csv --output .work/retraining-v3/features.parquet\npython analyze_estate_retraining.py audit\npython analyze_estate_retraining.py price\npython analyze_estate_retraining.py potential\npython publish_estate_retraining_report.py\n```',
+        f"최종 통합 CSV SHA-256: `{audit['source_sha256']}`. 정규화와 코드 지문은 상세 실행 원장에 보존했다.",
+        summary['limitations']]
+    (reports/'estate_retraining_results_20260909.md').write_text('\n\n'.join(report)+'\n',encoding='utf-8')
+    print(json.dumps({'summary':str(reports/'estate_retraining_summary_20260909.json'),
+                      'summary_sha256':file_sha256(reports/'estate_retraining_summary_20260909.json'),
+                      'headline':headline},ensure_ascii=False))
+    return summary
+
+
+if __name__=='__main__':
+    p=argparse.ArgumentParser(description=__doc__)
+    p.add_argument('--source',default='.work/retraining-results-20260909')
+    p.add_argument('--reports',default='reports')
+    a=p.parse_args()
+    publish(a.source,a.reports)
