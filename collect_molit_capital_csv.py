@@ -637,6 +637,14 @@ def collect(requests: list[ExportRequest], output: Path, cutoff: date,
             raise
 
 
+def prioritize_incheon_sales(requests: list[ExportRequest]) -> list[ExportRequest]:
+    """Keep the full coverage plan; visit Incheon historical sales newest first."""
+    priority = [r for r in requests if r.region == "incheon" and r.kind == "sale"
+                and r.start.year <= 2020]
+    rest = [r for r in requests if r not in priority]
+    return sorted(priority, key=lambda r: r.start, reverse=True) + rest
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--output", type=Path, default=Path("data/raw/molit-capital-csv"))
@@ -644,6 +652,8 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--regions", nargs="+", choices=tuple(REGIONS), default=list(REGIONS))
     parser.add_argument("--kinds", nargs="+", choices=("sale", "rent"), default=["sale", "rent"])
     parser.add_argument("--years", nargs="+", type=int, help="Restrict the default expansion plan")
+    parser.add_argument("--incheon-sales-descending", action="store_true",
+                        help="Prioritize historical Incheon sales from 2020 downward without dropping coverage")
     parser.add_argument("--daily-limit", type=int, default=DAILY_LIMIT)
     parser.add_argument("--include-current-sales", action="store_true",
                         help="Append three capital-area sale exports in the cutoff year")
@@ -673,6 +683,8 @@ def main(argv: list[str] | None = None) -> int:
     requests = [request for request in expansion_requests(args.cutoff, args.include_current_sales)
                 if request.region in args.regions and request.kind in args.kinds
                 and (args.years is None or request.start.year in args.years)]
+    if args.incheon_sales_descending:
+        requests = prioritize_incheon_sales(requests)
     if not requests:
         parser.error("No requested partitions belong to the default expansion plan")
     if args.plan_only:

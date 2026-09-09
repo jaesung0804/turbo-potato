@@ -30,7 +30,7 @@ jobs:
           m = json.load(open('checkpoint.json'))
           plan = expansion_requests(date(2026, 9, 9), True)
           assert set(m['planned_keys']) == {r.key for r in plan}
-          remaining = sum(m['entries'].get(r.key, {}).get('status') != 'complete' for r in plan)
+          remaining = sum(m['entries'].get(r.key, {}).get('status') != 'complete' for r in plan if r.region == 'incheon' and r.kind == 'sale' and r.start.year <= 2020)
           request = json.load(open('.github/capital-collection-request.json'))
           limit = request.get('max_files', 1)
           assert type(limit) is int and 1 <= limit <= 5, 'max_files must be 1..5'
@@ -67,7 +67,7 @@ jobs:
           for ((batch_index=1; batch_index<=FILE_LIMIT; batch_index++)); do
             echo "Starting file $batch_index/$FILE_LIMIT on this runner"
             collect_status=0
-            timeout --signal=INT --kill-after=5s 240s python -u trace_molit_transport.py --output .work/batch-input --cutoff 2026-09-09 --include-current-sales --max-new-partitions 1 --cache-hashes-only --metadata-timeout 30 --csv-timeout 120 --pause 1 --transport-retries 1 --retry-delay 5 --daily-limit 90 || collect_status=$?
+            timeout --signal=INT --kill-after=5s 240s python -u trace_molit_transport.py --output .work/batch-input --cutoff 2026-09-09 --include-current-sales --incheon-sales-descending --max-new-partitions 1 --cache-hashes-only --metadata-timeout 30 --csv-timeout 120 --pause 1 --transport-retries 1 --retry-delay 5 --daily-limit 90 || collect_status=$?
             timeout --signal=TERM --kill-after=5s 60s python capital_csv_state.py pack --source .work/batch-input --state .work/batch-state --incremental
             git -C .work/batch-state add -A
             if ! git -C .work/batch-state diff --cached --quiet; then
