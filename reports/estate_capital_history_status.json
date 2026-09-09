@@ -1,0 +1,125 @@
+{
+  "as_of": "2026-09-09",
+  "full_requested_collection_complete": false,
+  "production_data_changed": false,
+  "new_model_backtest_run": false,
+  "website_updated": false,
+  "requested_scope": {
+    "regions": [
+      "서울",
+      "경기",
+      "인천"
+    ],
+    "sale_start": "2006-01-01",
+    "rental_start_available": "2011-01-01",
+    "rental_2006_2010": "not_provided_by_this_source",
+    "requested_end": "2026-09-09",
+    "september_2026": "partial_month"
+  },
+  "csv_expansion": {
+    "planned_partitions": 81,
+    "completed_partitions": 4,
+    "remaining_partitions": 77,
+    "raw_rows": 614813,
+    "sale_rows": 433442,
+    "rental_rows": 181371,
+    "pure_jeonse_rows": 139547,
+    "monthly_rent_rows": 41824,
+    "completed": [
+      {
+        "region": "경기",
+        "kind": "sale",
+        "year": 2006,
+        "rows": 206224
+      },
+      {
+        "region": "경기",
+        "kind": "sale",
+        "year": 2007,
+        "rows": 117164
+      },
+      {
+        "region": "경기",
+        "kind": "sale",
+        "year": 2008,
+        "rows": 110054
+      },
+      {
+        "region": "경기",
+        "kind": "rent",
+        "year": 2011,
+        "rows": 181371
+      }
+    ],
+    "state_commit": "1747755718e829d8f581f88854337702eb284072",
+    "failure": {
+      "partition": "gyeonggi/sale/2009/2009-01-01_2009-12-31",
+      "expected_rows": 140861,
+      "error": "Non-CSV response; possible server error or access challenge",
+      "actual_error_kind": "undetermined; response body was not retained",
+      "run": 34298091259
+    }
+  },
+  "api_current_access_check": {
+    "run": 34298847695,
+    "results": [
+      {
+        "access_confirmed": false,
+        "attempts": 1,
+        "checked_at": "2026-09-09T01:21:25.282826+00:00",
+        "contract_month": "200601",
+        "kind": "sale",
+        "region": "11110",
+        "requested_rows": 1,
+        "service": "RTMSDataSvcAptTrade",
+        "transport_error": "TimeoutError"
+      },
+      {
+        "access_confirmed": false,
+        "attempts": 1,
+        "checked_at": "2026-09-09T01:22:10.495370+00:00",
+        "contract_month": "201101",
+        "kind": "rent",
+        "region": "11110",
+        "requested_rows": 1,
+        "service": "RTMSDataSvcAptRent",
+        "transport_error": "TimeoutError"
+      }
+    ],
+    "interpretation": "Both requests timed out without an HTTP/API status; this does not establish an API permission denial.",
+    "prior_sale_access_confirmed_by_existing_data": true,
+    "prior_rental_permission": "undetermined"
+  },
+  "reused_sales": {
+    "historical_seoul_gwangmyeong": {
+      "start": "200601",
+      "end": "202012",
+      "raw_rows": 1217848,
+      "source_commits": [
+        "e1e48354f7cb2f15f2b4c045c7ce48569869688b",
+        "2221cc29004f0dcc7132cca43dd4c5955f08ae4d"
+      ]
+    },
+    "capital_recent": {
+      "start": "202101",
+      "end": "202609",
+      "raw_rows": 1145460,
+      "fetched_at": "2026-09-08T22:57:55.326645+00:00",
+      "source_commit": "890e937419182652bf2b8e04a6f9c17f776d3002"
+    }
+  },
+  "overlap_audit": {
+    "scope": "Gwangmyeong 2006 full-year sales",
+    "csv_rows": 5304,
+    "api_rows": 5304,
+    "multiset_common": 5304,
+    "csv_only": 0,
+    "api_only": 0,
+    "duplicate_multiplicity_retained": true
+  },
+  "limitations": [
+    "Downloaded current revised records are not historical publication-time vintages.",
+    "Raw row counts preserve identical-row multiplicity and cancellations; they are not deduplicated contract counts.",
+    "New sources overlap parts of existing Gwangmyeong history and must not be blindly appended."
+  ]
+}

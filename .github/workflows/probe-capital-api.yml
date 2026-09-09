@@ -1,9 +1,6 @@
 name: Check existing MOLIT API service access
 on:
   workflow_dispatch:
-  push:
-    branches: [codex/estate-capital-history]
-    paths: [.github/workflows/probe-capital-api.yml]
 permissions:
   contents: read
 jobs:

@@ -1,14 +1,8 @@
 name: Collect and normalize capital area apartment history
 on:
   workflow_dispatch:
-  push:
-    branches: [codex/estate-capital-history]
-    paths:
-      - collect_molit_capital_csv.py
-      - capital_csv_state.py
-      - normalize_molit_capital_history.py
-      - prepare_capital_history_inputs.py
-      - .github/workflows/research-capital-history.yml
+# Resume deliberately after confirming the public export service is healthy.
+# Code/documentation pushes must not repeat the stopped non-CSV request.
 permissions:
   contents: write
 concurrency:
