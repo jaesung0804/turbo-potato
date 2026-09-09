@@ -636,3 +636,57 @@ def test_cli_rejects_unbounded_transport_retry_options(options):
 def test_cli_accepts_explicit_bounded_transport_retry_options(capsys):
     assert collector.main(["--plan-only", "--transport-retries", "2", "--retry-delay", "60"]) == 0
     assert json.loads(capsys.readouterr().out)["count"] == 78
+
+
+def test_initialize_transport_retry_keeps_client_and_records_endpoint(tmp_path, sleep_calls):
+    req = collector.ExportRequest("gyeonggi", "sale", date(2020, 1, 1), date(2020, 12, 31))
+    client = FakeClient({req.key: csv_bytes([transaction()])})
+    attempts = []
+    def initialize():
+        attempts.append(1)
+        if len(attempts) == 1:
+            client.last_request = {"endpoint": collector.PAGE_PATH, "category": "timeout"}
+            raise collector.TransportError("timeout")
+    client.initialize = initialize
+    result = collector.collect([req], tmp_path, CUTOFF, client,
+                               transport_retries=1, retry_delay=5)
+    assert len(attempts) == 2
+    assert result["status"] == "complete"
+    assert result["initialization_failures"][0]["request"]["endpoint"] == collector.PAGE_PATH
+    assert download_attempts(tmp_path) == 1
+    assert sleep_calls == [5]
+
+
+def test_initialize_failure_is_not_reported_as_download_failure(tmp_path, sleep_calls):
+    req = collector.ExportRequest("gyeonggi", "sale", date(2020, 1, 1), date(2020, 12, 31))
+    client = FakeClient({})
+    def initialize():
+        client.last_request = {"endpoint": collector.SIDO_PATH, "category": "dns_error"}
+        raise collector.TransportError("dns_error")
+    client.initialize = initialize
+    with pytest.raises(collector.TransportError):
+        collector.collect([req], tmp_path, CUTOFF, client, transport_retries=1, retry_delay=0)
+    manifest = read_json(tmp_path / "manifest.json")
+    assert manifest["failure_diagnostic"]["phase"] == "initialize"
+    assert manifest["failure_diagnostic"]["request"]["endpoint"] == collector.SIDO_PATH
+    assert len(manifest["initialization_failures"]) == 2
+    assert download_attempts(tmp_path) == 0
+
+
+def test_transport_diagnostics_keep_errno_but_not_secret_error_message():
+    error = urllib.error.URLError(OSError(101, "unreachable https://example/?secret=PRIVATE"))
+    diagnostic = collector.transport_diagnostic(error)
+    assert diagnostic["errno"] == 101
+    assert diagnostic["reason_type"] == "OSError"
+    assert "PRIVATE" not in json.dumps(diagnostic)
+
+
+def test_certificate_failures_do_not_retry(monkeypatch):
+    client = collector.PublicCSVClient(pause=0)
+    def fail_open(*args, **kwargs):
+        raise urllib.error.URLError(collector.ssl.SSLCertVerificationError(1, "bad certificate"))
+    monkeypatch.setattr(client.opener, "open", fail_open)
+    with pytest.raises(collector.CollectionError) as caught:
+        client._request(collector.PAGE_PATH)
+    assert not isinstance(caught.value, collector.TransportError)
+    assert client.last_request["category"] == "certificate_verification_failed"

@@ -26,6 +26,8 @@ import json
 import os
 from pathlib import Path
 import re
+import socket
+import ssl
 import sys
 import tempfile
 import time
@@ -53,6 +55,26 @@ class CollectionError(RuntimeError):
 
 class TransportError(CollectionError):
     """A network transport failure eligible for an explicitly bounded retry."""
+
+
+def transport_diagnostic(exc: Exception) -> dict[str, Any]:
+    """Keep useful connection evidence without logging URLs, cookies or error bodies."""
+    reason = getattr(exc, "reason", exc)
+    category = "connection_error"
+    if isinstance(reason, ssl.SSLCertVerificationError):
+        category = "certificate_verification_failed"
+    elif isinstance(reason, ssl.SSLError):
+        category = "tls_error"
+    elif isinstance(reason, socket.gaierror):
+        category = "dns_error"
+    elif isinstance(reason, TimeoutError):
+        category = "timeout"
+    elif isinstance(reason, http.client.RemoteDisconnected):
+        category = "remote_disconnected"
+    return {"category": category, "exception_type": type(exc).__name__,
+            "reason_type": type(reason).__name__,
+            "errno": getattr(reason, "errno", None),
+            "certificate_verify_code": getattr(reason, "verify_code", None)}
 
 
 def utc_now() -> str:
@@ -259,6 +281,7 @@ class PublicCSVClient:
             urllib.request.HTTPCookieProcessor(http.cookiejar.CookieJar()), _SameOriginRedirect())
         self.sido_codes: dict[str, str] = {}
         self._last_request: float | None = None
+        self.last_request: dict[str, Any] = {}
 
     def _request(self, path: str, fields: dict[str, str] | None = None) -> tuple[bytes, dict[str, str]]:
         if path not in {PAGE_PATH, CSV_PATH, COUNT_PATH, SIDO_PATH}:
@@ -274,6 +297,8 @@ class PublicCSVClient:
             headers["Content-Type"] = "application/x-www-form-urlencoded; charset=UTF-8"
         req = urllib.request.Request(ORIGIN + path, data=data, headers=headers)
         self._last_request = time.monotonic()
+        self.last_request = {"endpoint": path, "method": req.get_method(),
+                             "started_at": utc_now()}
         try:
             with self.opener.open(req, timeout=self.timeout) as response:
                 if response.status != 200:
@@ -283,11 +308,25 @@ class PublicCSVClient:
                     raise CollectionError("Response exceeds the explicit CSV size bound")
                 safe_headers = {key.lower(): value for key, value in response.headers.items()
                                 if key.lower() in {"content-type", "date", "last-modified"}}
+                leading = raw.lstrip()[:1]
+                self.last_request.update({"http_status": response.status,
+                    "content_type": safe_headers.get("content-type", ""),
+                    "response_bytes": len(raw), "response_sha256": hashlib.sha256(raw).hexdigest(),
+                    "body_shape": "markup" if leading == b"<" else
+                                  "json_like" if leading in (b"{", b"[") else "other"})
                 return raw, safe_headers
         except urllib.error.HTTPError as exc:
+            self.last_request.update({"http_status": exc.code, "category": "http_error"})
             raise CollectionError(f"Server HTTP {exc.code}; collection stopped without retry") from None
         except (urllib.error.URLError, TimeoutError, http.client.RemoteDisconnected, OSError) as exc:
-            raise TransportError(f"Transport request failed ({type(exc).__name__})") from None
+            diagnostic = transport_diagnostic(exc)
+            self.last_request.update(diagnostic)
+            message = f"Transport request failed ({type(exc).__name__}; {diagnostic['category']}; errno={diagnostic['errno']})"
+            if diagnostic["category"] == "certificate_verification_failed":
+                raise CollectionError(message) from None
+            raise TransportError(message) from None
+        finally:
+            self.last_request["elapsed_seconds"] = round(time.monotonic() - self._last_request, 3)
 
     def _json(self, path: str, fields: dict[str, str]) -> Any:
         raw, _ = self._request(path, fields)
@@ -469,13 +508,16 @@ def collect(requests: list[ExportRequest], output: Path, cutoff: date,
         manifest.pop("error", None)
         manifest.pop("failed_key", None)
         manifest.pop("completed_at", None)
+        manifest.pop("failure_diagnostic", None)
         atomic_json(manifest_path, manifest)
         ledger = DownloadLedger(output / "download-ledger.json", daily_limit, prior_downloads)
         active_key: str | None = None
         initialized = False
+        phase = "cache_verification"
         try:
             for request in requests:
                 active_key = request.key
+                phase = "cache_verification"
                 cached = manifest["entries"].get(request.key)
                 if cached and cached.get("status") == "complete":
                     _verify_cached(output, request, cached)
@@ -483,9 +525,25 @@ def collect(requests: list[ExportRequest], output: Path, cutoff: date,
                     continue
                 if not initialized:
                     client = client or PublicCSVClient()
-                    client.initialize()
+                    phase = "initialize"
+                    for attempt in range(transport_retries + 1):
+                        print(f"initialize attempt={attempt + 1}/{transport_retries + 1}", flush=True)
+                        try:
+                            client.initialize()
+                            break
+                        except TransportError:
+                            retry = attempt < transport_retries
+                            manifest.setdefault("initialization_failures", []).append({
+                                "failed_at": utc_now(), "attempt": attempt + 1,
+                                "retry_scheduled": retry,
+                                "request": dict(getattr(client, "last_request", {}))})
+                            atomic_json(manifest_path, manifest)
+                            if not retry:
+                                raise
+                            time.sleep(retry_delay)
                     initialized = True
                     manifest["sido_codes"] = dict(client.sido_codes)
+                phase = "count_download_validate"
                 fields = request.form(client.sido_codes)
                 entry: dict[str, Any] = {"query": request.as_dict(), "request_fields": fields,
                                          "status": "checking", "started_at": utc_now(),
@@ -544,6 +602,8 @@ def collect(requests: list[ExportRequest], output: Path, cutoff: date,
             message = str(exc) if isinstance(exc, CollectionError) else type(exc).__name__
             manifest.update({"status": "interrupted" if isinstance(exc, KeyboardInterrupt) else "failed",
                              "failed_key": active_key, "error": message, "updated_at": utc_now(),
+                             "failure_diagnostic": {"phase": phase,
+                                 "request": dict(getattr(client, "last_request", {}))},
                              "completed_count": sum(manifest["entries"].get(r.key, {}).get("status") == "complete"
                                                     for r in requests)})
             if active_key in manifest["entries"] and manifest["entries"][active_key].get("status") != "complete":

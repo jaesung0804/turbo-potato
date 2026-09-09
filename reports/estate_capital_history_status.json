@@ -18,10 +18,10 @@
   },
   "csv_expansion": {
     "planned_partitions": 81,
-    "completed_partitions": 4,
-    "remaining_partitions": 77,
-    "raw_rows": 614813,
-    "sale_rows": 433442,
+    "completed_partitions": 5,
+    "remaining_partitions": 76,
+    "raw_rows": 755674,
+    "sale_rows": 574303,
     "rental_rows": 181371,
     "pure_jeonse_rows": 139547,
     "monthly_rent_rows": 41824,
@@ -49,10 +49,16 @@
         "kind": "rent",
         "year": 2011,
         "rows": 181371
+      },
+      {
+        "region": "경기",
+        "kind": "sale",
+        "year": 2009,
+        "rows": 140861
       }
     ],
-    "state_commit": "1747755718e829d8f581f88854337702eb284072",
-    "failure": {
+    "state_commit": "de8bd939eed594efd9bad670cf47aee737978d71",
+    "previous_failure": {
       "partition": "gyeonggi/sale/2009/2009-01-01_2009-12-31",
       "expected_rows": 140861,
       "error": "Non-CSV response; possible server error or access challenge",
@@ -139,5 +145,14 @@
     "existing_api_inputs_merged": false,
     "remote_restore_verified": true,
     "verification": "All 16 gzip byte sizes, SHA-256 hashes, decompressed row counts and subset manifest hash matched after fetching remote commit."
+  },
+  "latest_diagnosis": {
+    "report": "estate_capital_csv_diagnosis.md",
+    "initialization_retry_fixed": true,
+    "transport_reason_diagnostics_added": true,
+    "previous_three_attempt_claim_corrected": true,
+    "new_annual_download_verified": true,
+    "github_runner_recovery_verified": false,
+    "tests_passed": 100
   }
 }
