@@ -1,6 +1,9 @@
 name: Capital history - one file per job
 on:
   workflow_dispatch:
+  push:
+    branches: [codex/estate-capital-history]
+    paths: [.github/capital-collection-request.json]
 permissions:
   contents: write
 concurrency:
