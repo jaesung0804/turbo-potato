@@ -23,6 +23,7 @@ import http.client
 import http.cookiejar
 import io
 import json
+import math
 import os
 from pathlib import Path
 import re
@@ -274,8 +275,11 @@ class _SameOriginRedirect(urllib.request.HTTPRedirectHandler):
 class PublicCSVClient:
     """One anonymous cookie session, kept in memory for the entire run."""
 
-    def __init__(self, timeout: float = 180, pause: float = 1.0):
+    def __init__(self, timeout: float = 180, pause: float = 1.0,
+                 metadata_timeout: float | None = None, csv_timeout: float | None = None):
         self.timeout = timeout
+        self.metadata_timeout = timeout if metadata_timeout is None else metadata_timeout
+        self.csv_timeout = timeout if csv_timeout is None else csv_timeout
         self.pause = pause
         self.opener = urllib.request.build_opener(
             urllib.request.HTTPCookieProcessor(http.cookiejar.CookieJar()), _SameOriginRedirect())
@@ -299,8 +303,11 @@ class PublicCSVClient:
         self._last_request = time.monotonic()
         self.last_request = {"endpoint": path, "method": req.get_method(),
                              "started_at": utc_now()}
+        request_timeout = self.csv_timeout if path == CSV_PATH else self.metadata_timeout
+        print(f"request start endpoint={path} timeout={request_timeout:g}s", flush=True)
         try:
-            with self.opener.open(req, timeout=self.timeout) as response:
+            with self.opener.open(req, timeout=request_timeout) as response:
+                self.last_request["headers_seconds"] = round(time.monotonic() - self._last_request, 3)
                 if response.status != 200:
                     raise CollectionError(f"Server HTTP {response.status}; collection stopped")
                 raw = response.read(MAX_RESPONSE_BYTES + 1)
@@ -327,6 +334,7 @@ class PublicCSVClient:
             raise TransportError(message) from None
         finally:
             self.last_request["elapsed_seconds"] = round(time.monotonic() - self._last_request, 3)
+            print("request end " + json.dumps(self.last_request), flush=True)
 
     def _json(self, path: str, fields: dict[str, str]) -> Any:
         raw, _ = self._request(path, fields)
@@ -642,6 +650,8 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--prior-downloads-today", type=int, default=0,
                         help="Conservative floor for already-used daily quota, including manual probes")
     parser.add_argument("--timeout", type=float, default=180)
+    parser.add_argument("--metadata-timeout", type=float, help="Socket timeout for page, region list and count")
+    parser.add_argument("--csv-timeout", type=float, help="Socket timeout for CSV response; use an outer process deadline")
     parser.add_argument("--pause", type=float, default=1.0)
     parser.add_argument("--transport-retries", type=int, choices=(0, 1, 2), default=0,
                         help="Retry transport failures only, retaining one anonymous session")
@@ -655,6 +665,9 @@ def main(argv: list[str] | None = None) -> int:
     args = parser.parse_args(argv)
     if args.pause < 0 or args.pause > 60 or args.timeout <= 0:
         parser.error("pause must be 0–60 seconds and timeout must be positive")
+    if any(value is not None and (not math.isfinite(value) or value <= 0)
+           for value in (args.metadata_timeout, args.csv_timeout)):
+        parser.error("phase timeouts must be finite and positive")
     if not 0 <= args.retry_delay <= 60:
         parser.error("retry-delay must be between 0 and 60 seconds")
     requests = [request for request in expansion_requests(args.cutoff, args.include_current_sales)
@@ -667,7 +680,7 @@ def main(argv: list[str] | None = None) -> int:
                           "requests": [request.as_dict() for request in requests]}, indent=2))
         return 0
     try:
-        collect(requests, args.output, args.cutoff, PublicCSVClient(args.timeout, args.pause),
+        collect(requests, args.output, args.cutoff, PublicCSVClient(args.timeout, args.pause, args.metadata_timeout, args.csv_timeout),
                 args.daily_limit, args.prior_downloads_today,
                 args.transport_retries, args.retry_delay, args.max_new_partitions,
                 not args.cache_hashes_only)

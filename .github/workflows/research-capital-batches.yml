@@ -59,11 +59,12 @@ jobs:
       - id: collect
         name: Collect at most one new CSV
         run: >-
-          timeout --signal=INT --kill-after=5s 90s
-          python collect_molit_capital_csv.py
+          timeout --signal=INT --kill-after=5s 240s
+          python -u collect_molit_capital_csv.py
           --output .work/batch-input --cutoff 2026-09-09
           --include-current-sales --max-new-partitions 1 --cache-hashes-only
-          --timeout 45 --pause 1 --transport-retries 0 --daily-limit 90
+          --metadata-timeout 30 --csv-timeout 120 --pause 1
+          --transport-retries 1 --retry-delay 5 --daily-limit 90
       - name: Save new or changed checkpoint files
         timeout-minutes: 2
         if: always() && steps.restore.outcome == 'success' && steps.collect.outcome != 'skipped'
