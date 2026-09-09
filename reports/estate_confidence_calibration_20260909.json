@@ -1,0 +1,11 @@
+{
+  "region_offsets": {
+    "경기도": -0.0037094034894120873,
+    "서울특별시": 0.007446763392022826,
+    "인천광역시": -0.00811377496000286
+  },
+  "trained_year": 2024,
+  "calibration_year": 2025,
+  "target_coverage": 0.8,
+  "version": "estate-price-confidence-v1"
+}

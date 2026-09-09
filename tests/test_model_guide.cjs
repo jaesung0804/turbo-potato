@@ -9,6 +9,7 @@ async function check(version,includeComparison,active=false){
   model:{model_version:version,model_month:'2026-09',trained_through:'2025-12-31',ml_weight:.25,validation:comparison.folds.map(f=>f.v3)}};
  if(includeComparison){manifest.model_comparison=comparison;manifest.retraining_research=retraining;}
  if(active)manifest.model.nowcast={...JSON.parse(fs.readFileSync('metadata/nowcast_2026_capital_v2.json','utf8')),month:'2026-09',available_types:12,total_types:15};
+ if(active)manifest.access_confidence_research=JSON.parse(fs.readFileSync('reports/estate_access_confidence_summary_20260909.json','utf8'));
  const context=vm.createContext({document:{getElementById(id){assert.ok(elements[id],`Missing guide element ${id}`);return elements[id];}},
   fetch:async()=>({ok:true,json:async()=>manifest})});
  vm.runInContext(fs.readFileSync('web/result-pages.js','utf8'),context);
@@ -16,6 +17,7 @@ async function check(version,includeComparison,active=false){
  vm.runInContext(code,context);await vm.runInContext('loadGuide()',context);
  assert.match(elements['model-status'].textContent,new RegExp(version));
  assert.ok(elements['validation-rows'].innerHTML.includes('2025'));
+ if(active){assert.match(elements['access-confidence-results'].innerHTML,/77.2%/);assert.match(elements['access-confidence-results'].innerHTML,/0.1981/);assert.match(elements['access-confidence-results'].innerHTML,/34.4%/);}
  if(includeComparison){
   if(active){assert.match(elements['capital-retraining-status'].textContent,/검색·지도·상세·CSV/);assert.match(elements['nowcast-info'].innerHTML,/인천 기존 모델/);assert.match(elements['nowcast-info'].innerHTML,/0.3091/);}else assert.equal(elements['capital-retraining-status'].textContent,retraining.headline);
   for(const row of retraining.price_rows)assert.ok(elements['capital-retraining-results'].innerHTML.includes(row.all_history.toFixed(4)));

@@ -1,0 +1,258 @@
+{
+  "asof": "2026-09-09",
+  "headline": "서울·경기 새 가격 모델 적용 완료 · 가격 신뢰도 A~D 추가",
+  "access_note": "업무지구·일자리 접근성의 1차 대리변수 실험은 인천 기존 모델을 이기지 못했습니다. 좌표 연결률 약 58%, 실제 통근시간과 수도권 전체 고용은 아직 반영하지 않았습니다. 인천 가격 모델은 유지합니다.",
+  "access_rows": [
+    {
+      "year": 2025,
+      "scope": "all",
+      "method": "price_activity_floor",
+      "transactions": 22485,
+      "complexes": 1669,
+      "mape_pct": 5.222,
+      "complex_balanced_mape_pct": 9.208,
+      "median_ape_pct": 3.541,
+      "mae_oku": 0.1939,
+      "bias_pct": 0.756,
+      "within10_pct": 87.97
+    },
+    {
+      "year": 2025,
+      "scope": "all",
+      "method": "base",
+      "transactions": 22485,
+      "complexes": 1669,
+      "mape_pct": 5.595,
+      "complex_balanced_mape_pct": 10.015,
+      "median_ape_pct": 3.705,
+      "mae_oku": 0.2021,
+      "bias_pct": 2.677,
+      "within10_pct": 86.17
+    },
+    {
+      "year": 2025,
+      "scope": "all",
+      "method": "controls",
+      "transactions": 22485,
+      "complexes": 1669,
+      "mape_pct": 5.415,
+      "complex_balanced_mape_pct": 9.615,
+      "median_ape_pct": 3.663,
+      "mae_oku": 0.1987,
+      "bias_pct": 1.447,
+      "within10_pct": 87.24
+    },
+    {
+      "year": 2025,
+      "scope": "all",
+      "method": "coordinates",
+      "transactions": 22485,
+      "complexes": 1669,
+      "mape_pct": 5.414,
+      "complex_balanced_mape_pct": 9.612,
+      "median_ape_pct": 3.669,
+      "mae_oku": 0.1987,
+      "bias_pct": 1.462,
+      "within10_pct": 87.23
+    },
+    {
+      "year": 2025,
+      "scope": "all",
+      "method": "access",
+      "transactions": 22485,
+      "complexes": 1669,
+      "mape_pct": 5.413,
+      "complex_balanced_mape_pct": 9.612,
+      "median_ape_pct": 3.669,
+      "mae_oku": 0.1985,
+      "bias_pct": 1.462,
+      "within10_pct": 87.19
+    },
+    {
+      "year": 2026,
+      "scope": "all",
+      "method": "price_activity_floor",
+      "transactions": 12765,
+      "complexes": 1489,
+      "mape_pct": 5.091,
+      "complex_balanced_mape_pct": 8.733,
+      "median_ape_pct": 3.26,
+      "mae_oku": 0.1946,
+      "bias_pct": 0.943,
+      "within10_pct": 88.37
+    },
+    {
+      "year": 2026,
+      "scope": "all",
+      "method": "base",
+      "transactions": 12765,
+      "complexes": 1489,
+      "mape_pct": 5.47,
+      "complex_balanced_mape_pct": 9.527,
+      "median_ape_pct": 3.443,
+      "mae_oku": 0.2019,
+      "bias_pct": 2.651,
+      "within10_pct": 86.69
+    },
+    {
+      "year": 2026,
+      "scope": "all",
+      "method": "controls",
+      "transactions": 12765,
+      "complexes": 1489,
+      "mape_pct": 5.276,
+      "complex_balanced_mape_pct": 9.113,
+      "median_ape_pct": 3.393,
+      "mae_oku": 0.1985,
+      "bias_pct": 1.483,
+      "within10_pct": 87.54
+    },
+    {
+      "year": 2026,
+      "scope": "all",
+      "method": "coordinates",
+      "transactions": 12765,
+      "complexes": 1489,
+      "mape_pct": 5.273,
+      "complex_balanced_mape_pct": 9.108,
+      "median_ape_pct": 3.395,
+      "mae_oku": 0.1983,
+      "bias_pct": 1.495,
+      "within10_pct": 87.5
+    },
+    {
+      "year": 2026,
+      "scope": "all",
+      "method": "access",
+      "transactions": 12765,
+      "complexes": 1489,
+      "mape_pct": 5.271,
+      "complex_balanced_mape_pct": 9.108,
+      "median_ape_pct": 3.379,
+      "mae_oku": 0.1981,
+      "bias_pct": 1.498,
+      "within10_pct": 87.52
+    }
+  ],
+  "access_coordinate_coverage": [
+    {
+      "year": 2025,
+      "coordinate_coverage": 0.5804758728040916,
+      "mae_gain_vs_legacy_pct": -2.372356884992266,
+      "passed": false
+    },
+    {
+      "year": 2026,
+      "coordinate_coverage": 0.5779083431257345,
+      "mae_gain_vs_legacy_pct": -1.7985611510791477,
+      "passed": false
+    }
+  ],
+  "confidence_rows": [
+    {
+      "year": 2026,
+      "scope": "all",
+      "group": "all",
+      "transactions": 119313,
+      "complexes": 12135,
+      "coverage_pct": 77.23299221375709,
+      "complex_coverage_pct": 77.5931932702717,
+      "mape_pct": 5.732350523467378,
+      "median_upper_radius_pct": 7.3827230061967395,
+      "median_total_width_pct": 14.257872750509614
+    },
+    {
+      "year": 2026,
+      "scope": "region",
+      "group": "경기도",
+      "transactions": 74197,
+      "complexes": 5924,
+      "coverage_pct": 77.43978867070098,
+      "complex_coverage_pct": 77.52896361896413,
+      "mape_pct": 5.276797066489979,
+      "median_upper_radius_pct": 7.238447357610623,
+      "median_total_width_pct": 13.988309497513129
+    },
+    {
+      "year": 2026,
+      "scope": "region",
+      "group": "서울특별시",
+      "transactions": 32351,
+      "complexes": 4722,
+      "coverage_pct": 75.2032394670953,
+      "complex_coverage_pct": 77.01288920279652,
+      "mape_pct": 7.030138923583089,
+      "median_upper_radius_pct": 7.966450496732691,
+      "median_total_width_pct": 15.345085674679716
+    },
+    {
+      "year": 2026,
+      "scope": "region",
+      "group": "인천광역시",
+      "transactions": 12765,
+      "complexes": 1489,
+      "coverage_pct": 81.17508813160987,
+      "complex_coverage_pct": 79.68902420443149,
+      "mape_pct": 5.091218311576174,
+      "median_upper_radius_pct": 7.084565983068631,
+      "median_total_width_pct": 13.700426931871279
+    },
+    {
+      "year": 2026,
+      "scope": "grade",
+      "group": "A",
+      "transactions": 99532,
+      "complexes": 8175,
+      "coverage_pct": 76.89185387614033,
+      "complex_coverage_pct": 75.7878969469661,
+      "mape_pct": 4.7451867674037,
+      "median_upper_radius_pct": 7.03762732484231,
+      "median_total_width_pct": 13.612537009157533
+    },
+    {
+      "year": 2026,
+      "scope": "grade",
+      "group": "B",
+      "transactions": 16208,
+      "complexes": 6813,
+      "coverage_pct": 78.37487660414611,
+      "complex_coverage_pct": 78.64014168850332,
+      "mape_pct": 8.03668666519026,
+      "median_upper_radius_pct": 11.740671431231117,
+      "median_total_width_pct": 22.24774220577601
+    },
+    {
+      "year": 2026,
+      "scope": "grade",
+      "group": "C",
+      "transactions": 2075,
+      "complexes": 1680,
+      "coverage_pct": 81.97590361445783,
+      "complex_coverage_pct": 81.75694444444444,
+      "mape_pct": 14.415036885162774,
+      "median_upper_radius_pct": 24.301601769762957,
+      "median_total_width_pct": 43.852115539308315
+    },
+    {
+      "year": 2026,
+      "scope": "grade",
+      "group": "D",
+      "transactions": 1498,
+      "complexes": 1128,
+      "coverage_pct": 80.97463284379172,
+      "complex_coverage_pct": 82.71209434773264,
+      "mape_pct": 34.3632774813897,
+      "median_upper_radius_pct": 59.03176511229275,
+      "median_total_width_pct": 96.15124559322754
+    }
+  ],
+  "confidence_note": "거래 당시 실제 층의 과거 오차로 보정한 가격 범위입니다. 목표 포함률 80%, 2026년 재사용 검증의 실제 포함률 77.2%. 대표 층·비슷한 상태의 가격을 비교하세요. 상승 확률이나 개별 매물의 정확도 보장이 아닙니다.",
+  "confidence_limits": {
+    "A": 10,
+    "B": 20,
+    "C": 35,
+    "D": null
+  },
+  "research_note": "2023~2024년 개발, 2025년 구간 보정, 2026년 재사용 진단입니다. 독립적인 미래 검증이 아니며, 등급은 거래수만으로 정하지 않고 가격 점수와 분리합니다. 같은 단지도 시점·면적·층에 따라 등급이 달라질 수 있습니다.",
+  "report_url": "https://github.com/jaesung0804/turbo-potato/blob/main/reports/estate_access_confidence_20260909.md"
+}

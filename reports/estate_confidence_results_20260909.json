@@ -1,0 +1,301 @@
+{
+  "status": "exploratory_reused_evaluation",
+  "version": "estate-price-confidence-v1",
+  "training_transactions": 169216,
+  "calibration_transactions": 205771,
+  "evaluation": [
+    {
+      "year": 2025,
+      "scope": "all",
+      "group": "all",
+      "transactions": 205771,
+      "complexes": 13274,
+      "coverage_pct": 81.4677481277731,
+      "complex_coverage_pct": 80.00561962507764,
+      "mape_pct": 5.1723967457974345,
+      "median_upper_radius_pct": 7.306298035724989,
+      "median_total_width_pct": 14.115123025002463
+    },
+    {
+      "year": 2025,
+      "scope": "region",
+      "group": "경기도",
+      "transactions": 118656,
+      "complexes": 6282,
+      "coverage_pct": 81.47839131607336,
+      "complex_coverage_pct": 80.00007711758838,
+      "mape_pct": 4.80295146036832,
+      "median_upper_radius_pct": 7.210790456443037,
+      "median_total_width_pct": 13.936597090032398
+    },
+    {
+      "year": 2025,
+      "scope": "region",
+      "group": "서울특별시",
+      "transactions": 64630,
+      "complexes": 5323,
+      "coverage_pct": 81.74377224199289,
+      "complex_coverage_pct": 80.01090654532359,
+      "mape_pct": 5.833554618786346,
+      "median_upper_radius_pct": 7.56334296491249,
+      "median_total_width_pct": 14.594867605588323
+    },
+    {
+      "year": 2025,
+      "scope": "region",
+      "group": "인천광역시",
+      "transactions": 22485,
+      "complexes": 1669,
+      "coverage_pct": 80.6181899043807,
+      "complex_coverage_pct": 80.00961947862967,
+      "mape_pct": 5.221596944000844,
+      "median_upper_radius_pct": 7.233478892816528,
+      "median_total_width_pct": 13.97902046015358
+    },
+    {
+      "year": 2025,
+      "scope": "grade",
+      "group": "A",
+      "transactions": 171065,
+      "complexes": 8582,
+      "coverage_pct": 81.48890772513371,
+      "complex_coverage_pct": 79.76080117758232,
+      "mape_pct": 4.183349224636858,
+      "median_upper_radius_pct": 6.980552941900853,
+      "median_total_width_pct": 13.505620115270078
+    },
+    {
+      "year": 2025,
+      "scope": "grade",
+      "group": "B",
+      "transactions": 28316,
+      "complexes": 8877,
+      "coverage_pct": 81.1166831473372,
+      "complex_coverage_pct": 81.04150742487688,
+      "mape_pct": 7.50260099151302,
+      "median_upper_radius_pct": 11.885484091014902,
+      "median_total_width_pct": 22.508384986006014
+    },
+    {
+      "year": 2025,
+      "scope": "grade",
+      "group": "C",
+      "transactions": 3821,
+      "complexes": 2929,
+      "coverage_pct": 82.75320596702433,
+      "complex_coverage_pct": 82.08709294574777,
+      "mape_pct": 14.185109024570785,
+      "median_upper_radius_pct": 24.299695186138294,
+      "median_total_width_pct": 43.84897497298699
+    },
+    {
+      "year": 2025,
+      "scope": "grade",
+      "group": "D",
+      "transactions": 2569,
+      "complexes": 2001,
+      "coverage_pct": 82.01634877384197,
+      "complex_coverage_pct": 81.3576453531476,
+      "mape_pct": 31.942259403819477,
+      "median_upper_radius_pct": 57.97984619600596,
+      "median_total_width_pct": 94.68063277866298
+    },
+    {
+      "year": 2026,
+      "scope": "all",
+      "group": "all",
+      "transactions": 119313,
+      "complexes": 12135,
+      "coverage_pct": 77.23299221375709,
+      "complex_coverage_pct": 77.5931932702717,
+      "mape_pct": 5.732350523467378,
+      "median_upper_radius_pct": 7.3827230061967395,
+      "median_total_width_pct": 14.257872750509614
+    },
+    {
+      "year": 2026,
+      "scope": "region",
+      "group": "경기도",
+      "transactions": 74197,
+      "complexes": 5924,
+      "coverage_pct": 77.43978867070098,
+      "complex_coverage_pct": 77.52896361896413,
+      "mape_pct": 5.276797066489979,
+      "median_upper_radius_pct": 7.238447357610623,
+      "median_total_width_pct": 13.988309497513129
+    },
+    {
+      "year": 2026,
+      "scope": "region",
+      "group": "서울특별시",
+      "transactions": 32351,
+      "complexes": 4722,
+      "coverage_pct": 75.2032394670953,
+      "complex_coverage_pct": 77.01288920279652,
+      "mape_pct": 7.030138923583089,
+      "median_upper_radius_pct": 7.966450496732691,
+      "median_total_width_pct": 15.345085674679716
+    },
+    {
+      "year": 2026,
+      "scope": "region",
+      "group": "인천광역시",
+      "transactions": 12765,
+      "complexes": 1489,
+      "coverage_pct": 81.17508813160987,
+      "complex_coverage_pct": 79.68902420443149,
+      "mape_pct": 5.091218311576174,
+      "median_upper_radius_pct": 7.084565983068631,
+      "median_total_width_pct": 13.700426931871279
+    },
+    {
+      "year": 2026,
+      "scope": "grade",
+      "group": "A",
+      "transactions": 99532,
+      "complexes": 8175,
+      "coverage_pct": 76.89185387614033,
+      "complex_coverage_pct": 75.7878969469661,
+      "mape_pct": 4.7451867674037,
+      "median_upper_radius_pct": 7.03762732484231,
+      "median_total_width_pct": 13.612537009157533
+    },
+    {
+      "year": 2026,
+      "scope": "grade",
+      "group": "B",
+      "transactions": 16208,
+      "complexes": 6813,
+      "coverage_pct": 78.37487660414611,
+      "complex_coverage_pct": 78.64014168850332,
+      "mape_pct": 8.03668666519026,
+      "median_upper_radius_pct": 11.740671431231117,
+      "median_total_width_pct": 22.24774220577601
+    },
+    {
+      "year": 2026,
+      "scope": "grade",
+      "group": "C",
+      "transactions": 2075,
+      "complexes": 1680,
+      "coverage_pct": 81.97590361445783,
+      "complex_coverage_pct": 81.75694444444444,
+      "mape_pct": 14.415036885162774,
+      "median_upper_radius_pct": 24.301601769762957,
+      "median_total_width_pct": 43.852115539308315
+    },
+    {
+      "year": 2026,
+      "scope": "grade",
+      "group": "D",
+      "transactions": 1498,
+      "complexes": 1128,
+      "coverage_pct": 80.97463284379172,
+      "complex_coverage_pct": 82.71209434773264,
+      "mape_pct": 34.3632774813897,
+      "median_upper_radius_pct": 59.03176511229275,
+      "median_total_width_pct": 96.15124559322754
+    },
+    {
+      "year": 2026,
+      "scope": "input_history",
+      "group": "input_trades_0_2",
+      "transactions": 52496,
+      "complexes": 11534,
+      "coverage_pct": 76.43249009448338,
+      "complex_coverage_pct": 77.48058472275007,
+      "mape_pct": 7.287048569219107,
+      "median_upper_radius_pct": 8.705070098132111,
+      "median_total_width_pct": 16.713040738358593
+    },
+    {
+      "year": 2026,
+      "scope": "input_history",
+      "group": "input_trades_3_plus",
+      "transactions": 66817,
+      "complexes": 5362,
+      "coverage_pct": 77.8619213673167,
+      "complex_coverage_pct": 76.98965697827752,
+      "mape_pct": 4.51087352495229,
+      "median_upper_radius_pct": 6.847489569607696,
+      "median_total_width_pct": 13.25614699075074
+    },
+    {
+      "year": 2026,
+      "scope": "sparse_grade",
+      "group": "A",
+      "transactions": 35351,
+      "complexes": 7308,
+      "coverage_pct": 75.2963141070974,
+      "complex_coverage_pct": 75.47168822248625,
+      "mape_pct": 5.347063692542035,
+      "median_upper_radius_pct": 7.752952710170069,
+      "median_total_width_pct": 14.948071280167563
+    },
+    {
+      "year": 2026,
+      "scope": "sparse_grade",
+      "group": "B",
+      "transactions": 13572,
+      "complexes": 6362,
+      "coverage_pct": 78.0430297671677,
+      "complex_coverage_pct": 78.18298806918015,
+      "mape_pct": 8.26182300993503,
+      "median_upper_radius_pct": 12.17915747995249,
+      "median_total_width_pct": 23.036038342224114
+    },
+    {
+      "year": 2026,
+      "scope": "sparse_grade",
+      "group": "C",
+      "transactions": 2075,
+      "complexes": 1680,
+      "coverage_pct": 81.97590361445783,
+      "complex_coverage_pct": 81.75694444444444,
+      "mape_pct": 14.415036885162774,
+      "median_upper_radius_pct": 24.301601769762957,
+      "median_total_width_pct": 43.852115539308315
+    },
+    {
+      "year": 2026,
+      "scope": "sparse_grade",
+      "group": "D",
+      "transactions": 1498,
+      "complexes": 1128,
+      "coverage_pct": 80.97463284379172,
+      "complex_coverage_pct": 82.71209434773264,
+      "mape_pct": 34.3632774813897,
+      "median_upper_radius_pct": 59.03176511229275,
+      "median_total_width_pct": 96.15124559322754
+    }
+  ],
+  "gates": {
+    "overall": true,
+    "regions": true,
+    "supported_grades": true,
+    "grade_error_order": true
+  },
+  "numerical_gate_passed": true,
+  "supported_grades": [
+    "A",
+    "B",
+    "C",
+    "D"
+  ],
+  "calibration": {
+    "region_offsets": {
+      "경기도": -0.0037094034894120873,
+      "서울특별시": 0.007446763392022826,
+      "인천광역시": -0.00811377496000286
+    },
+    "trained_year": 2024,
+    "calibration_year": 2025,
+    "target_coverage": 0.8,
+    "version": "estate-price-confidence-v1"
+  },
+  "limitations": [
+    "Bands are calibrated against actual transaction floors; representative-floor predictions need comparable properties.",
+    "80% is a historical target, not a guaranteed probability for a listing or future price increase.",
+    "2025/2026 are reused research periods; no independent future validation."
+  ]
+}

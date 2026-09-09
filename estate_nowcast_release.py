@@ -47,7 +47,8 @@ def attach_nowcast(model, source, artifact_path=ARTIFACT, manifest_path=MANIFEST
     known = set(d.loc[d.date < origin, 'key'])
     sample = [{'key': r['building_key']} for r in model['recommendations'] if r['building_key'] in known]
     predicted = predict_sample(d, sample, artifact, month,
-                               int(spec.get('assumed_reporting_lag_days', 31))) if sample else pd.DataFrame()
+                               int(spec.get('assumed_reporting_lag_days', 31)),
+                               spec.get('feature_engine')) if sample else pd.DataFrame()
     by_key = {r['key']: r for r in predicted.to_dict('records')}
     regions = d.groupby('key', sort=False).region.first().to_dict() if 'region' in d else {}
     for rec in model['recommendations']:
@@ -74,4 +75,7 @@ def attach_nowcast(model, source, artifact_path=ARTIFACT, manifest_path=MANIFEST
             'score_error_scale': spec['score_error_scale'],
         }
         meta['available_types'] += 1
+    if spec.get('confidence') and not predicted.empty:
+        from estate_price_confidence import attach_confidence
+        attach_confidence(model, predicted, spec['confidence'])
     return attach_current_comparisons(model)

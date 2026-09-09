@@ -20,6 +20,20 @@ const run=s=>vm.runInContext(s,context);
     'Every displayed neutral price must produce exactly 50');
  }
  console.log(`Canonical price/score contract verified for ${scored.length} types.`);
+ if(manifest.model.nowcast?.price_confidence){
+  const valued=run('state.recommendations.recommendations.filter(r=>r.current_valuation?.status==="available")');
+  const counts={};
+  for(const rec of valued){
+   const v=rec.current_valuation,q=v.confidence;
+   assert.equal(q.status,'available','Every currently calibrated price must expose its band');
+   assert.match(q.grade,/^[ABCD]$/);
+   assert.ok(q.lower_price_billion>0 && q.lower_price_billion<=v.price_billion && q.upper_price_billion>=v.price_billion);
+   counts[q.grade]=(counts[q.grade]??0)+1;
+   context.rec=rec;assert.equal(run('reviewScoreAtPrice(rec,rec.current_valuation.price_billion)'),50);
+  }
+  assert.deepEqual(counts,manifest.model.nowcast.price_confidence.current_grade_counts);
+  console.log(`Price confidence bands verified for ${valued.length} types.`);
+ }
  if(manifest.transaction_valuation){
   await run('state.dataStore.ensureTransactionValuations()');
   const replayed=run('state.recommendations.recommendations.filter(r=>r.transaction_valuation?.status==="available")');

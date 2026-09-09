@@ -89,6 +89,10 @@
     "max_weight": 3.5336649919025516,
     "effective_sample_size": 2146516.5346007687
   },
-  "score_note": "가격 점수의 계산식과 오차 척도는 v1 그대로 유지합니다. 등급은 별도 검증 후 표시합니다.",
-  "feature_engine": "array_equivalent_v1"
+  "score_note": "가격 점수 계산식과 척도는 v1 그대로 유지합니다. 신뢰도 등급은 별도 오차 모델로 산출하며 점수에 합산하지 않습니다.",
+  "feature_engine": "array_equivalent_legacy_ties_v1",
+  "confidence": {
+    "manifest": "metadata/price_confidence_2026.json",
+    "artifact": "metadata/price_confidence_2026.joblib"
+  }
 }

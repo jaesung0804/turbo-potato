@@ -41,6 +41,12 @@ assert.equal(evaluate('canonicalPrice(.51815)'),.5182);
 assert.equal(evaluate('priceBillion({metrics:{price_billion:{avg:12,median:10}}})'),10);
 for(let p=1;p<20;p+=.125){context.p=p;assert.ok(evaluate('reviewScoreAtPrice(priceRec,p)>=reviewScoreAtPrice(priceRec,p+.125)'));}
 assert.equal(evaluate('askingPriceResult(priceRec,"10")').includes('50점 기준가와 같습니다.'),true);
+evaluate(`priceRec.current_valuation.confidence={status:'available',grade:'D',lower_price_billion:6,upper_price_billion:17,historical_grade_coverage_pct:80.97};`);
+assert.equal(evaluate('reviewScoreAtPrice(priceRec,10)'),50);
+assert.match(evaluate('priceConfidencePanel(priceRec)'),/가격 신뢰도 D/);
+assert.match(evaluate('priceConfidencePanel(priceRec)'),/77.2%/);
+assert.match(evaluate('priceConfidencePanel(priceRec)'),/상승 가능성이나 가격 점수와는 별개/);
+assert.equal(evaluate('priceConfidenceLabel({})'),'가격 신뢰도 미산출');
 assert.match(evaluate('householdEvidenceNote({households_verified:true,household_observed_at:"2026-09-08",household_source_url:"https://example.gov/official"})'),/공식 단지 전체 세대수/);
 assert.match(evaluate('householdEvidenceNote({households_verified:false})'),/기존 시설 자료/);
 evaluate(`globalThis.savedRecommendationForItem=aiRecommendationForItem;

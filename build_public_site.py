@@ -165,6 +165,9 @@ def build(source, output, model_dir=Path('models'), month=None, summary_path=Non
     retraining_path=Path('reports/estate_retraining_summary_20260909.json')
     if retraining_path.exists():
         manifest['retraining_research']=json.loads(retraining_path.read_text(encoding='utf-8'))
+    followup_path = Path('reports/estate_access_confidence_summary_20260909.json')
+    if followup_path.exists():
+        manifest['access_confidence_research'] = json.loads(followup_path.read_text(encoding='utf-8'))
     comparison_path=Path('reports/estate_model_comparison.json')
     if comparison_path.exists():
         manifest['model_comparison']=json.loads(comparison_path.read_text(encoding='utf-8'))

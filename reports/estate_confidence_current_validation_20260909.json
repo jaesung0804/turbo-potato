@@ -1,0 +1,86 @@
+{
+  "asof": "2026-09-09",
+  "current_grade_counts": {
+    "D": 156,
+    "A": 25081,
+    "C": 363,
+    "B": 7754
+  },
+  "current_prices_unchanged": 33354,
+  "current_scores_unchanged": true,
+  "first_main_commit": "db6e63d348516a7cb3f77fc1e9b00b5d7055d09c",
+  "sparse_validation": [
+    {
+      "year": 2026,
+      "scope": "input_history",
+      "group": "input_trades_0_2",
+      "transactions": 52496,
+      "complexes": 11534,
+      "coverage_pct": 76.43249009448338,
+      "complex_coverage_pct": 77.48058472275007,
+      "mape_pct": 7.287048569219107,
+      "median_upper_radius_pct": 8.705070098132111,
+      "median_total_width_pct": 16.713040738358593
+    },
+    {
+      "year": 2026,
+      "scope": "input_history",
+      "group": "input_trades_3_plus",
+      "transactions": 66817,
+      "complexes": 5362,
+      "coverage_pct": 77.8619213673167,
+      "complex_coverage_pct": 76.98965697827752,
+      "mape_pct": 4.51087352495229,
+      "median_upper_radius_pct": 6.847489569607696,
+      "median_total_width_pct": 13.25614699075074
+    },
+    {
+      "year": 2026,
+      "scope": "sparse_grade",
+      "group": "A",
+      "transactions": 35351,
+      "complexes": 7308,
+      "coverage_pct": 75.2963141070974,
+      "complex_coverage_pct": 75.47168822248625,
+      "mape_pct": 5.347063692542035,
+      "median_upper_radius_pct": 7.752952710170069,
+      "median_total_width_pct": 14.948071280167563
+    },
+    {
+      "year": 2026,
+      "scope": "sparse_grade",
+      "group": "B",
+      "transactions": 13572,
+      "complexes": 6362,
+      "coverage_pct": 78.0430297671677,
+      "complex_coverage_pct": 78.18298806918015,
+      "mape_pct": 8.26182300993503,
+      "median_upper_radius_pct": 12.17915747995249,
+      "median_total_width_pct": 23.036038342224114
+    },
+    {
+      "year": 2026,
+      "scope": "sparse_grade",
+      "group": "C",
+      "transactions": 2075,
+      "complexes": 1680,
+      "coverage_pct": 81.97590361445783,
+      "complex_coverage_pct": 81.75694444444444,
+      "mape_pct": 14.415036885162774,
+      "median_upper_radius_pct": 24.301601769762957,
+      "median_total_width_pct": 43.852115539308315
+    },
+    {
+      "year": 2026,
+      "scope": "sparse_grade",
+      "group": "D",
+      "transactions": 1498,
+      "complexes": 1128,
+      "coverage_pct": 80.97463284379172,
+      "complex_coverage_pct": 82.71209434773264,
+      "mape_pct": 34.3632774813897,
+      "median_upper_radius_pct": 59.03176511229275,
+      "median_total_width_pct": 96.15124559322754
+    }
+  ]
+}

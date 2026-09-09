@@ -14,5 +14,31 @@
     "bias_pct": 0.827,
     "within10_pct": 85.65
   },
-  "retrospective_policy_choice": true
+  "retrospective_policy_choice": true,
+  "current_price_comparison": {
+    "서울특별시": {
+      "comparable_types": 12222,
+      "changed_types": 12221,
+      "median_absolute_change_pct": 2.185519242429029,
+      "models": [
+        "estate-nowcast-full-history-v2"
+      ]
+    },
+    "인천광역시": {
+      "comparable_types": 4051,
+      "changed_types": 0,
+      "median_absolute_change_pct": 0.0,
+      "models": [
+        "estate-nowcast-v1"
+      ]
+    },
+    "경기도": {
+      "comparable_types": 17081,
+      "changed_types": 17075,
+      "median_absolute_change_pct": 2.159218628801174,
+      "models": [
+        "estate-nowcast-full-history-v2"
+      ]
+    }
+  }
 }

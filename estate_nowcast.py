@@ -308,7 +308,7 @@ def main():
     experiment(features, out)
 
 
-def predict_sample(d, sample, artifact, month, lag_days=31):
+def predict_sample(d, sample, artifact, month, lag_days=31, feature_engine=None):
     """Conditional current valuation at historical median floor, not a live quote.
 
     No asking prices are accepted. The monthly availability cutoff is exactly
@@ -335,7 +335,11 @@ def predict_sample(d, sample, artifact, month, lag_days=31):
         row['log_price'] = row['price_oku'] = np.nan
         templates.append(row)
     synthetic = pd.concat([base, pd.DataFrame(templates)], ignore_index=True)
-    f = build_features(synthetic, lag_days, month, month)
+    if feature_engine == 'array_equivalent_legacy_ties_v1':
+        from estate_retraining_features import monthly_features
+        f = monthly_features(synthetic, month, month, policy=False, uniform_lag=lag_days, legacy_order=True)
+    else:
+        f = build_features(synthetic, lag_days, month, month)
     if f.empty:
         raise ValueError('No supported prediction rows')
     if artifact['model'] is None:
@@ -344,8 +348,9 @@ def predict_sample(d, sample, artifact, month, lag_days=31):
         predicted = f.anchor + artifact['model'].predict(f[artifact['columns']])
     f['estimated_price_oku'] = np.exp(predicted) * f.area / 10000
     f['floor_basis'] = 'previous observable 365-day median; no individual listing floor supplied'
-    return f[['key','month','feature_cutoff','lag_days','floor','floor_basis',
-              'estimated_price_oku','n90','last_age','eff90','active_days90']]
+    return f[list(dict.fromkeys(['key','month','feature_cutoff','lag_days','floor','floor_basis',
+              'estimated_price_oku','n90','last_age','eff90','active_days90','region',
+              *PRICE_FEATURES,*ACTIVITY_FEATURES,*FLOOR_FEATURES]))]
 
 
 if __name__ == '__main__':

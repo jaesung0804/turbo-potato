@@ -45,7 +45,8 @@ def test_weighted_median_is_order_invariant_and_rejects_invalid_weights():
     assert np.isnan(weighted_median([1, 2], [0, np.nan]))
 
 
-def test_inference_uses_same_cutoff_and_does_not_turn_templates_into_trades():
+@pytest.mark.parametrize('engine', [None, 'array_equivalent_legacy_ties_v1'])
+def test_inference_uses_same_cutoff_and_does_not_turn_templates_into_trades(engine):
     dates = pd.to_datetime(['2026-06-01', '2026-07-01', '2026-08-20'])
     d = pd.DataFrame({'date': dates, 'month': dates.to_period('M').astype(str),
         'day': dates.values.astype('datetime64[D]').astype('int64'),
@@ -54,7 +55,7 @@ def test_inference_uses_same_cutoff_and_does_not_turn_templates_into_trades():
         'floor': [10., 12., 1.], 'log_price': np.log([100., 100., 9999.]),
         'price_oku': [0.5, 0.5, 49.995]})
     artifact = {'trained_through': '2025-12-31', 'selected': 'ew90', 'model': None}
-    result = predict_sample(d, [{'key': 'exact'}], artifact, '2026-09')
+    result = predict_sample(d, [{'key': 'exact'}], artifact, '2026-09', feature_engine=engine)
     assert len(result) == 1
     assert result.estimated_price_oku.iloc[0] == pytest.approx(.5)
     assert result.floor.iloc[0] == 11

@@ -45,3 +45,20 @@ def test_monthly_reproduction_matches_reference_for_peers_and_exact_types():
         if pd.api.types.is_numeric_dtype(expected[col]):
             np.testing.assert_allclose(actual[col],expected[col],rtol=1e-12,atol=1e-12,equal_nan=True,err_msg=col)
         else: assert actual[col].tolist()==expected[col].tolist(),col
+
+
+def test_release_reproduction_preserves_same_day_transaction_order():
+    rng = np.random.default_rng(91)
+    dates = pd.to_datetime(['2026-01-01']*20+['2026-04-30']*20+['2026-06-15']*10)
+    order = rng.permutation(len(dates)); dates = dates[order]
+    prices = rng.uniform(80, 120, len(dates))
+    d = pd.DataFrame({'key':'a','complex':'A','peer':'g:5','region':'경기도',
+        'gu':'g','area':84.,'built':2000.,'floor':rng.integers(1,25,len(dates)),
+        'date':dates,'day':dates.values.astype('datetime64[D]').astype(int),
+        'year':dates.year,'month':dates.to_period('M').astype(str),
+        'log_price':np.log(prices),'price_oku':prices*84/10000})
+    a = build_features(d,31,'2026-06','2026-06')
+    b = monthly_features(d,'2026-06','2026-06',policy=False,uniform_lag=31,legacy_order=True)
+    for col in a.select_dtypes('number'):
+        if col != 'hist_floor':
+            np.testing.assert_allclose(a[col], b[col], equal_nan=True, rtol=1e-12, atol=1e-12, err_msg=col)

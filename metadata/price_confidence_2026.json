@@ -1,0 +1,75 @@
+{
+  "version": "estate-price-confidence-v1",
+  "sha256": "fed26c3d2ba87006ed3c1451e8f4f94cdac67ad85425ce10324758a58d661526",
+  "price_model_sha256": "f902e7a30ccc012f56563c5f3798b7a1998de38335fc0a7c14a1d700bd6c7fd7",
+  "validation_passed": true,
+  "target_coverage": 0.8,
+  "evaluation_coverage_pct": 77.23299221375709,
+  "evaluation_complex_coverage_pct": 77.5931932702717,
+  "supported_grades": [
+    "A",
+    "B",
+    "C",
+    "D"
+  ],
+  "grade_validation": {
+    "A": {
+      "year": 2026,
+      "scope": "grade",
+      "group": "A",
+      "transactions": 99532,
+      "complexes": 8175,
+      "coverage_pct": 76.89185387614033,
+      "complex_coverage_pct": 75.7878969469661,
+      "mape_pct": 4.7451867674037,
+      "median_upper_radius_pct": 7.03762732484231,
+      "median_total_width_pct": 13.612537009157533
+    },
+    "B": {
+      "year": 2026,
+      "scope": "grade",
+      "group": "B",
+      "transactions": 16208,
+      "complexes": 6813,
+      "coverage_pct": 78.37487660414611,
+      "complex_coverage_pct": 78.64014168850332,
+      "mape_pct": 8.03668666519026,
+      "median_upper_radius_pct": 11.740671431231117,
+      "median_total_width_pct": 22.24774220577601
+    },
+    "C": {
+      "year": 2026,
+      "scope": "grade",
+      "group": "C",
+      "transactions": 2075,
+      "complexes": 1680,
+      "coverage_pct": 81.97590361445783,
+      "complex_coverage_pct": 81.75694444444444,
+      "mape_pct": 14.415036885162774,
+      "median_upper_radius_pct": 24.301601769762957,
+      "median_total_width_pct": 43.852115539308315
+    },
+    "D": {
+      "year": 2026,
+      "scope": "grade",
+      "group": "D",
+      "transactions": 1498,
+      "complexes": 1128,
+      "coverage_pct": 80.97463284379172,
+      "complex_coverage_pct": 82.71209434773264,
+      "mape_pct": 34.3632774813897,
+      "median_upper_radius_pct": 59.03176511229275,
+      "median_total_width_pct": 96.15124559322754
+    }
+  },
+  "trained_year": 2024,
+  "calibration_year": 2025,
+  "evaluation_period": "2026-03~2026-07",
+  "grade_upper_radius_limits_pct": {
+    "A": 10,
+    "B": 20,
+    "C": 35,
+    "D": null
+  },
+  "note": "거래 당시 실제 층의 과거 오차로 보정한 가격 범위입니다. 목표 포함률 80%, 2026년 재사용 검증의 실제 포함률 77.2%. 대표 층·비슷한 상태의 가격을 비교하세요. 상승 확률이나 개별 매물의 정확도 보장이 아닙니다."
+}

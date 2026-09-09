@@ -66,11 +66,20 @@ def array_history(values, origin_day, year, lag_days, policy=False):
     return result
 
 
-def monthly_features(d, first, last, *, policy=True, uniform_lag=None, months=None):
-    ordered = d.sort_values(['key', 'day'], kind='stable')
-    groups = {key: (g.day.to_numpy(), g.log_price.to_numpy(), g.floor.to_numpy())
-              for key, g in ordered.groupby('key', sort=False)}
-    del ordered
+def monthly_features(d, first, last, *, policy=True, uniform_lag=None, months=None, legacy_order=False):
+    if legacy_order:
+        # Preserve the released model's equal-date ordering exactly. Research
+        # histories retain their separately frozen stable ordering by default.
+        target_keys = set(d.loc[d.month.between(first, last), 'key'])
+        groups = {}
+        for key, g in d[d.key.isin(target_keys)].groupby('key', sort=False):
+            g = g.sort_values('day')
+            groups[key] = (g.day.to_numpy(), g.log_price.to_numpy(), g.floor.to_numpy())
+    else:
+        ordered = d.sort_values(['key', 'day'], kind='stable')
+        groups = {key: (g.day.to_numpy(), g.log_price.to_numpy(), g.floor.to_numpy())
+                  for key, g in ordered.groupby('key', sort=False)}
+        del ordered
     periods = pd.period_range(first, last, freq='M')
     parts = []
     for period in periods:

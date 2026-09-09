@@ -1,0 +1,543 @@
+{
+  "status": "exploratory_spatial_proxy_not_actual_commute",
+  "selection": {
+    "choices": {
+      "controls": {
+        "method": "controls",
+        "strength": 0.5,
+        "selection_score": 0.9201114680559638,
+        "transactions": 13136,
+        "complexes": 875,
+        "mape_pct": 5.438,
+        "complex_balanced_mape_pct": 8.18,
+        "median_ape_pct": 3.97,
+        "mae_oku": 0.2017,
+        "bias_pct": 1.064,
+        "within10_pct": 86.69
+      },
+      "coordinates": {
+        "method": "coordinates",
+        "strength": 0.5,
+        "selection_score": 0.9200224539084026,
+        "transactions": 13136,
+        "complexes": 875,
+        "mape_pct": 5.437,
+        "complex_balanced_mape_pct": 8.174,
+        "median_ape_pct": 3.98,
+        "mae_oku": 0.2018,
+        "bias_pct": 1.085,
+        "within10_pct": 86.76
+      },
+      "access": {
+        "method": "access",
+        "strength": 0.5,
+        "selection_score": 0.91925935104638,
+        "transactions": 13136,
+        "complexes": 875,
+        "mape_pct": 5.434,
+        "complex_balanced_mape_pct": 8.173,
+        "median_ape_pct": 3.99,
+        "mae_oku": 0.2015,
+        "bias_pct": 1.079,
+        "within10_pct": 86.72
+      }
+    },
+    "selected": "access",
+    "development": [
+      {
+        "method": "controls",
+        "strength": 0.0,
+        "selection_score": 1.0,
+        "transactions": 13136,
+        "complexes": 875,
+        "mape_pct": 5.931,
+        "complex_balanced_mape_pct": 9.222,
+        "median_ape_pct": 4.263,
+        "mae_oku": 0.2116,
+        "bias_pct": 3.107,
+        "within10_pct": 83.98
+      },
+      {
+        "method": "controls",
+        "strength": 0.25,
+        "selection_score": 0.9436858683045679,
+        "transactions": 13136,
+        "complexes": 875,
+        "mape_pct": 5.586,
+        "complex_balanced_mape_pct": 8.532,
+        "median_ape_pct": 4.062,
+        "mae_oku": 0.2036,
+        "bias_pct": 2.075,
+        "within10_pct": 85.96
+      },
+      {
+        "method": "controls",
+        "strength": 0.5,
+        "selection_score": 0.9201114680559638,
+        "transactions": 13136,
+        "complexes": 875,
+        "mape_pct": 5.438,
+        "complex_balanced_mape_pct": 8.18,
+        "median_ape_pct": 3.97,
+        "mae_oku": 0.2017,
+        "bias_pct": 1.064,
+        "within10_pct": 86.69
+      },
+      {
+        "method": "controls",
+        "strength": 1.0,
+        "selection_score": 0.9585401105845764,
+        "transactions": 13136,
+        "complexes": 875,
+        "mape_pct": 5.692,
+        "complex_balanced_mape_pct": 8.344,
+        "median_ape_pct": 4.235,
+        "mae_oku": 0.2142,
+        "bias_pct": -0.901,
+        "within10_pct": 84.33
+      },
+      {
+        "method": "coordinates",
+        "strength": 0.0,
+        "selection_score": 1.0,
+        "transactions": 13136,
+        "complexes": 875,
+        "mape_pct": 5.931,
+        "complex_balanced_mape_pct": 9.222,
+        "median_ape_pct": 4.263,
+        "mae_oku": 0.2116,
+        "bias_pct": 3.107,
+        "within10_pct": 83.98
+      },
+      {
+        "method": "coordinates",
+        "strength": 0.25,
+        "selection_score": 0.9442126762705604,
+        "transactions": 13136,
+        "complexes": 875,
+        "mape_pct": 5.588,
+        "complex_balanced_mape_pct": 8.533,
+        "median_ape_pct": 4.053,
+        "mae_oku": 0.2038,
+        "bias_pct": 2.086,
+        "within10_pct": 85.99
+      },
+      {
+        "method": "coordinates",
+        "strength": 0.5,
+        "selection_score": 0.9200224539084026,
+        "transactions": 13136,
+        "complexes": 875,
+        "mape_pct": 5.437,
+        "complex_balanced_mape_pct": 8.174,
+        "median_ape_pct": 3.98,
+        "mae_oku": 0.2018,
+        "bias_pct": 1.085,
+        "within10_pct": 86.76
+      },
+      {
+        "method": "coordinates",
+        "strength": 1.0,
+        "selection_score": 0.9563867574006271,
+        "transactions": 13136,
+        "complexes": 875,
+        "mape_pct": 5.681,
+        "complex_balanced_mape_pct": 8.313,
+        "median_ape_pct": 4.225,
+        "mae_oku": 0.214,
+        "bias_pct": -0.861,
+        "within10_pct": 84.47
+      },
+      {
+        "method": "access",
+        "strength": 0.0,
+        "selection_score": 1.0,
+        "transactions": 13136,
+        "complexes": 875,
+        "mape_pct": 5.931,
+        "complex_balanced_mape_pct": 9.222,
+        "median_ape_pct": 4.263,
+        "mae_oku": 0.2116,
+        "bias_pct": 3.107,
+        "within10_pct": 83.98
+      },
+      {
+        "method": "access",
+        "strength": 0.25,
+        "selection_score": 0.9438137268527343,
+        "transactions": 13136,
+        "complexes": 875,
+        "mape_pct": 5.585,
+        "complex_balanced_mape_pct": 8.53,
+        "median_ape_pct": 4.064,
+        "mae_oku": 0.2037,
+        "bias_pct": 2.083,
+        "within10_pct": 85.97
+      },
+      {
+        "method": "access",
+        "strength": 0.5,
+        "selection_score": 0.91925935104638,
+        "transactions": 13136,
+        "complexes": 875,
+        "mape_pct": 5.434,
+        "complex_balanced_mape_pct": 8.173,
+        "median_ape_pct": 3.99,
+        "mae_oku": 0.2015,
+        "bias_pct": 1.079,
+        "within10_pct": 86.72
+      },
+      {
+        "method": "access",
+        "strength": 1.0,
+        "selection_score": 0.9554221556162035,
+        "transactions": 13136,
+        "complexes": 875,
+        "mape_pct": 5.681,
+        "complex_balanced_mape_pct": 8.317,
+        "median_ape_pct": 4.194,
+        "mae_oku": 0.2135,
+        "bias_pct": -0.871,
+        "within10_pct": 84.54
+      }
+    ],
+    "train_year": 2023,
+    "selection_year": 2024,
+    "evaluation_years_used_for_selection": []
+  },
+  "hubs": {
+    "city_hall": [
+      37.566,
+      126.978
+    ],
+    "yeouido": [
+      37.521,
+      126.924
+    ],
+    "gangnam": [
+      37.498,
+      127.028
+    ],
+    "gasan": [
+      37.481,
+      126.882
+    ],
+    "pangyo": [
+      37.395,
+      127.111
+    ],
+    "songdo": [
+      37.389,
+      126.644
+    ],
+    "cheongna": [
+      37.532,
+      126.64
+    ],
+    "yeongjong": [
+      37.487,
+      126.493
+    ],
+    "namdong": [
+      37.405,
+      126.69
+    ],
+    "bupyeong": [
+      37.507,
+      126.722
+    ]
+  },
+  "partial_jobs": {
+    "songdo": 61922,
+    "yeongjong": 22879,
+    "cheongna": 11840
+  },
+  "employment_reference_year": 2021,
+  "employment_published_at": "2022-12-19",
+  "employment_source": "https://www.ifez.go.kr/main/pst/view.do?pst_id=noti03&pst_sn=271919",
+  "coordinates": "Current legacy snapshot, unambiguous name and construction year only; not archived historical coordinates.",
+  "evaluation": [
+    {
+      "year": 2025,
+      "scope": "all",
+      "method": "price_activity_floor",
+      "transactions": 22485,
+      "complexes": 1669,
+      "mape_pct": 5.222,
+      "complex_balanced_mape_pct": 9.208,
+      "median_ape_pct": 3.541,
+      "mae_oku": 0.1939,
+      "bias_pct": 0.756,
+      "within10_pct": 87.97
+    },
+    {
+      "year": 2025,
+      "scope": "all",
+      "method": "base",
+      "transactions": 22485,
+      "complexes": 1669,
+      "mape_pct": 5.595,
+      "complex_balanced_mape_pct": 10.015,
+      "median_ape_pct": 3.705,
+      "mae_oku": 0.2021,
+      "bias_pct": 2.677,
+      "within10_pct": 86.17
+    },
+    {
+      "year": 2025,
+      "scope": "all",
+      "method": "controls",
+      "transactions": 22485,
+      "complexes": 1669,
+      "mape_pct": 5.415,
+      "complex_balanced_mape_pct": 9.615,
+      "median_ape_pct": 3.663,
+      "mae_oku": 0.1987,
+      "bias_pct": 1.447,
+      "within10_pct": 87.24
+    },
+    {
+      "year": 2025,
+      "scope": "all",
+      "method": "coordinates",
+      "transactions": 22485,
+      "complexes": 1669,
+      "mape_pct": 5.414,
+      "complex_balanced_mape_pct": 9.612,
+      "median_ape_pct": 3.669,
+      "mae_oku": 0.1987,
+      "bias_pct": 1.462,
+      "within10_pct": 87.23
+    },
+    {
+      "year": 2025,
+      "scope": "all",
+      "method": "access",
+      "transactions": 22485,
+      "complexes": 1669,
+      "mape_pct": 5.413,
+      "complex_balanced_mape_pct": 9.612,
+      "median_ape_pct": 3.669,
+      "mae_oku": 0.1985,
+      "bias_pct": 1.462,
+      "within10_pct": 87.19
+    },
+    {
+      "year": 2025,
+      "scope": "matched",
+      "method": "price_activity_floor",
+      "transactions": 13052,
+      "complexes": 897,
+      "mape_pct": 5.206,
+      "complex_balanced_mape_pct": 8.126,
+      "median_ape_pct": 3.615,
+      "mae_oku": 0.1876,
+      "bias_pct": 0.576,
+      "within10_pct": 87.93
+    },
+    {
+      "year": 2025,
+      "scope": "matched",
+      "method": "base",
+      "transactions": 13052,
+      "complexes": 897,
+      "mape_pct": 5.573,
+      "complex_balanced_mape_pct": 8.712,
+      "median_ape_pct": 3.775,
+      "mae_oku": 0.1969,
+      "bias_pct": 2.623,
+      "within10_pct": 85.99
+    },
+    {
+      "year": 2025,
+      "scope": "matched",
+      "method": "controls",
+      "transactions": 13052,
+      "complexes": 897,
+      "mape_pct": 5.265,
+      "complex_balanced_mape_pct": 7.967,
+      "median_ape_pct": 3.706,
+      "mae_oku": 0.191,
+      "bias_pct": 0.504,
+      "within10_pct": 87.82
+    },
+    {
+      "year": 2025,
+      "scope": "matched",
+      "method": "coordinates",
+      "transactions": 13052,
+      "complexes": 897,
+      "mape_pct": 5.263,
+      "complex_balanced_mape_pct": 7.963,
+      "median_ape_pct": 3.714,
+      "mae_oku": 0.191,
+      "bias_pct": 0.53,
+      "within10_pct": 87.8
+    },
+    {
+      "year": 2025,
+      "scope": "matched",
+      "method": "access",
+      "transactions": 13052,
+      "complexes": 897,
+      "mape_pct": 5.26,
+      "complex_balanced_mape_pct": 7.963,
+      "median_ape_pct": 3.703,
+      "mae_oku": 0.1907,
+      "bias_pct": 0.53,
+      "within10_pct": 87.73
+    },
+    {
+      "year": 2026,
+      "scope": "all",
+      "method": "price_activity_floor",
+      "transactions": 12765,
+      "complexes": 1489,
+      "mape_pct": 5.091,
+      "complex_balanced_mape_pct": 8.733,
+      "median_ape_pct": 3.26,
+      "mae_oku": 0.1946,
+      "bias_pct": 0.943,
+      "within10_pct": 88.37
+    },
+    {
+      "year": 2026,
+      "scope": "all",
+      "method": "base",
+      "transactions": 12765,
+      "complexes": 1489,
+      "mape_pct": 5.47,
+      "complex_balanced_mape_pct": 9.527,
+      "median_ape_pct": 3.443,
+      "mae_oku": 0.2019,
+      "bias_pct": 2.651,
+      "within10_pct": 86.69
+    },
+    {
+      "year": 2026,
+      "scope": "all",
+      "method": "controls",
+      "transactions": 12765,
+      "complexes": 1489,
+      "mape_pct": 5.276,
+      "complex_balanced_mape_pct": 9.113,
+      "median_ape_pct": 3.393,
+      "mae_oku": 0.1985,
+      "bias_pct": 1.483,
+      "within10_pct": 87.54
+    },
+    {
+      "year": 2026,
+      "scope": "all",
+      "method": "coordinates",
+      "transactions": 12765,
+      "complexes": 1489,
+      "mape_pct": 5.273,
+      "complex_balanced_mape_pct": 9.108,
+      "median_ape_pct": 3.395,
+      "mae_oku": 0.1983,
+      "bias_pct": 1.495,
+      "within10_pct": 87.5
+    },
+    {
+      "year": 2026,
+      "scope": "all",
+      "method": "access",
+      "transactions": 12765,
+      "complexes": 1489,
+      "mape_pct": 5.271,
+      "complex_balanced_mape_pct": 9.108,
+      "median_ape_pct": 3.379,
+      "mae_oku": 0.1981,
+      "bias_pct": 1.498,
+      "within10_pct": 87.52
+    },
+    {
+      "year": 2026,
+      "scope": "matched",
+      "method": "price_activity_floor",
+      "transactions": 7377,
+      "complexes": 810,
+      "mape_pct": 4.984,
+      "complex_balanced_mape_pct": 7.702,
+      "median_ape_pct": 3.341,
+      "mae_oku": 0.1849,
+      "bias_pct": 0.561,
+      "within10_pct": 88.72
+    },
+    {
+      "year": 2026,
+      "scope": "matched",
+      "method": "base",
+      "transactions": 7377,
+      "complexes": 810,
+      "mape_pct": 5.38,
+      "complex_balanced_mape_pct": 8.378,
+      "median_ape_pct": 3.573,
+      "mae_oku": 0.1941,
+      "bias_pct": 2.535,
+      "within10_pct": 87.34
+    },
+    {
+      "year": 2026,
+      "scope": "matched",
+      "method": "controls",
+      "transactions": 7377,
+      "complexes": 810,
+      "mape_pct": 5.045,
+      "complex_balanced_mape_pct": 7.617,
+      "median_ape_pct": 3.488,
+      "mae_oku": 0.1882,
+      "bias_pct": 0.512,
+      "within10_pct": 88.8
+    },
+    {
+      "year": 2026,
+      "scope": "matched",
+      "method": "coordinates",
+      "transactions": 7377,
+      "complexes": 810,
+      "mape_pct": 5.04,
+      "complex_balanced_mape_pct": 7.608,
+      "median_ape_pct": 3.469,
+      "mae_oku": 0.1879,
+      "bias_pct": 0.534,
+      "within10_pct": 88.74
+    },
+    {
+      "year": 2026,
+      "scope": "matched",
+      "method": "access",
+      "transactions": 7377,
+      "complexes": 810,
+      "mape_pct": 5.036,
+      "complex_balanced_mape_pct": 7.608,
+      "median_ape_pct": 3.469,
+      "mae_oku": 0.1875,
+      "bias_pct": 0.539,
+      "within10_pct": 88.78
+    }
+  ],
+  "gates": [
+    {
+      "year": 2025,
+      "coordinate_coverage": 0.5804758728040916,
+      "mae_gain_vs_legacy_pct": -2.372356884992266,
+      "passed": false
+    },
+    {
+      "year": 2026,
+      "coordinate_coverage": 0.5779083431257345,
+      "mae_gain_vs_legacy_pct": -1.7985611510791477,
+      "passed": false
+    }
+  ],
+  "numerical_gate_passed": false,
+  "train_transactions": 10890,
+  "development_transactions": 13136,
+  "limitations": [
+    "Only three IFEZ employment counts; not all capital-area jobs.",
+    "Distances are to analyst-defined approximate representative points, not travel time.",
+    "2025/2026 reused after prior inspection. Spatial association is not causation."
+  ]
+}

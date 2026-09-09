@@ -184,9 +184,10 @@ def replay_transactions(d, artifact, spec, month):
     first, lag = f'{year}-03', int(spec.get('assumed_reporting_lag_days', 31))
     end = pd.Period(month).end_time
     source = d[d.date <= end].copy()
-    if spec.get('feature_engine') == 'array_equivalent_v1':
+    if spec.get('feature_engine') in ('array_equivalent_v1', 'array_equivalent_legacy_ties_v1'):
         from estate_retraining_features import monthly_features
-        features = monthly_features(source, first, month, policy=False, uniform_lag=lag)
+        features = monthly_features(source, first, month, policy=False, uniform_lag=lag,
+            legacy_order=spec.get('feature_engine') == 'array_equivalent_legacy_ties_v1')
     else:
         features = build_features(source, lag, first, month)
     wanted = source[source.month.between(first, month)]

@@ -22,3 +22,6 @@ Thumbs.db
 
 # Restored monthly research status is generated from the immutable state branch.
 /metadata/potential_refresh_status.json
+
+# Reproducible cache for the separate regional price policy.
+/metadata/transaction_valuation_2026_capital_v2.json.gz
