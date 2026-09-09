@@ -42,6 +42,11 @@ const Potential = (() => {
     return `<p><b>${result.passed?'사전 연구 기준 통과 · 운영 순위는 별도 검증 후 변경':'실험 완료 · 사전 기준 미통과'}</b></p><p>같은 후보를 미리 선택하고 24·36·48·60개월마다 직전 12개월 거래가격을 확인했습니다. ${result.model_test_origins}개 판단 시점의 모형을 시험했으며, 결과가 없는 후보를 실패나 수익률 0으로 채우지 않았습니다.</p><div class="table-scroll"><table><thead><tr><th>확인 시점</th><th>공통 관측 조건 충족 · 최소6개 필요</th><th>모형 상대 변화</th><th>단순 소외 후보</th></tr></thead><tbody>${rows}</tbody></table></div><p>표는 공통 관측 조건을 충족한 시점별 단지 중앙값을 같은 비중으로 평균한 값입니다. 확인 가능한 후보만의 결과이며, 실제 매매차익이나 독립적인 시장 국면 수를 뜻하지 않습니다.</p><p>상대 10% 이상이 처음 관측된 체크포인트도 보조 분석했습니다. 관측 공백과 미확인 후보를 보존하며, 5년 안의 최고가에 팔았다고 가정하지 않습니다. 이 실험의 점수를 현재 18~24개월 후보에 합산하지 않았습니다.</p>`;
   }
   function renderInfo(data){
+    const capital=data.capital_retraining;
+    document.getElementById('capital-expansion-validation').hidden=!capital;
+    document.getElementById('capital-expansion-status').textContent=capital?.headline??'';
+    document.getElementById('capital-expansion-detail').textContent=capital?.detail??'';
+    document.getElementById('capital-expansion-results').innerHTML=capital?`<div class="table-scroll"><table><thead><tr><th>고정 사양</th><th>같은 판단 시점의 상대 변화 중앙값</th><th>선정 후보 관측률 중앙값</th></tr></thead><tbody>${capital.comparison.map(r=>`<tr><th>${esc(r.label)}</th><td>${signed(r.excess_pct)}</td><td>${r.observation_rate_pct==null?'—':r.observation_rate_pct.toFixed(1)+'%'}</td></tr>`).join('')}</tbody></table></div><p class="score-note">${esc(capital.comparison_note)}</p>`:'';
     document.getElementById('potential-origin').textContent=data.origin;
     document.getElementById('five-year-validation').hidden=!data.five_year_validation;
     document.getElementById('five-year-results').innerHTML=fiveYearHtml(data.five_year_validation);
