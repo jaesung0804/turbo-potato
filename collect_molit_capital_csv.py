@@ -404,7 +404,7 @@ class DownloadLedger:
         atomic_json(self.path, self.data)
 
 
-def _verify_cached(output: Path, request: ExportRequest, entry: dict[str, Any]) -> None:
+def _verify_cached(output: Path, request: ExportRequest, entry: dict[str, Any], verify_rows: bool = True) -> None:
     if entry.get("query") != request.as_dict():
         raise CollectionError("Cached completion belongs to a different query")
     if entry.get("expected_count") == 0 and entry.get("row_count") == 0 and entry.get("file") is None:
@@ -420,7 +420,8 @@ def _verify_cached(output: Path, request: ExportRequest, entry: dict[str, Any]) 
     if (hashlib.sha256(raw).hexdigest() != entry.get("raw_sha256") or
             hashlib.sha256(compressed).hexdigest() != entry.get("gzip_sha256")):
         raise CollectionError("Completed source hash mismatch; restore it before resuming")
-    inspect_csv(raw, request, entry["expected_count"])
+    if verify_rows:
+        inspect_csv(raw, request, entry["expected_count"])
 
 
 def _checked_download(client: PublicCSVClient, fields: dict[str, str], request: ExportRequest,
@@ -463,7 +464,8 @@ def _checked_download(client: PublicCSVClient, fields: dict[str, str], request: 
 def collect(requests: list[ExportRequest], output: Path, cutoff: date,
             client: PublicCSVClient | None = None, daily_limit: int = DAILY_LIMIT,
             prior_downloads: int = 0, transport_retries: int = 0,
-            retry_delay: float = 10, max_new_partitions: int | None = None) -> dict[str, Any]:
+            retry_delay: float = 10, max_new_partitions: int | None = None,
+            verify_cached_rows: bool = True) -> dict[str, Any]:
     """Resume a plan; optionally retry transport only and retain completed files."""
     if len({request.key for request in requests}) != len(requests):
         raise ValueError("Collection plan contains duplicate requests")
@@ -526,7 +528,7 @@ def collect(requests: list[ExportRequest], output: Path, cutoff: date,
                 phase = "cache_verification"
                 cached = manifest["entries"].get(request.key)
                 if cached and cached.get("status") == "complete":
-                    _verify_cached(output, request, cached)
+                    _verify_cached(output, request, cached, verify_cached_rows)
                     print(f"reuse {request.key} rows={cached['row_count']}", flush=True)
                     continue
                 if max_new_partitions is not None and new_partitions >= max_new_partitions:
@@ -648,6 +650,8 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--plan-only", action="store_true", help="Print the plan without network or file writes")
     parser.add_argument("--max-new-partitions", type=int,
                         help="Stop after this many newly completed exports, preserving the full plan")
+    parser.add_argument("--cache-hashes-only", action="store_true",
+                        help="Verify both hashes of previously validated cached files without reparsing every row")
     args = parser.parse_args(argv)
     if args.pause < 0 or args.pause > 60 or args.timeout <= 0:
         parser.error("pause must be 0–60 seconds and timeout must be positive")
@@ -665,7 +669,8 @@ def main(argv: list[str] | None = None) -> int:
     try:
         collect(requests, args.output, args.cutoff, PublicCSVClient(args.timeout, args.pause),
                 args.daily_limit, args.prior_downloads_today,
-                args.transport_retries, args.retry_delay, args.max_new_partitions)
+                args.transport_retries, args.retry_delay, args.max_new_partitions,
+                not args.cache_hashes_only)
     except (CollectionError, ValueError) as exc:
         print(f"STOP: {exc}", file=sys.stderr)
         return 1

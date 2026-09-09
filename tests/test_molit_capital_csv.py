@@ -704,3 +704,16 @@ def test_single_partition_batches_preserve_full_plan_and_resume(tmp_path):
     assert "next_key" not in result
     assert sum(phase == "count" for phase, key in client.calls) == 3
     assert download_attempts(tmp_path) == 0
+
+
+def test_cache_hash_mode_skips_reparsing_but_rejects_corrupted_file(tmp_path, monkeypatch):
+    req = collector.ExportRequest("gyeonggi", "sale", date(2020, 1, 1), date(2020, 12, 31))
+    client = FakeClient({req.key: csv_bytes([transaction()])})
+    m = collector.collect([req], tmp_path, CUTOFF, client)
+    def unexpected_parse(*args, **kwargs):
+        raise AssertionError("Cached rows should not be reparsed")
+    monkeypatch.setattr(collector, "inspect_csv", unexpected_parse)
+    collector._verify_cached(tmp_path, req, m['entries'][req.key], verify_rows=False)
+    (tmp_path / req.relative_path).write_bytes(b'corrupted')
+    with pytest.raises(collector.CollectionError):
+        collector._verify_cached(tmp_path, req, m['entries'][req.key], verify_rows=False)

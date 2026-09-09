@@ -1,0 +1,85 @@
+name: Capital history - one file per job
+on:
+  workflow_dispatch:
+  push:
+    branches: [codex/estate-capital-history]
+    paths: [.github/workflows/research-capital-batches.yml]
+permissions:
+  contents: write
+concurrency:
+  group: estate-capital-history
+  cancel-in-progress: false
+jobs:
+  plan:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    outputs:
+      batches: ${{ steps.plan.outputs.batches }}
+      remaining: ${{ steps.plan.outputs.remaining }}
+    steps:
+      - uses: actions/checkout@v4
+      - id: plan
+        shell: bash
+        run: |
+          git fetch --depth=1 origin estate-capital-history-state
+          git show FETCH_HEAD:collection/manifest.json > checkpoint.json
+          python - <<'PY'
+          import json, os
+          from datetime import date
+          from collect_molit_capital_csv import expansion_requests
+          m = json.load(open('checkpoint.json'))
+          plan = expansion_requests(date(2026, 9, 9), True)
+          assert set(m['planned_keys']) == {r.key for r in plan}
+          remaining = sum(m['entries'].get(r.key, {}).get('status') != 'complete' for r in plan)
+          with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
+              f.write('remaining=' + str(remaining) + '\n')
+              f.write('batches=' + json.dumps(list(range(remaining)) or [0]) + '\n')
+          print('Remaining annual/province exports:', remaining)
+          PY
+  batch:
+    needs: plan
+    if: needs.plan.outputs.remaining != '0'
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    strategy:
+      fail-fast: true
+      max-parallel: 1
+      matrix:
+        batch: ${{ fromJSON(needs.plan.outputs.batches) }}
+    steps:
+      - uses: actions/checkout@v4
+      - id: restore
+        name: Restore the last saved checkpoint
+        shell: bash
+        run: |
+          git fetch --depth=1 origin estate-capital-history-state
+          git worktree add --detach .work/batch-state FETCH_HEAD
+          python capital_csv_state.py restore --state .work/batch-state --output .work/batch-input
+      - id: collect
+        name: Collect at most one new CSV
+        run: >-
+          timeout --signal=INT --kill-after=5s 90s
+          python collect_molit_capital_csv.py
+          --output .work/batch-input --cutoff 2026-09-09
+          --include-current-sales --max-new-partitions 1 --cache-hashes-only
+          --timeout 20 --pause 1 --transport-retries 0 --daily-limit 90
+      - name: Save this checkpoint before the next job
+        if: always() && steps.restore.outcome == 'success' && steps.collect.outcome != 'skipped'
+        shell: bash
+        run: |
+          python capital_csv_state.py pack --source .work/batch-input --state .work/batch-state
+          git -C .work/batch-state config user.name 'github-actions[bot]'
+          git -C .work/batch-state config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git -C .work/batch-state add -A
+          if ! git -C .work/batch-state diff --cached --quiet; then
+            git -C .work/batch-state commit -m "Save single-file capital batch ${GITHUB_RUN_ID}"
+            git -C .work/batch-state push origin HEAD:estate-capital-history-state
+          fi
+          python - <<'PY'
+          import json, os
+          m = json.load(open('.work/batch-input/manifest.json'))
+          rows = sum(e.get('row_count', 0) for e in m['entries'].values() if e.get('status') == 'complete')
+          with open(os.environ['GITHUB_STEP_SUMMARY'], 'a') as f:
+              f.write(f"Status: {m['status']}; completed: {m['completed_count']}/81; raw rows: {rows}\n")
+          print('Status:', m['status'], 'completed:', m['completed_count'], 'rows:', rows)
+          PY
