@@ -62,7 +62,7 @@ jobs:
           python collect_molit_capital_csv.py
           --output .work/batch-input --cutoff 2026-09-09
           --include-current-sales --max-new-partitions 1 --cache-hashes-only
-          --timeout 20 --pause 1 --transport-retries 0 --daily-limit 90
+          --timeout 45 --pause 1 --transport-retries 0 --daily-limit 90
       - name: Save this checkpoint before the next job
         if: always() && steps.restore.outcome == 'success' && steps.collect.outcome != 'skipped'
         shell: bash
