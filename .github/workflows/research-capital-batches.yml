@@ -31,9 +31,12 @@ jobs:
           plan = expansion_requests(date(2026, 9, 9), True)
           assert set(m['planned_keys']) == {r.key for r in plan}
           remaining = sum(m['entries'].get(r.key, {}).get('status') != 'complete' for r in plan)
+          request = json.load(open('.github/capital-collection-request.json'))
+          limit = request.get('max_files', 1)
+          assert type(limit) is int and 1 <= limit <= 5, 'max_files must be 1..5'
           with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
               f.write('remaining=' + str(remaining) + '\n')
-              f.write('batches=' + json.dumps([0]) + '\n')
+              f.write('batches=' + json.dumps(list(range(min(remaining, limit))) or [0]) + '\n')
           print('Remaining annual/province exports:', remaining)
           PY
   batch:

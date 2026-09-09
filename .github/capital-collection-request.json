@@ -1,6 +1,6 @@
 {
-  "request": "resume-gyeonggi-sale-2014-phase-timeouts",
-  "baseline_completed": 9,
-  "max_new_partitions": 1,
+  "request": "serial-five-from-gyeonggi-sale-2015",
+  "max_files": 5,
+  "baseline_completed": 10,
   "cutoff": "2026-09-09"
 }
