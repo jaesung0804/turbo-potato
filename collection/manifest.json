@@ -1,5 +1,5 @@
 {
-  "completed_count": 17,
+  "completed_count": 18,
   "coverage_bounds": {
     "sale_source_start": "2006-01-01",
     "rent_source_start": "2011-01-01",
@@ -2402,6 +2402,144 @@
         "date": "Wed, 09 Sep 2026 07:37:56 GMT"
       },
       "completed_at": "2026-09-09T07:38:04.152063+00:00"
+    },
+    "incheon/sale/2007/2007-01-01_2007-12-31": {
+      "query": {
+        "region": "incheon",
+        "kind": "sale",
+        "start": "2007-01-01",
+        "end": "2007-12-31"
+      },
+      "request_fields": {
+        "mobileAt": "",
+        "srhSggCd": "",
+        "srhEmdCd": "",
+        "srhRoadNm": "",
+        "srhLoadCd": "",
+        "srhHsmpCd": "",
+        "srhArea": "",
+        "srhLrArea": "",
+        "srhFromAmount": "",
+        "srhToAmount": "",
+        "srhThingNo": "A",
+        "srhDelngSecd": "1",
+        "srhAddrGbn": "1",
+        "srhLfstsSecd": "1",
+        "sidoNm": "인천광역시",
+        "sggNm": "전체",
+        "emdNm": "전체",
+        "loadNm": "전체",
+        "areaNm": "전체",
+        "hsmpNm": "전체",
+        "srhFromDt": "2007-01-01",
+        "srhToDt": "2007-12-31",
+        "srhSidoCd": "28000"
+      },
+      "status": "complete",
+      "started_at": "2026-09-09T07:39:19.697456+00:00",
+      "data_cutoff": "2026-09-09",
+      "expected_count": 37863,
+      "count_checked_at": "2026-09-09T07:39:21.157605+00:00",
+      "encoding": "cp949",
+      "columns": [
+        "NO",
+        "시군구",
+        "번지",
+        "본번",
+        "부번",
+        "단지명",
+        "전용면적(㎡)",
+        "계약년월",
+        "계약일",
+        "거래금액(만원)",
+        "동",
+        "층",
+        "매수자",
+        "매도자",
+        "건축년도",
+        "도로명",
+        "해제사유발생일",
+        "거래유형",
+        "중개사소재지",
+        "등기일자"
+      ],
+      "header_row": 16,
+      "metadata_rows": [
+        [
+          "□ 본 서비스에서 제공하는 정보는 법적인 효력이 없으므로 참고용으로만 활용하시기 바랍니다."
+        ],
+        [
+          "□ 신고정보가 실시간 변경, 해제되어 제공시점에 따라 공개건수 및 내용이 상이할 수 있는 점 참고하시기 바랍니다."
+        ],
+        [
+          "□ 본 자료는 계약일 기준입니다. (※ 7월 계약, 8월 신고건 → 7월 거래건으로  제공)"
+        ],
+        [
+          "□ 통계자료 활용시에는 수치가 왜곡될 수 있으니 참고자료로만 활용하시기  바라며,  외부 공개시에는 반드시 신고일 기준으로 집계되는 공식통계를 이용하여 주시기 바랍니다."
+        ],
+        [
+          ""
+        ],
+        [
+          "* 국토교통부 실거래가 공개시스템의 궁금하신 점이나 문의사항은 콜센터 1533-2949로 연락 주시기 바랍니다."
+        ],
+        [
+          "□ 검색조건"
+        ],
+        [
+          "계약일자 : 2007-01-01 ~ 2007-12-31"
+        ],
+        [
+          "실거래구분 : 아파트(매매)"
+        ],
+        [
+          "주소구분 : 지번주소"
+        ],
+        [
+          "시도 : 인천광역시"
+        ],
+        [
+          "시군구 : 전체"
+        ],
+        [
+          "읍면동 : 전체"
+        ],
+        [
+          "면적 : 전체"
+        ],
+        [
+          "금액선택 : 전체"
+        ]
+      ],
+      "row_count": 37863,
+      "minimum_contract_date": "2007-01-01",
+      "maximum_contract_date": "2007-12-31",
+      "cancellation_marked_rows": 0,
+      "deduplication_applied": false,
+      "contract_month_counts": {
+        "200701": 2758,
+        "200702": 2362,
+        "200703": 3702,
+        "200704": 3339,
+        "200705": 3129,
+        "200706": 3331,
+        "200707": 3908,
+        "200708": 3306,
+        "200709": 2806,
+        "200710": 3999,
+        "200711": 2884,
+        "200712": 2339
+      },
+      "raw_bytes": 5924129,
+      "raw_sha256": "4c92a029af4d37cc872ad14bd3fae1c4f49ff69e9cae075d2c14ff452eb5f9ae",
+      "file": "incheon/sale/2007/2007-01-01_2007-12-31.csv.gz",
+      "gzip_sha256": "dd85de21ceab0e3ed829d26e3d97fcaa74c30f3883453eab2f58142694ada80d",
+      "gzip_bytes": 958588,
+      "downloaded_at": "2026-09-09T07:39:26.296780+00:00",
+      "response_headers": {
+        "date": "Wed, 09 Sep 2026 07:39:21 GMT"
+      },
+      "completed_at": "2026-09-09T07:39:28.002242+00:00"
     }
   },
   "format_version": 1,
@@ -2515,7 +2653,7 @@
     "same_anonymous_session": true,
     "http_and_validation_errors_retried": false
   },
-  "updated_at": "2026-09-09T07:38:04.190193+00:00",
+  "updated_at": "2026-09-09T07:39:28.004876+00:00",
   "initialization_failures": [
     {
       "failed_at": "2026-09-09T05:57:20.874576+00:00",
@@ -2663,5 +2801,5 @@
     }
   ],
   "pause_reason": "batch_limit",
-  "next_key": "incheon/sale/2007/2007-01-01_2007-12-31"
+  "next_key": "incheon/sale/2008/2008-01-01_2008-12-31"
 }
