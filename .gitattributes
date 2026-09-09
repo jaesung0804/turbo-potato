@@ -1,0 +1,3 @@
+*.gz -text
+*.part -text
+*.json text eol=lf

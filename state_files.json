@@ -1,0 +1,25 @@
+{
+  "version": 1,
+  "files": {
+    "download-ledger.json": {
+      "size": 396,
+      "sha256": "525ca8d67b4c6642074484d7da4da381b162f3ab1992fc8946f4c9fca867a171",
+      "file": "collection/download-ledger.json"
+    },
+    "gyeonggi/sale/2006/2006-01-01_2006-12-31.csv.gz": {
+      "size": 6001520,
+      "sha256": "fc4f20afd00ab6d195808c34dd8e66b80aac41fbca57bc7c39f8f1793bf9aadb",
+      "file": "collection/gyeonggi/sale/2006/2006-01-01_2006-12-31.csv.gz"
+    },
+    "gyeonggi/sale/2007/2007-01-01_2007-12-31.csv.gz": {
+      "size": 3570147,
+      "sha256": "48768b68d976fadd605eece76316f751b53d9f6dc05da34efe58d4e6ed0f59a5",
+      "file": "collection/gyeonggi/sale/2007/2007-01-01_2007-12-31.csv.gz"
+    },
+    "manifest.json": {
+      "size": 14300,
+      "sha256": "4cdf523b3cde6e7569848064a714e70bc6366dd7a528807cf3b59cd37a9f8a85",
+      "file": "collection/manifest.json"
+    }
+  }
+}
