@@ -117,14 +117,59 @@
       "file": "collection/incheon/sale/2011/2011-01-01_2011-12-31.csv.gz"
     },
     "manifest.json": {
-      "size": 111584,
-      "sha256": "4738d707d95ea6cf4b3c9bcd8a8dadc008660523e7cd1f39f4deb9e43f2704f5",
+      "size": 144902,
+      "sha256": "e0d90f84ccdf355dade64ab83846519336785fcad105da4076fcfd7ec419b9a0",
       "file": "collection/manifest.json"
     },
     "probe_gyeonggi_rent_2011.json": {
       "size": 2811,
       "sha256": "9978123802a496a004e0d90500d90832b8a9c01e5d7c13e50eb5cd40684de7ec",
       "file": "collection/probe_gyeonggi_rent_2011.json"
+    },
+    "incheon/sale/2012/2012-01-01_2012-12-31.csv.gz": {
+      "size": 561845,
+      "sha256": "63a4ee3b40756605ab977fa627994d80744431d4e7524a3e951b9e49d40949fd",
+      "file": "collection/incheon/sale/2012/2012-01-01_2012-12-31.csv.gz"
+    },
+    "incheon/sale/2013/2013-01-01_2013-12-31.csv.gz": {
+      "size": 962942,
+      "sha256": "983aa833748232606fea3808ef035c5243575a7deb137e3732b5ef599a4ce7c8",
+      "file": "collection/incheon/sale/2013/2013-01-01_2013-12-31.csv.gz"
+    },
+    "incheon/sale/2014/2014-01-01_2014-12-31.csv.gz": {
+      "size": 1172188,
+      "sha256": "395e7507b4559be17535d0f4266782f99e3060cb3de16dae4bcbcf376de09e5d",
+      "file": "collection/incheon/sale/2014/2014-01-01_2014-12-31.csv.gz"
+    },
+    "incheon/sale/2015/2015-01-01_2015-12-31.csv.gz": {
+      "size": 1422213,
+      "sha256": "0b5f328af734313fe6175e43c9a95415a35172d253fe647476450226afb5ba37",
+      "file": "collection/incheon/sale/2015/2015-01-01_2015-12-31.csv.gz"
+    },
+    "incheon/sale/2016/2016-01-01_2016-12-31.csv.gz": {
+      "size": 1246540,
+      "sha256": "7e39ad77c37418c853f654d060b9938c7b70cce0abbc44d4faf28c7042825b47",
+      "file": "collection/incheon/sale/2016/2016-01-01_2016-12-31.csv.gz"
+    },
+    "incheon/sale/2017/2017-01-01_2017-12-31.csv.gz": {
+      "size": 1064629,
+      "sha256": "64bf56f5b7d1632ca0bab6f1418f103edc5698fcaa6f1f0b86203f378ad06d9b",
+      "file": "collection/incheon/sale/2017/2017-01-01_2017-12-31.csv.gz"
+    },
+    "incheon/sale/2018/2018-01-01_2018-12-31.csv.gz": {
+      "size": 894056,
+      "sha256": "561296cf1ad8e30724923f4a9bfc88a568763ae4a27791b558a0650c31baa3f3",
+      "file": "collection/incheon/sale/2018/2018-01-01_2018-12-31.csv.gz"
+    },
+    "incheon/sale/2019/2019-01-01_2019-12-31.csv.gz": {
+      "size": 1018680,
+      "sha256": "3977ac8177c4c30f86865a1f7c1365474ad15dffdf923f2b7e4630841c819087",
+      "file": "collection/incheon/sale/2019/2019-01-01_2019-12-31.csv.gz"
+    },
+    "incheon/sale/2020/2020-01-01_2020-12-31.csv.gz": {
+      "size": 1633660,
+      "sha256": "c3594b987d1754b6e7f25bc6a2a8a433c71319e81278638e6275cb1e1d65045f",
+      "file": "collection/incheon/sale/2020/2020-01-01_2020-12-31.csv.gz"
     }
   }
 }

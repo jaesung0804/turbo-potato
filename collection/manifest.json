@@ -1,5 +1,5 @@
 {
-  "completed_count": 22,
+  "completed_count": 31,
   "coverage_bounds": {
     "sale_source_start": "2006-01-01",
     "rent_source_start": "2011-01-01",
@@ -3092,6 +3092,1041 @@
         "date": "Wed, 09 Sep 2026 07:57:19 GMT"
       },
       "completed_at": "2026-09-09T07:57:24.035688+00:00"
+    },
+    "incheon/sale/2012/2012-01-01_2012-12-31": {
+      "cancellation_marked_rows": 0,
+      "columns": [
+        "NO",
+        "시군구",
+        "번지",
+        "본번",
+        "부번",
+        "단지명",
+        "전용면적(㎡)",
+        "계약년월",
+        "계약일",
+        "거래금액(만원)",
+        "동",
+        "층",
+        "매수자",
+        "매도자",
+        "건축년도",
+        "도로명",
+        "해제사유발생일",
+        "거래유형",
+        "중개사소재지",
+        "등기일자"
+      ],
+      "completed_at": "2026-09-09T08:51:45.203457+00:00",
+      "contract_month_counts": {
+        "201201": 1216,
+        "201202": 1864,
+        "201203": 2054,
+        "201204": 1665,
+        "201205": 1715,
+        "201206": 1320,
+        "201207": 1212,
+        "201208": 1235,
+        "201209": 1926,
+        "201210": 2359,
+        "201211": 2163,
+        "201212": 1824
+      },
+      "data_cutoff": "2026-09-09",
+      "deduplication_applied": false,
+      "encoding": "cp949",
+      "expected_count": 20553,
+      "expected_count_evidence": "Observed CSV rows and sequential NO; NOT independently checked against server count endpoint",
+      "file": "incheon/sale/2012/2012-01-01_2012-12-31.csv.gz",
+      "gzip_bytes": 561845,
+      "gzip_sha256": "63a4ee3b40756605ab977fa627994d80744431d4e7524a3e951b9e49d40949fd",
+      "header_row": 16,
+      "import_provenance": {
+        "method": "user-provided official CSV",
+        "new_network_downloads_during_import": 0,
+        "source_filename": "아파트(매매)_실거래가_20260909174719.csv"
+      },
+      "imported_at": "2026-09-09T08:51:45.203468+00:00",
+      "independent_server_count_checked": false,
+      "maximum_contract_date": "2012-12-31",
+      "metadata_rows": [
+        [
+          "□ 본 서비스에서 제공하는 정보는 법적인 효력이 없으므로 참고용으로만 활용하시기 바랍니다."
+        ],
+        [
+          "□ 신고정보가 실시간 변경, 해제되어 제공시점에 따라 공개건수 및 내용이 상이할 수 있는 점 참고하시기 바랍니다."
+        ],
+        [
+          "□ 본 자료는 계약일 기준입니다. (※ 7월 계약, 8월 신고건 → 7월 거래건으로  제공)"
+        ],
+        [
+          "□ 통계자료 활용시에는 수치가 왜곡될 수 있으니 참고자료로만 활용하시기  바라며,  외부 공개시에는 반드시 신고일 기준으로 집계되는 공식통계를 이용하여 주시기 바랍니다."
+        ],
+        [
+          ""
+        ],
+        [
+          "* 국토교통부 실거래가 공개시스템의 궁금하신 점이나 문의사항은 콜센터 1533-2949로 연락 주시기 바랍니다."
+        ],
+        [
+          "□ 검색조건"
+        ],
+        [
+          "계약일자 : 2012-01-01 ~ 2012-12-31"
+        ],
+        [
+          "실거래구분 : 아파트(매매)"
+        ],
+        [
+          "주소구분 : 지번주소"
+        ],
+        [
+          "시도 : 인천광역시"
+        ],
+        [
+          "시군구 : 전체"
+        ],
+        [
+          "읍면동 : 전체"
+        ],
+        [
+          "면적 : 전체"
+        ],
+        [
+          "금액선택 : 전체"
+        ]
+      ],
+      "minimum_contract_date": "2012-01-01",
+      "query": {
+        "end": "2012-12-31",
+        "kind": "sale",
+        "region": "incheon",
+        "start": "2012-01-01"
+      },
+      "raw_bytes": 3248621,
+      "raw_sha256": "d051895a5ff508cd67bc17d528b9269e9303ff0ac60dea478a49506e9db286bd",
+      "row_count": 20553,
+      "status": "complete"
+    },
+    "incheon/sale/2013/2013-01-01_2013-12-31": {
+      "cancellation_marked_rows": 0,
+      "columns": [
+        "NO",
+        "시군구",
+        "번지",
+        "본번",
+        "부번",
+        "단지명",
+        "전용면적(㎡)",
+        "계약년월",
+        "계약일",
+        "거래금액(만원)",
+        "동",
+        "층",
+        "매수자",
+        "매도자",
+        "건축년도",
+        "도로명",
+        "해제사유발생일",
+        "거래유형",
+        "중개사소재지",
+        "등기일자"
+      ],
+      "completed_at": "2026-09-09T08:51:47.047754+00:00",
+      "contract_month_counts": {
+        "201301": 1603,
+        "201302": 2273,
+        "201303": 3449,
+        "201304": 3538,
+        "201305": 3556,
+        "201306": 2920,
+        "201307": 2038,
+        "201308": 2931,
+        "201309": 3622,
+        "201310": 3812,
+        "201311": 2313,
+        "201312": 2548
+      },
+      "data_cutoff": "2026-09-09",
+      "deduplication_applied": false,
+      "encoding": "cp949",
+      "expected_count": 34603,
+      "expected_count_evidence": "Observed CSV rows and sequential NO; NOT independently checked against server count endpoint",
+      "file": "incheon/sale/2013/2013-01-01_2013-12-31.csv.gz",
+      "gzip_bytes": 962942,
+      "gzip_sha256": "983aa833748232606fea3808ef035c5243575a7deb137e3732b5ef599a4ce7c8",
+      "header_row": 16,
+      "import_provenance": {
+        "method": "user-provided official CSV",
+        "new_network_downloads_during_import": 0,
+        "source_filename": "아파트(매매)_실거래가_20260909174739.csv"
+      },
+      "imported_at": "2026-09-09T08:51:47.047766+00:00",
+      "independent_server_count_checked": false,
+      "maximum_contract_date": "2013-12-31",
+      "metadata_rows": [
+        [
+          "□ 본 서비스에서 제공하는 정보는 법적인 효력이 없으므로 참고용으로만 활용하시기 바랍니다."
+        ],
+        [
+          "□ 신고정보가 실시간 변경, 해제되어 제공시점에 따라 공개건수 및 내용이 상이할 수 있는 점 참고하시기 바랍니다."
+        ],
+        [
+          "□ 본 자료는 계약일 기준입니다. (※ 7월 계약, 8월 신고건 → 7월 거래건으로  제공)"
+        ],
+        [
+          "□ 통계자료 활용시에는 수치가 왜곡될 수 있으니 참고자료로만 활용하시기  바라며,  외부 공개시에는 반드시 신고일 기준으로 집계되는 공식통계를 이용하여 주시기 바랍니다."
+        ],
+        [
+          ""
+        ],
+        [
+          "* 국토교통부 실거래가 공개시스템의 궁금하신 점이나 문의사항은 콜센터 1533-2949로 연락 주시기 바랍니다."
+        ],
+        [
+          "□ 검색조건"
+        ],
+        [
+          "계약일자 : 2013-01-01 ~ 2013-12-31"
+        ],
+        [
+          "실거래구분 : 아파트(매매)"
+        ],
+        [
+          "주소구분 : 지번주소"
+        ],
+        [
+          "시도 : 인천광역시"
+        ],
+        [
+          "시군구 : 전체"
+        ],
+        [
+          "읍면동 : 전체"
+        ],
+        [
+          "면적 : 전체"
+        ],
+        [
+          "금액선택 : 전체"
+        ]
+      ],
+      "minimum_contract_date": "2013-01-01",
+      "query": {
+        "end": "2013-12-31",
+        "kind": "sale",
+        "region": "incheon",
+        "start": "2013-01-01"
+      },
+      "raw_bytes": 5492004,
+      "raw_sha256": "c67e3206923713b49b67f226954caccaf9d4e433818d6ab2542aca605027b4c8",
+      "row_count": 34603,
+      "status": "complete"
+    },
+    "incheon/sale/2014/2014-01-01_2014-12-31": {
+      "cancellation_marked_rows": 0,
+      "columns": [
+        "NO",
+        "시군구",
+        "번지",
+        "본번",
+        "부번",
+        "단지명",
+        "전용면적(㎡)",
+        "계약년월",
+        "계약일",
+        "거래금액(만원)",
+        "동",
+        "층",
+        "매수자",
+        "매도자",
+        "건축년도",
+        "도로명",
+        "해제사유발생일",
+        "거래유형",
+        "중개사소재지",
+        "등기일자"
+      ],
+      "completed_at": "2026-09-09T08:51:49.358703+00:00",
+      "contract_month_counts": {
+        "201401": 2932,
+        "201402": 3827,
+        "201403": 4157,
+        "201404": 2917,
+        "201405": 2857,
+        "201406": 2799,
+        "201407": 3292,
+        "201408": 4574,
+        "201409": 4580,
+        "201410": 4486,
+        "201411": 3174,
+        "201412": 2725
+      },
+      "data_cutoff": "2026-09-09",
+      "deduplication_applied": false,
+      "encoding": "cp949",
+      "expected_count": 42320,
+      "expected_count_evidence": "Observed CSV rows and sequential NO; NOT independently checked against server count endpoint",
+      "file": "incheon/sale/2014/2014-01-01_2014-12-31.csv.gz",
+      "gzip_bytes": 1172188,
+      "gzip_sha256": "395e7507b4559be17535d0f4266782f99e3060cb3de16dae4bcbcf376de09e5d",
+      "header_row": 16,
+      "import_provenance": {
+        "method": "user-provided official CSV",
+        "new_network_downloads_during_import": 0,
+        "source_filename": "아파트(매매)_실거래가_20260909174818.csv"
+      },
+      "imported_at": "2026-09-09T08:51:49.358715+00:00",
+      "independent_server_count_checked": false,
+      "maximum_contract_date": "2014-12-31",
+      "metadata_rows": [
+        [
+          "□ 본 서비스에서 제공하는 정보는 법적인 효력이 없으므로 참고용으로만 활용하시기 바랍니다."
+        ],
+        [
+          "□ 신고정보가 실시간 변경, 해제되어 제공시점에 따라 공개건수 및 내용이 상이할 수 있는 점 참고하시기 바랍니다."
+        ],
+        [
+          "□ 본 자료는 계약일 기준입니다. (※ 7월 계약, 8월 신고건 → 7월 거래건으로  제공)"
+        ],
+        [
+          "□ 통계자료 활용시에는 수치가 왜곡될 수 있으니 참고자료로만 활용하시기  바라며,  외부 공개시에는 반드시 신고일 기준으로 집계되는 공식통계를 이용하여 주시기 바랍니다."
+        ],
+        [
+          ""
+        ],
+        [
+          "* 국토교통부 실거래가 공개시스템의 궁금하신 점이나 문의사항은 콜센터 1533-2949로 연락 주시기 바랍니다."
+        ],
+        [
+          "□ 검색조건"
+        ],
+        [
+          "계약일자 : 2014-01-01 ~ 2014-12-31"
+        ],
+        [
+          "실거래구분 : 아파트(매매)"
+        ],
+        [
+          "주소구분 : 지번주소"
+        ],
+        [
+          "시도 : 인천광역시"
+        ],
+        [
+          "시군구 : 전체"
+        ],
+        [
+          "읍면동 : 전체"
+        ],
+        [
+          "면적 : 전체"
+        ],
+        [
+          "금액선택 : 전체"
+        ]
+      ],
+      "minimum_contract_date": "2014-01-01",
+      "query": {
+        "end": "2014-12-31",
+        "kind": "sale",
+        "region": "incheon",
+        "start": "2014-01-01"
+      },
+      "raw_bytes": 6751579,
+      "raw_sha256": "b13c430420696fd12eb133624acd2a8cdca99043de96cd071f018d9204a82ad6",
+      "row_count": 42320,
+      "status": "complete"
+    },
+    "incheon/sale/2015/2015-01-01_2015-12-31": {
+      "cancellation_marked_rows": 0,
+      "columns": [
+        "NO",
+        "시군구",
+        "번지",
+        "본번",
+        "부번",
+        "단지명",
+        "전용면적(㎡)",
+        "계약년월",
+        "계약일",
+        "거래금액(만원)",
+        "동",
+        "층",
+        "매수자",
+        "매도자",
+        "건축년도",
+        "도로명",
+        "해제사유발생일",
+        "거래유형",
+        "중개사소재지",
+        "등기일자"
+      ],
+      "completed_at": "2026-09-09T08:51:51.919590+00:00",
+      "contract_month_counts": {
+        "201501": 3990,
+        "201502": 3893,
+        "201503": 6547,
+        "201504": 4961,
+        "201505": 3960,
+        "201506": 4072,
+        "201507": 4135,
+        "201508": 3897,
+        "201509": 3902,
+        "201510": 4476,
+        "201511": 2976,
+        "201512": 2307
+      },
+      "data_cutoff": "2026-09-09",
+      "deduplication_applied": false,
+      "encoding": "cp949",
+      "expected_count": 49116,
+      "expected_count_evidence": "Observed CSV rows and sequential NO; NOT independently checked against server count endpoint",
+      "file": "incheon/sale/2015/2015-01-01_2015-12-31.csv.gz",
+      "gzip_bytes": 1422213,
+      "gzip_sha256": "0b5f328af734313fe6175e43c9a95415a35172d253fe647476450226afb5ba37",
+      "header_row": 16,
+      "import_provenance": {
+        "method": "user-provided official CSV",
+        "new_network_downloads_during_import": 0,
+        "source_filename": "아파트(매매)_실거래가_20260909174833.csv"
+      },
+      "imported_at": "2026-09-09T08:51:51.919603+00:00",
+      "independent_server_count_checked": false,
+      "maximum_contract_date": "2015-12-31",
+      "metadata_rows": [
+        [
+          "□ 본 서비스에서 제공하는 정보는 법적인 효력이 없으므로 참고용으로만 활용하시기 바랍니다."
+        ],
+        [
+          "□ 신고정보가 실시간 변경, 해제되어 제공시점에 따라 공개건수 및 내용이 상이할 수 있는 점 참고하시기 바랍니다."
+        ],
+        [
+          "□ 본 자료는 계약일 기준입니다. (※ 7월 계약, 8월 신고건 → 7월 거래건으로  제공)"
+        ],
+        [
+          "□ 통계자료 활용시에는 수치가 왜곡될 수 있으니 참고자료로만 활용하시기  바라며,  외부 공개시에는 반드시 신고일 기준으로 집계되는 공식통계를 이용하여 주시기 바랍니다."
+        ],
+        [
+          ""
+        ],
+        [
+          "* 국토교통부 실거래가 공개시스템의 궁금하신 점이나 문의사항은 콜센터 1533-2949로 연락 주시기 바랍니다."
+        ],
+        [
+          "□ 검색조건"
+        ],
+        [
+          "계약일자 : 2015-01-01 ~ 2015-12-31"
+        ],
+        [
+          "실거래구분 : 아파트(매매)"
+        ],
+        [
+          "주소구분 : 지번주소"
+        ],
+        [
+          "시도 : 인천광역시"
+        ],
+        [
+          "시군구 : 전체"
+        ],
+        [
+          "읍면동 : 전체"
+        ],
+        [
+          "면적 : 전체"
+        ],
+        [
+          "금액선택 : 전체"
+        ]
+      ],
+      "minimum_contract_date": "2015-01-01",
+      "query": {
+        "end": "2015-12-31",
+        "kind": "sale",
+        "region": "incheon",
+        "start": "2015-01-01"
+      },
+      "raw_bytes": 7805644,
+      "raw_sha256": "d9d46eb39cbdf193446a77e6ddd126261436dd154f6172e4a508c1438eec2dac",
+      "row_count": 49116,
+      "status": "complete"
+    },
+    "incheon/sale/2016/2016-01-01_2016-12-31": {
+      "cancellation_marked_rows": 0,
+      "columns": [
+        "NO",
+        "시군구",
+        "번지",
+        "본번",
+        "부번",
+        "단지명",
+        "전용면적(㎡)",
+        "계약년월",
+        "계약일",
+        "거래금액(만원)",
+        "동",
+        "층",
+        "매수자",
+        "매도자",
+        "건축년도",
+        "도로명",
+        "해제사유발생일",
+        "거래유형",
+        "중개사소재지",
+        "등기일자"
+      ],
+      "completed_at": "2026-09-09T08:51:57.434612+00:00",
+      "contract_month_counts": {
+        "201601": 2326,
+        "201602": 2322,
+        "201603": 3726,
+        "201604": 3790,
+        "201605": 3741,
+        "201606": 4254,
+        "201607": 4384,
+        "201608": 4259,
+        "201609": 4572,
+        "201610": 4787,
+        "201611": 2690,
+        "201612": 2078
+      },
+      "data_cutoff": "2026-09-09",
+      "deduplication_applied": false,
+      "encoding": "cp949",
+      "expected_count": 42929,
+      "expected_count_evidence": "Observed CSV rows and sequential NO; NOT independently checked against server count endpoint",
+      "file": "incheon/sale/2016/2016-01-01_2016-12-31.csv.gz",
+      "gzip_bytes": 1246540,
+      "gzip_sha256": "7e39ad77c37418c853f654d060b9938c7b70cce0abbc44d4faf28c7042825b47",
+      "header_row": 16,
+      "import_provenance": {
+        "method": "user-provided official CSV",
+        "new_network_downloads_during_import": 0,
+        "source_filename": "아파트(매매)_실거래가_20260909174925.csv"
+      },
+      "imported_at": "2026-09-09T08:51:57.434624+00:00",
+      "independent_server_count_checked": false,
+      "maximum_contract_date": "2016-12-31",
+      "metadata_rows": [
+        [
+          "□ 본 서비스에서 제공하는 정보는 법적인 효력이 없으므로 참고용으로만 활용하시기 바랍니다."
+        ],
+        [
+          "□ 신고정보가 실시간 변경, 해제되어 제공시점에 따라 공개건수 및 내용이 상이할 수 있는 점 참고하시기 바랍니다."
+        ],
+        [
+          "□ 본 자료는 계약일 기준입니다. (※ 7월 계약, 8월 신고건 → 7월 거래건으로  제공)"
+        ],
+        [
+          "□ 통계자료 활용시에는 수치가 왜곡될 수 있으니 참고자료로만 활용하시기  바라며,  외부 공개시에는 반드시 신고일 기준으로 집계되는 공식통계를 이용하여 주시기 바랍니다."
+        ],
+        [
+          ""
+        ],
+        [
+          "* 국토교통부 실거래가 공개시스템의 궁금하신 점이나 문의사항은 콜센터 1533-2949로 연락 주시기 바랍니다."
+        ],
+        [
+          "□ 검색조건"
+        ],
+        [
+          "계약일자 : 2016-01-01 ~ 2016-12-31"
+        ],
+        [
+          "실거래구분 : 아파트(매매)"
+        ],
+        [
+          "주소구분 : 지번주소"
+        ],
+        [
+          "시도 : 인천광역시"
+        ],
+        [
+          "시군구 : 전체"
+        ],
+        [
+          "읍면동 : 전체"
+        ],
+        [
+          "면적 : 전체"
+        ],
+        [
+          "금액선택 : 전체"
+        ]
+      ],
+      "minimum_contract_date": "2016-01-01",
+      "query": {
+        "end": "2016-12-31",
+        "kind": "sale",
+        "region": "incheon",
+        "start": "2016-01-01"
+      },
+      "raw_bytes": 6837287,
+      "raw_sha256": "590b0abf522cc4ab6fc6b8b0f51048ce88a1b3913afa0131e90d0418120d6f1e",
+      "row_count": 42929,
+      "status": "complete"
+    },
+    "incheon/sale/2017/2017-01-01_2017-12-31": {
+      "cancellation_marked_rows": 0,
+      "columns": [
+        "NO",
+        "시군구",
+        "번지",
+        "본번",
+        "부번",
+        "단지명",
+        "전용면적(㎡)",
+        "계약년월",
+        "계약일",
+        "거래금액(만원)",
+        "동",
+        "층",
+        "매수자",
+        "매도자",
+        "건축년도",
+        "도로명",
+        "해제사유발생일",
+        "거래유형",
+        "중개사소재지",
+        "등기일자"
+      ],
+      "completed_at": "2026-09-09T08:51:53.704472+00:00",
+      "contract_month_counts": {
+        "201701": 1812,
+        "201702": 2599,
+        "201703": 3331,
+        "201704": 3175,
+        "201705": 3482,
+        "201706": 4141,
+        "201707": 3689,
+        "201708": 3357,
+        "201709": 3409,
+        "201710": 2759,
+        "201711": 2538,
+        "201712": 2046
+      },
+      "data_cutoff": "2026-09-09",
+      "deduplication_applied": false,
+      "encoding": "cp949",
+      "expected_count": 36338,
+      "expected_count_evidence": "Observed CSV rows and sequential NO; NOT independently checked against server count endpoint",
+      "file": "incheon/sale/2017/2017-01-01_2017-12-31.csv.gz",
+      "gzip_bytes": 1064629,
+      "gzip_sha256": "64bf56f5b7d1632ca0bab6f1418f103edc5698fcaa6f1f0b86203f378ad06d9b",
+      "header_row": 16,
+      "import_provenance": {
+        "method": "user-provided official CSV",
+        "new_network_downloads_during_import": 0,
+        "source_filename": "아파트(매매)_실거래가_20260909174846.csv"
+      },
+      "imported_at": "2026-09-09T08:51:53.704484+00:00",
+      "independent_server_count_checked": false,
+      "maximum_contract_date": "2017-12-31",
+      "metadata_rows": [
+        [
+          "□ 본 서비스에서 제공하는 정보는 법적인 효력이 없으므로 참고용으로만 활용하시기 바랍니다."
+        ],
+        [
+          "□ 신고정보가 실시간 변경, 해제되어 제공시점에 따라 공개건수 및 내용이 상이할 수 있는 점 참고하시기 바랍니다."
+        ],
+        [
+          "□ 본 자료는 계약일 기준입니다. (※ 7월 계약, 8월 신고건 → 7월 거래건으로  제공)"
+        ],
+        [
+          "□ 통계자료 활용시에는 수치가 왜곡될 수 있으니 참고자료로만 활용하시기  바라며,  외부 공개시에는 반드시 신고일 기준으로 집계되는 공식통계를 이용하여 주시기 바랍니다."
+        ],
+        [
+          ""
+        ],
+        [
+          "* 국토교통부 실거래가 공개시스템의 궁금하신 점이나 문의사항은 콜센터 1533-2949로 연락 주시기 바랍니다."
+        ],
+        [
+          "□ 검색조건"
+        ],
+        [
+          "계약일자 : 2017-01-01 ~ 2017-12-31"
+        ],
+        [
+          "실거래구분 : 아파트(매매)"
+        ],
+        [
+          "주소구분 : 지번주소"
+        ],
+        [
+          "시도 : 인천광역시"
+        ],
+        [
+          "시군구 : 전체"
+        ],
+        [
+          "읍면동 : 전체"
+        ],
+        [
+          "면적 : 전체"
+        ],
+        [
+          "금액선택 : 전체"
+        ]
+      ],
+      "minimum_contract_date": "2017-01-01",
+      "query": {
+        "end": "2017-12-31",
+        "kind": "sale",
+        "region": "incheon",
+        "start": "2017-01-01"
+      },
+      "raw_bytes": 5783952,
+      "raw_sha256": "64188c09951704b4c98888a7c6ed546ec3491bf17f6986502277109c83a8b04e",
+      "row_count": 36338,
+      "status": "complete"
+    },
+    "incheon/sale/2018/2018-01-01_2018-12-31": {
+      "cancellation_marked_rows": 0,
+      "columns": [
+        "NO",
+        "시군구",
+        "번지",
+        "본번",
+        "부번",
+        "단지명",
+        "전용면적(㎡)",
+        "계약년월",
+        "계약일",
+        "거래금액(만원)",
+        "동",
+        "층",
+        "매수자",
+        "매도자",
+        "건축년도",
+        "도로명",
+        "해제사유발생일",
+        "거래유형",
+        "중개사소재지",
+        "등기일자"
+      ],
+      "completed_at": "2026-09-09T08:51:55.228731+00:00",
+      "contract_month_counts": {
+        "201801": 2477,
+        "201802": 2224,
+        "201803": 3268,
+        "201804": 2292,
+        "201805": 2245,
+        "201806": 2205,
+        "201807": 2123,
+        "201808": 2725,
+        "201809": 3371,
+        "201810": 3353,
+        "201811": 2029,
+        "201812": 1973
+      },
+      "data_cutoff": "2026-09-09",
+      "deduplication_applied": false,
+      "encoding": "cp949",
+      "expected_count": 30285,
+      "expected_count_evidence": "Observed CSV rows and sequential NO; NOT independently checked against server count endpoint",
+      "file": "incheon/sale/2018/2018-01-01_2018-12-31.csv.gz",
+      "gzip_bytes": 894056,
+      "gzip_sha256": "561296cf1ad8e30724923f4a9bfc88a568763ae4a27791b558a0650c31baa3f3",
+      "header_row": 16,
+      "import_provenance": {
+        "method": "user-provided official CSV",
+        "new_network_downloads_during_import": 0,
+        "source_filename": "아파트(매매)_실거래가_20260909174905.csv"
+      },
+      "imported_at": "2026-09-09T08:51:55.228743+00:00",
+      "independent_server_count_checked": false,
+      "maximum_contract_date": "2018-12-31",
+      "metadata_rows": [
+        [
+          "□ 본 서비스에서 제공하는 정보는 법적인 효력이 없으므로 참고용으로만 활용하시기 바랍니다."
+        ],
+        [
+          "□ 신고정보가 실시간 변경, 해제되어 제공시점에 따라 공개건수 및 내용이 상이할 수 있는 점 참고하시기 바랍니다."
+        ],
+        [
+          "□ 본 자료는 계약일 기준입니다. (※ 7월 계약, 8월 신고건 → 7월 거래건으로  제공)"
+        ],
+        [
+          "□ 통계자료 활용시에는 수치가 왜곡될 수 있으니 참고자료로만 활용하시기  바라며,  외부 공개시에는 반드시 신고일 기준으로 집계되는 공식통계를 이용하여 주시기 바랍니다."
+        ],
+        [
+          ""
+        ],
+        [
+          "* 국토교통부 실거래가 공개시스템의 궁금하신 점이나 문의사항은 콜센터 1533-2949로 연락 주시기 바랍니다."
+        ],
+        [
+          "□ 검색조건"
+        ],
+        [
+          "계약일자 : 2018-01-01 ~ 2018-12-31"
+        ],
+        [
+          "실거래구분 : 아파트(매매)"
+        ],
+        [
+          "주소구분 : 지번주소"
+        ],
+        [
+          "시도 : 인천광역시"
+        ],
+        [
+          "시군구 : 전체"
+        ],
+        [
+          "읍면동 : 전체"
+        ],
+        [
+          "면적 : 전체"
+        ],
+        [
+          "금액선택 : 전체"
+        ]
+      ],
+      "minimum_contract_date": "2018-01-01",
+      "query": {
+        "end": "2018-12-31",
+        "kind": "sale",
+        "region": "incheon",
+        "start": "2018-01-01"
+      },
+      "raw_bytes": 4833500,
+      "raw_sha256": "a211c18457711a5ab38a2833cff94a34b43b982546c2768be44618573f22584a",
+      "row_count": 30285,
+      "status": "complete"
+    },
+    "incheon/sale/2019/2019-01-01_2019-12-31": {
+      "cancellation_marked_rows": 0,
+      "columns": [
+        "NO",
+        "시군구",
+        "번지",
+        "본번",
+        "부번",
+        "단지명",
+        "전용면적(㎡)",
+        "계약년월",
+        "계약일",
+        "거래금액(만원)",
+        "동",
+        "층",
+        "매수자",
+        "매도자",
+        "건축년도",
+        "도로명",
+        "해제사유발생일",
+        "거래유형",
+        "중개사소재지",
+        "등기일자"
+      ],
+      "completed_at": "2026-09-09T08:51:59.201946+00:00",
+      "contract_month_counts": {
+        "201901": 2067,
+        "201902": 1898,
+        "201903": 2447,
+        "201904": 2368,
+        "201905": 2339,
+        "201906": 2468,
+        "201907": 2768,
+        "201908": 2875,
+        "201909": 2740,
+        "201910": 3889,
+        "201911": 4065,
+        "201912": 4354
+      },
+      "data_cutoff": "2026-09-09",
+      "deduplication_applied": false,
+      "encoding": "cp949",
+      "expected_count": 34278,
+      "expected_count_evidence": "Observed CSV rows and sequential NO; NOT independently checked against server count endpoint",
+      "file": "incheon/sale/2019/2019-01-01_2019-12-31.csv.gz",
+      "gzip_bytes": 1018680,
+      "gzip_sha256": "3977ac8177c4c30f86865a1f7c1365474ad15dffdf923f2b7e4630841c819087",
+      "header_row": 16,
+      "import_provenance": {
+        "method": "official browser CSV download",
+        "new_network_downloads_during_import": 0,
+        "source_filename": "아파트(매매)_실거래가_20260909173406.csv"
+      },
+      "imported_at": "2026-09-09T08:51:59.201958+00:00",
+      "independent_server_count_checked": false,
+      "maximum_contract_date": "2019-12-31",
+      "metadata_rows": [
+        [
+          "□ 본 서비스에서 제공하는 정보는 법적인 효력이 없으므로 참고용으로만 활용하시기 바랍니다."
+        ],
+        [
+          "□ 신고정보가 실시간 변경, 해제되어 제공시점에 따라 공개건수 및 내용이 상이할 수 있는 점 참고하시기 바랍니다."
+        ],
+        [
+          "□ 본 자료는 계약일 기준입니다. (※ 7월 계약, 8월 신고건 → 7월 거래건으로  제공)"
+        ],
+        [
+          "□ 통계자료 활용시에는 수치가 왜곡될 수 있으니 참고자료로만 활용하시기  바라며,  외부 공개시에는 반드시 신고일 기준으로 집계되는 공식통계를 이용하여 주시기 바랍니다."
+        ],
+        [
+          ""
+        ],
+        [
+          "* 국토교통부 실거래가 공개시스템의 궁금하신 점이나 문의사항은 콜센터 1533-2949로 연락 주시기 바랍니다."
+        ],
+        [
+          "□ 검색조건"
+        ],
+        [
+          "계약일자 : 2019-01-01 ~ 2019-12-31"
+        ],
+        [
+          "실거래구분 : 아파트(매매)"
+        ],
+        [
+          "주소구분 : 지번주소"
+        ],
+        [
+          "시도 : 인천광역시"
+        ],
+        [
+          "시군구 : 전체"
+        ],
+        [
+          "읍면동 : 전체"
+        ],
+        [
+          "면적 : 전체"
+        ],
+        [
+          "금액선택 : 전체"
+        ]
+      ],
+      "minimum_contract_date": "2019-01-01",
+      "query": {
+        "end": "2019-12-31",
+        "kind": "sale",
+        "region": "incheon",
+        "start": "2019-01-01"
+      },
+      "raw_bytes": 5491929,
+      "raw_sha256": "67b1deacd50d0414d9d088491089453006ff65eefa3bcc842117fd4c38e804f7",
+      "row_count": 34278,
+      "status": "complete"
+    },
+    "incheon/sale/2020/2020-01-01_2020-12-31": {
+      "cancellation_marked_rows": 2495,
+      "columns": [
+        "NO",
+        "시군구",
+        "번지",
+        "본번",
+        "부번",
+        "단지명",
+        "전용면적(㎡)",
+        "계약년월",
+        "계약일",
+        "거래금액(만원)",
+        "동",
+        "층",
+        "매수자",
+        "매도자",
+        "건축년도",
+        "도로명",
+        "해제사유발생일",
+        "거래유형",
+        "중개사소재지",
+        "등기일자"
+      ],
+      "completed_at": "2026-09-09T08:52:02.265461+00:00",
+      "contract_month_counts": {
+        "202001": 4320,
+        "202002": 9097,
+        "202003": 5695,
+        "202004": 4254,
+        "202005": 5284,
+        "202006": 7227,
+        "202007": 3593,
+        "202008": 2489,
+        "202009": 2303,
+        "202010": 3338,
+        "202011": 4256,
+        "202012": 4977
+      },
+      "data_cutoff": "2026-09-09",
+      "deduplication_applied": false,
+      "encoding": "cp949",
+      "expected_count": 56833,
+      "expected_count_evidence": "Observed CSV rows and sequential NO; NOT independently checked against server count endpoint",
+      "file": "incheon/sale/2020/2020-01-01_2020-12-31.csv.gz",
+      "gzip_bytes": 1633660,
+      "gzip_sha256": "c3594b987d1754b6e7f25bc6a2a8a433c71319e81278638e6275cb1e1d65045f",
+      "header_row": 16,
+      "import_provenance": {
+        "method": "official browser CSV download",
+        "new_network_downloads_during_import": 0,
+        "source_filename": "아파트(매매)_실거래가_20260909173242.csv"
+      },
+      "imported_at": "2026-09-09T08:52:02.265473+00:00",
+      "independent_server_count_checked": false,
+      "maximum_contract_date": "2020-12-31",
+      "metadata_rows": [
+        [
+          "□ 본 서비스에서 제공하는 정보는 법적인 효력이 없으므로 참고용으로만 활용하시기 바랍니다."
+        ],
+        [
+          "□ 신고정보가 실시간 변경, 해제되어 제공시점에 따라 공개건수 및 내용이 상이할 수 있는 점 참고하시기 바랍니다."
+        ],
+        [
+          "□ 본 자료는 계약일 기준입니다. (※ 7월 계약, 8월 신고건 → 7월 거래건으로  제공)"
+        ],
+        [
+          "□ 통계자료 활용시에는 수치가 왜곡될 수 있으니 참고자료로만 활용하시기  바라며,  외부 공개시에는 반드시 신고일 기준으로 집계되는 공식통계를 이용하여 주시기 바랍니다."
+        ],
+        [
+          ""
+        ],
+        [
+          "* 국토교통부 실거래가 공개시스템의 궁금하신 점이나 문의사항은 콜센터 1533-2949로 연락 주시기 바랍니다."
+        ],
+        [
+          "□ 검색조건"
+        ],
+        [
+          "계약일자 : 2020-01-01 ~ 2020-12-31"
+        ],
+        [
+          "실거래구분 : 아파트(매매)"
+        ],
+        [
+          "주소구분 : 지번주소"
+        ],
+        [
+          "시도 : 인천광역시"
+        ],
+        [
+          "시군구 : 전체"
+        ],
+        [
+          "읍면동 : 전체"
+        ],
+        [
+          "면적 : 전체"
+        ],
+        [
+          "금액선택 : 전체"
+        ]
+      ],
+      "minimum_contract_date": "2020-01-01",
+      "query": {
+        "end": "2020-12-31",
+        "kind": "sale",
+        "region": "incheon",
+        "start": "2020-01-01"
+      },
+      "raw_bytes": 9135110,
+      "raw_sha256": "e3f1d6bdee99eec098f6028b227d84306c1d26e16a90fa61489fbd49762e8987",
+      "row_count": 56833,
+      "status": "complete"
     }
   },
   "format_version": 1,
@@ -3190,6 +4225,23 @@
       "previous_state_commit": "9bc6d911df0f8edb34e8ac1ce4677082867d160e",
       "recovered_at": "2026-09-09T03:08:41.972548+00:00",
       "verified_rows": 140861
+    },
+    {
+      "recovered_at": "2026-09-09T08:53:35.654Z",
+      "method": "Import user-provided and browser-downloaded official CSVs",
+      "previous_error": "Transport request failed (URLError; timeout; errno=None)",
+      "previous_failed_key": "incheon/sale/2020/2020-01-01_2020-12-31",
+      "imported_partitions": [
+        "incheon/sale/2012/2012-01-01_2012-12-31",
+        "incheon/sale/2013/2013-01-01_2013-12-31",
+        "incheon/sale/2014/2014-01-01_2014-12-31",
+        "incheon/sale/2015/2015-01-01_2015-12-31",
+        "incheon/sale/2016/2016-01-01_2016-12-31",
+        "incheon/sale/2017/2017-01-01_2017-12-31",
+        "incheon/sale/2018/2018-01-01_2018-12-31",
+        "incheon/sale/2019/2019-01-01_2019-12-31",
+        "incheon/sale/2020/2020-01-01_2020-12-31"
+      ]
     }
   ],
   "sido_codes": {
@@ -3198,14 +4250,14 @@
     "incheon": "28000"
   },
   "source": "https://rt.molit.go.kr/pt/xls/xls.do?mobileAt=",
-  "status": "failed",
+  "status": "paused",
   "transport_retry_policy": {
     "max_retries_per_partition": 1,
-    "delay_seconds": 5.0,
+    "delay_seconds": 5,
     "same_anonymous_session": true,
     "http_and_validation_errors_retried": false
   },
-  "updated_at": "2026-09-09T08:28:31.195284+00:00",
+  "updated_at": "2026-09-09T08:53:35.655Z",
   "initialization_failures": [
     {
       "failed_at": "2026-09-09T05:57:20.874576+00:00",
@@ -3640,20 +4692,5 @@
       }
     }
   ],
-  "failed_key": "incheon/sale/2020/2020-01-01_2020-12-31",
-  "error": "Transport request failed (URLError; timeout; errno=None)",
-  "failure_diagnostic": {
-    "phase": "initialize",
-    "request": {
-      "endpoint": "/pt/xls/xls.do?mobileAt=",
-      "method": "GET",
-      "started_at": "2026-09-09T08:28:00.813110+00:00",
-      "category": "timeout",
-      "exception_type": "URLError",
-      "reason_type": "TimeoutError",
-      "errno": null,
-      "certificate_verify_code": null,
-      "elapsed_seconds": 30.378
-    }
-  }
+  "pause_reason": "Requested Incheon historical sales 2006-2020 complete; rentals deferred by user"
 }
