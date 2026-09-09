@@ -2,8 +2,8 @@
   "version": 1,
   "files": {
     "download-ledger.json": {
-      "size": 2399,
-      "sha256": "fc2f3aebdc5fd140251a1d5e009f09dc3a06c56e13a955e944736653e8835da0",
+      "size": 2541,
+      "sha256": "ff838d81752fcf646f7d92ea1df5d12dfd30c2e6d30f60fc830c778a07bff208",
       "file": "collection/download-ledger.json"
     },
     "gyeonggi/rent/2011/2011-01-01_2011-12-31.csv.gz": {
@@ -86,9 +86,14 @@
       "sha256": "91bc56aa5ceed6772e8aeb735766eefc796f3b13e641bf92f15fb3c543dff474",
       "file": "collection/gyeonggi/sale/2020/2020-01-01_2020-12-31.csv.gz"
     },
+    "incheon/sale/2006/2006-01-01_2006-12-31.csv.gz": {
+      "size": 1020940,
+      "sha256": "1942eca317f5852e6debdcb2eefe522cdd182603c3eb1c0714eb3b2004f2a0dd",
+      "file": "collection/incheon/sale/2006/2006-01-01_2006-12-31.csv.gz"
+    },
     "manifest.json": {
-      "size": 77587,
-      "sha256": "ca95d6049de2aed013a556f0e78d3af47c07dd134ef8baed7ac7059258297f72",
+      "size": 81731,
+      "sha256": "9d88ab7cd517f35820940c788535f09d08cf46c668ff55c62ef8c2694b22f110",
       "file": "collection/manifest.json"
     },
     "probe_gyeonggi_rent_2011.json": {
