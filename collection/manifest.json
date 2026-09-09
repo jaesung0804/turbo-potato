@@ -1,5 +1,5 @@
 {
-  "completed_count": 12,
+  "completed_count": 13,
   "coverage_bounds": {
     "sale_source_start": "2006-01-01",
     "rent_source_start": "2011-01-01",
@@ -1712,6 +1712,144 @@
         "date": "Wed, 09 Sep 2026 07:13:59 GMT"
       },
       "completed_at": "2026-09-09T07:14:17.443013+00:00"
+    },
+    "gyeonggi/sale/2017/2017-01-01_2017-12-31": {
+      "query": {
+        "region": "gyeonggi",
+        "kind": "sale",
+        "start": "2017-01-01",
+        "end": "2017-12-31"
+      },
+      "request_fields": {
+        "mobileAt": "",
+        "srhSggCd": "",
+        "srhEmdCd": "",
+        "srhRoadNm": "",
+        "srhLoadCd": "",
+        "srhHsmpCd": "",
+        "srhArea": "",
+        "srhLrArea": "",
+        "srhFromAmount": "",
+        "srhToAmount": "",
+        "srhThingNo": "A",
+        "srhDelngSecd": "1",
+        "srhAddrGbn": "1",
+        "srhLfstsSecd": "1",
+        "sidoNm": "경기도",
+        "sggNm": "전체",
+        "emdNm": "전체",
+        "loadNm": "전체",
+        "areaNm": "전체",
+        "hsmpNm": "전체",
+        "srhFromDt": "2017-01-01",
+        "srhToDt": "2017-12-31",
+        "srhSidoCd": "41000"
+      },
+      "status": "complete",
+      "started_at": "2026-09-09T07:28:20.094229+00:00",
+      "data_cutoff": "2026-09-09",
+      "expected_count": 153710,
+      "count_checked_at": "2026-09-09T07:28:23.619708+00:00",
+      "encoding": "cp949",
+      "columns": [
+        "NO",
+        "시군구",
+        "번지",
+        "본번",
+        "부번",
+        "단지명",
+        "전용면적(㎡)",
+        "계약년월",
+        "계약일",
+        "거래금액(만원)",
+        "동",
+        "층",
+        "매수자",
+        "매도자",
+        "건축년도",
+        "도로명",
+        "해제사유발생일",
+        "거래유형",
+        "중개사소재지",
+        "등기일자"
+      ],
+      "header_row": 16,
+      "metadata_rows": [
+        [
+          "□ 본 서비스에서 제공하는 정보는 법적인 효력이 없으므로 참고용으로만 활용하시기 바랍니다."
+        ],
+        [
+          "□ 신고정보가 실시간 변경, 해제되어 제공시점에 따라 공개건수 및 내용이 상이할 수 있는 점 참고하시기 바랍니다."
+        ],
+        [
+          "□ 본 자료는 계약일 기준입니다. (※ 7월 계약, 8월 신고건 → 7월 거래건으로  제공)"
+        ],
+        [
+          "□ 통계자료 활용시에는 수치가 왜곡될 수 있으니 참고자료로만 활용하시기  바라며,  외부 공개시에는 반드시 신고일 기준으로 집계되는 공식통계를 이용하여 주시기 바랍니다."
+        ],
+        [
+          ""
+        ],
+        [
+          "* 국토교통부 실거래가 공개시스템의 궁금하신 점이나 문의사항은 콜센터 1533-2949로 연락 주시기 바랍니다."
+        ],
+        [
+          "□ 검색조건"
+        ],
+        [
+          "계약일자 : 2017-01-01 ~ 2017-12-31"
+        ],
+        [
+          "실거래구분 : 아파트(매매)"
+        ],
+        [
+          "주소구분 : 지번주소"
+        ],
+        [
+          "시도 : 경기도"
+        ],
+        [
+          "시군구 : 전체"
+        ],
+        [
+          "읍면동 : 전체"
+        ],
+        [
+          "면적 : 전체"
+        ],
+        [
+          "금액선택 : 전체"
+        ]
+      ],
+      "row_count": 153710,
+      "minimum_contract_date": "2017-01-01",
+      "maximum_contract_date": "2017-12-31",
+      "cancellation_marked_rows": 0,
+      "deduplication_applied": false,
+      "contract_month_counts": {
+        "201701": 7152,
+        "201702": 10330,
+        "201703": 13486,
+        "201704": 12630,
+        "201705": 16594,
+        "201706": 18419,
+        "201707": 17953,
+        "201708": 12399,
+        "201709": 13080,
+        "201710": 10593,
+        "201711": 10874,
+        "201712": 10200
+      },
+      "raw_bytes": 24838485,
+      "raw_sha256": "f7d2865c3fb05841d5a888dbfcf57538266b80652c69802de3ed9f2c9723243e",
+      "file": "gyeonggi/sale/2017/2017-01-01_2017-12-31.csv.gz",
+      "gzip_sha256": "1120d5a718c9dee6d00c31281752cd748285a4d9b7c84017921e6bebc0349ce1",
+      "gzip_bytes": 5383622,
+      "downloaded_at": "2026-09-09T07:28:37.081454+00:00",
+      "response_headers": {
+        "date": "Wed, 09 Sep 2026 07:28:24 GMT"
+      },
+      "completed_at": "2026-09-09T07:28:44.600116+00:00"
     }
   },
   "format_version": 1,
@@ -1818,14 +1956,14 @@
     "incheon": "28000"
   },
   "source": "https://rt.molit.go.kr/pt/xls/xls.do?mobileAt=",
-  "status": "failed",
+  "status": "paused",
   "transport_retry_policy": {
     "max_retries_per_partition": 1,
     "delay_seconds": 5.0,
     "same_anonymous_session": true,
     "http_and_validation_errors_retried": false
   },
-  "updated_at": "2026-09-09T07:23:27.149245+00:00",
+  "updated_at": "2026-09-09T07:28:44.602316+00:00",
   "initialization_failures": [
     {
       "failed_at": "2026-09-09T05:57:20.874576+00:00",
@@ -1972,20 +2110,6 @@
       }
     }
   ],
-  "failed_key": "gyeonggi/sale/2017/2017-01-01_2017-12-31",
-  "error": "Transport request failed (URLError; timeout; errno=None)",
-  "failure_diagnostic": {
-    "phase": "initialize",
-    "request": {
-      "endpoint": "/pt/xls/xls.do?mobileAt=",
-      "method": "GET",
-      "started_at": "2026-09-09T07:22:56.791826+00:00",
-      "category": "timeout",
-      "exception_type": "URLError",
-      "reason_type": "TimeoutError",
-      "errno": null,
-      "certificate_verify_code": null,
-      "elapsed_seconds": 30.354
-    }
-  }
+  "pause_reason": "batch_limit",
+  "next_key": "gyeonggi/sale/2018/2018-01-01_2018-12-31"
 }
