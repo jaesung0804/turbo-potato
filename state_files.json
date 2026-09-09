@@ -27,8 +27,8 @@
       "file": "collection/gyeonggi/sale/2008/2008-01-01_2008-12-31.csv.gz"
     },
     "manifest.json": {
-      "size": 23127,
-      "sha256": "cef86a3e1c89807d210aef8a2ce97b49b864a9186e38af4e5944d030c521135d",
+      "size": 23079,
+      "sha256": "b9468801a353efea6f14ba55ceeada6cfc774adfd6d1c904766349f8b39c38a2",
       "file": "collection/manifest.json"
     },
     "probe_gyeonggi_rent_2011.json": {
