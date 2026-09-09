@@ -1,4 +1,4 @@
-name: Capital history - one file per job
+name: Capital history - checkpointed loop on one runner
 on:
   workflow_dispatch:
   push:
@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 3
     outputs:
-      batches: ${{ steps.plan.outputs.batches }}
+      files: ${{ steps.plan.outputs.files }}
       remaining: ${{ steps.plan.outputs.remaining }}
     steps:
       - uses: actions/checkout@v4
@@ -36,19 +36,14 @@ jobs:
           assert type(limit) is int and 1 <= limit <= 5, 'max_files must be 1..5'
           with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
               f.write('remaining=' + str(remaining) + '\n')
-              f.write('batches=' + json.dumps(list(range(min(remaining, limit))) or [0]) + '\n')
+              f.write('files=' + str(min(remaining, limit)) + '\n')
           print('Remaining annual/province exports:', remaining)
           PY
   batch:
     needs: plan
     if: needs.plan.outputs.remaining != '0'
     runs-on: ubuntu-latest
-    timeout-minutes: 8
-    strategy:
-      fail-fast: true
-      max-parallel: 1
-      matrix:
-        batch: ${{ fromJSON(needs.plan.outputs.batches) }}
+    timeout-minutes: 35
     steps:
       - uses: actions/checkout@v4
       - id: restore
@@ -60,35 +55,31 @@ jobs:
           git worktree add --detach .work/batch-state FETCH_HEAD
           timeout --signal=TERM --kill-after=5s 60s python capital_csv_state.py restore --state .work/batch-state --output .work/batch-input
       - id: collect
-        name: Collect at most one new CSV
-        run: >-
-          timeout --signal=INT --kill-after=5s 240s
-          python -u trace_molit_transport.py
-          --output .work/batch-input --cutoff 2026-09-09
-          --include-current-sales --max-new-partitions 1 --cache-hashes-only
-          --metadata-timeout 30 --csv-timeout 120 --pause 1
-          --transport-retries 1 --retry-delay 5 --daily-limit 90
-      - name: Save new or changed checkpoint files
-        timeout-minutes: 2
-        if: always() && steps.restore.outcome == 'success' && steps.collect.outcome != 'skipped'
+        name: Collect and save each file on the same runner
         shell: bash
+        env:
+          FILE_LIMIT: ${{ needs.plan.outputs.files }}
         run: |
-          timeout --signal=TERM --kill-after=5s 60s python capital_csv_state.py pack --source .work/batch-input --state .work/batch-state --incremental
+          set -euo pipefail
+          [[ "$FILE_LIMIT" =~ ^[1-5]$ ]]
           git -C .work/batch-state config user.name 'github-actions[bot]'
           git -C .work/batch-state config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git -C .work/batch-state add -A
-          if ! git -C .work/batch-state diff --cached --quiet; then
-            git -C .work/batch-state commit -m "Save single-file capital batch ${GITHUB_RUN_ID}"
-            git -C .work/batch-state push origin HEAD:estate-capital-history-state
-          fi
-          python - <<'PY'
-          import json, os
-          m = json.load(open('.work/batch-input/manifest.json'))
-          rows = sum(e.get('row_count', 0) for e in m['entries'].values() if e.get('status') == 'complete')
-          with open(os.environ['GITHUB_STEP_SUMMARY'], 'a') as f:
-              f.write(f"Status: {m['status']}; completed: {m['completed_count']}/81; raw rows: {rows}\n")
-          print('Status:', m['status'], 'completed:', m['completed_count'], 'rows:', rows)
-          PY
+          for ((batch_index=1; batch_index<=FILE_LIMIT; batch_index++)); do
+            echo "Starting file $batch_index/$FILE_LIMIT on this runner"
+            collect_status=0
+            timeout --signal=INT --kill-after=5s 240s python -u trace_molit_transport.py --output .work/batch-input --cutoff 2026-09-09 --include-current-sales --max-new-partitions 1 --cache-hashes-only --metadata-timeout 30 --csv-timeout 120 --pause 1 --transport-retries 1 --retry-delay 5 --daily-limit 90 || collect_status=$?
+            timeout --signal=TERM --kill-after=5s 60s python capital_csv_state.py pack --source .work/batch-input --state .work/batch-state --incremental
+            git -C .work/batch-state add -A
+            if ! git -C .work/batch-state diff --cached --quiet; then
+              git -C .work/batch-state commit -m "Save capital file $batch_index from run ${GITHUB_RUN_ID}"
+              timeout --signal=TERM --kill-after=5s 60s git -C .work/batch-state push origin HEAD:estate-capital-history-state
+            fi
+            python -c 'import json; m=json.load(open(".work/batch-input/manifest.json")); print("Saved checkpoint:", m["status"], "completed:", m["completed_count"], flush=True)'
+            if ((collect_status != 0)); then
+              echo "Collection failed; checkpoint saved; remaining files will not run"
+              exit "$collect_status"
+            fi
+          done
       - name: Diagnose connection on this failed runner without CSV
         if: failure() && steps.collect.outcome == 'failure'
         timeout-minutes: 1
