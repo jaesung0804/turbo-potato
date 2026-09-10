@@ -73,7 +73,8 @@
         "misa_lunarium_202609_parking_elevator_connection_unknown",
         "misa_lunarium_202304_school_crossing_report",
         "misa_lunarium_20260910_line5_walk_time",
-        "misa_lunarium_20260910_line5_walk_distance"
+        "misa_lunarium_20260910_line5_walk_distance",
+        "misa_lunarium_202509_streetview_entry_scene"
       ],
       "official_identity_linked": false,
       "additional_notes": [
@@ -119,6 +120,27 @@
       "study_type": "data_quality_case",
       "status": "partial_source_review",
       "structured_claim_ids": [],
+      "official_identity_linked": false
+    },
+    {
+      "name": "갈매한라비발디",
+      "note": "notes/east_research_notes.md",
+      "study_type": "complex_research",
+      "status": "partial_source_review",
+      "structured_claim_ids": [
+        "galmae_halla_202609_market_price_30",
+        "galmae_halla_202609_market_price_34"
+      ],
+      "official_identity_linked": false
+    },
+    {
+      "name": "갈매역아이파크",
+      "note": "notes/east_research_notes.md",
+      "study_type": "complex_research",
+      "status": "partial_source_review",
+      "structured_claim_ids": [
+        "galmae_station_ipark_20260910_market_price34"
+      ],
       "official_identity_linked": false
     }
   ]
