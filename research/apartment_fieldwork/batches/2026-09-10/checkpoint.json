@@ -1,8 +1,8 @@
 {
   "schema_version": "1.0",
   "batch_date": "2026-09-10",
-  "checkpoint_number": 6,
-  "saved_at": "2026-09-10T08:12:04+00:00",
+  "checkpoint_number": 7,
+  "saved_at": "2026-09-10T08:13:45+00:00",
   "status": "research_in_progress",
   "method": "public_online_sources",
   "model_eligible": false,
@@ -11,8 +11,8 @@
   "validation": "JSON parsed; required fields, unique claim IDs, model_eligible=false and URL presence checked",
   "files": {
     "README.md": {
-      "bytes": 4496,
-      "sha256": "d64ab963e9777154d35d3a7befcaafb844c2a5dcfbd87f55cc08fb9f7f09d551"
+      "bytes": 4750,
+      "sha256": "f90e54af2ce328d671afbf467fb277e7f612c799b7b35d805aaa8db22df2fd40"
     },
     "batches/2026-09-10/complex_catalog.json": {
       "bytes": 4918,
@@ -39,16 +39,22 @@
       "sha256": "c1ac0e0ffc974f2e89114bb47e302806e0d6a521bc0bb795e66bc73fc130299c"
     },
     "batches/2026-09-10/source_catalog.json": {
-      "bytes": 11651,
-      "sha256": "faee22aec19a33e865b0a58817a2b1959497c179aebde360d62abe7491b7650a"
+      "bytes": 12011,
+      "sha256": "ae6e95d7fcfb53279b9a537b8a74bea4e88862757b597ae3427af4e56ae0086a"
     },
     "schema/observation.schema.json": {
       "bytes": 4716,
       "sha256": "8add71467b4837e3176c076992bebff1bc1209af9735c5dcf67f2c0babdc9f8f"
+    },
+    "templates/apartment_inspection_template.md": {
+      "bytes": 24109,
+      "sha256": "005a8f054ee1ce9ef28c0a54c3eb7a65d539996f72a44dbf09f63d7d4872d765"
     }
   },
   "checklist_observation_axes": 26,
   "complexes_with_source_notes": 12,
   "referenced_public_url_count": 51,
-  "field_checklist_source_count": 22
+  "field_checklist_source_count": 22,
+  "inspection_template_version": "1.0",
+  "inspection_template_sections": 16
 }

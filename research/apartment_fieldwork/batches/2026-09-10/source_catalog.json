@@ -20,6 +20,7 @@
     {
       "url": "https://astro.kasi.re.kr/life/pageView/10",
       "mentioned_in": [
+        "../../templates/apartment_inspection_template.md",
         "notes/field_checklist_tiers_notes.md"
       ],
       "access_status": "see_note"
@@ -209,6 +210,7 @@
     {
       "url": "https://openapt.seoul.go.kr/portal/index.do",
       "mentioned_in": [
+        "../../templates/apartment_inspection_template.md",
         "notes/field_checklist_tiers_notes.md"
       ],
       "access_status": "see_note"
@@ -237,6 +239,7 @@
     {
       "url": "https://weolbu.com/community/182188",
       "mentioned_in": [
+        "../../templates/apartment_inspection_template.md",
         "notes/field_checklist_tiers_notes.md"
       ],
       "access_status": "see_note"
@@ -244,6 +247,7 @@
     {
       "url": "https://weolbu.com/community/3724905",
       "mentioned_in": [
+        "../../templates/apartment_inspection_template.md",
         "notes/field_checklist_tiers_notes.md"
       ],
       "access_status": "see_note"
@@ -307,6 +311,7 @@
     {
       "url": "https://www.k-apt.go.kr/web/main/index.do",
       "mentioned_in": [
+        "../../templates/apartment_inspection_template.md",
         "notes/field_checklist_tiers_notes.md"
       ],
       "access_status": "see_note"
@@ -314,6 +319,7 @@
     {
       "url": "https://www.noiseinfo.or.kr/index.jsp",
       "mentioned_in": [
+        "../../templates/apartment_inspection_template.md",
         "notes/field_checklist_tiers_notes.md"
       ],
       "access_status": "see_note"
