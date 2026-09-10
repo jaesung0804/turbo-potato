@@ -1,0 +1,11 @@
+[Unit]
+Description=Retry the initial investment backfill at most once per 15 minutes
+
+[Timer]
+OnActiveSec=15min
+OnUnitInactiveSec=15min
+AccuracySec=1min
+Unit=research-investment-backfill.service
+
+[Install]
+WantedBy=timers.target
