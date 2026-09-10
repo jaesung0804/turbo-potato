@@ -1,21 +1,21 @@
 {
   "batch_date": "2026-09-10",
   "checklist_observation_axes": 26,
-  "checkpoint_number": 12,
+  "checkpoint_number": 13,
   "complexes_with_source_notes": 16,
   "field_checklist_source_count": 25,
   "files": {
     "README.md": {
-      "bytes": 5191,
-      "sha256": "940f47ae53a53844a8511805ae6d771ece566774554ad2c93dfeb73f5267b8cd"
+      "bytes": 5280,
+      "sha256": "f8724603496527faa641ba2969c9b151aee97679390dfb89399f99aa196c43f9"
     },
     "batches/2026-09-10/complex_catalog.json": {
-      "bytes": 6552,
-      "sha256": "c064caf1b75744eabf42a2e4219db5a50defd53d6598d0d0dbe8b0ef0970a876"
+      "bytes": 6915,
+      "sha256": "81c9c328f55cac384a8b3c81de280c7851e0a47f7e473e652470bf187ed0ab8c"
     },
     "batches/2026-09-10/model_extracts/manifest.json": {
       "bytes": 1477,
-      "sha256": "659745adc94e257776cf42bbd60a00139a5090fd858ce3041d27ada4df3b66c5"
+      "sha256": "06efa1a372dfae404d88116c3449fecc71db402e928641a62676b5589ecdbc26"
     },
     "batches/2026-09-10/model_extracts/model_current_candidate_extract.json.gz": {
       "bytes": 32057,
@@ -50,24 +50,28 @@
       "sha256": "ae51074509d9b602ca50da252d665e9eb7c4a2d71c1c3af4723290919f904a69"
     },
     "batches/2026-09-10/notes/map_research_notes.md": {
-      "bytes": 7866,
-      "sha256": "1b2160c7f70e68cfb06b3e4000d098cf445fe5959ea0b1a9cb66deccffc68943"
+      "bytes": 8908,
+      "sha256": "f46886eeebe5253e6caa691029ea7ee50fcc8a0d08cc8959f5e0ba857eee885f"
     },
     "batches/2026-09-10/notes/model_audit_notes.md": {
       "bytes": 20720,
       "sha256": "70a7f7956123a7acb5e87306c5b91d6f851923657b435fedd6f498e9ce203055"
     },
     "batches/2026-09-10/observations.jsonl": {
-      "bytes": 46577,
-      "sha256": "96ffb988fb2a9c57424f895d41711e541ded5fa2cfc17e9b382512feb11200ad"
+      "bytes": 61919,
+      "sha256": "7249f28bf2bd275cb93763cb2e99e6ce3ff89543231a6217f53146edef4e7204"
     },
     "batches/2026-09-10/source_catalog.json": {
-      "bytes": 27033,
-      "sha256": "f510eacfe96f16ab8464feee53124bd0589e3643562150d3c9b490dbeeff1461"
+      "bytes": 27445,
+      "sha256": "27f3ce5b0a4cad9e6ae8536bdeb8d3a7210a407dc2d7f49481eb872065ddb867"
     },
     "schema/observation.schema.json": {
       "bytes": 4716,
       "sha256": "8add71467b4837e3176c076992bebff1bc1209af9735c5dcf67f2c0babdc9f8f"
+    },
+    "templates/agent_workflow_template.md": {
+      "bytes": 9103,
+      "sha256": "9560633038b57f287aa709c6bae917f579d51cd6c4f657a0adf202d6f0c7d8b9"
     },
     "templates/apartment_inspection_template.md": {
       "bytes": 26093,
@@ -84,10 +88,10 @@
   "model_eligible": false,
   "model_extract_files": 3,
   "note_files": 7,
-  "referenced_public_url_count": 101,
-  "saved_at": "2026-09-10T08:35:12+00:00",
+  "referenced_public_url_count": 102,
+  "saved_at": "2026-09-10T08:39:16+00:00",
   "schema_version": "1.0",
   "status": "research_in_progress",
-  "structured_claim_count": 43,
+  "structured_claim_count": 51,
   "validation": "JSON parsed; required fields, unique claim IDs, model_eligible=false and URL presence checked"
 }

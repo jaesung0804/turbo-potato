@@ -17,6 +17,7 @@
 - [저장 체크포인트](batches/2026-09-10/checkpoint.json)
 - [개인 기본값 없는 로컬 비교 엔진](tools/ranking_engine.py)
 - [모델 출력 추출본·압축 해시](batches/2026-09-10/model_extracts/manifest.json)
+- [조사팀 오더·보고·검토 운영 양식](templates/agent_workflow_template.md)
 - [주장 스키마](schema/observation.schema.json)
 - [평면·실내·공용부 임장 양식](templates/apartment_inspection_template.md)
 

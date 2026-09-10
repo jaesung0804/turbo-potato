@@ -62,7 +62,9 @@
         "inchang2_20260904_kb_estimate",
         "inchang2_202609_parking_capacity_display",
         "inchang2_202609_kb108_rooms",
-        "inchang2_202609_photo210_entry_ramp"
+        "inchang2_202609_photo210_entry_ramp",
+        "inchang2_20260910_walk_donggureung",
+        "inchang2_20260910_walk_guri"
       ],
       "official_identity_linked": false
     },
@@ -80,7 +82,10 @@
         "misa_lunarium_202304_school_crossing_report",
         "misa_lunarium_20260910_line5_walk_time",
         "misa_lunarium_20260910_line5_walk_distance",
-        "misa_lunarium_202509_streetview_entry_scene"
+        "misa_lunarium_202509_streetview_entry_scene",
+        "lunarium_20260910_transit_yeouido",
+        "lunarium_20260910_transit_seoul",
+        "lunarium_20260910_transit_gangnam"
       ],
       "official_identity_linked": false,
       "additional_notes": [
@@ -177,7 +182,10 @@
       "status": "partial_source_review",
       "structured_claim_ids": [
         "sanbon_raemian_20260907_sale",
-        "sanbon_raemian_202609_floorplan59a"
+        "sanbon_raemian_202609_floorplan59a",
+        "sanbon_hi_us_20260910_transit_seoul",
+        "sanbon_hi_us_20260910_transit_yeouido",
+        "sanbon_hi_us_20260910_transit_gangnam"
       ],
       "official_identity_linked": false
     },
