@@ -44,7 +44,11 @@
         "inchang4_20260904_kb_estimate",
         "inchang4_20260825_platform_sale",
         "inchang4_202609_parking_capacity_conflict",
-        "inchang4_202609_platform_guri_walk"
+        "inchang4_202609_platform_guri_walk",
+        "inchang4_202609_kb79a_rooms",
+        "inchang4_20260910_guri8_walk_m",
+        "inchang4_20260910_guri8_walk_min",
+        "inchang4_202609_photo416_entry_steps"
       ],
       "official_identity_linked": false
     },
@@ -56,7 +60,9 @@
       "structured_claim_ids": [
         "inchang2_20260825_kb_sale",
         "inchang2_20260904_kb_estimate",
-        "inchang2_202609_parking_capacity_display"
+        "inchang2_202609_parking_capacity_display",
+        "inchang2_202609_kb108_rooms",
+        "inchang2_202609_photo210_entry_ramp"
       ],
       "official_identity_linked": false
     },

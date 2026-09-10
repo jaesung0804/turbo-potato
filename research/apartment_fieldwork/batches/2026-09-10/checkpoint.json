@@ -1,46 +1,65 @@
 {
-  "schema_version": "1.0",
   "batch_date": "2026-09-10",
-  "checkpoint_number": 10,
-  "saved_at": "2026-09-10T08:20:40+00:00",
-  "status": "research_in_progress",
-  "method": "public_online_sources",
-  "model_eligible": false,
-  "note_files": 4,
-  "structured_claim_count": 37,
-  "validation": "JSON parsed; required fields, unique claim IDs, model_eligible=false and URL presence checked",
+  "checklist_observation_axes": 26,
+  "checkpoint_number": 11,
+  "complexes_with_source_notes": 16,
+  "field_checklist_source_count": 25,
   "files": {
     "README.md": {
-      "bytes": 4750,
-      "sha256": "f90e54af2ce328d671afbf467fb277e7f612c799b7b35d805aaa8db22df2fd40"
+      "bytes": 5110,
+      "sha256": "cb54f53d912e6bf4896395d917a397831905536dce456c395e3b764094feff5b"
     },
     "batches/2026-09-10/complex_catalog.json": {
-      "bytes": 6293,
-      "sha256": "55f0f51a7c354ba72075363009744f8a8f298db11258057cd51dac055828951c"
+      "bytes": 6552,
+      "sha256": "c064caf1b75744eabf42a2e4219db5a50defd53d6598d0d0dbe8b0ef0970a876"
+    },
+    "batches/2026-09-10/model_extracts/manifest.json": {
+      "bytes": 1477,
+      "sha256": "87e9e960d4027988611bf40dd6e7392b9ede589c7dcb72564b3b6006213b9cbd"
+    },
+    "batches/2026-09-10/model_extracts/model_current_candidate_extract.json.gz": {
+      "bytes": 32057,
+      "sha256": "2a21625e92aa7abff69506c08444b74e6e22c25dd96ef5beff40f12db599c129"
+    },
+    "batches/2026-09-10/model_extracts/model_identity_replay_extract.json.gz": {
+      "bytes": 2194,
+      "sha256": "eb4475a16cd6ccad876dde9fdf7892e49beacf5df937b581ccc7987cb01a049a"
+    },
+    "batches/2026-09-10/model_extracts/model_potential_candidate_extract.json.gz": {
+      "bytes": 7132,
+      "sha256": "c16d316d410123d8133070bf6fc6007cbe3a8feb56b054d065e165a39d917713"
     },
     "batches/2026-09-10/notes/commute_research_notes.md": {
       "bytes": 20702,
       "sha256": "0d3a26c8c80b1084e77988597a812f23d078074715a06be079204667927fce90"
     },
     "batches/2026-09-10/notes/east_research_notes.md": {
-      "bytes": 15482,
-      "sha256": "2ca145a0ae370efc9b0d1d6ae6d483d530606beb757dd2d7c8178ee0799d4d7f"
+      "bytes": 19475,
+      "sha256": "b00ad607fe76d7536dab423692db314cf638fd981417a5e283ddd87367e2f65c"
     },
     "batches/2026-09-10/notes/field_checklist_tiers_notes.md": {
       "bytes": 32353,
       "sha256": "ec92ae1ad147b82b0638449d567fa3b1e93ee854a00196ec8f64dc35665dc0ae"
     },
+    "batches/2026-09-10/notes/future_research_lab_notes.md": {
+      "bytes": 14603,
+      "sha256": "0717c18ade3b6f72f41fc0dcd8b5397abd84c55aedc3b1ce4f8dce9de7745da1"
+    },
     "batches/2026-09-10/notes/map_research_notes.md": {
       "bytes": 5487,
       "sha256": "2161c36e68bfe8b0cf2c87e0b4c804da4bd51364f052cf21d0f4ac38a8c29a24"
     },
+    "batches/2026-09-10/notes/model_audit_notes.md": {
+      "bytes": 20720,
+      "sha256": "70a7f7956123a7acb5e87306c5b91d6f851923657b435fedd6f498e9ce203055"
+    },
     "batches/2026-09-10/observations.jsonl": {
-      "bytes": 38853,
-      "sha256": "5557a95299510f3c4cda63c874ed7de7f5d87bd73616f93966d72212a3f4021e"
+      "bytes": 46577,
+      "sha256": "96ffb988fb2a9c57424f895d41711e541ded5fa2cfc17e9b382512feb11200ad"
     },
     "batches/2026-09-10/source_catalog.json": {
-      "bytes": 13918,
-      "sha256": "57eef8740135a88bcb6b95afea20e0a47d678aa7cdf1374f23ee2b23d0e0f6c4"
+      "bytes": 23473,
+      "sha256": "c618121cf750e45436527fb959d51abe4c8051442a04db04aa66b1745e9d26b5"
     },
     "schema/observation.schema.json": {
       "bytes": 4716,
@@ -49,12 +68,22 @@
     "templates/apartment_inspection_template.md": {
       "bytes": 26093,
       "sha256": "945382e2a2f19349ea2b436131e7a871ca7dfc54305657261d174cb9b2717463"
+    },
+    "tools/ranking_engine.py": {
+      "bytes": 9571,
+      "sha256": "a109d8a5b29d82395e81fc04d07bc8ffb540965a3cb8cd784de55c58522dd2ae"
     }
   },
-  "checklist_observation_axes": 26,
-  "complexes_with_source_notes": 16,
-  "referenced_public_url_count": 59,
-  "field_checklist_source_count": 25,
+  "inspection_template_sections": 16,
   "inspection_template_version": "1.1",
-  "inspection_template_sections": 16
+  "method": "public_online_sources",
+  "model_eligible": false,
+  "note_files": 6,
+  "referenced_public_url_count": 97,
+  "saved_at": "2026-09-10T08:29:15+00:00",
+  "schema_version": "1.0",
+  "status": "research_in_progress",
+  "structured_claim_count": 43,
+  "validation": "JSON parsed; required fields, unique claim IDs, model_eligible=false and URL presence checked",
+  "model_extract_files": 3
 }

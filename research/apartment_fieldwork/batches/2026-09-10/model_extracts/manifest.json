@@ -1,0 +1,31 @@
+{
+  "created_at": "2026-09-10T08:29:15+00:00",
+  "description": "Lossless extracts from already published model outputs. Original JSON bytes are preserved by deterministic gzip. No model training or changes.",
+  "files": {
+    "model_current_candidate_extract.json.gz": {
+      "json_filename": "model_current_candidate_extract.json",
+      "compressed_bytes": 32057,
+      "compressed_sha256": "2a21625e92aa7abff69506c08444b74e6e22c25dd96ef5beff40f12db599c129",
+      "original_json_bytes": 419262,
+      "original_json_sha256": "66c2ea3c9406364999fe7c6b3f599faf5c4a4b22768558fa5a3b36896a5e1dcc",
+      "rows": 82,
+      "catalog_rows_without_current_recommendation": 19
+    },
+    "model_identity_replay_extract.json.gz": {
+      "json_filename": "model_identity_replay_extract.json",
+      "compressed_bytes": 2194,
+      "compressed_sha256": "eb4475a16cd6ccad876dde9fdf7892e49beacf5df937b581ccc7987cb01a049a",
+      "original_json_bytes": 10329,
+      "original_json_sha256": "659f7a4b8767822b13f20be8c42fa26ee95f53c61a45ec8a65812c4f0b0d986b",
+      "keys": 3
+    },
+    "model_potential_candidate_extract.json.gz": {
+      "json_filename": "model_potential_candidate_extract.json",
+      "compressed_bytes": 7132,
+      "compressed_sha256": "c16d316d410123d8133070bf6fc6007cbe3a8feb56b054d065e165a39d917713",
+      "original_json_bytes": 37118,
+      "original_json_sha256": "915e14eefec5e1f55b902a3039378c9a2972c1efb079e3d93177cc3fbf8d233c",
+      "rows": 23
+    }
+  }
+}
