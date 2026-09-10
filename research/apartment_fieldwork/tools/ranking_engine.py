@@ -67,6 +67,8 @@ def gate(candidate, constraints):
         reasons.append("outside_reference_price_range")
     if constraints.get("require_current_listing", True) and not candidate.get("current_listing_verified", False):
         reasons.append("current_listing_not_verified")
+    if constraints.get("require_current_listing", True) and candidate.get("reference_price_kind") != "current_listing_asking":
+        reasons.append("current_listing_price_not_selected")
     if not candidate.get("price_area_date_linked", False):
         reasons.append("price_area_date_not_linked")
     return reasons
