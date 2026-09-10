@@ -1,0 +1,5 @@
+# Set BACKEND_HOSTNAME to a domain pointing to the API server.
+{$BACKEND_HOSTNAME} {
+    reverse_proxy 127.0.0.1:8787
+    header X-Content-Type-Options nosniff
+}

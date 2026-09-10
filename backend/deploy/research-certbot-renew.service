@@ -1,0 +1,13 @@
+[Unit]
+Description=Renew the short-lived research backend IP certificate
+Wants=network-online.target
+After=network-online.target nginx.service
+
+[Service]
+Type=oneshot
+ExecStart=/opt/certbot/bin/certbot renew --quiet --cert-name research-backend-ip
+PrivateTmp=true
+ProtectHome=true
+UMask=0022
+TimeoutStartSec=15min
+# Successful renewal runs /etc/letsencrypt/renewal-hooks/deploy/research-nginx.

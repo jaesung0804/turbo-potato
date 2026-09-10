@@ -1,16 +1,20 @@
 name: Collect older history for five-year potential research
 on:
   workflow_dispatch:
-  push:
-    branches: [codex/estate-five-year-history]
-    paths:
-      - collect_estate_older_history.py
-      - .github/workflows/research-five-year.yml
+    inputs:
+      refresh:
+        description: Run the bounded 2006-2015 collector instead of reusing the verified backend export
+        type: boolean
+        default: false
 permissions:
   contents: write
 concurrency:
   group: estate-five-year-history
   cancel-in-progress: false
+env:
+  RESEARCH_STORAGE: ${{ vars.RESEARCH_STORAGE || 'git' }}
+  RESEARCH_BACKEND_URL: ${{ vars.RESEARCH_BACKEND_URL }}
+  RESEARCH_BACKEND_TOKEN: ${{ secrets.RESEARCH_BACKEND_TOKEN }}
 jobs:
   history:
     runs-on: ubuntu-latest
@@ -20,47 +24,62 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
+      - name: Restore and validate the saved older historical export
+        if: env.RESEARCH_STORAGE == 'backend'
+        run: |
+          python backend_state.py pull --name estate-history-extended-state --state-dir .work/older-history-state
+          python backend_state.py reuse-history --state-dir .work/older-history-state --history-kind older-history --output-dir .work/five-year-history
       - uses: actions/cache/restore@v4
+        if: env.RESEARCH_STORAGE != 'backend' || inputs.refresh == true
         with:
           path: .work/five-year-history/cache
           key: estate-older-history-v1-${{ github.run_id }}-${{ github.run_attempt }}
           restore-keys: estate-older-history-v1-
       - name: Collect 2006–2015 Seoul and Gwangmyeong sales
+        if: env.RESEARCH_STORAGE != 'backend' || inputs.refresh == true
         env:
           MOLIT_API_KEY: ${{ secrets.MOLIT_API_KEY }}
         run: python collect_estate_older_history.py
       - name: Preserve complete older research input separately
+        if: env.RESEARCH_STORAGE != 'backend' || inputs.refresh == true
         env:
           SNAPSHOT_ID: ${{ github.run_id }}-${{ github.run_attempt }}
         run: |
           set -euo pipefail
           state_dir=.work/older-history-state
-          if git ls-remote --exit-code --heads origin estate-history-extended-state > /dev/null; then
-            git fetch origin estate-history-extended-state
-            git worktree add --detach "$state_dir" FETCH_HEAD
-          else
-            git worktree add --detach "$state_dir" "$GITHUB_SHA"
-            git -C "$state_dir" checkout --orphan estate-history-extended-state
-            git -C "$state_dir" rm -rf --quiet .
+          if [ "$RESEARCH_STORAGE" != "backend" ]; then
+            if git ls-remote --exit-code --heads origin estate-history-extended-state > /dev/null; then
+              git fetch origin estate-history-extended-state
+              git worktree add --detach "$state_dir" FETCH_HEAD
+            else
+              git worktree add --detach "$state_dir" "$GITHUB_SHA"
+              git -C "$state_dir" checkout --orphan estate-history-extended-state
+              git -C "$state_dir" rm -rf --quiet .
+            fi
           fi
           snapshot_dir="$state_dir/snapshots/$SNAPSHOT_ID"
           mkdir -p "$snapshot_dir"
           cp .work/five-year-history/research-older-history.csv.gz "$snapshot_dir/"
           cp .work/five-year-history/research-older-history.json "$snapshot_dir/"
           cp "$snapshot_dir"/* "$state_dir/"
-          git -C "$state_dir" config user.name 'github-actions[bot]'
-          git -C "$state_dir" config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git -C "$state_dir" add research-older-history.csv.gz research-older-history.json "snapshots/$SNAPSHOT_ID"
-          git -C "$state_dir" commit -m 'Preserve complete 2006–2015 research sales with immutable run snapshot'
-          git -C "$state_dir" push origin HEAD:estate-history-extended-state
+          if [ "$RESEARCH_STORAGE" = "backend" ]; then
+            python backend_state.py push --name estate-history-extended-state --state-dir "$state_dir"
+            python backend_rows.py --csv "$state_dir/research-older-history.csv.gz" --dataset apt-trades --snapshot-name estate-history-extended-state --state-dir "$state_dir"
+          else
+            git -C "$state_dir" config user.name 'github-actions[bot]'
+            git -C "$state_dir" config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+            git -C "$state_dir" add research-older-history.csv.gz research-older-history.json "snapshots/$SNAPSHOT_ID"
+            git -C "$state_dir" commit -m 'Preserve complete 2006–2015 research sales with immutable run snapshot'
+            git -C "$state_dir" push origin HEAD:estate-history-extended-state
+          fi
       - uses: actions/cache/save@v4
-        if: always()
+        if: always() && (env.RESEARCH_STORAGE != 'backend' || inputs.refresh == true)
         with:
           path: .work/five-year-history/cache
           key: estate-older-history-v1-${{ github.run_id }}-${{ github.run_attempt }}
       - uses: actions/upload-artifact@v4
-        if: always()
-        # The checked, immutable Git snapshot above is the durable output.
+        if: always() && (env.RESEARCH_STORAGE != 'backend' || failure())
+        # The checked Git/backend snapshot above is the durable output.
         # A secondary download archive failure must not invalidate that copy.
         continue-on-error: true
         with:

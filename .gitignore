@@ -25,3 +25,8 @@ Thumbs.db
 
 # Reproducible cache for the separate regional price policy.
 /metadata/transaction_valuation_2026_capital_v2.json.gz
+
+# Local backend restore receipts; never publish credentials or database files.
+/.research-backend/
+*.sqlite3
+/backend.env

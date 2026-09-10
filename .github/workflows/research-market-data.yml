@@ -1,14 +1,20 @@
 name: Collect focused rent research data
 on:
-  push:
-    branches: [codex/estate-market-signals]
-    paths: [collect_estate_rents.py, .github/workflows/research-market-data.yml]
   workflow_dispatch:
+    inputs:
+      initialize_backend_state:
+        description: Explicitly start the first bounded rent collection when no backend snapshot has been migrated
+        type: boolean
+        default: false
 permissions:
   contents: read
 concurrency:
   group: estate-rent-research
   cancel-in-progress: false
+env:
+  RESEARCH_STORAGE: ${{ vars.RESEARCH_STORAGE || 'git' }}
+  RESEARCH_BACKEND_URL: ${{ vars.RESEARCH_BACKEND_URL }}
+  RESEARCH_BACKEND_TOKEN: ${{ secrets.RESEARCH_BACKEND_TOKEN }}
 jobs:
   collect:
     runs-on: ubuntu-latest
@@ -18,12 +24,33 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
+      - name: Restore saved rent partitions before collection
+        id: restore
+        if: env.RESEARCH_STORAGE == 'backend'
+        env:
+          INITIALIZE_RENT: ${{ inputs.initialize_backend_state || false }}
+        run: |
+          set -euo pipefail
+          args=()
+          if [ "$INITIALIZE_RENT" = "true" ]; then
+            args+=(--initialize-if-missing)
+          fi
+          python backend_state.py pull --name estate-rent-state --state-dir .work/market-data "${args[@]}"
       - name: Collect published lease records for the three study districts
+        id: collect
         env:
           MOLIT_API_KEY: ${{ secrets.MOLIT_API_KEY }}
         run: python collect_estate_rents.py --start 202307 --end 202412 --use-existing-config
+      - name: Save completed rent partitions and collection progress
+        id: persist
+        if: always() && env.RESEARCH_STORAGE == 'backend' && steps.restore.outcome == 'success' && steps.collect.outcome != 'skipped'
+        run: |
+          set -euo pipefail
+          test -d .work/market-data/rents
+          python backend_state.py push --name estate-rent-state --state-dir .work/market-data --paths rents
       - uses: actions/upload-artifact@v4
+        if: (success() && env.RESEARCH_STORAGE != 'backend') || (always() && env.RESEARCH_STORAGE == 'backend' && steps.persist.outcome == 'failure')
         with:
           name: estate-rent-research-${{ github.run_id }}
           path: .work/market-data/
-          retention-days: 90
+          retention-days: ${{ env.RESEARCH_STORAGE == 'backend' && 7 || 90 }}

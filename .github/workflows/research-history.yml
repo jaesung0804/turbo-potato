@@ -1,11 +1,20 @@
 name: Collect bounded historical model research
 on:
   workflow_dispatch:
+    inputs:
+      refresh:
+        description: Run the bounded 2016-2020 collector instead of reusing the verified backend export
+        type: boolean
+        default: false
 permissions:
   contents: write
 concurrency:
   group: estate-historical-research
   cancel-in-progress: false
+env:
+  RESEARCH_STORAGE: ${{ vars.RESEARCH_STORAGE || 'git' }}
+  RESEARCH_BACKEND_URL: ${{ vars.RESEARCH_BACKEND_URL }}
+  RESEARCH_BACKEND_TOKEN: ${{ secrets.RESEARCH_BACKEND_TOKEN }}
 jobs:
   history:
     runs-on: ubuntu-latest
@@ -15,27 +24,41 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
+      - name: Restore and validate the saved historical export
+        if: env.RESEARCH_STORAGE == 'backend'
+        run: |
+          python backend_state.py pull --name estate-history-state --state-dir .work/history-state
+          python backend_state.py reuse-history --state-dir .work/history-state --history-kind history --output-dir .work/history
       - name: Collect 2016–2020 Seoul and Gwangmyeong sales
+        if: env.RESEARCH_STORAGE != 'backend' || inputs.refresh == true
         env:
           MOLIT_API_KEY: ${{ secrets.MOLIT_API_KEY }}
         run: python collect_estate_history.py
       - name: Preserve completed research input separately
+        if: env.RESEARCH_STORAGE != 'backend' || inputs.refresh == true
         run: |
           set -euo pipefail
           mkdir -p /tmp/estate-history-export
           cp .work/history/research-history.* /tmp/estate-history-export/
-          git fetch origin estate-history-state
-          git worktree add --detach .work/history-state FETCH_HEAD
+          if [ "$RESEARCH_STORAGE" != "backend" ]; then
+            git fetch origin estate-history-state
+            git worktree add --detach .work/history-state FETCH_HEAD
+          fi
           cp /tmp/estate-history-export/* .work/history-state/
-          git -C .work/history-state config user.name 'github-actions[bot]'
-          git -C .work/history-state config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git -C .work/history-state add research-history.csv.gz research-history.json
-          if ! git -C .work/history-state diff --cached --quiet; then
-            git -C .work/history-state commit -m 'Preserve completed 2016–2020 research sales snapshot'
-            git -C .work/history-state push origin HEAD:estate-history-state
+          if [ "$RESEARCH_STORAGE" = "backend" ]; then
+            python backend_state.py push --name estate-history-state --state-dir .work/history-state
+            python backend_rows.py --csv .work/history-state/research-history.csv.gz --dataset apt-trades --snapshot-name estate-history-state --state-dir .work/history-state
+          else
+            git -C .work/history-state config user.name 'github-actions[bot]'
+            git -C .work/history-state config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+            git -C .work/history-state add research-history.csv.gz research-history.json
+            if ! git -C .work/history-state diff --cached --quiet; then
+              git -C .work/history-state commit -m 'Preserve completed 2016–2020 research sales snapshot'
+              git -C .work/history-state push origin HEAD:estate-history-state
+            fi
           fi
       - uses: actions/upload-artifact@v4
-        if: always()
+        if: always() && (env.RESEARCH_STORAGE != 'backend' || failure())
         with:
           name: historical-sales-${{ github.run_id }}
           path: /tmp/estate-history-export/

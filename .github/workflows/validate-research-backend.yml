@@ -1,0 +1,74 @@
+name: Validate research backend and saved estate state
+on:
+  pull_request:
+    paths:
+      - backend/**
+      - '*.py'
+      - tests/**
+      - .github/workflows/validate-research-backend.yml
+      - .github/workflows/estate-collect.yml
+      - .github/workflows/pages.yml
+      - .github/workflows/research-*.yml
+      - .github/workflows/refresh-estate-potential.yml
+  push:
+    branches: [main, 'codex/**']
+    paths:
+      - backend/**
+      - '*.py'
+      - tests/**
+      - .github/workflows/validate-research-backend.yml
+      - .github/workflows/estate-collect.yml
+      - .github/workflows/pages.yml
+      - .github/workflows/research-*.yml
+      - .github/workflows/refresh-estate-potential.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: research-backend-validation-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  unit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      PYTHONUTF8: '1'
+      BACKEND_DATABASE: sqlite
+      BACKEND_BLOB_STORE: local
+      # Tests use synthetic tokens and temporary files. No project secrets,
+      # Oracle Wallet, cloud account, collector credential, or deployment runs here.
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          fetch-depth: 1
+      - name: Configure local test storage on the runner
+        # The runner context is unavailable in job-level env expressions.
+        run: echo "BACKEND_DATA_DIR=$RUNNER_TEMP/research-backend-tests" >> "$GITHUB_ENV"
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+          cache-dependency-path: backend/pyproject.toml
+      - name: Install the backend and minimal offline test dependencies
+        # OCI authentication is mocked; the OCI SDK and ML/build stack are unnecessary.
+        run: python -m pip install -e './backend[test]' 'pytest-socket==0.7.0'
+      - name: Verify saved estate state, parsers, and provenance on Linux
+        run: |
+          python -m pytest -q --disable-socket \
+            tests/test_backend_state.py \
+            tests/test_backend_rows.py \
+            tests/test_saved_release_server.py \
+            tests/test_capital_csv_state.py \
+            tests/test_prepare_capital_history_inputs.py \
+            tests/test_molit_capital_csv.py \
+            tests/test_molit_capital_normalization.py \
+            tests/test_estate_vintages.py \
+            tests/test_reporting_lag.py \
+            tests/test_estate_research_progress.py \
+            tests/test_estate_potential_refresh.py::test_current_source_checksum_and_collection_month_are_required \
+            tests/test_estate_potential_refresh.py::test_history_refuses_other_scope_and_corrupt_csv_without_replacing_output
+      - name: Verify the complete backend suite using SQLite and local objects
+        working-directory: backend
+        # Allow only local HTTP round-trip fixtures and async Unix sockets.
+        run: python -m pytest -q tests --disable-socket --allow-hosts=127.0.0.1,::1 --allow-unix-socket

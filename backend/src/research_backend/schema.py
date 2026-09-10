@@ -1,0 +1,95 @@
+"""Portable SQL schema: Oracle 19c+ CLOB JSON; no native JSON type required."""
+from sqlalchemy import Column, Index, Integer, MetaData, String, Table, Text
+
+metadata = MetaData()
+
+records = Table("research_records", metadata,
+    Column("kind", String(32), primary_key=True),
+    Column("record_key", String(200), primary_key=True),
+    Column("version", Integer, nullable=False),
+    Column("summary", String(2000), nullable=False),
+    Column("payload", Text, nullable=False),
+    Column("sha256", String(64), nullable=False),
+    Column("source_uri", Text),
+    Column("observed_at", String(32), nullable=False),
+    Column("created_at", String(32), nullable=False),
+    Column("updated_at", String(32), nullable=False),
+)
+revisions = Table("record_revisions", metadata,
+    Column("kind", String(32), primary_key=True),
+    Column("record_key", String(200), primary_key=True),
+    Column("version", Integer, primary_key=True),
+    Column("payload", Text, nullable=False),
+    Column("sha256", String(64), nullable=False),
+    Column("observed_at", String(32), nullable=False),
+    Column("created_at", String(32), nullable=False),
+)
+files = Table("stored_files", metadata,
+    Column("sha256", String(64), primary_key=True),
+    Column("byte_size", Integer, nullable=False),
+    Column("store_name", String(16), nullable=False),
+    Column("created_at", String(32), nullable=False),
+)
+heads = Table("snapshot_heads", metadata,
+    Column("name", String(100), primary_key=True),
+    Column("snapshot_id", String(32), nullable=False),
+    Column("updated_at", String(32), nullable=False),
+)
+snapshots = Table("snapshots", metadata,
+    Column("snapshot_id", String(32), primary_key=True),
+    Column("name", String(100), nullable=False),
+    Column("previous_id", String(32)),
+    Column("status", String(16), nullable=False),
+    Column("file_count", Integer, nullable=False),
+    Column("created_at", String(32), nullable=False),
+)
+snapshot_files = Table("snapshot_files", metadata,
+    Column("snapshot_id", String(32), primary_key=True),
+    Column("entry_id", String(64), primary_key=True),
+    Column("relative_path", String(1000), nullable=False),
+    Column("sha256", String(64), nullable=False),
+    Column("byte_size", Integer, nullable=False),
+)
+datasets = Table("dataset_heads", metadata,
+    Column("dataset_key", String(150), primary_key=True),
+    Column("version_id", String(64), nullable=False),
+    Column("row_count", Integer, nullable=False),
+    Column("updated_at", String(32), nullable=False),
+)
+dataset_versions = Table("dataset_versions", metadata,
+    Column("dataset_key", String(150), primary_key=True),
+    Column("version_id", String(64), primary_key=True),
+    Column("source_sha256", String(64), nullable=False),
+    Column("status", String(16), nullable=False),
+    Column("row_count", Integer, nullable=False),
+    Column("format_name", String(100), nullable=False),
+    Column("created_at", String(32), nullable=False),
+)
+observations = Table("observations", metadata,
+    Column("dataset_key", String(150), primary_key=True),
+    Column("version_id", String(64), primary_key=True),
+    Column("row_no", Integer, primary_key=True),
+    Column("entity_key", String(200)),
+    Column("observed_day", String(10)),
+    Column("region_code", String(20)),
+    Column("payload", Text, nullable=False),
+)
+Index("obs_entity_day", observations.c.dataset_key, observations.c.version_id,
+      observations.c.entity_key, observations.c.observed_day, observations.c.row_no)
+Index("obs_region_day", observations.c.dataset_key, observations.c.version_id,
+      observations.c.region_code, observations.c.observed_day, observations.c.row_no)
+jobs = Table("research_jobs", metadata,
+    Column("job_id", String(64), primary_key=True),
+    Column("job_type", String(64), nullable=False),
+    Column("status", String(16), nullable=False),
+    Column("payload", Text, nullable=False),
+    Column("result_payload", Text),
+    Column("lease_token", String(32)),
+    Column("lease_until", String(32)),
+    Column("worker_id", String(100)),
+    Column("attempts", Integer, nullable=False),
+    Column("max_attempts", Integer, nullable=False),
+    Column("created_at", String(32), nullable=False),
+    Column("updated_at", String(32), nullable=False),
+)
+Index("jobs_status_lease", jobs.c.job_type, jobs.c.status, jobs.c.lease_until)

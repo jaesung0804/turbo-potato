@@ -1,0 +1,24 @@
+[build-system]
+requires = ["setuptools>=70"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "project-research-backend"
+version = "0.1.0"
+description = "Durable, bounded data access for estate and investment research"
+requires-python = ">=3.12"
+dependencies = ["fastapi>=0.115,<1", "uvicorn>=0.30,<1", "SQLAlchemy>=2.0.36,<3", "oracledb>=3,<4", "python-dotenv>=1,<2", "ijson>=3.3,<4"]
+
+[project.optional-dependencies]
+oci = ["oci>=2.140,<3"]
+test = ["pytest>=8,<10", "httpx>=0.27,<1"]
+
+[project.scripts]
+research-backend = "research_backend.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]

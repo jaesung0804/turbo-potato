@@ -1,0 +1,20 @@
+name: Verify Oracle backend connection
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      RESEARCH_STORAGE: backend
+      RESEARCH_BACKEND_URL: ${{ vars.RESEARCH_BACKEND_URL }}
+      RESEARCH_BACKEND_TOKEN: ${{ secrets.RESEARCH_BACKEND_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Verify database and one small file without collection
+        run: python verify_research_backend.py --project estate

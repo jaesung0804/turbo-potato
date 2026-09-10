@@ -1,0 +1,23 @@
+[Unit]
+Description=Research backend for estate and investment
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=research-backend
+Group=research-backend
+WorkingDirectory=/opt/research-backend
+EnvironmentFile=/etc/research-backend/backend.env
+ExecStart=/opt/research-backend/.venv/bin/research-backend serve --host 127.0.0.1 --port 8787
+Restart=on-failure
+RestartSec=5
+UMask=0077
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/var/lib/research-backend
+
+[Install]
+WantedBy=multi-user.target

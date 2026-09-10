@@ -1,0 +1,24 @@
+[Unit]
+Description=Publish changed monthly observations for %i
+After=network-online.target research-backend.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=research
+Group=research
+WorkingDirectory=/opt/research-backend
+EnvironmentFile=/etc/research-backend.env
+ExecStart=/opt/research-backend/.venv/bin/python -m research_backend.row_worker --project %i
+Restart=on-failure
+RestartSec=10
+TimeoutStopSec=120
+UMask=0077
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/var/lib/research-backend
+
+[Install]
+WantedBy=multi-user.target

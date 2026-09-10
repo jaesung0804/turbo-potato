@@ -1,0 +1,28 @@
+[Unit]
+Description=Resume the verified initial investment SQL backfill
+After=network-online.target
+Wants=network-online.target
+ConditionPathExists=!/var/lib/research-backend/backfill/investment-complete.json
+ConditionPathExists=!/var/lib/research-backend/backfill/investment-needs-attention.json
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+User=research
+Group=research
+WorkingDirectory=/opt/research-backend
+EnvironmentFile=/etc/research-backend.env
+ExecStart=/opt/research-backend/.venv/bin/python /opt/research-backend/deploy/investment-backfill.py --import-script @IMPORT_SCRIPT@ --manifest @MANIFEST@ --manifest-sha256 @MANIFEST_SHA256@ --snapshot-id 8f1ff2d04a4b4c31b31f0d470fc27894
+Restart=no
+TimeoutStartSec=4h
+TimeoutStopSec=120
+KillMode=control-group
+UMask=0077
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/var/lib/research-backend
+
+[Install]
+WantedBy=multi-user.target
