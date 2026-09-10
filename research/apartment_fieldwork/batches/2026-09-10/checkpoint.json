@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
   "batch_date": "2026-09-10",
-  "checkpoint_number": 1,
-  "saved_at": "2026-09-10T07:57:52+00:00",
+  "checkpoint_number": 2,
+  "saved_at": "2026-09-10T07:59:26+00:00",
   "status": "research_in_progress",
   "method": "public_online_sources",
   "model_eligible": false,
-  "note_files": 2,
+  "note_files": 3,
   "structured_claim_count": 11,
   "validation": "JSON parse/required-fields checked; jsonschema unavailable",
   "files": {
@@ -22,6 +22,10 @@
       "bytes": 7293,
       "sha256": "693b121a7114fa2251e733895c67267c227054d803f9adc2666e378ccc5e426e"
     },
+    "batches/2026-09-10/notes/field_checklist_tiers_notes.md": {
+      "bytes": 19352,
+      "sha256": "f3555c33db1c830389036cafef74dd7f20ef85daca85839bc46ad6419a924fa8"
+    },
     "batches/2026-09-10/observations.jsonl": {
       "bytes": 11066,
       "sha256": "f5f74ffbd5c470ffcdaaa5f08c0eea06edba19569eb2ba134b3157356593571a"
@@ -30,5 +34,6 @@
       "bytes": 4716,
       "sha256": "8add71467b4837e3176c076992bebff1bc1209af9735c5dcf67f2c0babdc9f8f"
     }
-  }
+  },
+  "checklist_observation_axes": 26
 }
