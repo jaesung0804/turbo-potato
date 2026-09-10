@@ -71,9 +71,14 @@
         "misa_lunarium_202304_floorplan59_dressing_room_report",
         "misa_lunarium_202304_underground_parking_report",
         "misa_lunarium_202609_parking_elevator_connection_unknown",
-        "misa_lunarium_202304_school_crossing_report"
+        "misa_lunarium_202304_school_crossing_report",
+        "misa_lunarium_20260910_line5_walk_time",
+        "misa_lunarium_20260910_line5_walk_distance"
       ],
-      "official_identity_linked": false
+      "official_identity_linked": false,
+      "additional_notes": [
+        "notes/map_research_notes.md"
+      ]
     },
     {
       "name": "미사강변센트리버",
@@ -83,6 +88,37 @@
       "structured_claim_ids": [
         "misa_centriver_202304_school_crossing_report"
       ],
+      "official_identity_linked": false
+    },
+    {
+      "name": "당산계룡리슈빌3단지",
+      "note": "notes/commute_research_notes.md",
+      "study_type": "complex_research",
+      "status": "partial_source_review",
+      "structured_claim_ids": [
+        "dangsan_kyeryong3_20260803_sale",
+        "dangsan_kyeryong3_202609_parking_capacity",
+        "dangsan_kyeryong3_202609_building_type"
+      ],
+      "official_identity_linked": false
+    },
+    {
+      "name": "당산대우아파트",
+      "note": "notes/commute_research_notes.md",
+      "study_type": "complex_research",
+      "status": "partial_source_review",
+      "structured_claim_ids": [
+        "dangsan_daewoo_20260828_sale",
+        "dangsan_daewoo_202609_parking_capacity"
+      ],
+      "official_identity_linked": false
+    },
+    {
+      "name": "영등포경남아너스빌아파트",
+      "note": "notes/commute_research_notes.md",
+      "study_type": "data_quality_case",
+      "status": "partial_source_review",
+      "structured_claim_ids": [],
       "official_identity_linked": false
     }
   ]

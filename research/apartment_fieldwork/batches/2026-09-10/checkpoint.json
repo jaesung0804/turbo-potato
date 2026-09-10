@@ -1,13 +1,13 @@
 {
   "schema_version": "1.0",
   "batch_date": "2026-09-10",
-  "checkpoint_number": 3,
-  "saved_at": "2026-09-10T08:01:48+00:00",
+  "checkpoint_number": 4,
+  "saved_at": "2026-09-10T08:03:44+00:00",
   "status": "research_in_progress",
   "method": "public_online_sources",
   "model_eligible": false,
-  "note_files": 3,
-  "structured_claim_count": 19,
+  "note_files": 4,
+  "structured_claim_count": 26,
   "validation": "JSON parsed; required fields, unique claim IDs, model_eligible=false and URL presence checked",
   "files": {
     "README.md": {
@@ -15,24 +15,28 @@
       "sha256": "b5f5e7b4d46e2d4d6b84e892e0ffd05e0315dcaeb09cfcd0cc037a390e9cc651"
     },
     "batches/2026-09-10/complex_catalog.json": {
-      "bytes": 2977,
-      "sha256": "b0c906a4c49ad2c757fbad52c11abc0b4d8652978da0ca3f1443fd9a0f244ada"
+      "bytes": 4195,
+      "sha256": "5f96bf3ecccf54659cd31ef75fd4441dc663179ba96ea26de8015315870b40ae"
     },
     "batches/2026-09-10/notes/commute_research_notes.md": {
-      "bytes": 7124,
-      "sha256": "b78f6b95c6551ceed17d741937903ec7013f2d158bd36d444f6d305b67322331"
+      "bytes": 11632,
+      "sha256": "9bb5f010aba968ae290e88652ab0da6c2ca2632ddf7b55a2bccc6127a368f6bf"
     },
     "batches/2026-09-10/notes/east_research_notes.md": {
       "bytes": 10680,
       "sha256": "9e1095b7b588c799daa823d09207cfea5aca1deb57f6cf2de8a8624507f8f36d"
     },
     "batches/2026-09-10/notes/field_checklist_tiers_notes.md": {
-      "bytes": 19352,
-      "sha256": "f3555c33db1c830389036cafef74dd7f20ef85daca85839bc46ad6419a924fa8"
+      "bytes": 24308,
+      "sha256": "30a620eda8dfb2aae14d6d2bb7c6b4378a8f4b49af81a5bd093427617dcc5fb7"
+    },
+    "batches/2026-09-10/notes/map_research_notes.md": {
+      "bytes": 4005,
+      "sha256": "d718d09082281f64e4634e5d9e1b941bb335cb9beefd84f689d850ca27888c01"
     },
     "batches/2026-09-10/observations.jsonl": {
-      "bytes": 18760,
-      "sha256": "a17fffe8fef1722487db6cb2e0a1006603b178f721e90cd313caf70931d836f0"
+      "bytes": 26982,
+      "sha256": "4a57af7eb634ebf15b4cf09f8aa0cb1a5500c95b7ca315677851978995edba5a"
     },
     "schema/observation.schema.json": {
       "bytes": 4716,
@@ -40,5 +44,5 @@
     }
   },
   "checklist_observation_axes": 26,
-  "complexes_with_source_notes": 7
+  "complexes_with_source_notes": 10
 }
