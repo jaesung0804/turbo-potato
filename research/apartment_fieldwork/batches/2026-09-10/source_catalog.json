@@ -1,7 +1,7 @@
 {
   "batch_date": "2026-09-10",
   "meaning": "Referenced public URLs, including unverified image candidates. Mention does not imply original page or image was opened. See each note for access status.",
-  "url_count": 102,
+  "url_count": 120,
   "sources": [
     {
       "url": "https://apt.wiki/wiki/미사강변루나리움",
@@ -26,6 +26,13 @@
       "access_status": "see_note"
     },
     {
+      "url": "https://blog.naver.com/2000yjung/224399926274",
+      "mentioned_in": [
+        "notes/east_research_notes.md"
+      ],
+      "access_status": "see_note"
+    },
+    {
       "url": "https://blog.naver.com/eat_iiiiing/224101115700",
       "mentioned_in": [
         "notes/map_research_notes.md"
@@ -40,9 +47,23 @@
       "access_status": "see_note"
     },
     {
+      "url": "https://blog.naver.com/hangilblog/224374102118",
+      "mentioned_in": [
+        "notes/east_research_notes.md"
+      ],
+      "access_status": "see_note"
+    },
+    {
       "url": "https://blog.naver.com/livart_sungwon/224398140649",
       "mentioned_in": [
         "notes/commute_research_notes.md"
+      ],
+      "access_status": "see_note"
+    },
+    {
+      "url": "https://cafe.naver.com/kig/19084242",
+      "mentioned_in": [
+        "notes/east_research_notes.md"
       ],
       "access_status": "see_note"
     },
@@ -76,6 +97,82 @@
     },
     {
       "url": "https://file.kbland.kr/image/kbstar/land/img/alian/kms/complex/photo/objctidnfr/3304/MzMwNDEwMDExNTY5NzI%3D.jpg",
+      "mentioned_in": [
+        "notes/east_research_notes.md"
+      ],
+      "access_status": "see_note"
+    },
+    {
+      "url": "https://fin.land.naver.com/articles/2643573813",
+      "mentioned_in": [
+        "notes/current_listing_observations.md",
+        "notes/future_research_lab_notes.md"
+      ],
+      "access_status": "see_note"
+    },
+    {
+      "url": "https://fin.land.naver.com/articles/2645025341",
+      "mentioned_in": [
+        "notes/east_research_notes.md",
+        "notes/future_research_lab_notes.md"
+      ],
+      "access_status": "see_note"
+    },
+    {
+      "url": "https://fin.land.naver.com/articles/2645632265",
+      "mentioned_in": [
+        "notes/current_listing_observations.md"
+      ],
+      "access_status": "see_note"
+    },
+    {
+      "url": "https://fin.land.naver.com/articles/2646260962",
+      "mentioned_in": [
+        "notes/east_research_notes.md",
+        "notes/future_research_lab_notes.md"
+      ],
+      "access_status": "see_note"
+    },
+    {
+      "url": "https://fin.land.naver.com/articles/2648252775",
+      "mentioned_in": [
+        "notes/east_research_notes.md"
+      ],
+      "access_status": "see_note"
+    },
+    {
+      "url": "https://fin.land.naver.com/articles/2648730027",
+      "mentioned_in": [
+        "notes/current_listing_observations.md"
+      ],
+      "access_status": "see_note"
+    },
+    {
+      "url": "https://fin.land.naver.com/articles/2648887565",
+      "mentioned_in": [
+        "notes/current_listing_observations.md",
+        "notes/east_research_notes.md",
+        "notes/future_research_lab_notes.md"
+      ],
+      "access_status": "see_note"
+    },
+    {
+      "url": "https://fin.land.naver.com/articles/2648995274",
+      "mentioned_in": [
+        "notes/current_listing_observations.md",
+        "notes/future_research_lab_notes.md"
+      ],
+      "access_status": "see_note"
+    },
+    {
+      "url": "https://fin.land.naver.com/complexes/1660?tab=article&articleTradeTypes=A1&articlePyeongTypeNumbers=3&isVilla=false",
+      "mentioned_in": [
+        "notes/current_listing_observations.md"
+      ],
+      "access_status": "see_note"
+    },
+    {
+      "url": "https://fin.land.naver.com/complexes/1661",
       "mentioned_in": [
         "notes/east_research_notes.md"
       ],
@@ -234,6 +331,7 @@
     {
       "url": "https://kbland.kr/se/c/2883",
       "mentioned_in": [
+        "notes/current_listing_observations.md",
         "notes/east_research_notes.md",
         "notes/future_research_lab_notes.md",
         "notes/model_audit_notes.md"
@@ -537,6 +635,13 @@
       "access_status": "see_note"
     },
     {
+      "url": "https://www.bok.or.kr/portal/bbs/B0000501/view.do?depth=201264&menuNo=201264&nttId=11064110&programType=newsData&relate=Y",
+      "mentioned_in": [
+        "notes/macro_policy_notes.md"
+      ],
+      "access_status": "see_note"
+    },
+    {
       "url": "https://www.bok.or.kr/portal/bbs/P0000559/view.do?nttId=11064191&menuNo=200690&programType=newsData&relate=Y&depth=200690",
       "mentioned_in": [
         "notes/future_research_lab_notes.md",
@@ -552,6 +657,13 @@
       "access_status": "see_note"
     },
     {
+      "url": "https://www.fsc.go.kr/no010101/84617",
+      "mentioned_in": [
+        "notes/macro_policy_notes.md"
+      ],
+      "access_status": "see_note"
+    },
+    {
       "url": "https://www.fsc.go.kr/no010101/86606",
       "mentioned_in": [
         "notes/macro_policy_notes.md"
@@ -561,6 +673,14 @@
     {
       "url": "https://www.fsc.go.kr/no010101/87222",
       "mentioned_in": [
+        "notes/future_research_lab_notes.md",
+        "notes/macro_policy_notes.md"
+      ],
+      "access_status": "see_note"
+    },
+    {
+      "url": "https://www.fsc.go.kr/no010101/87517",
+      "mentioned_in": [
         "notes/macro_policy_notes.md"
       ],
       "access_status": "see_note"
@@ -568,6 +688,7 @@
     {
       "url": "https://www.fsc.go.kr/no010101/87543",
       "mentioned_in": [
+        "notes/future_research_lab_notes.md",
         "notes/macro_policy_notes.md"
       ],
       "access_status": "see_note"
@@ -575,6 +696,7 @@
     {
       "url": "https://www.fsc.go.kr/no010101/87674",
       "mentioned_in": [
+        "notes/future_research_lab_notes.md",
         "notes/macro_policy_notes.md"
       ],
       "access_status": "see_note"
@@ -582,6 +704,7 @@
     {
       "url": "https://www.fsc.go.kr/no010101/87675",
       "mentioned_in": [
+        "notes/future_research_lab_notes.md",
         "notes/macro_policy_notes.md"
       ],
       "access_status": "see_note"
@@ -625,6 +748,20 @@
       "url": "https://www.hankyung.com/article/202609106839i",
       "mentioned_in": [
         "notes/commute_research_notes.md"
+      ],
+      "access_status": "see_note"
+    },
+    {
+      "url": "https://www.hf.go.kr/ko/sub01/sub01_01_01.do",
+      "mentioned_in": [
+        "notes/macro_policy_notes.md"
+      ],
+      "access_status": "see_note"
+    },
+    {
+      "url": "https://www.hf.go.kr/ko/sub01/sub01_02_01.do",
+      "mentioned_in": [
+        "notes/macro_policy_notes.md"
       ],
       "access_status": "see_note"
     },
@@ -714,6 +851,7 @@
       "url": "https://zippoom.com/부동산/경기-군포시-산본동-래미안하이어스/bri1xr",
       "mentioned_in": [
         "notes/commute_research_notes.md",
+        "notes/current_listing_observations.md",
         "notes/future_research_lab_notes.md",
         "notes/model_audit_notes.md"
       ],
