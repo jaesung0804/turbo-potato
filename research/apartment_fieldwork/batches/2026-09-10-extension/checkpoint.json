@@ -1,0 +1,52 @@
+{
+  "research_phase": "extension",
+  "batch_date": "2026-09-10",
+  "checkpoint_number": 19,
+  "snapshot_started_from_commit": "d96f53018d12d42566dfe37992bcf08fd21db2d9",
+  "saved_at": "2026-09-10T09:42:51+00:00",
+  "status": "additional_research_in_progress",
+  "method": "public_online_sources",
+  "model_eligible": false,
+  "note_files": 5,
+  "referenced_public_url_count": 22,
+  "extension_structured_claim_count": 0,
+  "previous_batch_structured_claim_count": 64,
+  "files": {
+    "README.md": {
+      "bytes": 5467,
+      "sha256": "8635bf7a88dddbc474dd9a3ff87963b046af62e614076b10397595aba381660b"
+    },
+    "batches/2026-09-10-extension/README.md": {
+      "bytes": 1561,
+      "sha256": "3b7d6f9527c298fb48752c75a15a8eea0d0e17e29b18265e646f013c83e73445"
+    },
+    "batches/2026-09-10-extension/source_catalog.json": {
+      "bytes": 5587,
+      "sha256": "46e8cd7c5935c2c02e8ac5e5051e282e54bf3fad6018af84e9324b70618fc438"
+    },
+    "batches/2026-09-10-extension/notes/east_extension_20260910.md": {
+      "bytes": 3855,
+      "sha256": "dd3363c1b05a46a33fd2693ba4fe6c407579a631d510a04ab3fc59e5ed58281e"
+    },
+    "batches/2026-09-10-extension/notes/future_extension_20260910.md": {
+      "bytes": 26708,
+      "sha256": "6ffce9bac03837b01bf27464ef780a47a4120b97035e9fce6591d3eecc0100f6"
+    },
+    "batches/2026-09-10-extension/notes/model_listing_extension_20260910.md": {
+      "bytes": 5076,
+      "sha256": "9309c9ec0d0b0ef96118ecc4fd6318a06d82b394db38fc98ced591fab368bbc1"
+    },
+    "batches/2026-09-10-extension/notes/ranking_engine_v2_changes.md": {
+      "bytes": 2226,
+      "sha256": "16591942077d3910b7233b9226277e5ffbf453056412aa021caf16236a005b94"
+    },
+    "batches/2026-09-10-extension/notes/transport_measurement_extension_20260910.md": {
+      "bytes": 7828,
+      "sha256": "8f8d91c01f8ec4c7cd7450b20ffb2c1f0e1689e7283d5f0d7597f49ca3d8f442"
+    },
+    "tools/ranking_engine_v2.py": {
+      "bytes": 10691,
+      "sha256": "8a4f9d20d8b3568749fee326e0c573977998e9297643fc49118f1e9d35cdadf9"
+    }
+  }
+}

@@ -1,0 +1,162 @@
+{
+  "research_phase": "extension",
+  "url_count": 22,
+  "description": "Referenced URLs only; see each note for access, date, scope and confidence. Not a count of independent verified sources.",
+  "sources": [
+    {
+      "url": "https://fin.land.naver.com/articles/2645321058",
+      "mentioned_in": [
+        "notes/model_listing_extension_20260910.md"
+      ],
+      "access_status": "see_note"
+    },
+    {
+      "url": "https://fin.land.naver.com/articles/2646745616",
+      "mentioned_in": [
+        "notes/model_listing_extension_20260910.md"
+      ],
+      "access_status": "see_note"
+    },
+    {
+      "url": "https://fin.land.naver.com/articles/2647168951",
+      "mentioned_in": [
+        "notes/future_extension_20260910.md"
+      ],
+      "access_status": "see_note"
+    },
+    {
+      "url": "https://fin.land.naver.com/articles/2647778269",
+      "mentioned_in": [
+        "notes/future_extension_20260910.md"
+      ],
+      "access_status": "see_note"
+    },
+    {
+      "url": "https://fin.land.naver.com/articles/2648252775",
+      "mentioned_in": [
+        "notes/future_extension_20260910.md"
+      ],
+      "access_status": "see_note"
+    },
+    {
+      "url": "https://fin.land.naver.com/articles/2648995274",
+      "mentioned_in": [
+        "notes/east_extension_20260910.md",
+        "notes/future_extension_20260910.md"
+      ],
+      "access_status": "see_note"
+    },
+    {
+      "url": "https://fin.land.naver.com/complexes/1621",
+      "mentioned_in": [
+        "notes/model_listing_extension_20260910.md"
+      ],
+      "access_status": "see_note"
+    },
+    {
+      "url": "https://github.com/jaesung0804/turbo-potato/blob/b2a92f8b4439766a2568ef0460c5753ac4903c8d/estate_valuation.py",
+      "mentioned_in": [
+        "notes/future_extension_20260910.md"
+      ],
+      "access_status": "see_note"
+    },
+    {
+      "url": "https://github.com/jaesung0804/turbo-potato/tree/b2a92f8b4439766a2568ef0460c5753ac4903c8d",
+      "mentioned_in": [
+        "notes/model_listing_extension_20260910.md"
+      ],
+      "access_status": "see_note"
+    },
+    {
+      "url": "https://jaesung0804.github.io/turbo-potato/",
+      "mentioned_in": [
+        "notes/model_listing_extension_20260910.md"
+      ],
+      "access_status": "see_note"
+    },
+    {
+      "url": "https://jaesung0804.github.io/turbo-potato/data/dashboard_manifest.json",
+      "mentioned_in": [
+        "notes/future_extension_20260910.md"
+      ],
+      "access_status": "see_note"
+    },
+    {
+      "url": "https://map.naver.com/p/directions/3zoAaU,2ANRWi,%EC%9D%B8%EC%B0%BD%ED%8F%AC%EB%A0%88%EB%A6%AC%EC%9B%80%EC%95%84%ED%8C%8C%ED%8A%B8,18159459,PLACE_POI/3zfop5,2AK9Yz,%EC%97%AC%EC%9D%98%EB%8F%84%EC%97%AD%205%ED%98%B8%EC%84%A0,526,SUBWAY_STATION/-/transit?c=11.00,0,0,0,dh",
+      "mentioned_in": [
+        "notes/transport_measurement_extension_20260910.md"
+      ],
+      "access_status": "see_note"
+    },
+    {
+      "url": "https://map.naver.com/p/directions/3zoAaU,2ANRWi,%EC%9D%B8%EC%B0%BD%ED%8F%AC%EB%A0%88%EB%A6%AC%EC%9B%80%EC%95%84%ED%8C%8C%ED%8A%B8,18159459,PLACE_POI/3zhqqF,2ALByS,%EC%84%9C%EC%9A%B8%EC%97%AD%201%ED%98%B8%EC%84%A0,133,SUBWAY_STATION/-/transit?c=11.00,0,0,0,dh",
+      "mentioned_in": [
+        "notes/transport_measurement_extension_20260910.md"
+      ],
+      "access_status": "see_note"
+    },
+    {
+      "url": "https://map.naver.com/p/directions/3zoAaU,2ANRWi,%EC%9D%B8%EC%B0%BD%ED%8F%AC%EB%A0%88%EB%A6%AC%EC%9B%80%EC%95%84%ED%8C%8C%ED%8A%B8,18159459,PLACE_POI/3zjKf0,2AJaFo,%EA%B0%95%EB%82%A8%EC%97%AD%202%ED%98%B8%EC%84%A0,222,SUBWAY_STATION/-/transit?c=11.00,0,0,0,dh",
+      "mentioned_in": [
+        "notes/transport_measurement_extension_20260910.md"
+      ],
+      "access_status": "see_note"
+    },
+    {
+      "url": "https://map.naver.com/p/directions/3zq9qi,2AM7ir,%EB%AF%B8%EC%82%AC%EA%B0%95%EB%B3%80%EB%A3%A8%EB%82%98%EB%A6%AC%EC%9B%80%EC%95%84%ED%8C%8C%ED%8A%B8,32875531,PLACE_POI/3zjKf0,2AJaFo,%EA%B0%95%EB%82%A8%EC%97%AD%202%ED%98%B8%EC%84%A0,222,SUBWAY_STATION/-/transit?c=15.00,0,0,0,dh",
+      "mentioned_in": [
+        "notes/transport_measurement_extension_20260910.md"
+      ],
+      "access_status": "see_note"
+    },
+    {
+      "url": "https://www.bok.or.kr/portal/bbs/P0000559/view.do?nttId=11064191&menuNo=200690&programType=newsData&relate=Y&depth=200690",
+      "mentioned_in": [
+        "notes/future_extension_20260910.md"
+      ],
+      "access_status": "see_note"
+    },
+    {
+      "url": "https://www.fsc.go.kr/no010101/87517",
+      "mentioned_in": [
+        "notes/future_extension_20260910.md"
+      ],
+      "access_status": "see_note"
+    },
+    {
+      "url": "https://www.metro9.co.kr/kor/sub01_06_03.do",
+      "mentioned_in": [
+        "notes/transport_measurement_extension_20260910.md"
+      ],
+      "access_status": "see_note"
+    },
+    {
+      "url": "https://www.metro9.co.kr/prog/elvtrMaster/kor/sub01_10/search.do",
+      "mentioned_in": [
+        "notes/transport_measurement_extension_20260910.md"
+      ],
+      "access_status": "see_note"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=5rDpNtMzNEs",
+      "mentioned_in": [
+        "notes/east_extension_20260910.md"
+      ],
+      "access_status": "see_note"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=AagA5YhcHh0",
+      "mentioned_in": [
+        "notes/east_extension_20260910.md"
+      ],
+      "access_status": "see_note"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=IxQCtn1XGcA",
+      "mentioned_in": [
+        "notes/east_extension_20260910.md"
+      ],
+      "access_status": "see_note"
+    }
+  ]
+}
