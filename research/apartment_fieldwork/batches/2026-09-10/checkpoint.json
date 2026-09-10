@@ -1,8 +1,8 @@
 {
   "schema_version": "1.0",
   "batch_date": "2026-09-10",
-  "checkpoint_number": 9,
-  "saved_at": "2026-09-10T08:18:41+00:00",
+  "checkpoint_number": 10,
+  "saved_at": "2026-09-10T08:20:40+00:00",
   "status": "research_in_progress",
   "method": "public_online_sources",
   "model_eligible": false,
@@ -19,8 +19,8 @@
       "sha256": "55f0f51a7c354ba72075363009744f8a8f298db11258057cd51dac055828951c"
     },
     "batches/2026-09-10/notes/commute_research_notes.md": {
-      "bytes": 18283,
-      "sha256": "ed7e2bb71d5fe7da6899ab39528c4245588d75c7df1c80626b18389613fec1c2"
+      "bytes": 20702,
+      "sha256": "0d3a26c8c80b1084e77988597a812f23d078074715a06be079204667927fce90"
     },
     "batches/2026-09-10/notes/east_research_notes.md": {
       "bytes": 15482,
@@ -39,8 +39,8 @@
       "sha256": "5557a95299510f3c4cda63c874ed7de7f5d87bd73616f93966d72212a3f4021e"
     },
     "batches/2026-09-10/source_catalog.json": {
-      "bytes": 13514,
-      "sha256": "52f6c87bb041854d8ea1218860179c5537ffc77ef81dc04ed7bc08f547ebccb3"
+      "bytes": 13918,
+      "sha256": "57eef8740135a88bcb6b95afea20e0a47d678aa7cdf1374f23ee2b23d0e0f6c4"
     },
     "schema/observation.schema.json": {
       "bytes": 4716,
@@ -53,7 +53,7 @@
   },
   "checklist_observation_axes": 26,
   "complexes_with_source_notes": 16,
-  "referenced_public_url_count": 58,
+  "referenced_public_url_count": 59,
   "field_checklist_source_count": 25,
   "inspection_template_version": "1.1",
   "inspection_template_sections": 16

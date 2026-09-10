@@ -1,7 +1,7 @@
 {
   "batch_date": "2026-09-10",
   "meaning": "Referenced public URLs, including unverified image candidates. Mention does not imply original page or image was opened. See each note for access status.",
-  "url_count": 58,
+  "url_count": 59,
   "sources": [
     {
       "url": "https://apt.wiki/wiki/미사강변루나리움",
@@ -184,6 +184,13 @@
       "url": "https://m.richgo.ai/realty/danji/a9TQiNC",
       "mentioned_in": [
         "notes/east_research_notes.md"
+      ],
+      "access_status": "see_note"
+    },
+    {
+      "url": "https://map.naver.com/p/directions/3zfUy4,2ADJpx,%EB%9E%98%EB%AF%B8%EC%95%88%ED%95%98%EC%9D%B4%EC%96%B4%EC%8A%A4%EC%95%84%ED%8C%8C%ED%8A%B8,19270711,PLACE_POI/3zgdbS,2ADTAb,%EA%B8%88%EC%A0%95%EC%97%AD%201%ED%98%B8%EC%84%A0,179,SUBWAY_STATION/-/walk?c=16.00,0,0,0,dh",
+      "mentioned_in": [
+        "notes/commute_research_notes.md"
       ],
       "access_status": "see_note"
     },
