@@ -35,7 +35,6 @@ jobs:
       PYTHONUTF8: '1'
       BACKEND_DATABASE: sqlite
       BACKEND_BLOB_STORE: local
-      BACKEND_DATA_DIR: ${{ runner.temp }}/research-backend-tests
       # Tests use synthetic tokens and temporary files. No project secrets,
       # Oracle Wallet, cloud account, collector credential, or deployment runs here.
     steps:
@@ -43,6 +42,9 @@ jobs:
         with:
           persist-credentials: false
           fetch-depth: 1
+      - name: Configure local test storage on the runner
+        # The runner context is unavailable in job-level env expressions.
+        run: echo "BACKEND_DATA_DIR=$RUNNER_TEMP/research-backend-tests" >> "$GITHUB_ENV"
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
