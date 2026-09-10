@@ -142,6 +142,49 @@
         "galmae_station_ipark_20260910_market_price34"
       ],
       "official_identity_linked": false
+    },
+    {
+      "name": "쌍마한신",
+      "note": "notes/commute_research_notes.md",
+      "study_type": "complex_research",
+      "status": "partial_source_review",
+      "structured_claim_ids": [
+        "ssangma_hanshin_20260806_sale"
+      ],
+      "official_identity_linked": false
+    },
+    {
+      "name": "철산한신아파트",
+      "note": "notes/commute_research_notes.md",
+      "study_type": "complex_research",
+      "status": "partial_source_review",
+      "structured_claim_ids": [
+        "cheolsan_hanshin_20260814_sale",
+        "cheolsan_hanshin_202608_resident_garage_lift_report"
+      ],
+      "official_identity_linked": false
+    },
+    {
+      "name": "산본래미안하이어스",
+      "note": "notes/commute_research_notes.md",
+      "study_type": "complex_research",
+      "status": "partial_source_review",
+      "structured_claim_ids": [
+        "sanbon_raemian_20260907_sale",
+        "sanbon_raemian_202609_floorplan59a"
+      ],
+      "official_identity_linked": false
+    },
+    {
+      "name": "철산주공12단지",
+      "note": "notes/commute_research_notes.md",
+      "study_type": "complex_research",
+      "status": "partial_source_review",
+      "structured_claim_ids": [
+        "cheolsan_jugong12_20260831_sale",
+        "cheolsan_jugong12_202609_underground_parking"
+      ],
+      "official_identity_linked": false
     }
   ]
 }

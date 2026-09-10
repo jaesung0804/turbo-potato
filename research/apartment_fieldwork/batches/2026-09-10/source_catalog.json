@@ -1,7 +1,7 @@
 {
   "batch_date": "2026-09-10",
   "meaning": "Referenced public URLs, including unverified image candidates. Mention does not imply original page or image was opened. See each note for access status.",
-  "url_count": 51,
+  "url_count": 55,
   "sources": [
     {
       "url": "https://apt.wiki/wiki/미사강변루나리움",
@@ -339,9 +339,37 @@
       "access_status": "see_note"
     },
     {
+      "url": "https://zippoom.com/부동산/경기-광명시-철산동-쌍마한신/ejtdw3",
+      "mentioned_in": [
+        "notes/commute_research_notes.md"
+      ],
+      "access_status": "see_note"
+    },
+    {
+      "url": "https://zippoom.com/부동산/경기-광명시-철산동-주공12단지/ov085k",
+      "mentioned_in": [
+        "notes/commute_research_notes.md"
+      ],
+      "access_status": "see_note"
+    },
+    {
+      "url": "https://zippoom.com/부동산/경기-광명시-철산동-한신아파트/pn1k1g",
+      "mentioned_in": [
+        "notes/commute_research_notes.md"
+      ],
+      "access_status": "see_note"
+    },
+    {
       "url": "https://zippoom.com/부동산/경기-구리시-인창동-구리행복마을인창주공4단지/dzrpho",
       "mentioned_in": [
         "notes/east_research_notes.md"
+      ],
+      "access_status": "see_note"
+    },
+    {
+      "url": "https://zippoom.com/부동산/경기-군포시-산본동-래미안하이어스/bri1xr",
+      "mentioned_in": [
+        "notes/commute_research_notes.md"
       ],
       "access_status": "see_note"
     },
