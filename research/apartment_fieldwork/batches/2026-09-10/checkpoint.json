@@ -1,0 +1,34 @@
+{
+  "schema_version": "1.0",
+  "batch_date": "2026-09-10",
+  "checkpoint_number": 1,
+  "saved_at": "2026-09-10T07:57:52+00:00",
+  "status": "research_in_progress",
+  "method": "public_online_sources",
+  "model_eligible": false,
+  "note_files": 2,
+  "structured_claim_count": 11,
+  "validation": "JSON parse/required-fields checked; jsonschema unavailable",
+  "files": {
+    "README.md": {
+      "bytes": 4043,
+      "sha256": "b5f5e7b4d46e2d4d6b84e892e0ffd05e0315dcaeb09cfcd0cc037a390e9cc651"
+    },
+    "batches/2026-09-10/notes/commute_research_notes.md": {
+      "bytes": 7124,
+      "sha256": "b78f6b95c6551ceed17d741937903ec7013f2d158bd36d444f6d305b67322331"
+    },
+    "batches/2026-09-10/notes/east_research_notes.md": {
+      "bytes": 7293,
+      "sha256": "693b121a7114fa2251e733895c67267c227054d803f9adc2666e378ccc5e426e"
+    },
+    "batches/2026-09-10/observations.jsonl": {
+      "bytes": 11066,
+      "sha256": "f5f74ffbd5c470ffcdaaa5f08c0eea06edba19569eb2ba134b3157356593571a"
+    },
+    "schema/observation.schema.json": {
+      "bytes": 4716,
+      "sha256": "8add71467b4837e3176c076992bebff1bc1209af9735c5dcf67f2c0babdc9f8f"
+    }
+  }
+}
