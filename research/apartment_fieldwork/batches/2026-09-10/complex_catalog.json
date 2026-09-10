@@ -168,7 +168,10 @@
       "study_type": "complex_research",
       "status": "partial_source_review",
       "structured_claim_ids": [
-        "ssangma_hanshin_20260806_sale"
+        "ssangma_hanshin_20260806_sale",
+        "ssangma_hanshin_20260910_transit_gangnam",
+        "ssangma_hanshin_20260910_transit_yeouido",
+        "ssangma_hanshin_20260910_transit_seoul"
       ],
       "official_identity_linked": false
     },

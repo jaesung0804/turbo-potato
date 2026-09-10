@@ -1,7 +1,7 @@
 {
   "batch_date": "2026-09-10",
   "meaning": "Referenced public URLs, including unverified image candidates. Mention does not imply original page or image was opened. See each note for access status.",
-  "url_count": 125,
+  "url_count": 126,
   "sources": [
     {
       "url": "https://apt.wiki/wiki/미사강변루나리움",
@@ -441,6 +441,13 @@
     },
     {
       "url": "https://map.naver.com/p/directions/3zd34K,2AIiKP,%EC%B2%A0%EC%82%B0%EC%8C%8D%EB%A7%88%ED%95%9C%EC%8B%A0%EC%95%84%ED%8C%8C%ED%8A%B8,18937233,PLACE_POI/3zfop5,2AK9Yz,%EC%97%AC%EC%9D%98%EB%8F%84%EC%97%AD%205%ED%98%B8%EC%84%A0,526,SUBWAY_STATION/-/transit?c=13.00,0,0,0,dh",
+      "mentioned_in": [
+        "notes/commute_research_notes.md"
+      ],
+      "access_status": "see_note"
+    },
+    {
+      "url": "https://map.naver.com/p/directions/3zd34K,2AIiKP,%EC%B2%A0%EC%82%B0%EC%8C%8D%EB%A7%88%ED%95%9C%EC%8B%A0%EC%95%84%ED%8C%8C%ED%8A%B8,18937233,PLACE_POI/3zhqqF,2ALByS,%EC%84%9C%EC%9A%B8%EC%97%AD%201%ED%98%B8%EC%84%A0,133,SUBWAY_STATION/-/transit?c=12.00,0,0,0,dh",
       "mentioned_in": [
         "notes/commute_research_notes.md"
       ],
