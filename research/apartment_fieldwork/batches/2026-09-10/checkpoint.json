@@ -1,8 +1,8 @@
 {
   "schema_version": "1.0",
   "batch_date": "2026-09-10",
-  "checkpoint_number": 8,
-  "saved_at": "2026-09-10T08:15:41+00:00",
+  "checkpoint_number": 9,
+  "saved_at": "2026-09-10T08:18:41+00:00",
   "status": "research_in_progress",
   "method": "public_online_sources",
   "model_eligible": false,
@@ -27,8 +27,8 @@
       "sha256": "2ca145a0ae370efc9b0d1d6ae6d483d530606beb757dd2d7c8178ee0799d4d7f"
     },
     "batches/2026-09-10/notes/field_checklist_tiers_notes.md": {
-      "bytes": 28345,
-      "sha256": "18e8c960660110ca9bb50242868d2398f9e1f61c7ffc62c796403642d185c9c3"
+      "bytes": 32353,
+      "sha256": "ec92ae1ad147b82b0638449d567fa3b1e93ee854a00196ec8f64dc35665dc0ae"
     },
     "batches/2026-09-10/notes/map_research_notes.md": {
       "bytes": 5487,
@@ -39,22 +39,22 @@
       "sha256": "5557a95299510f3c4cda63c874ed7de7f5d87bd73616f93966d72212a3f4021e"
     },
     "batches/2026-09-10/source_catalog.json": {
-      "bytes": 12885,
-      "sha256": "bb5c16c3f6647286c201e7e38cc3d2799f62265b9350e9aa60d1546b5e85c449"
+      "bytes": 13514,
+      "sha256": "52f6c87bb041854d8ea1218860179c5537ffc77ef81dc04ed7bc08f547ebccb3"
     },
     "schema/observation.schema.json": {
       "bytes": 4716,
       "sha256": "8add71467b4837e3176c076992bebff1bc1209af9735c5dcf67f2c0babdc9f8f"
     },
     "templates/apartment_inspection_template.md": {
-      "bytes": 24109,
-      "sha256": "005a8f054ee1ce9ef28c0a54c3eb7a65d539996f72a44dbf09f63d7d4872d765"
+      "bytes": 26093,
+      "sha256": "945382e2a2f19349ea2b436131e7a871ca7dfc54305657261d174cb9b2717463"
     }
   },
   "checklist_observation_axes": 26,
   "complexes_with_source_notes": 16,
-  "referenced_public_url_count": 55,
-  "field_checklist_source_count": 22,
-  "inspection_template_version": "1.0",
+  "referenced_public_url_count": 58,
+  "field_checklist_source_count": 25,
+  "inspection_template_version": "1.1",
   "inspection_template_sections": 16
 }

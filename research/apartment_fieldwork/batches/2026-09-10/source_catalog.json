@@ -1,7 +1,7 @@
 {
   "batch_date": "2026-09-10",
   "meaning": "Referenced public URLs, including unverified image candidates. Mention does not imply original page or image was opened. See each note for access status.",
-  "url_count": 55,
+  "url_count": 58,
   "sources": [
     {
       "url": "https://apt.wiki/wiki/미사강변루나리움",
@@ -113,6 +113,14 @@
       "url": "https://kbland.kr/se/c/2884",
       "mentioned_in": [
         "notes/east_research_notes.md"
+      ],
+      "access_status": "see_note"
+    },
+    {
+      "url": "https://kbthink.com/house/property-tour.html",
+      "mentioned_in": [
+        "../../templates/apartment_inspection_template.md",
+        "notes/field_checklist_tiers_notes.md"
       ],
       "access_status": "see_note"
     },
@@ -245,9 +253,23 @@
       "access_status": "see_note"
     },
     {
+      "url": "https://weolbu.com/community/308854",
+      "mentioned_in": [
+        "notes/field_checklist_tiers_notes.md"
+      ],
+      "access_status": "see_note"
+    },
+    {
       "url": "https://weolbu.com/community/3724905",
       "mentioned_in": [
         "../../templates/apartment_inspection_template.md",
+        "notes/field_checklist_tiers_notes.md"
+      ],
+      "access_status": "see_note"
+    },
+    {
+      "url": "https://weolbu.com/community/4339183/property-price-timing",
+      "mentioned_in": [
         "notes/field_checklist_tiers_notes.md"
       ],
       "access_status": "see_note"

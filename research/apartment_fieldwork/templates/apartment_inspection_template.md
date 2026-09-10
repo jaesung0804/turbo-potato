@@ -1,6 +1,6 @@
 # 아파트 임장 조사 양식
 
-버전: 1.0 · 작성일: 2026-09-10 · 공개 재사용 양식
+버전: 1.1 · 작성일: 2026-09-10 · 공개 재사용 양식
 
 단지 정보, 동별 공용부, 평면별 구조, 실제 세대 상태를 구분해 기록한다. 아래 `미확인`은 빈칸을 뜻하며, 없다는 뜻이 아니다. 조사한 범위와 원문을 함께 남기고 단일 후기·추정·실측을 구별한다. 개인 예산, 실제 출근지, 연락처, 정확한 동호수와 거주자 정보는 공개 양식에 적지 않는다.
 
@@ -152,7 +152,20 @@
 
 일조 상태는 `방향만 확인 / 날짜 있는 사진 / 차폐 반영 추정 / 현장 관찰 / 미확인`으로 표현한다. 한강 인접은 한강 조망과 구분한다. 조감도·모델하우스·다른 층 사진을 실제 거실 전망으로 표시하지 않는다.
 
-## 7. 소음·진동·냄새
+층별 비교 질문 — 아래는 확인할 질문이며, 해당 층에 문제가 있다는 판정이 아니다.
+
+| 층·위치 조건 | 확인할 차이 | 근거·비교 조건 |
+|---|---|---|
+| 저층·보행로 높이와 비슷한 층 | 보행자 시선, 수목·옹벽 차폐, 현관·놀이터·쓰레기장 소리와 조명 | 실제 창 높이, 동·라인·창 방향, 밤/낮 |
+| 필로티·비난방 공용공간 바로 위 | 아래 공간의 용도, 바닥 체감과 난방·수리 관련 경험 | 아래층 구조 확인, 계절과 실제 후기. 구조만 보고 단열 성능 확정 금지 |
+| 중층 | 앞동 창과의 관계, 앞동·나무 높이, 해당 높이의 전망 | 같은 동의 다른 층과 비교한 자료 |
+| 고층 | 앞동을 넘는 시야인지, 도로·철도 소리, 창 개방 시 바람, 승강기·급수 이용 | 층·창 상태·시간을 명시. 높을수록 조용하거나 수압이 약하다고 일반화 금지 |
+| 최상층·옥상/기계실 인접 | 옥상 용도, 누수·방수보수 이력, 설비 소리, 냉난방 경험 | 대상 세대나 바로 연결된 공용부의 구체적인 기록 |
+| 상가·램프·차단기·공용시설 인접 | 영업·차량·설비 운영과 창·바닥의 관계 | 시설 위치와 실제 운영시간, 관찰 지점 |
+
+동일한 ‘5층’도 경사지나 필로티 때문에 외부 지면과의 높이가 다르다. `표시 층수`와 `주변 지면·장애물 대비 위치`를 별도로 기록한다.
+
+## 7. 소음·진동·냄새·야간 조명
 
 | 소음원·환경 | 확인값 | 근거 ID / 동·층·시간·창 상태 |
 |---|---|---|
@@ -165,6 +178,7 @@
 | 위·옆집 생활 소음·진동 관련 후기 | 미확인 | 미확인 |
 | 인근 공사 기간·작업시간·차량 경로 | 미확인 | 미확인 |
 | 분진·음식·하천·쓰레기·흡연 냄새 | 미확인 | 미확인 |
+| 가로등·상가간판·경관조명의 침실 유입 | 미확인 | 관찰 시각·창 방향·커튼 상태 |
 
 측정 기록이 있다면 `기기/앱, 측정 지점, 측정 시간 길이, 지표와 단위, 창 개폐, 날씨, 소음원`을 같이 적는다. 인접 측정소의 환경소음, 단지 외부 소음, 실내 소음, 층간소음은 다른 자료다. ‘도로가 있어 소음이 날 듯’은 추정이고, ‘후기 없음’은 미확인이다.
 
@@ -306,6 +320,7 @@
 | 욕실별 | `bathrooms[]`: `kind`, `toilet`, `basin`, `shower_space`, `shower_partition`, `bathtub`, `window`, `exhaust_fan`, `drainage_observation`, `odor_observation`, `evidence_id` |
 | 수납·설비 | `pantry`, `walk_in_closet`, `built_in_storage`, `laundry_space`, `dryer_installation`, `outdoor_unit_room`, `air_conditioning`, `kitchen_appliance_space`, `entrance_step`, `window_replacement_asof` |
 | 동·공용부 | `access_layout`, `households_per_floor_per_core`, `elevator_count_per_core`, `elevator_served_floors`, `corridor_weather_exposure`, `step_free_entrance_route` |
+| 층별 위치 | `floor_number`, `floor_band`, `height_relative_to_ground`, `below_space_use`, `above_space_use`, `roof_adjacency`, `mechanical_room_adjacency`, `nearby_facility_scope` |
 | 주차 | `parking_total`, `parking_ground`, `parking_underground`, `parking_mechanical`, `garage_exists`, `garage_lift_connected`, `garage_connection_scope`, `garage_step_free_route`, `garage_weather_protected_route`, `garage_clearance_m`, `visitor_parking_rules`, `ev_charging_count`, `night_parking_observation` |
 | 일조·조망 | `living_room_azimuth`, `bedroom_azimuths`, `daylight_evidence_type`, `solar_reference_date`, `shading_obstacles`, `view_type`, `view_extent`, `view_room_scope`, `view_floor_scope`, `privacy_obstruction` |
 | 소음·실내 | `noise_source`, `noise_evidence_type`, `window_state`, `measurement_metric`, `measurement_duration_min`, `measurement_device`, `noise_value`, `noise_unit`, `water_pressure_observation`, `drainage_observation`, `leak_observation`, `condensation_observation`, `telecom_observation` |
@@ -316,6 +331,7 @@
 
 ## 참고한 공개 원문
 
+- [KB Think: 임장 유형·체크리스트](https://kbthink.com/house/property-tour.html) — 단지/매물 범위, 동선과 촬영 시각, 낮/밤·평일/주말 비교.
 - [월부: 집 볼 때 확인할 입지·현장 항목](https://weolbu.com/community/3724905) — 직장·교통·환경과 현관~승강장, 환승, 소음 등의 실무 관점.
 - [월부: 매물 방문과 기록 방법](https://weolbu.com/community/182188) — 평형·향·동·층·조망·누수·배수·수리 상태 기록.
 - [국가소음정보시스템](https://www.noiseinfo.or.kr/index.jsp) — 인접 측정망·실시간값의 범위.
