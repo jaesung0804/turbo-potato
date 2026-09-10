@@ -1,39 +1,44 @@
 {
   "schema_version": "1.0",
   "batch_date": "2026-09-10",
-  "checkpoint_number": 2,
-  "saved_at": "2026-09-10T07:59:26+00:00",
+  "checkpoint_number": 3,
+  "saved_at": "2026-09-10T08:01:48+00:00",
   "status": "research_in_progress",
   "method": "public_online_sources",
   "model_eligible": false,
   "note_files": 3,
-  "structured_claim_count": 11,
-  "validation": "JSON parse/required-fields checked; jsonschema unavailable",
+  "structured_claim_count": 19,
+  "validation": "JSON parsed; required fields, unique claim IDs, model_eligible=false and URL presence checked",
   "files": {
     "README.md": {
       "bytes": 4043,
       "sha256": "b5f5e7b4d46e2d4d6b84e892e0ffd05e0315dcaeb09cfcd0cc037a390e9cc651"
+    },
+    "batches/2026-09-10/complex_catalog.json": {
+      "bytes": 2977,
+      "sha256": "b0c906a4c49ad2c757fbad52c11abc0b4d8652978da0ca3f1443fd9a0f244ada"
     },
     "batches/2026-09-10/notes/commute_research_notes.md": {
       "bytes": 7124,
       "sha256": "b78f6b95c6551ceed17d741937903ec7013f2d158bd36d444f6d305b67322331"
     },
     "batches/2026-09-10/notes/east_research_notes.md": {
-      "bytes": 7293,
-      "sha256": "693b121a7114fa2251e733895c67267c227054d803f9adc2666e378ccc5e426e"
+      "bytes": 10680,
+      "sha256": "9e1095b7b588c799daa823d09207cfea5aca1deb57f6cf2de8a8624507f8f36d"
     },
     "batches/2026-09-10/notes/field_checklist_tiers_notes.md": {
       "bytes": 19352,
       "sha256": "f3555c33db1c830389036cafef74dd7f20ef85daca85839bc46ad6419a924fa8"
     },
     "batches/2026-09-10/observations.jsonl": {
-      "bytes": 11066,
-      "sha256": "f5f74ffbd5c470ffcdaaa5f08c0eea06edba19569eb2ba134b3157356593571a"
+      "bytes": 18760,
+      "sha256": "a17fffe8fef1722487db6cb2e0a1006603b178f721e90cd313caf70931d836f0"
     },
     "schema/observation.schema.json": {
       "bytes": 4716,
       "sha256": "8add71467b4837e3176c076992bebff1bc1209af9735c5dcf67f2c0babdc9f8f"
     }
   },
-  "checklist_observation_axes": 26
+  "checklist_observation_axes": 26,
+  "complexes_with_source_notes": 7
 }

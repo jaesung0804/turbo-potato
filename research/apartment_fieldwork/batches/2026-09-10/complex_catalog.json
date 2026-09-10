@@ -1,0 +1,89 @@
+{
+  "batch_date": "2026-09-10",
+  "scope": "Public-source review, not completed physical inspections",
+  "model_eligible": false,
+  "complexes": [
+    {
+      "name": "동탄역롯데캐슬",
+      "note": "notes/commute_research_notes.md",
+      "study_type": "case_study",
+      "status": "partial_source_review",
+      "structured_claim_ids": [
+        "dongtan_lottecastle_20260604_reported_sale"
+      ],
+      "official_identity_linked": false
+    },
+    {
+      "name": "목동신시가지7단지",
+      "note": "notes/commute_research_notes.md",
+      "study_type": "case_study",
+      "status": "partial_source_review",
+      "structured_claim_ids": [
+        "mokdong7_202607_reported_sale",
+        "mokdong7_202609_parking_resident_report"
+      ],
+      "official_identity_linked": false
+    },
+    {
+      "name": "미사강변푸르지오",
+      "note": "notes/commute_research_notes.md",
+      "study_type": "complex_research",
+      "status": "partial_source_review",
+      "structured_claim_ids": [
+        "misa_prugio_20260818_reported_sale",
+        "misa_prugio_202609_lakeview_asking_report"
+      ],
+      "official_identity_linked": false
+    },
+    {
+      "name": "구리행복마을인창주공4단지",
+      "note": "notes/east_research_notes.md",
+      "study_type": "complex_research",
+      "status": "partial_source_review",
+      "structured_claim_ids": [
+        "inchang4_20260904_kb_estimate",
+        "inchang4_20260825_platform_sale",
+        "inchang4_202609_parking_capacity_conflict",
+        "inchang4_202609_platform_guri_walk"
+      ],
+      "official_identity_linked": false
+    },
+    {
+      "name": "인창포레리움(인창2단지주공)",
+      "note": "notes/east_research_notes.md",
+      "study_type": "complex_research",
+      "status": "partial_source_review",
+      "structured_claim_ids": [
+        "inchang2_20260825_kb_sale",
+        "inchang2_20260904_kb_estimate",
+        "inchang2_202609_parking_capacity_display"
+      ],
+      "official_identity_linked": false
+    },
+    {
+      "name": "미사강변루나리움",
+      "note": "notes/east_research_notes.md",
+      "study_type": "complex_research",
+      "status": "partial_source_review",
+      "structured_claim_ids": [
+        "misa_lunarium_202609_station_310m_unresolved",
+        "misa_lunarium_20260910_platform_price23",
+        "misa_lunarium_202304_floorplan59_dressing_room_report",
+        "misa_lunarium_202304_underground_parking_report",
+        "misa_lunarium_202609_parking_elevator_connection_unknown",
+        "misa_lunarium_202304_school_crossing_report"
+      ],
+      "official_identity_linked": false
+    },
+    {
+      "name": "미사강변센트리버",
+      "note": "notes/east_research_notes.md",
+      "study_type": "complex_research",
+      "status": "partial_source_review",
+      "structured_claim_ids": [
+        "misa_centriver_202304_school_crossing_report"
+      ],
+      "official_identity_linked": false
+    }
+  ]
+}
