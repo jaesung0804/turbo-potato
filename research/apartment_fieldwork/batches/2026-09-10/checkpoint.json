@@ -1,7 +1,7 @@
 {
   "batch_date": "2026-09-10",
   "checklist_observation_axes": 26,
-  "checkpoint_number": 16,
+  "checkpoint_number": 17,
   "complexes_with_source_notes": 16,
   "field_checklist_source_count": 25,
   "files": {
@@ -10,12 +10,12 @@
       "sha256": "07890b11c114355e1de8edf5bb7a0aaff32e7afaa4dc95c56875a4a39285b57c"
     },
     "batches/2026-09-10/complex_catalog.json": {
-      "bytes": 7469,
-      "sha256": "32d9215f39d494bc258e1eda6921fe0d09103873e2937a9998091d324996139e"
+      "bytes": 7573,
+      "sha256": "60140d88e76b0b98a54180031a99190c26019ed2bfadafafdd4c2144b15dcc25"
     },
     "batches/2026-09-10/model_extracts/manifest.json": {
       "bytes": 1477,
-      "sha256": "d064f23927326259c12887427e6abc306090040583f08ca48d04ca8db5ccb47c"
+      "sha256": "ab671765280739fefd59691891ca360778469044a5b52c7737fcb7c5211dc5af"
     },
     "batches/2026-09-10/model_extracts/model_current_candidate_extract.json.gz": {
       "bytes": 32057,
@@ -34,8 +34,8 @@
       "sha256": "53844ada5eb161b316e24605afe0c1fcbafcc10b49117bd7b4286b54103b6f3f"
     },
     "batches/2026-09-10/notes/current_listing_observations.md": {
-      "bytes": 7007,
-      "sha256": "85c7681b00597946bf44100f3bf0eb02107652fbfd6de3e11867c88593fde0d1"
+      "bytes": 9564,
+      "sha256": "209b18f16837f710ecd04deacfa5f86a3a096f200fe531f00b99181509f9e4a6"
     },
     "batches/2026-09-10/notes/east_research_notes.md": {
       "bytes": 26467,
@@ -62,12 +62,12 @@
       "sha256": "70a7f7956123a7acb5e87306c5b91d6f851923657b435fedd6f498e9ce203055"
     },
     "batches/2026-09-10/observations.jsonl": {
-      "bytes": 83928,
-      "sha256": "5fc3164452a06f8318e0875846baacead4e984f8eb1f5a8c89c8a03dc9c3f54e"
+      "bytes": 88306,
+      "sha256": "f4d5b728aed7e5e5d2e30a001b455eae5ba8e506ea111cd15f9a9bb39ce99c35"
     },
     "batches/2026-09-10/source_catalog.json": {
-      "bytes": 33235,
-      "sha256": "72be41b1c237790b55773890b272773c8e1b53824c1fa4f3014a13b98ef06632"
+      "bytes": 34070,
+      "sha256": "1f8ce367c8ff3181f16fe65af39c866b6eccb7f88449f375a2c4b6850b55a6c9"
     },
     "schema/observation.schema.json": {
       "bytes": 4716,
@@ -92,10 +92,10 @@
   "model_eligible": false,
   "model_extract_files": 3,
   "note_files": 8,
-  "referenced_public_url_count": 126,
-  "saved_at": "2026-09-10T08:45:08+00:00",
+  "referenced_public_url_count": 130,
+  "saved_at": "2026-09-10T08:46:34+00:00",
   "schema_version": "1.0",
   "status": "online_review_snapshot_saved_followups_pending",
-  "structured_claim_count": 62,
+  "structured_claim_count": 64,
   "validation": "JSON parsed; required fields, unique claim IDs, model_eligible=false and URL presence checked"
 }
