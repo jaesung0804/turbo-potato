@@ -1,11 +1,22 @@
 {
   "research_phase": "extension",
-  "url_count": 22,
+  "url_count": 37,
   "description": "Referenced URLs only; see each note for access, date, scope and confidence. Not a count of independent verified sources.",
   "sources": [
     {
       "url": "https://fin.land.naver.com/articles/2645321058",
       "mentioned_in": [
+        "model_listing_observations_extension_20260910.jsonl",
+        "notes/future_extension_20260910.md",
+        "notes/model_listing_extension_20260910.md"
+      ],
+      "access_status": "see_note"
+    },
+    {
+      "url": "https://fin.land.naver.com/articles/2646357642",
+      "mentioned_in": [
+        "model_listing_observations_extension_20260910.jsonl",
+        "notes/future_extension_20260910.md",
         "notes/model_listing_extension_20260910.md"
       ],
       "access_status": "see_note"
@@ -13,6 +24,8 @@
     {
       "url": "https://fin.land.naver.com/articles/2646745616",
       "mentioned_in": [
+        "model_listing_observations_extension_20260910.jsonl",
+        "notes/future_extension_20260910.md",
         "notes/model_listing_extension_20260910.md"
       ],
       "access_status": "see_note"
@@ -20,13 +33,23 @@
     {
       "url": "https://fin.land.naver.com/articles/2647168951",
       "mentioned_in": [
+        "notes/east_extension_20260910.md",
         "notes/future_extension_20260910.md"
+      ],
+      "access_status": "see_note"
+    },
+    {
+      "url": "https://fin.land.naver.com/articles/2647277536",
+      "mentioned_in": [
+        "notes/future_extension_20260910.md",
+        "notes/model_listing_extension_20260910.md"
       ],
       "access_status": "see_note"
     },
     {
       "url": "https://fin.land.naver.com/articles/2647778269",
       "mentioned_in": [
+        "notes/commute_extension_20260910.md",
         "notes/future_extension_20260910.md"
       ],
       "access_status": "see_note"
@@ -39,6 +62,15 @@
       "access_status": "see_note"
     },
     {
+      "url": "https://fin.land.naver.com/articles/2648325659",
+      "mentioned_in": [
+        "model_listing_observations_extension_20260910.jsonl",
+        "notes/future_extension_20260910.md",
+        "notes/model_listing_extension_20260910.md"
+      ],
+      "access_status": "see_note"
+    },
+    {
       "url": "https://fin.land.naver.com/articles/2648995274",
       "mentioned_in": [
         "notes/east_extension_20260910.md",
@@ -47,9 +79,51 @@
       "access_status": "see_note"
     },
     {
+      "url": "https://fin.land.naver.com/complexes/101283?tab=complex-info",
+      "mentioned_in": [
+        "notes/commute_extension_20260910.md"
+      ],
+      "access_status": "see_note"
+    },
+    {
+      "url": "https://fin.land.naver.com/complexes/1605?tab=article&articleTradeTypes=A1&articlePyeongTypeNumbers=2&isVilla=false",
+      "mentioned_in": [
+        "notes/model_listing_extension_20260910.md"
+      ],
+      "access_status": "see_note"
+    },
+    {
       "url": "https://fin.land.naver.com/complexes/1621",
       "mentioned_in": [
         "notes/model_listing_extension_20260910.md"
+      ],
+      "access_status": "see_note"
+    },
+    {
+      "url": "https://fin.land.naver.com/map?layer=NobwRAlgJmBcYEMBOAXCBjANgUwPpWxQQkzABowAHZBAWwGc5xk0tsBJGeAJgDYAWAOzCAHHwCcYAL4V62ZOgAWABRoMmUqQF0gA#floor-plan-gallery-3",
+      "mentioned_in": [
+        "notes/commute_extension_20260910.md"
+      ],
+      "access_status": "see_note"
+    },
+    {
+      "url": "https://fin.land.naver.com/map?layer=NobwRAlgJmBcYGMD2BbADgGwKYA8D6UWALgIYQZgA0YaJATiSgM5zjLrY4CSMsAjAAY%2BAJgAcAZgC%2B1JlnoIAFgAV6jFrHAQmANXIYScAGYkMs6qQBGcMEQYA7JiQREISO2EnTNvRKky48NAUkIiQqGlVmVl8OXB44QREJaTBZeWVI9U0dPQNYY1MsTwBdIA#complex-gallery-5",
+      "mentioned_in": [
+        "notes/commute_extension_20260910.md"
+      ],
+      "access_status": "see_note"
+    },
+    {
+      "url": "https://fin.land.naver.com/map?layer=NobwRAlgJmBcYGMD2BbADgGwKYA8D6UWALgIYQZgA0YaJATiSgM5zjLrY4CSMsAjAAY%2BAJgAcAZgC%2B1JlnoIAFgAV6jFrHAQmANXIYScAGYkMs6qQBGcMEQYA7JiQREISO2EnTNvRKky48NAUkIiQqGlVmVl8OXB44QREJaTBZeWVI9U0dPQNYY1MsTwBdIA#complex-gallery-9",
+      "mentioned_in": [
+        "notes/commute_extension_20260910.md"
+      ],
+      "access_status": "see_note"
+    },
+    {
+      "url": "https://fin.land.naver.com/map?layer=NobwRAlgJmBcYGMD2BbADgGwKYA8D6UWALgIYQZgA0YaJATiSgM5zjLrY4CSMsAjAAY%2BAJgAcAZgC%2B1JlnoIAFgAV6jFrHAQmANXIYScAGYkMs6qQBGcRKky4AtBAB2hpFRoBPLEicBzACoeaFgAcgCuKBZYdNZ8YJKSALpAA#floor-plan-gallery-3",
+      "mentioned_in": [
+        "notes/commute_extension_20260910.md"
       ],
       "access_status": "see_note"
     },
@@ -64,6 +138,34 @@
       "url": "https://github.com/jaesung0804/turbo-potato/tree/b2a92f8b4439766a2568ef0460c5753ac4903c8d",
       "mentioned_in": [
         "notes/model_listing_extension_20260910.md"
+      ],
+      "access_status": "see_note"
+    },
+    {
+      "url": "https://info.childcare.go.kr/info/pnis/search/preview/BasisPresentConditionSlPu.jsp?STCODE_POP=41450000342&flag=GH",
+      "mentioned_in": [
+        "notes/childcare_access_extension_20260910.md"
+      ],
+      "access_status": "see_note"
+    },
+    {
+      "url": "https://info.childcare.go.kr/info/pnis/search/preview/ChildStaffSlPu.jsp?STCODE_POP=41450000342&flag=BG",
+      "mentioned_in": [
+        "notes/childcare_access_extension_20260910.md"
+      ],
+      "access_status": "see_note"
+    },
+    {
+      "url": "https://info.childcare.go.kr/info/pnis/search/preview/SummaryInfoSlPu.jsp?STCODE_POP=41450000297&flag=YJ",
+      "mentioned_in": [
+        "notes/childcare_access_extension_20260910.md"
+      ],
+      "access_status": "see_note"
+    },
+    {
+      "url": "https://info.childcare.go.kr/info/pnis/search/preview/SummaryInfoSlPu.jsp?STCODE_POP=41450000342&flag=YJ",
+      "mentioned_in": [
+        "notes/childcare_access_extension_20260910.md"
       ],
       "access_status": "see_note"
     },
@@ -120,6 +222,20 @@
       "url": "https://www.fsc.go.kr/no010101/87517",
       "mentioned_in": [
         "notes/future_extension_20260910.md"
+      ],
+      "access_status": "see_note"
+    },
+    {
+      "url": "https://www.gsamhospital.com/",
+      "mentioned_in": [
+        "notes/childcare_access_extension_20260910.md"
+      ],
+      "access_status": "see_note"
+    },
+    {
+      "url": "https://www.gsamhospital.com/bbs/content.php?co_id=pedmedical",
+      "mentioned_in": [
+        "notes/childcare_access_extension_20260910.md"
       ],
       "access_status": "see_note"
     },

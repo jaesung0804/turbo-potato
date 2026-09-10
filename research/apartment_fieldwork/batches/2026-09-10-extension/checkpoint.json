@@ -1,15 +1,17 @@
 {
   "research_phase": "extension",
   "batch_date": "2026-09-10",
-  "checkpoint_number": 19,
+  "checkpoint_number": 20,
   "snapshot_started_from_commit": "d96f53018d12d42566dfe37992bcf08fd21db2d9",
-  "saved_at": "2026-09-10T09:42:51+00:00",
-  "status": "additional_research_in_progress",
+  "saved_at": "2026-09-10T09:53:21+00:00",
+  "status": "extension_closed_followups_preserved",
   "method": "public_online_sources",
   "model_eligible": false,
-  "note_files": 5,
-  "referenced_public_url_count": 22,
-  "extension_structured_claim_count": 0,
+  "note_files": 7,
+  "referenced_public_url_count": 37,
+  "extension_listing_record_count": 4,
+  "extension_record_schema": "provisional_listing_observation_v1",
+  "extension_independent_property_count": null,
   "previous_batch_structured_claim_count": 64,
   "files": {
     "README.md": {
@@ -17,24 +19,32 @@
       "sha256": "8635bf7a88dddbc474dd9a3ff87963b046af62e614076b10397595aba381660b"
     },
     "batches/2026-09-10-extension/README.md": {
-      "bytes": 1561,
-      "sha256": "3b7d6f9527c298fb48752c75a15a8eea0d0e17e29b18265e646f013c83e73445"
+      "bytes": 1844,
+      "sha256": "93f2ff1ce9ee8634cceea7d7bbd90d7165d951c56c16407f2dd37bc322b8ba04"
     },
     "batches/2026-09-10-extension/source_catalog.json": {
-      "bytes": 5587,
-      "sha256": "46e8cd7c5935c2c02e8ac5e5051e282e54bf3fad6018af84e9324b70618fc438"
+      "bytes": 10102,
+      "sha256": "c84543b5f1a1039b6652a3928f8a9c157663f95f6fef7a10b3b3adc7b88100d5"
+    },
+    "batches/2026-09-10-extension/notes/childcare_access_extension_20260910.md": {
+      "bytes": 8064,
+      "sha256": "dc5b3c48179a1cba2d6014f8ebe0c589ff3a95be3a8141af90e2c43f5284b8fa"
+    },
+    "batches/2026-09-10-extension/notes/commute_extension_20260910.md": {
+      "bytes": 10219,
+      "sha256": "ab2231b2a5fba8461fb448a08a64e08e4189c504917fa731dbda7be1f9333f5e"
     },
     "batches/2026-09-10-extension/notes/east_extension_20260910.md": {
-      "bytes": 3855,
-      "sha256": "dd3363c1b05a46a33fd2693ba4fe6c407579a631d510a04ab3fc59e5ed58281e"
+      "bytes": 7546,
+      "sha256": "6d96e462cba358f4b8ddd541f83f98c266a5db9195eb4b02e4df381fcd2d0f5c"
     },
     "batches/2026-09-10-extension/notes/future_extension_20260910.md": {
-      "bytes": 26708,
-      "sha256": "6ffce9bac03837b01bf27464ef780a47a4120b97035e9fce6591d3eecc0100f6"
+      "bytes": 35151,
+      "sha256": "862675b4d20bec098570d89bdf5776f1a623142b206123aeefa48bda5768c0f0"
     },
     "batches/2026-09-10-extension/notes/model_listing_extension_20260910.md": {
-      "bytes": 5076,
-      "sha256": "9309c9ec0d0b0ef96118ecc4fd6318a06d82b394db38fc98ced591fab368bbc1"
+      "bytes": 11904,
+      "sha256": "7dc27d3b802203af4d2ba6f7024bd3845442f078e8032468523bc9a45afe0bc8"
     },
     "batches/2026-09-10-extension/notes/ranking_engine_v2_changes.md": {
       "bytes": 2226,
@@ -43,6 +53,10 @@
     "batches/2026-09-10-extension/notes/transport_measurement_extension_20260910.md": {
       "bytes": 7828,
       "sha256": "8f8d91c01f8ec4c7cd7450b20ffb2c1f0e1689e7283d5f0d7597f49ca3d8f442"
+    },
+    "batches/2026-09-10-extension/model_listing_observations_extension_20260910.jsonl": {
+      "bytes": 12981,
+      "sha256": "dd882cc17a93d895505fe81beae1b105b88e73b780e10f5455db1d22ec1c8548"
     },
     "tools/ranking_engine_v2.py": {
       "bytes": 10691,

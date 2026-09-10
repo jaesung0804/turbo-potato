@@ -4,6 +4,8 @@
 
 ## 기록 목록
 
+- [childcare_access_extension_20260910](notes/childcare_access_extension_20260910.md)
+- [commute_extension_20260910](notes/commute_extension_20260910.md)
 - [east_extension_20260910](notes/east_extension_20260910.md)
 - [future_extension_20260910](notes/future_extension_20260910.md)
 - [model_listing_extension_20260910](notes/model_listing_extension_20260910.md)
@@ -11,6 +13,7 @@
 - [transport_measurement_extension_20260910](notes/transport_measurement_extension_20260910.md)
 
 - [조사 도구 v2](../../tools/ranking_engine_v2.py)
+- [연장 광고 레코드 4개](model_listing_observations_extension_20260910.jsonl) — 독립 물건 4건을 뜻하지 않음
 - [저장 체크포인트](checkpoint.json)
 - [참조 URL 목록](source_catalog.json)
 - [앞선 조사 묶음](../2026-09-10/checkpoint.json)
