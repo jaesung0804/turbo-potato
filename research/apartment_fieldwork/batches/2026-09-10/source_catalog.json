@@ -1,0 +1,336 @@
+{
+  "batch_date": "2026-09-10",
+  "meaning": "Referenced public URLs, including unverified image candidates. Mention does not imply original page or image was opened. See each note for access status.",
+  "url_count": 47,
+  "sources": [
+    {
+      "url": "https://apt.wiki/wiki/미사강변루나리움",
+      "mentioned_in": [
+        "notes/east_research_notes.md"
+      ],
+      "access_status": "see_note"
+    },
+    {
+      "url": "https://apt.wiki/wiki/인창2단지주공",
+      "mentioned_in": [
+        "notes/east_research_notes.md"
+      ],
+      "access_status": "see_note"
+    },
+    {
+      "url": "https://astro.kasi.re.kr/life/pageView/10",
+      "mentioned_in": [
+        "notes/field_checklist_tiers_notes.md"
+      ],
+      "access_status": "see_note"
+    },
+    {
+      "url": "https://blog.naver.com/eat_iiiiing/224101115700",
+      "mentioned_in": [
+        "notes/map_research_notes.md"
+      ],
+      "access_status": "see_note"
+    },
+    {
+      "url": "https://blog.naver.com/film033/223861291885",
+      "mentioned_in": [
+        "notes/map_research_notes.md"
+      ],
+      "access_status": "see_note"
+    },
+    {
+      "url": "https://file.kbland.kr/image/kbstar/land/img/alian/kms/complex/photo/objctidnfr/3304/MzMwNDEwMDExNTY3NzI%3D.jpg",
+      "mentioned_in": [
+        "notes/east_research_notes.md"
+      ],
+      "access_status": "see_note"
+    },
+    {
+      "url": "https://file.kbland.kr/image/kbstar/land/img/alian/kms/complex/photo/objctidnfr/3304/MzMwNDEwMDExNTY4NzI%3D.jpg",
+      "mentioned_in": [
+        "notes/east_research_notes.md"
+      ],
+      "access_status": "see_note"
+    },
+    {
+      "url": "https://jeannestory.tistory.com/entry/%EA%B4%91%EB%AA%85-%EC%9E%84%EC%9E%A5%EA%B4%91%EB%AA%85%EB%89%B4%ED%83%80%EC%9A%B4-%EA%B4%91%EB%AA%85%EB%8F%99-%EC%B2%A0%EC%82%B0%EB%8F%99-%ED%95%98%EC%95%88%EB%8F%99-%EC%86%8C%ED%95%98%EB%8F%99",
+      "mentioned_in": [
+        "notes/field_checklist_tiers_notes.md"
+      ],
+      "access_status": "see_note"
+    },
+    {
+      "url": "https://jeannestory.tistory.com/entry/%EB%B3%84%EB%82%B4-%EA%B0%88%EB%A7%A4-%EC%9E%84%EC%9E%A5-%ED%9B%84%EA%B8%B0",
+      "mentioned_in": [
+        "notes/field_checklist_tiers_notes.md"
+      ],
+      "access_status": "see_note"
+    },
+    {
+      "url": "https://jeannestory.tistory.com/entry/%EB%B6%80%EB%8F%99%EC%82%B0-%EA%B8%89%EC%A7%80-%EA%B5%AC%EB%B6%84",
+      "mentioned_in": [
+        "notes/field_checklist_tiers_notes.md"
+      ],
+      "access_status": "see_note"
+    },
+    {
+      "url": "https://jeannestory.tistory.com/entry/%EC%84%9C%EC%9A%B8-%EA%B0%95%EC%84%9C%EA%B5%AC-%EB%A7%88%EA%B3%A1-%EA%B0%80%EC%96%91-%EC%9E%84%EC%9E%A5",
+      "mentioned_in": [
+        "notes/field_checklist_tiers_notes.md"
+      ],
+      "access_status": "see_note"
+    },
+    {
+      "url": "https://jeannestory.tistory.com/entry/%EC%84%9C%EC%9A%B8-%EC%B0%BD%EC%8B%A0%EC%97%AD-%EC%9D%B8%EA%B7%BC-%EC%95%84%ED%8C%8C%ED%8A%B8-%EC%9E%84%EC%9E%A5%EC%B0%BD%EC%8B%A0%EC%8C%8D%EC%9A%A912%EB%8B%A8%EC%A7%80%EC%82%BC%EC%84%A0%ED%9E%90%EC%8A%A4%ED%85%8C%EC%9D%B4%ED%8A%B8%EC%82%BC%EC%84%A0%EB%8C%80%EC%9A%B0%ED%91%B8%EB%A5%B4%EC%A7%80%EC%98%A4%EC%82%BC%EC%84%A0sk%EB%B7%B0",
+      "mentioned_in": [
+        "notes/field_checklist_tiers_notes.md"
+      ],
+      "access_status": "see_note"
+    },
+    {
+      "url": "https://jeannestory.tistory.com/entry/%EC%86%A1%ED%8C%8C%EA%B5%AC-%EC%9E%84%EC%9E%A5-%EB%B0%A9%EC%9D%B4%EC%97%AD-%EC%98%A4%EA%B8%88%EC%97%AD-%EA%B0%80%EB%9D%BD%EC%8B%9C%EC%9E%A5%EC%97%AD-%EC%86%A1%ED%8C%8C%EC%97%AD-%EC%9D%B8%EA%B7%BC-%EC%9E%84%EC%9E%A5%ED%97%AC%EB%A6%AC%EC%98%A4%EC%8B%9C%ED%8B%B0-%ED%95%98%EB%B9%84%EC%98%A4",
+      "mentioned_in": [
+        "notes/field_checklist_tiers_notes.md"
+      ],
+      "access_status": "see_note"
+    },
+    {
+      "url": "https://kbland.kr/se/c/2883",
+      "mentioned_in": [
+        "notes/east_research_notes.md"
+      ],
+      "access_status": "see_note"
+    },
+    {
+      "url": "https://kbland.kr/se/c/2884",
+      "mentioned_in": [
+        "notes/east_research_notes.md"
+      ],
+      "access_status": "see_note"
+    },
+    {
+      "url": "https://kbthink.com/main/real-estate/real-estate-issue/our-house-issues/2024/our-house-issues-240527.html",
+      "mentioned_in": [
+        "notes/field_checklist_tiers_notes.md"
+      ],
+      "access_status": "see_note"
+    },
+    {
+      "url": "https://kbthink.com/main/real-estate/real-estate-issue/our-house-issues/2025/our-house-issues-250306.html",
+      "mentioned_in": [
+        "notes/field_checklist_tiers_notes.md"
+      ],
+      "access_status": "see_note"
+    },
+    {
+      "url": "https://kbthink.com/realestate/insights/Park-260807.html",
+      "mentioned_in": [
+        "notes/field_checklist_tiers_notes.md"
+      ],
+      "access_status": "see_note"
+    },
+    {
+      "url": "https://land.seoul.go.kr/land/",
+      "mentioned_in": [
+        "notes/field_checklist_tiers_notes.md"
+      ],
+      "access_status": "see_note"
+    },
+    {
+      "url": "https://m.richgo.ai/realty/danji/a0DOYhg",
+      "mentioned_in": [
+        "notes/east_research_notes.md"
+      ],
+      "access_status": "see_note"
+    },
+    {
+      "url": "https://m.richgo.ai/realty/danji/a4LreJX",
+      "mentioned_in": [
+        "notes/east_research_notes.md"
+      ],
+      "access_status": "see_note"
+    },
+    {
+      "url": "https://m.richgo.ai/realty/danji/a9TQiNC",
+      "mentioned_in": [
+        "notes/east_research_notes.md"
+      ],
+      "access_status": "see_note"
+    },
+    {
+      "url": "https://map.naver.com/p/directions/3zq9qi,2AM7ir,%EB%AF%B8%EC%82%AC%EA%B0%95%EB%B3%80%EB%A3%A8%EB%82%98%EB%A6%AC%EC%9B%80%EC%95%84%ED%8C%8C%ED%8A%B8,32875531,PLACE_POI/3zqFG1,2ALU9g,%EB%AF%B8%EC%82%AC%EC%97%AD%205%ED%98%B8%EC%84%A0,555,SUBWAY_STATION/-/walk?c=15.00,0,0,0,dh",
+      "mentioned_in": [
+        "notes/map_research_notes.md"
+      ],
+      "access_status": "see_note"
+    },
+    {
+      "url": "https://misa-5.tistory.com/6",
+      "mentioned_in": [
+        "notes/east_research_notes.md"
+      ],
+      "access_status": "see_note"
+    },
+    {
+      "url": "https://misa-5.tistory.com/8",
+      "mentioned_in": [
+        "notes/east_research_notes.md"
+      ],
+      "access_status": "see_note"
+    },
+    {
+      "url": "https://openapt.seoul.go.kr/portal/index.do",
+      "mentioned_in": [
+        "notes/field_checklist_tiers_notes.md"
+      ],
+      "access_status": "see_note"
+    },
+    {
+      "url": "https://s-apt.seoul.go.kr/goHome.do",
+      "mentioned_in": [
+        "notes/field_checklist_tiers_notes.md"
+      ],
+      "access_status": "see_note"
+    },
+    {
+      "url": "https://urban.seoul.go.kr/view/new/main.html",
+      "mentioned_in": [
+        "notes/field_checklist_tiers_notes.md"
+      ],
+      "access_status": "see_note"
+    },
+    {
+      "url": "https://v.daum.net/v/BJ5ctw5rXR",
+      "mentioned_in": [
+        "notes/east_research_notes.md"
+      ],
+      "access_status": "see_note"
+    },
+    {
+      "url": "https://weolbu.com/community/182188",
+      "mentioned_in": [
+        "notes/field_checklist_tiers_notes.md"
+      ],
+      "access_status": "see_note"
+    },
+    {
+      "url": "https://weolbu.com/community/3724905",
+      "mentioned_in": [
+        "notes/field_checklist_tiers_notes.md"
+      ],
+      "access_status": "see_note"
+    },
+    {
+      "url": "https://weolbu.com/community/4365414/seoul-property-market",
+      "mentioned_in": [
+        "notes/field_checklist_tiers_notes.md"
+      ],
+      "access_status": "see_note"
+    },
+    {
+      "url": "https://weolbu.com/community/4383507/home-buying-basics",
+      "mentioned_in": [
+        "notes/field_checklist_tiers_notes.md"
+      ],
+      "access_status": "see_note"
+    },
+    {
+      "url": "https://www.hankyung.com/article/202608126236i",
+      "mentioned_in": [
+        "notes/commute_research_notes.md"
+      ],
+      "access_status": "see_note"
+    },
+    {
+      "url": "https://www.hankyung.com/article/2026083145991",
+      "mentioned_in": [
+        "notes/commute_research_notes.md"
+      ],
+      "access_status": "see_note"
+    },
+    {
+      "url": "https://www.hankyung.com/article/2026090436616",
+      "mentioned_in": [
+        "notes/commute_research_notes.md"
+      ],
+      "access_status": "see_note"
+    },
+    {
+      "url": "https://www.hankyung.com/article/2026090437546",
+      "mentioned_in": [
+        "notes/commute_research_notes.md"
+      ],
+      "access_status": "see_note"
+    },
+    {
+      "url": "https://www.hankyung.com/article/2026090560377",
+      "mentioned_in": [
+        "notes/commute_research_notes.md"
+      ],
+      "access_status": "see_note"
+    },
+    {
+      "url": "https://www.hankyung.com/article/202609106839i",
+      "mentioned_in": [
+        "notes/commute_research_notes.md"
+      ],
+      "access_status": "see_note"
+    },
+    {
+      "url": "https://www.k-apt.go.kr/web/main/index.do",
+      "mentioned_in": [
+        "notes/field_checklist_tiers_notes.md"
+      ],
+      "access_status": "see_note"
+    },
+    {
+      "url": "https://www.noiseinfo.or.kr/index.jsp",
+      "mentioned_in": [
+        "notes/field_checklist_tiers_notes.md"
+      ],
+      "access_status": "see_note"
+    },
+    {
+      "url": "https://www.noiseinfo.or.kr/inform/noise.do",
+      "mentioned_in": [
+        "notes/field_checklist_tiers_notes.md"
+      ],
+      "access_status": "see_note"
+    },
+    {
+      "url": "https://www.teamblind.com/kr/post/%EA%B2%BD%EA%B8%B0%EB%8F%84-%EC%A0%95%ED%99%95%ED%95%9C-%EA%B8%89%EC%A7%80-%EC%84%9C%EC%97%B4-ZgCVM7jA",
+      "mentioned_in": [
+        "notes/field_checklist_tiers_notes.md"
+      ],
+      "access_status": "see_note"
+    },
+    {
+      "url": "https://zippoom.com/부동산/경기-구리시-인창동-구리행복마을인창주공4단지/dzrpho",
+      "mentioned_in": [
+        "notes/east_research_notes.md"
+      ],
+      "access_status": "see_note"
+    },
+    {
+      "url": "https://zippoom.com/부동산/서울-영등포구-당산동2가-당산대우아파트/u78opd/b",
+      "mentioned_in": [
+        "notes/commute_research_notes.md"
+      ],
+      "access_status": "see_note"
+    },
+    {
+      "url": "https://zippoom.com/부동산/서울-영등포구-당산동3가-당산계룡리슈빌3단지/6qxxgx/매매/21평",
+      "mentioned_in": [
+        "notes/commute_research_notes.md"
+      ],
+      "access_status": "see_note"
+    },
+    {
+      "url": "https://zippoom.com/부동산/서울-영등포구-영등포동7가-영등포경남아너스빌아파트/tl9jfw",
+      "mentioned_in": [
+        "notes/commute_research_notes.md"
+      ],
+      "access_status": "see_note"
+    }
+  ]
+}

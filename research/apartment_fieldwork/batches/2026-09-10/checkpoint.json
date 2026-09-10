@@ -1,8 +1,8 @@
 {
   "schema_version": "1.0",
   "batch_date": "2026-09-10",
-  "checkpoint_number": 4,
-  "saved_at": "2026-09-10T08:03:44+00:00",
+  "checkpoint_number": 5,
+  "saved_at": "2026-09-10T08:06:00+00:00",
   "status": "research_in_progress",
   "method": "public_online_sources",
   "model_eligible": false,
@@ -11,8 +11,8 @@
   "validation": "JSON parsed; required fields, unique claim IDs, model_eligible=false and URL presence checked",
   "files": {
     "README.md": {
-      "bytes": 4043,
-      "sha256": "b5f5e7b4d46e2d4d6b84e892e0ffd05e0315dcaeb09cfcd0cc037a390e9cc651"
+      "bytes": 4496,
+      "sha256": "d64ab963e9777154d35d3a7befcaafb844c2a5dcfbd87f55cc08fb9f7f09d551"
     },
     "batches/2026-09-10/complex_catalog.json": {
       "bytes": 4195,
@@ -27,8 +27,8 @@
       "sha256": "9e1095b7b588c799daa823d09207cfea5aca1deb57f6cf2de8a8624507f8f36d"
     },
     "batches/2026-09-10/notes/field_checklist_tiers_notes.md": {
-      "bytes": 24308,
-      "sha256": "30a620eda8dfb2aae14d6d2bb7c6b4378a8f4b49af81a5bd093427617dcc5fb7"
+      "bytes": 28345,
+      "sha256": "18e8c960660110ca9bb50242868d2398f9e1f61c7ffc62c796403642d185c9c3"
     },
     "batches/2026-09-10/notes/map_research_notes.md": {
       "bytes": 4005,
@@ -38,11 +38,17 @@
       "bytes": 26982,
       "sha256": "4a57af7eb634ebf15b4cf09f8aa0cb1a5500c95b7ca315677851978995edba5a"
     },
+    "batches/2026-09-10/source_catalog.json": {
+      "bytes": 10644,
+      "sha256": "51cf963217e66b56f8acfb92707ef9ee6e1f57d6af8688d12329be494c3f8a0b"
+    },
     "schema/observation.schema.json": {
       "bytes": 4716,
       "sha256": "8add71467b4837e3176c076992bebff1bc1209af9735c5dcf67f2c0babdc9f8f"
     }
   },
   "checklist_observation_axes": 26,
-  "complexes_with_source_notes": 10
+  "complexes_with_source_notes": 10,
+  "referenced_public_url_count": 47,
+  "field_checklist_source_count": 22
 }

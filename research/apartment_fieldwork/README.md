@@ -4,7 +4,12 @@
 
 ## 현재 기록
 
-- [2026-09-10 조사 노트](batches/2026-09-10/notes/)
+- [동부권 단지 조사](batches/2026-09-10/notes/east_research_notes.md)
+- [서남권 단지·가격 변화 사례](batches/2026-09-10/notes/commute_research_notes.md)
+- [지도·보행 경로·사진 출처](batches/2026-09-10/notes/map_research_notes.md)
+- [임장 체크리스트·급지 관행](batches/2026-09-10/notes/field_checklist_tiers_notes.md)
+- [단지별 기록 목록](batches/2026-09-10/complex_catalog.json)
+- [원문·사진 후보 링크 목록](batches/2026-09-10/source_catalog.json)
 - [구조화된 주장](batches/2026-09-10/observations.jsonl)
 - [저장 체크포인트](batches/2026-09-10/checkpoint.json)
 - [주장 스키마](schema/observation.schema.json)
