@@ -1,14 +1,15 @@
 name: Collect complete apartment history
 on:
-  push:
-    branches: [codex/estate-data-recovery]
-    paths: [.github/workflows/estate-collect.yml]
   workflow_dispatch:
 permissions:
   contents: write
 concurrency:
   group: estate-raw-data-update
   cancel-in-progress: false
+env:
+  RESEARCH_STORAGE: ${{ vars.RESEARCH_STORAGE || 'git' }}
+  RESEARCH_BACKEND_URL: ${{ vars.RESEARCH_BACKEND_URL }}
+  RESEARCH_BACKEND_TOKEN: ${{ secrets.RESEARCH_BACKEND_TOKEN }}
 jobs:
   collect:
     strategy:
@@ -23,19 +24,28 @@ jobs:
         with:
           python-version: '3.12'
       - uses: actions/cache/restore@v4
+        if: env.RESEARCH_STORAGE != 'backend'
         with:
           path: data/molit_cache_v3
           key: estate-complete-v4-s${{ matrix.shard }}-${{ github.run_id }}-${{ github.run_attempt }}
           restore-keys: |
             estate-complete-v4-s${{ matrix.shard }}-
             estate-complete-v4-
+      - name: Restore this shard from verified backend checkpoints
+        if: env.RESEARCH_STORAGE == 'backend'
+        env:
+          SHARD: ${{ matrix.shard }}
+        run: |
+          python backend_state.py pull --name estate-raw-state --state-dir .work/raw-state
+          python backend_state.py restore-checkpoints --state-dir .work/raw-state --shard-count 4 --shard-index "$SHARD"
+          python backend_state.py mark-shard --state-dir .work/raw-state --shard-count 4 --shard-index "$SHARD"
       - name: Collect every page in the assigned districts
         env:
           MOLIT_API_KEY: ${{ secrets.MOLIT_API_KEY }}
           SHARD: ${{ matrix.shard }}
         run: python collect_estate_transactions.py --start 202101 --end 202609 --refresh-months 0 --workers 2 --shard-count 4 --shard-index "$SHARD" --use-existing-config
       - name: Preserve completed checkpoints after success or failure
-        if: always()
+        if: always() && env.RESEARCH_STORAGE != 'backend'
         uses: actions/cache/save@v4
         with:
           path: data/molit_cache_v3
@@ -45,7 +55,7 @@ jobs:
         with:
           name: estate-partitions-${{ matrix.shard }}
           path: data/molit_cache_v3/
-          retention-days: 30
+          retention-days: ${{ env.RESEARCH_STORAGE == 'backend' && 1 || 30 }}
           overwrite: true
           compression-level: 0
   assemble:
@@ -62,20 +72,29 @@ jobs:
           pattern: estate-partitions-*
           merge-multiple: true
           path: data/molit_cache_v3
+      - name: Verify all shard origins against the destination before assembly
+        if: env.RESEARCH_STORAGE == 'backend'
+        run: |
+          set -euo pipefail
+          python backend_state.py pull --name estate-raw-state --state-dir .work/raw-state
+          python backend_state.py verify-shards --state-dir .work/raw-state --shard-count 4
       - name: Verify all 83 districts and assemble the complete CSV
         run: python collect_estate_transactions.py --start 202101 --end 202609 --refresh-months 0
       - name: Prepare persistent raw state
         run: |
           set -euo pipefail
-          if [ -n "$(git ls-remote origin refs/heads/estate-raw-state)" ]; then
-            git fetch origin estate-raw-state
-            git worktree add --detach .work/raw-state FETCH_HEAD
-          else
-            git worktree add --detach .work/raw-state HEAD
-            git -C .work/raw-state switch --orphan estate-raw-state
+          if [ "$RESEARCH_STORAGE" != "backend" ]; then
+            if [ -n "$(git ls-remote origin refs/heads/estate-raw-state)" ]; then
+              git fetch origin estate-raw-state
+              git worktree add --detach .work/raw-state FETCH_HEAD
+            else
+              git worktree add --detach .work/raw-state HEAD
+              git -C .work/raw-state switch --orphan estate-raw-state
+            fi
           fi
           python raw_estate_state.py pack --state-dir .work/raw-state
       - uses: actions/upload-artifact@v4
+        if: env.RESEARCH_STORAGE != 'backend'
         with:
           name: complete-estate-state-${{ github.run_id }}-${{ github.run_attempt }}
           path: |
@@ -86,10 +105,15 @@ jobs:
       - name: Save complete state without changing the live site
         run: |
           set -euo pipefail
-          git -C .work/raw-state config user.name github-actions[bot]
-          git -C .work/raw-state config user.email 41898282+github-actions[bot]@users.noreply.github.com
-          git -C .work/raw-state add -A
-          if ! git -C .work/raw-state diff --cached --quiet; then
-            git -C .work/raw-state commit -m 'Save complete apartment history and verified checkpoints'
-            git -C .work/raw-state push origin HEAD:estate-raw-state
+          if [ "$RESEARCH_STORAGE" = "backend" ]; then
+            python backend_state.py push --name estate-raw-state --state-dir .work/raw-state
+            python backend_rows.py --csv data/capital_area_apt_trade_transactions.csv --dataset apt-trades --snapshot-name estate-raw-state --state-dir .work/raw-state
+          else
+            git -C .work/raw-state config user.name github-actions[bot]
+            git -C .work/raw-state config user.email 41898282+github-actions[bot]@users.noreply.github.com
+            git -C .work/raw-state add -A
+            if ! git -C .work/raw-state diff --cached --quiet; then
+              git -C .work/raw-state commit -m 'Save complete apartment history and verified checkpoints'
+              git -C .work/raw-state push origin HEAD:estate-raw-state
+            fi
           fi

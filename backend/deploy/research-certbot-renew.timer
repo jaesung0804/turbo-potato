@@ -1,0 +1,12 @@
+[Unit]
+Description=Check the short-lived IP certificate twice daily
+
+[Timer]
+OnCalendar=*-*-* 00,12:00:00
+RandomizedDelaySec=30min
+AccuracySec=1min
+Persistent=true
+Unit=research-certbot-renew.service
+
+[Install]
+WantedBy=timers.target

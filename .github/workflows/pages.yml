@@ -1,7 +1,7 @@
 name: Deploy dashboard to GitHub Pages
 on:
-  push:
-    branches: [main]
+  # Publishing rebuilds a release and may create a missing monthly model.
+  # Code pushes must only validate; publish via the existing schedule or dispatch.
   workflow_run:
     workflows: ['Refresh immutable monthly potential research']
     types: [completed]
@@ -21,6 +21,10 @@ permissions:
 concurrency:
   group: estate-raw-data-update
   cancel-in-progress: false
+env:
+  RESEARCH_STORAGE: ${{ vars.RESEARCH_STORAGE || 'git' }}
+  RESEARCH_BACKEND_URL: ${{ vars.RESEARCH_BACKEND_URL }}
+  RESEARCH_BACKEND_TOKEN: ${{ secrets.RESEARCH_BACKEND_TOKEN }}
 jobs:
   deploy:
     if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
@@ -51,8 +55,12 @@ jobs:
       - name: Restore checksum-verified complete raw state
         run: |
           set -euo pipefail
-          git fetch origin estate-raw-state
-          git worktree add --detach .work/raw-state FETCH_HEAD
+          if [ "$RESEARCH_STORAGE" = "backend" ]; then
+            python backend_state.py pull --name estate-raw-state --state-dir .work/raw-state
+          else
+            git fetch origin estate-raw-state
+            git worktree add --detach .work/raw-state FETCH_HEAD
+          fi
           python raw_estate_state.py restore --state-dir .work/raw-state
       - name: Refresh recent transactions and rotate one historical month
         if: github.event_name == 'schedule' || inputs.refresh == true
@@ -67,33 +75,48 @@ jobs:
           set -euo pipefail
           python raw_estate_state.py pack --state-dir .work/raw-state
           cp metadata/market_context.json .work/raw-state/market_context.json
-          git -C .work/raw-state config user.name github-actions[bot]
-          git -C .work/raw-state config user.email 41898282+github-actions[bot]@users.noreply.github.com
-          git -C .work/raw-state add -A
-          if ! git -C .work/raw-state diff --cached --quiet; then
-            git -C .work/raw-state commit -m 'Save verified incremental apartment transactions'
-            git -C .work/raw-state push origin HEAD:estate-raw-state
+          if [ "$RESEARCH_STORAGE" = "backend" ]; then
+            python backend_state.py push --name estate-raw-state --state-dir .work/raw-state
+            python backend_rows.py --csv data/capital_area_apt_trade_transactions.csv --dataset apt-trades --snapshot-name estate-raw-state --state-dir .work/raw-state
+          else
+            git -C .work/raw-state config user.name github-actions[bot]
+            git -C .work/raw-state config user.email 41898282+github-actions[bot]@users.noreply.github.com
+            git -C .work/raw-state add -A
+            if ! git -C .work/raw-state diff --cached --quiet; then
+              git -C .work/raw-state commit -m 'Save verified incremental apartment transactions'
+              git -C .work/raw-state push origin HEAD:estate-raw-state
+            fi
           fi
       - name: Restore immutable monthly models
         run: |
           set -euo pipefail
-          if [ -n "$(git ls-remote origin refs/heads/estate-model-state)" ]; then
-            git fetch origin estate-model-state
-            git worktree add --detach .work/model-state FETCH_HEAD
+          if [ "$RESEARCH_STORAGE" = "backend" ]; then
+            python backend_state.py pull --name estate-model-state --state-dir .work/model-state
             python estate_model_state.py restore --state-dir .work/model-state
           else
-            git worktree add --detach .work/model-state HEAD
-            git -C .work/model-state switch --orphan estate-model-state
+            if [ -n "$(git ls-remote origin refs/heads/estate-model-state)" ]; then
+              git fetch origin estate-model-state
+              git worktree add --detach .work/model-state FETCH_HEAD
+              python estate_model_state.py restore --state-dir .work/model-state
+            else
+              git worktree add --detach .work/model-state HEAD
+              git -C .work/model-state switch --orphan estate-model-state
+            fi
           fi
       - name: Restore the latest verified potential forecast
         run: |
           set -euo pipefail
-          if git ls-remote --exit-code --heads origin estate-potential-state > /dev/null; then
-            git fetch origin estate-potential-state
-            git worktree add --detach .work/potential-state FETCH_HEAD
+          if [ "$RESEARCH_STORAGE" = "backend" ]; then
+            python backend_state.py pull --name estate-potential-state --state-dir .work/potential-state
             python refresh_estate_potential.py restore --state-dir .work/potential-state
           else
-            echo 'Using the committed baseline potential forecast; no state archive exists yet.'
+            if git ls-remote --exit-code --heads origin estate-potential-state > /dev/null; then
+              git fetch origin estate-potential-state
+              git worktree add --detach .work/potential-state FETCH_HEAD
+              python refresh_estate_potential.py restore --state-dir .work/potential-state
+            else
+              echo 'Using the committed baseline potential forecast; no state archive exists yet.'
+            fi
           fi
       - name: Build full results with the frozen monthly model
         run: |
@@ -103,14 +126,19 @@ jobs:
         run: |
           set -euo pipefail
           python estate_model_state.py pack --state-dir .work/model-state
-          git -C .work/model-state config user.name github-actions[bot]
-          git -C .work/model-state config user.email 41898282+github-actions[bot]@users.noreply.github.com
-          git -C .work/model-state add .gitattributes model_manifest.json models
-          if ! git -C .work/model-state diff --cached --quiet; then
-            git -C .work/model-state commit -m 'Save immutable monthly estate reference model'
-            git -C .work/model-state push origin HEAD:estate-model-state
+          if [ "$RESEARCH_STORAGE" = "backend" ]; then
+            python backend_state.py push --name estate-model-state --state-dir .work/model-state
+          else
+            git -C .work/model-state config user.name github-actions[bot]
+            git -C .work/model-state config user.email 41898282+github-actions[bot]@users.noreply.github.com
+            git -C .work/model-state add .gitattributes model_manifest.json models
+            if ! git -C .work/model-state diff --cached --quiet; then
+              git -C .work/model-state commit -m 'Save immutable monthly estate reference model'
+              git -C .work/model-state push origin HEAD:estate-model-state
+            fi
           fi
       - uses: actions/upload-artifact@v4
+        if: env.RESEARCH_STORAGE != 'backend'
         with:
           name: estate-model-and-validation-${{ github.run_id }}
           path: |
@@ -118,6 +146,15 @@ jobs:
             .work/site/data/dashboard_manifest.json
             .work/site/data/model_validation.json
           retention-days: 90
+      - name: Preserve compact backend release validation
+        if: env.RESEARCH_STORAGE == 'backend'
+        uses: actions/upload-artifact@v4
+        with:
+          name: estate-release-validation-${{ github.run_id }}
+          path: |
+            .work/site/data/dashboard_manifest.json
+            .work/site/data/model_validation.json
+          retention-days: 7
       - name: Configure Pages
         uses: actions/configure-pages@v5
       - name: Upload complete static release

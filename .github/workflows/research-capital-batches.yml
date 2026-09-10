@@ -1,0 +1,111 @@
+name: Capital history - checkpointed loop on one runner
+on:
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: estate-capital-history
+  cancel-in-progress: false
+env:
+  RESEARCH_STORAGE: ${{ vars.RESEARCH_STORAGE || 'git' }}
+  RESEARCH_BACKEND_URL: ${{ vars.RESEARCH_BACKEND_URL }}
+  RESEARCH_BACKEND_TOKEN: ${{ secrets.RESEARCH_BACKEND_TOKEN }}
+jobs:
+  plan:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    outputs:
+      files: ${{ steps.plan.outputs.files }}
+      remaining: ${{ steps.plan.outputs.remaining }}
+    steps:
+      - uses: actions/checkout@v4
+      - id: plan
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ "$RESEARCH_STORAGE" = "backend" ]; then
+            python backend_state.py fetch-file --name estate-capital-history-state --relative-path collection/manifest.json --output checkpoint.json
+          else
+            git fetch --depth=1 origin estate-capital-history-state
+            git show FETCH_HEAD:collection/manifest.json > checkpoint.json
+          fi
+          python - <<'PY'
+          import json, os
+          from datetime import date
+          from collect_molit_capital_csv import expansion_requests
+          m = json.load(open('checkpoint.json'))
+          plan = expansion_requests(date(2026, 9, 9), True)
+          assert set(m['planned_keys']) == {r.key for r in plan}
+          remaining = sum(m['entries'].get(r.key, {}).get('status') != 'complete' for r in plan if r.region == 'incheon' and r.kind == 'sale' and r.start.year <= 2020)
+          request = json.load(open('.github/capital-collection-request.json'))
+          limit = request.get('max_files', 1)
+          assert type(limit) is int and 1 <= limit <= 5, 'max_files must be 1..5'
+          with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
+              f.write('remaining=' + str(remaining) + '\n')
+              f.write('files=' + str(min(remaining, limit)) + '\n')
+          print('Remaining annual/province exports:', remaining)
+          PY
+  batch:
+    needs: plan
+    if: needs.plan.outputs.remaining != '0'
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - id: restore
+        name: Restore the last saved checkpoint (bounded)
+        timeout-minutes: 10
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ "$RESEARCH_STORAGE" = "backend" ]; then
+            python backend_state.py pull --name estate-capital-history-state --state-dir .work/batch-state
+          else
+            git fetch --depth=1 origin estate-capital-history-state
+            git worktree add --detach .work/batch-state FETCH_HEAD
+          fi
+          timeout --signal=TERM --kill-after=5s 60s python capital_csv_state.py restore --state .work/batch-state --output .work/batch-input
+      - id: collect
+        name: Collect and save each file on the same runner
+        shell: bash
+        env:
+          FILE_LIMIT: ${{ needs.plan.outputs.files }}
+        run: |
+          set -euo pipefail
+          [[ "$FILE_LIMIT" =~ ^[1-5]$ ]]
+          if [ "$RESEARCH_STORAGE" != "backend" ]; then
+            git -C .work/batch-state config user.name 'github-actions[bot]'
+            git -C .work/batch-state config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          fi
+          for ((batch_index=1; batch_index<=FILE_LIMIT; batch_index++)); do
+            echo "Starting file $batch_index/$FILE_LIMIT on this runner"
+            collect_status=0
+            timeout --signal=INT --kill-after=5s 240s python -u trace_molit_transport.py --output .work/batch-input --cutoff 2026-09-09 --include-current-sales --incheon-sales-descending --max-new-partitions 1 --cache-hashes-only --metadata-timeout 30 --csv-timeout 120 --pause 1 --transport-retries 1 --retry-delay 5 --daily-limit 90 || collect_status=$?
+            timeout --signal=TERM --kill-after=5s 60s python capital_csv_state.py pack --source .work/batch-input --state .work/batch-state --incremental
+            if [ "$RESEARCH_STORAGE" = "backend" ]; then
+              paths=(collection state_files.json)
+              if [ -d .work/batch-state/objects ]; then paths+=(objects); fi
+              python backend_state.py push --name estate-capital-history-state --state-dir .work/batch-state --paths "${paths[@]}"
+            else
+              git -C .work/batch-state add -A
+              if ! git -C .work/batch-state diff --cached --quiet; then
+                git -C .work/batch-state commit -m "Save capital file $batch_index from run ${GITHUB_RUN_ID}"
+                timeout --signal=TERM --kill-after=5s 60s git -C .work/batch-state push origin HEAD:estate-capital-history-state
+              fi
+            fi
+            python -c 'import json; m=json.load(open(".work/batch-input/manifest.json")); print("Saved checkpoint:", m["status"], "completed:", m["completed_count"], flush=True)'
+            if ((collect_status != 0)); then
+              echo "Collection failed; checkpoint saved; remaining files will not run"
+              exit "$collect_status"
+            fi
+          done
+      - name: Diagnose connection on this failed runner without CSV
+        if: failure() && steps.collect.outcome == 'failure'
+        timeout-minutes: 1
+        shell: bash
+        run: |
+          set +e
+          curl --silent --show-error --output /dev/null --connect-timeout 10 --max-time 20 --max-filesize 2097152 --user-agent 'Python-urllib/3.12' --referer 'https://rt.molit.go.kr/pt/xls/xls.do?mobileAt=' --write-out 'http=%{http_code} dns=%{time_namelookup} tcp=%{time_connect} tls=%{time_appconnect} first_byte=%{time_starttransfer} total=%{time_total}\n' 'https://rt.molit.go.kr/pt/xls/xls.do?mobileAt='
+          result=$?
+          echo "Diagnostic curl exit: $result"
+          exit 0

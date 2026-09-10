@@ -1,8 +1,5 @@
 name: Verify estate data access
 on:
-  push:
-    branches: [codex/estate-data-recovery]
-    paths: [.github/workflows/estate-access.yml]
   workflow_dispatch:
 permissions:
   contents: read

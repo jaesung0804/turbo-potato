@@ -34,6 +34,9 @@ jobs:
           node tests/test_model_guide.cjs
           node tests/test_potential_ui.cjs
       - name: Restore complete data if the collection has finished
+        # PR/manual validation retains the complete candidate and ML checks.
+        # A code push runs unit/UI checks without downloading production state.
+        if: github.event_name != 'push'
         id: raw
         run: |
           set -euo pipefail
