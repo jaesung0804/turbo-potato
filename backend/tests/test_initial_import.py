@@ -210,4 +210,3 @@ def test_all_months_single_scan_matches_representative_month_bytes(tmp_path):
     assert [item["month"] for item in entries] == ["2026-01", "2026-02"]
     assert entries[1]["sha256"] == selected["sha256"]
     assert entries[1]["probe"]["entity_rows"] == 1501
-

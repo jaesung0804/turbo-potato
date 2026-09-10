@@ -21,4 +21,3 @@
 원본·기존 Git 이력·현재 게시 버전은 보존한다. 부분 capital-history 31/81, capital-normalized 4/81 자료를 완전한 거래 데이터에 합치지 않았다. 저장소에서 접근할 수 없었던 ChatGPT 첨부 사진까지 이관했다고 간주하지 않는다.
 
 Linux CI·운영 모드 전환의 최종 결과는 CLOUD-STATUS.md와 PR checks를 따른다. 기존 모델 학습을 SQL 방식으로 재작성하지 않았으며 학습 배치는 필요한 저장 상태를 복원한다. Starlette 관련 기존 deprecation 경고 2개는 기능 검사 실패가 아니다.
-
