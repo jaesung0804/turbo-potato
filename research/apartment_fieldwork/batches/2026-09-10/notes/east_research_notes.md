@@ -87,6 +87,21 @@
 - 사진에서 아래로 휘어지는 차량 진입로를 확인했다. 승강기 직결을 보여주는 사진은 아니다. 이 사진만의 동번호가 식별되지 않아 단지귀속은 KB분류에 의존(C).
 - 촬영일 미기재,육안확인일2026-09-10. 현행시설로 확정하지 않고 매물별 방문확인 항목으로 남긴다.
 
+### 인창2 역 보행 비교·거리뷰 (2026-09-10 조회)
+
+동구릉역 경로: https://map.naver.com/p/directions/3zoAaU,2ANRWi,%EC%9D%B8%EC%B0%BD%ED%8F%AC%EB%A0%88%EB%A6%AC%EC%9B%80%EC%95%84%ED%8C%8C%ED%8A%B8,18159459,PLACE_POI/3zonqI,2ANV6T,%EB%8F%99%EA%B5%AC%EB%A6%89%EC%97%AD%208%ED%98%B8%EC%84%A0,806,SUBWAY_STATION/-/walk/0?c=15.00,0,0,0,dh
+
+- 단지 지도대표점→동구릉역5번출구 추천461m/7분,지하도1회(B: 지도계산; 현장실측아님). 계단회피옵션498m/8분. 201동→인창주공1단지110동방향으로 안내한다.
+- 경로요약에 횡단보도 횟수가 표시되지 않았다고 차량출입로 횡단이 없다고 판단하지 않는다. 201동 부근의 실제거리뷰에서는 단지차량출입로와 과속방지턱 부근으로 안내선이 이어진다.
+- 해당 거리뷰 촬영표시는2025년03월(최신). 주공1단지110동 외벽표식,차도옆 보도,과속방지턱을 확인했다. 유모차유효폭·출입통제·경사각·현재상태는 미확인이다.
+
+거리뷰: https://map.naver.com/p/directions/3zoAaU,2ANRWi,%EC%9D%B8%EC%B0%BD%ED%8F%AC%EB%A0%88%EB%A6%AC%EC%9B%80%EC%95%84%ED%8C%8C%ED%8A%B8,18159459,PLACE_POI/3zonqI,2ANV6T,%EB%8F%99%EA%B5%AC%EB%A6%89%EC%97%AD%208%ED%98%B8%EC%84%A0,806,SUBWAY_STATION/-/walk/0?c=16.00,0,0,0,adh&p=lFviHo5pOmOwvk736l2BNA,-75,10,80,Float
+
+구리역 경로: https://map.naver.com/p/directions/3zoAaU,2ANRWi,%EC%9D%B8%EC%B0%BD%ED%8F%AC%EB%A0%88%EB%A6%AC%EC%9B%80%EC%95%84%ED%8C%8C%ED%8A%B8,18159459,PLACE_POI/3zouop,2ANyPI,%EA%B5%AC%EB%A6%AC%EC%97%AD(%EA%B5%AC%EB%A6%AC%EC%A0%84%ED%86%B5%EC%8B%9C%EC%9E%A5)%208%ED%98%B8%EC%84%A0,807,SUBWAY_STATION/-/walk?c=15.00,0,0,0,dh
+
+- 같은 단지대표점→구리역3번출구 추천933m/13분,횡단보도4회·지하도1회(B). 큰길우선1.2km/17분은계단1회,계단회피1.2km/17분은계단횟수미표시다. 옵션차이를 실제무단차 보증으로 바꾸지 않는다.
+- 두 역 거리 모두 개별동현관·승강장까지의 이동시간과 구분한다. 승강기대기·혼잡·신호대기 실측은 미수행이다.
+
 ### 리치고·위키 보조자료
 
 출처: https://m.richgo.ai/realty/danji/a0DOYhg

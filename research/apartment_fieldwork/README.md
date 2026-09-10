@@ -10,6 +10,7 @@
 - [임장 체크리스트·급지 관행](batches/2026-09-10/notes/field_checklist_tiers_notes.md)
 - [기존 모델·산출물 읽기 검증](batches/2026-09-10/notes/model_audit_notes.md)
 - [미래 가치 연구 방법과 점수 해석](batches/2026-09-10/notes/future_research_lab_notes.md)
+- [거시·주택 정책 원문](batches/2026-09-10/notes/macro_policy_notes.md)
 - [단지별 기록 목록](batches/2026-09-10/complex_catalog.json)
 - [원문·사진 후보 링크 목록](batches/2026-09-10/source_catalog.json)
 - [구조화된 주장](batches/2026-09-10/observations.jsonl)

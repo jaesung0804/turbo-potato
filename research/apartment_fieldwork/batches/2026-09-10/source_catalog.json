@@ -1,7 +1,7 @@
 {
   "batch_date": "2026-09-10",
   "meaning": "Referenced public URLs, including unverified image candidates. Mention does not imply original page or image was opened. See each note for access status.",
-  "url_count": 97,
+  "url_count": 101,
   "sources": [
     {
       "url": "https://apt.wiki/wiki/미사강변루나리움",
@@ -20,14 +20,8 @@
     {
       "url": "https://astro.kasi.re.kr/life/pageView/10",
       "mentioned_in": [
+        "../../templates/apartment_inspection_template.md",
         "notes/field_checklist_tiers_notes.md"
-      ],
-      "access_status": "see_note"
-    },
-    {
-      "url": "https://astro.kasi.re.kr/life/pageView/10)",
-      "mentioned_in": [
-        "../../templates/apartment_inspection_template.md"
       ],
       "access_status": "see_note"
     },
@@ -42,6 +36,13 @@
       "url": "https://blog.naver.com/film033/223861291885",
       "mentioned_in": [
         "notes/map_research_notes.md"
+      ],
+      "access_status": "see_note"
+    },
+    {
+      "url": "https://blog.naver.com/livart_sungwon/224398140649",
+      "mentioned_in": [
+        "notes/commute_research_notes.md"
       ],
       "access_status": "see_note"
     },
@@ -103,23 +104,10 @@
       "access_status": "see_note"
     },
     {
-      "url": "https://github.com/jaesung0804/turbo-potato/blob/b2a92f8b4439766a2568ef0460c5753ac4903c8d/metadata/nowcast_2026_capital_v2.json)는",
-      "mentioned_in": [
-        "notes/model_audit_notes.md"
-      ],
-      "access_status": "see_note"
-    },
-    {
       "url": "https://github.com/jaesung0804/turbo-potato/blob/b2a92f8b4439766a2568ef0460c5753ac4903c8d/metadata/potential_candidates.json.gz",
       "mentioned_in": [
+        "notes/future_research_lab_notes.md",
         "notes/model_audit_notes.md"
-      ],
-      "access_status": "see_note"
-    },
-    {
-      "url": "https://github.com/jaesung0804/turbo-potato/blob/b2a92f8b4439766a2568ef0460c5753ac4903c8d/metadata/potential_candidates.json.gz)이다",
-      "mentioned_in": [
-        "notes/future_research_lab_notes.md"
       ],
       "access_status": "see_note"
     },
@@ -189,13 +177,7 @@
     {
       "url": "https://jaesung0804.github.io/turbo-potato/data/dashboard_manifest.json",
       "mentioned_in": [
-        "notes/future_research_lab_notes.md"
-      ],
-      "access_status": "see_note"
-    },
-    {
-      "url": "https://jaesung0804.github.io/turbo-potato/data/dashboard_manifest.json)의",
-      "mentioned_in": [
+        "notes/future_research_lab_notes.md",
         "notes/model_audit_notes.md"
       ],
       "access_status": "see_note"
@@ -253,13 +235,7 @@
       "url": "https://kbland.kr/se/c/2883",
       "mentioned_in": [
         "notes/east_research_notes.md",
-        "notes/future_research_lab_notes.md"
-      ],
-      "access_status": "see_note"
-    },
-    {
-      "url": "https://kbland.kr/se/c/2883)의",
-      "mentioned_in": [
+        "notes/future_research_lab_notes.md",
         "notes/model_audit_notes.md"
       ],
       "access_status": "see_note"
@@ -268,13 +244,7 @@
       "url": "https://kbland.kr/se/c/2884",
       "mentioned_in": [
         "notes/east_research_notes.md",
-        "notes/future_research_lab_notes.md"
-      ],
-      "access_status": "see_note"
-    },
-    {
-      "url": "https://kbland.kr/se/c/2884)의",
-      "mentioned_in": [
+        "notes/future_research_lab_notes.md",
         "notes/model_audit_notes.md"
       ],
       "access_status": "see_note"
@@ -282,14 +252,8 @@
     {
       "url": "https://kbthink.com/house/property-tour.html",
       "mentioned_in": [
+        "../../templates/apartment_inspection_template.md",
         "notes/field_checklist_tiers_notes.md"
-      ],
-      "access_status": "see_note"
-    },
-    {
-      "url": "https://kbthink.com/house/property-tour.html)",
-      "mentioned_in": [
-        "../../templates/apartment_inspection_template.md"
       ],
       "access_status": "see_note"
     },
@@ -357,9 +321,65 @@
       "access_status": "see_note"
     },
     {
+      "url": "https://map.naver.com/p/directions/3zfUy4,2ADJpx,%EB%9E%98%EB%AF%B8%EC%95%88%ED%95%98%EC%9D%B4%EC%96%B4%EC%8A%A4%EC%95%84%ED%8C%8C%ED%8A%B8,19270711,PLACE_POI/3zfop5,2AK9Yz,%EC%97%AC%EC%9D%98%EB%8F%84%EC%97%AD%205%ED%98%B8%EC%84%A0,526,SUBWAY_STATION/-/transit?c=11.00,0,0,0,dh",
+      "mentioned_in": [
+        "notes/commute_research_notes.md"
+      ],
+      "access_status": "see_note"
+    },
+    {
+      "url": "https://map.naver.com/p/directions/3zfUy4,2ADJpx,%EB%9E%98%EB%AF%B8%EC%95%88%ED%95%98%EC%9D%B4%EC%96%B4%EC%8A%A4%EC%95%84%ED%8C%8C%ED%8A%B8,19270711,PLACE_POI/3zgdbS,2ADTAb,%EA%B8%88%EC%A0%95%EC%97%AD%201%ED%98%B8%EC%84%A0,179,SUBWAY_STATION/-/walk/0?c=16.00,0,0,0,adh&p=e5tjgPLqiES5foYd1_f3mg,-7,10,80,Float",
+      "mentioned_in": [
+        "notes/commute_research_notes.md"
+      ],
+      "access_status": "see_note"
+    },
+    {
+      "url": "https://map.naver.com/p/directions/3zfUy4,2ADJpx,%EB%9E%98%EB%AF%B8%EC%95%88%ED%95%98%EC%9D%B4%EC%96%B4%EC%8A%A4%EC%95%84%ED%8C%8C%ED%8A%B8,19270711,PLACE_POI/3zgdbS,2ADTAb,%EA%B8%88%EC%A0%95%EC%97%AD%201%ED%98%B8%EC%84%A0,179,SUBWAY_STATION/-/walk/0?c=16.00,0,0,0,adh&p=uNNYsOz16hKq3lCzzaGQHA,40,10,80,Float",
+      "mentioned_in": [
+        "notes/commute_research_notes.md"
+      ],
+      "access_status": "see_note"
+    },
+    {
       "url": "https://map.naver.com/p/directions/3zfUy4,2ADJpx,%EB%9E%98%EB%AF%B8%EC%95%88%ED%95%98%EC%9D%B4%EC%96%B4%EC%8A%A4%EC%95%84%ED%8C%8C%ED%8A%B8,19270711,PLACE_POI/3zgdbS,2ADTAb,%EA%B8%88%EC%A0%95%EC%97%AD%201%ED%98%B8%EC%84%A0,179,SUBWAY_STATION/-/walk?c=16.00,0,0,0,dh",
       "mentioned_in": [
         "notes/commute_research_notes.md"
+      ],
+      "access_status": "see_note"
+    },
+    {
+      "url": "https://map.naver.com/p/directions/3zfUy4,2ADJpx,%EB%9E%98%EB%AF%B8%EC%95%88%ED%95%98%EC%9D%B4%EC%96%B4%EC%8A%A4%EC%95%84%ED%8C%8C%ED%8A%B8,19270711,PLACE_POI/3zhqqF,2ALByS,%EC%84%9C%EC%9A%B8%EC%97%AD%201%ED%98%B8%EC%84%A0,133,SUBWAY_STATION/-/transit?c=11.00,0,0,0,dh",
+      "mentioned_in": [
+        "notes/commute_research_notes.md"
+      ],
+      "access_status": "see_note"
+    },
+    {
+      "url": "https://map.naver.com/p/directions/3zfUy4,2ADJpx,%EB%9E%98%EB%AF%B8%EC%95%88%ED%95%98%EC%9D%B4%EC%96%B4%EC%8A%A4%EC%95%84%ED%8C%8C%ED%8A%B8,19270711,PLACE_POI/3zjKf0,2AJaFo,%EA%B0%95%EB%82%A8%EC%97%AD%202%ED%98%B8%EC%84%A0,222,SUBWAY_STATION/-/transit?c=11.00,0,0,0,dh",
+      "mentioned_in": [
+        "notes/commute_research_notes.md"
+      ],
+      "access_status": "see_note"
+    },
+    {
+      "url": "https://map.naver.com/p/directions/3zoAaU,2ANRWi,%EC%9D%B8%EC%B0%BD%ED%8F%AC%EB%A0%88%EB%A6%AC%EC%9B%80%EC%95%84%ED%8C%8C%ED%8A%B8,18159459,PLACE_POI/3zonqI,2ANV6T,%EB%8F%99%EA%B5%AC%EB%A6%89%EC%97%AD%208%ED%98%B8%EC%84%A0,806,SUBWAY_STATION/-/walk/0?c=15.00,0,0,0,dh",
+      "mentioned_in": [
+        "notes/east_research_notes.md"
+      ],
+      "access_status": "see_note"
+    },
+    {
+      "url": "https://map.naver.com/p/directions/3zoAaU,2ANRWi,%EC%9D%B8%EC%B0%BD%ED%8F%AC%EB%A0%88%EB%A6%AC%EC%9B%80%EC%95%84%ED%8C%8C%ED%8A%B8,18159459,PLACE_POI/3zonqI,2ANV6T,%EB%8F%99%EA%B5%AC%EB%A6%89%EC%97%AD%208%ED%98%B8%EC%84%A0,806,SUBWAY_STATION/-/walk/0?c=16.00,0,0,0,adh&p=lFviHo5pOmOwvk736l2BNA,-75,10,80,Float",
+      "mentioned_in": [
+        "notes/east_research_notes.md"
+      ],
+      "access_status": "see_note"
+    },
+    {
+      "url": "https://map.naver.com/p/directions/3zoAaU,2ANRWi,%EC%9D%B8%EC%B0%BD%ED%8F%AC%EB%A0%88%EB%A6%AC%EC%9B%80%EC%95%84%ED%8C%8C%ED%8A%B8,18159459,PLACE_POI/3zouop,2ANyPI,%EA%B5%AC%EB%A6%AC%EC%97%AD(%EA%B5%AC%EB%A6%AC%EC%A0%84%ED%86%B5%EC%8B%9C%EC%9E%A5)%208%ED%98%B8%EC%84%A0,807,SUBWAY_STATION/-/walk?c=15.00,0,0,0,dh",
+      "mentioned_in": [
+        "notes/east_research_notes.md"
       ],
       "access_status": "see_note"
     },
@@ -378,6 +398,20 @@
       "access_status": "see_note"
     },
     {
+      "url": "https://map.naver.com/p/directions/3zq9qi,2AM7ir,%EB%AF%B8%EC%82%AC%EA%B0%95%EB%B3%80%EB%A3%A8%EB%82%98%EB%A6%AC%EC%9B%80%EC%95%84%ED%8C%8C%ED%8A%B8,32875531,PLACE_POI/3zfop5,2AK9Yz,%EC%97%AC%EC%9D%98%EB%8F%84%EC%97%AD%205%ED%98%B8%EC%84%A0,526,SUBWAY_STATION/-/transit?c=11.00,0,0,0,dh",
+      "mentioned_in": [
+        "notes/map_research_notes.md"
+      ],
+      "access_status": "see_note"
+    },
+    {
+      "url": "https://map.naver.com/p/directions/3zq9qi,2AM7ir,%EB%AF%B8%EC%82%AC%EA%B0%95%EB%B3%80%EB%A3%A8%EB%82%98%EB%A6%AC%EC%9B%80%EC%95%84%ED%8C%8C%ED%8A%B8,32875531,PLACE_POI/3zhqqF,2ALByS,%EC%84%9C%EC%9A%B8%EC%97%AD%201%ED%98%B8%EC%84%A0,133,SUBWAY_STATION/-/transit?c=11.00,0,0,0,dh",
+      "mentioned_in": [
+        "notes/map_research_notes.md"
+      ],
+      "access_status": "see_note"
+    },
+    {
       "url": "https://map.naver.com/p/directions/3zq9qi,2AM7ir,%EB%AF%B8%EC%82%AC%EA%B0%95%EB%B3%80%EB%A3%A8%EB%82%98%EB%A6%AC%EC%9B%80%EC%95%84%ED%8C%8C%ED%8A%B8,32875531,PLACE_POI/3zqFG1,2ALU9g,%EB%AF%B8%EC%82%AC%EC%97%AD%205%ED%98%B8%EC%84%A0,555,SUBWAY_STATION/-/walk/0?c=16.00,0,0,0,adh&p=EhNcjH2fE2kq-eXfECdLdA,-143,10,80,Float",
       "mentioned_in": [
         "notes/map_research_notes.md"
@@ -392,15 +426,17 @@
       "access_status": "see_note"
     },
     {
-      "url": "https://map.naver.com/p/entry/place/18936336?c=15.00,0,0,0,dh&placePath=%2Fhome%3Ffrom%3Dmap%26fromPanelNum%3D1%26additionalHeight%3D76%26timestamp%3D202609101724%26locale%3Dko%26svcName%3Dmap_pcv5)에서",
+      "url": "https://map.naver.com/p/entry/place/18936336?c=15.00,0,0,0,dh&placePath=%2Fhome%3Ffrom%3Dmap%26fromPanelNum%3D1%26additionalHeight%3D76%26timestamp%3D202609101724%26locale%3Dko%26svcName%3Dmap_pcv5",
       "mentioned_in": [
+        "notes/commute_research_notes.md",
         "notes/model_audit_notes.md"
       ],
       "access_status": "see_note"
     },
     {
-      "url": "https://map.naver.com/p/entry/place/18937233?c=15.00,0,0,0,dh&placePath=%2Fhome%3Ffrom%3Dmap%26fromPanelNum%3D1%26additionalHeight%3D76%26timestamp%3D202609101722%26locale%3Dko%26svcName%3Dmap_pcv5)에서",
+      "url": "https://map.naver.com/p/entry/place/18937233?c=15.00,0,0,0,dh&placePath=%2Fhome%3Ffrom%3Dmap%26fromPanelNum%3D1%26additionalHeight%3D76%26timestamp%3D202609101722%26locale%3Dko%26svcName%3Dmap_pcv5",
       "mentioned_in": [
+        "notes/commute_research_notes.md",
         "notes/model_audit_notes.md"
       ],
       "access_status": "see_note"
@@ -423,14 +459,8 @@
     {
       "url": "https://openapt.seoul.go.kr/portal/index.do",
       "mentioned_in": [
+        "../../templates/apartment_inspection_template.md",
         "notes/field_checklist_tiers_notes.md"
-      ],
-      "access_status": "see_note"
-    },
-    {
-      "url": "https://openapt.seoul.go.kr/portal/index.do)",
-      "mentioned_in": [
-        "../../templates/apartment_inspection_template.md"
       ],
       "access_status": "see_note"
     },
@@ -458,14 +488,8 @@
     {
       "url": "https://weolbu.com/community/182188",
       "mentioned_in": [
+        "../../templates/apartment_inspection_template.md",
         "notes/field_checklist_tiers_notes.md"
-      ],
-      "access_status": "see_note"
-    },
-    {
-      "url": "https://weolbu.com/community/182188)",
-      "mentioned_in": [
-        "../../templates/apartment_inspection_template.md"
       ],
       "access_status": "see_note"
     },
@@ -479,14 +503,8 @@
     {
       "url": "https://weolbu.com/community/3724905",
       "mentioned_in": [
+        "../../templates/apartment_inspection_template.md",
         "notes/field_checklist_tiers_notes.md"
-      ],
-      "access_status": "see_note"
-    },
-    {
-      "url": "https://weolbu.com/community/3724905)",
-      "mentioned_in": [
-        "../../templates/apartment_inspection_template.md"
       ],
       "access_status": "see_note"
     },
@@ -514,7 +532,50 @@
     {
       "url": "https://www.bok.or.kr/portal/bbs/P0000559/view.do?nttId=11064191&menuNo=200690&programType=newsData&relate=Y&depth=200690",
       "mentioned_in": [
-        "notes/future_research_lab_notes.md"
+        "notes/future_research_lab_notes.md",
+        "notes/macro_policy_notes.md"
+      ],
+      "access_status": "see_note"
+    },
+    {
+      "url": "https://www.bok.or.kr/portal/singl/baseRate/list.do?menuNo=200643",
+      "mentioned_in": [
+        "notes/macro_policy_notes.md"
+      ],
+      "access_status": "see_note"
+    },
+    {
+      "url": "https://www.fsc.go.kr/no010101/86606",
+      "mentioned_in": [
+        "notes/macro_policy_notes.md"
+      ],
+      "access_status": "see_note"
+    },
+    {
+      "url": "https://www.fsc.go.kr/no010101/87222",
+      "mentioned_in": [
+        "notes/macro_policy_notes.md"
+      ],
+      "access_status": "see_note"
+    },
+    {
+      "url": "https://www.fsc.go.kr/no010101/87543",
+      "mentioned_in": [
+        "notes/macro_policy_notes.md"
+      ],
+      "access_status": "see_note"
+    },
+    {
+      "url": "https://www.fsc.go.kr/no010101/87674",
+      "mentioned_in": [
+        "notes/macro_policy_notes.md"
+      ],
+      "access_status": "see_note"
+    },
+    {
+      "url": "https://www.fsc.go.kr/no010101/87675",
+      "mentioned_in": [
+        "notes/macro_policy_notes.md"
       ],
       "access_status": "see_note"
     },
@@ -563,28 +624,16 @@
     {
       "url": "https://www.k-apt.go.kr/web/main/index.do",
       "mentioned_in": [
+        "../../templates/apartment_inspection_template.md",
         "notes/field_checklist_tiers_notes.md"
-      ],
-      "access_status": "see_note"
-    },
-    {
-      "url": "https://www.k-apt.go.kr/web/main/index.do)",
-      "mentioned_in": [
-        "../../templates/apartment_inspection_template.md"
       ],
       "access_status": "see_note"
     },
     {
       "url": "https://www.noiseinfo.or.kr/index.jsp",
       "mentioned_in": [
+        "../../templates/apartment_inspection_template.md",
         "notes/field_checklist_tiers_notes.md"
-      ],
-      "access_status": "see_note"
-    },
-    {
-      "url": "https://www.noiseinfo.or.kr/index.jsp)",
-      "mentioned_in": [
-        "../../templates/apartment_inspection_template.md"
       ],
       "access_status": "see_note"
     },
@@ -596,7 +645,21 @@
       "access_status": "see_note"
     },
     {
-      "url": "https://www.reb.or.kr/reb/na/ntt/selectNttList.do?bbsId=1154&mi=9565)에서",
+      "url": "https://www.reb.or.kr/reb/na/ntt/selectNttInfo.do?mi=9565&nttSn=116519",
+      "mentioned_in": [
+        "notes/macro_policy_notes.md"
+      ],
+      "access_status": "see_note"
+    },
+    {
+      "url": "https://www.reb.or.kr/reb/na/ntt/selectNttInfo.do?mi=9565&nttSn=116850",
+      "mentioned_in": [
+        "notes/macro_policy_notes.md"
+      ],
+      "access_status": "see_note"
+    },
+    {
+      "url": "https://www.reb.or.kr/reb/na/ntt/selectNttList.do?bbsId=1154&mi=9565",
       "mentioned_in": [
         "notes/future_research_lab_notes.md"
       ],
@@ -628,13 +691,7 @@
       "url": "https://zippoom.com/부동산/경기-광명시-철산동-한신아파트/pn1k1g",
       "mentioned_in": [
         "notes/commute_research_notes.md",
-        "notes/future_research_lab_notes.md"
-      ],
-      "access_status": "see_note"
-    },
-    {
-      "url": "https://zippoom.com/부동산/경기-광명시-철산동-한신아파트/pn1k1g)의",
-      "mentioned_in": [
+        "notes/future_research_lab_notes.md",
         "notes/model_audit_notes.md"
       ],
       "access_status": "see_note"
@@ -650,13 +707,7 @@
       "url": "https://zippoom.com/부동산/경기-군포시-산본동-래미안하이어스/bri1xr",
       "mentioned_in": [
         "notes/commute_research_notes.md",
-        "notes/future_research_lab_notes.md"
-      ],
-      "access_status": "see_note"
-    },
-    {
-      "url": "https://zippoom.com/부동산/경기-군포시-산본동-래미안하이어스/bri1xr)의",
-      "mentioned_in": [
+        "notes/future_research_lab_notes.md",
         "notes/model_audit_notes.md"
       ],
       "access_status": "see_note"
@@ -673,13 +724,7 @@
       "url": "https://zippoom.com/부동산/서울-영등포구-당산동3가-당산계룡리슈빌3단지/6qxxgx/매매/21평",
       "mentioned_in": [
         "notes/commute_research_notes.md",
-        "notes/future_research_lab_notes.md"
-      ],
-      "access_status": "see_note"
-    },
-    {
-      "url": "https://zippoom.com/부동산/서울-영등포구-당산동3가-당산계룡리슈빌3단지/6qxxgx/매매/21평)의",
-      "mentioned_in": [
+        "notes/future_research_lab_notes.md",
         "notes/model_audit_notes.md"
       ],
       "access_status": "see_note"
