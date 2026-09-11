@@ -242,13 +242,11 @@ def collect(key,start,end,cache,output,refresh_months=3,workers=2,shard_index=0,
 
 
 def existing_key():
-    key=os.getenv("MOLIT_API_KEY","").strip()
-    if key:return key
-    tree=ast.parse(Path("get_apt_basis_detail_data.py").read_text(encoding="utf-8-sig"))
-    values=[n.value for n in ast.walk(tree) if isinstance(n,ast.Constant) and isinstance(n.value,str)
-            and re.fullmatch(r"[A-Za-z0-9+/=%]{70,160}",n.value)]
-    if len(values)!=1:raise RuntimeError("No existing authorized public-data configuration")
-    return values[0]
+    """Compatibility entry point; never recover credentials from public source."""
+    key = os.getenv("MOLIT_API_KEY", "").strip()
+    if not key:
+        raise RuntimeError("MOLIT_API_KEY must be configured in the private execution environment")
+    return key
 
 
 if __name__=="__main__":
@@ -257,7 +255,7 @@ if __name__=="__main__":
     p.add_argument("--refresh-months",type=int,default=3);p.add_argument("--workers",type=int,choices=[1,2,3,4],default=2)
     p.add_argument('--shard-index',type=int,default=0);p.add_argument('--shard-count',type=int,choices=[1,2,4],default=1)
     p.add_argument("--cache",default="data/molit_cache_v3");p.add_argument("--output",default="data/capital_area_apt_trade_transactions.csv")
-    p.add_argument("--use-existing-config",action="store_true",help="One-time migration of the configuration already provided in this repository")
+    p.add_argument("--use-existing-config",action="store_true",help="Compatibility flag: read MOLIT_API_KEY from the private environment only")
     args=p.parse_args()
     key=existing_key() if args.use_existing_config else os.getenv("MOLIT_API_KEY","")
     if key and os.getenv("GITHUB_ACTIONS"):print("::add-mask::"+key,flush=True)

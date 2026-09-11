@@ -18,7 +18,8 @@ from collect_verified_households import apply_verified_households
 from shapely.geometry import shape, mapping, box
 from shapely.ops import unary_union
 
-UI_FILES = ['index.html', 'model.html', 'potential.html', 'styles.css', 'app.js', 'potential.js', 'data-store.js', 'result-pages.js', 'model.js', '404.html','vendor/leaflet.css','vendor/leaflet.js','vendor/LICENSE.txt']
+from estate_ui_release import UI_FILES, copy_ui
+
 AMENITIES = ['households', 'elementary_500m', 'nearest_elementary_name', 'nearest_elementary_m',
              'subway_lines', 'subway_station', 'subway_distance_m', 'latitude', 'longitude']
 
@@ -120,17 +121,7 @@ def build(source, output, model_dir=Path('models'), month=None, summary_path=Non
         write_json(work/'valuation_published_model.json', model)
     summary = json.loads(summary_path.read_text(encoding='utf-8'))
     output.mkdir(parents=True, exist_ok=True)
-    for name in UI_FILES:
-        (output/name).parent.mkdir(parents=True,exist_ok=True)
-        shutil.copy2(Path('web')/name, output/name)
-    # A returning browser must load matching UI scripts after an HTML release.
-    for page in ['index.html', 'model.html', 'potential.html']:
-        html = (output/page).read_text(encoding='utf-8')
-        for name in ['app.js', 'potential.js', 'data-store.js', 'result-pages.js', 'model.js', 'styles.css','vendor/leaflet.css','vendor/leaflet.js']:
-            version = hashlib.sha256((output/name).read_bytes()).hexdigest()[:16]
-            html = html.replace('"'+name+'"', '"'+name+'?v='+version+'"')
-        (output/page).write_text(html,encoding='utf-8',newline='\n')
-    (output/'.nojekyll').touch()
+    copy_ui(output)
     # Remove obsolete release payloads; they never belong to the new manifest.
     if (output/'data').exists():
         shutil.rmtree(output/'data')

@@ -31,7 +31,7 @@ KAPT_LIST_PATH = ROOT_DIR / "data" / "kapt_code_list.csv"
 OUTPUT_PATH = ROOT_DIR / "data" / "apt_basis_detail_info.csv"
 ENDPOINT = "https://apis.data.go.kr/1613000/AptBasisInfoServiceV4/getAphusDtlInfoV4"
 LIST_ENDPOINT = "https://apis.data.go.kr/1613000/AptListService3/getTotalAptList3"
-DEFAULT_KEY = "snyJqch39RERcnLDkJs+gSQ+IOLVHENhQGKP1XmJJXGGOzsTCrvT2HQ3BFOOqBnj4tklUGxUJJQh1helocVJNA=="
+# Credentials are supplied only by the private runtime environment.
 FIELDNAMES = [
     "apt_cd",
     "apt_nm",
@@ -50,11 +50,14 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--input", default=str(APT_MASTER_PATH))
     parser.add_argument("--kapt-list", default=str(KAPT_LIST_PATH))
     parser.add_argument("--output", default=str(OUTPUT_PATH))
-    parser.add_argument("--service-key", default=os.environ.get("MOLIT_APT_BASIS_KEY", DEFAULT_KEY))
+    parser.add_argument("--service-key", default=os.environ.get("MOLIT_APT_BASIS_KEY"))
     parser.add_argument("--limit", type=int, help="테스트용 최대 호출 수입니다.")
     parser.add_argument("--sleep", type=float, default=0.08)
     parser.add_argument("--reset", action="store_true", help="기존 상세 수집 CSV를 백업하고 처음부터 다시 수집합니다.")
-    return parser.parse_args()
+    args = parser.parse_args()
+    if not args.service_key:
+        parser.error("MOLIT_APT_BASIS_KEY 환경 변수 또는 --service-key가 필요합니다.")
+    return args
 
 
 def parse_float(value: Any) -> float | None:

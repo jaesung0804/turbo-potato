@@ -1,6 +1,6 @@
 name: Deploy dashboard to GitHub Pages
 on:
-  # Publishing rebuilds a release and may create a missing monthly model.
+  # Scheduled/full publication rebuilds data; manual UI-only publication reuses saved public data.
   # Code pushes must only validate; publish via the existing schedule or dispatch.
   workflow_run:
     workflows: ['Refresh immutable monthly potential research']
@@ -10,6 +10,10 @@ on:
     - cron: '35 20 * * *'
   workflow_dispatch:
     inputs:
+      ui_only:
+        description: Reuse checksum-verified public data and replace only the UI (no collection or training)
+        type: boolean
+        default: true
       refresh:
         description: Refresh the recent 3 months and one older month before publishing
         type: boolean
@@ -52,7 +56,18 @@ jobs:
           node tests/test_ui.cjs
           node tests/test_model_guide.cjs
           node tests/test_potential_ui.cjs
+      - name: Validate manual publication scope
+        if: github.event_name == 'workflow_dispatch' && inputs.ui_only == true && inputs.refresh == true
+        run: |
+          echo '::error::UI-only publication cannot request collection; choose one scope.'
+          exit 1
+      - name: Refresh only the UI from the saved public release
+        if: github.event_name == 'workflow_dispatch' && inputs.ui_only == true
+        run: |
+          python refresh_saved_site.py --sha "$GITHUB_SHA"
+          node tests/check_bundle.cjs .work/site
       - name: Restore checksum-verified complete raw state
+        if: github.event_name != 'workflow_dispatch' || inputs.ui_only != true
         run: |
           set -euo pipefail
           if [ "$RESEARCH_STORAGE" = "backend" ]; then
@@ -63,14 +78,26 @@ jobs:
           fi
           python raw_estate_state.py restore --state-dir .work/raw-state
       - name: Refresh recent transactions and rotate one historical month
-        if: github.event_name == 'schedule' || inputs.refresh == true
+        if: github.event_name == 'schedule' || (inputs.refresh == true && inputs.ui_only != true)
         env:
           MOLIT_API_KEY: ${{ secrets.MOLIT_API_KEY }}
-        run: python collect_estate_transactions.py --refresh-months 3 --workers 2 --use-existing-config
+        run: |
+          if [ -z "$MOLIT_API_KEY" ]; then
+            if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+              echo '::error::MOLIT_API_KEY is required for the requested refresh.'
+              exit 1
+            fi
+            echo '::warning::MOLIT_API_KEY is missing. Preserving the verified saved collection and its original observation dates.'
+            echo 'Transaction refresh skipped: private MOLIT_API_KEY is missing; saved data dates remain unchanged.' >> "$GITHUB_STEP_SUMMARY"
+          else
+            python collect_estate_transactions.py --refresh-months 3 --workers 2
+          fi
       - name: Refresh dated public KB market context
+        if: github.event_name != 'workflow_dispatch' || inputs.ui_only != true
         run: |
           python collect_kb_public_statistics.py --previous .work/raw-state/market_context.json
       - name: Persist complete raw state and dated market context
+        if: github.event_name != 'workflow_dispatch' || inputs.ui_only != true
         run: |
           set -euo pipefail
           python raw_estate_state.py pack --state-dir .work/raw-state
@@ -88,6 +115,7 @@ jobs:
             fi
           fi
       - name: Restore immutable monthly models
+        if: github.event_name != 'workflow_dispatch' || inputs.ui_only != true
         run: |
           set -euo pipefail
           if [ "$RESEARCH_STORAGE" = "backend" ]; then
@@ -104,6 +132,7 @@ jobs:
             fi
           fi
       - name: Restore the latest verified potential forecast
+        if: github.event_name != 'workflow_dispatch' || inputs.ui_only != true
         run: |
           set -euo pipefail
           if [ "$RESEARCH_STORAGE" = "backend" ]; then
@@ -119,10 +148,12 @@ jobs:
             fi
           fi
       - name: Build full results with the frozen monthly model
+        if: github.event_name != 'workflow_dispatch' || inputs.ui_only != true
         run: |
           python build_public_site.py
           node tests/check_bundle.cjs .work/site
       - name: Persist the model before public deployment
+        if: github.event_name != 'workflow_dispatch' || inputs.ui_only != true
         run: |
           set -euo pipefail
           python estate_model_state.py pack --state-dir .work/model-state
@@ -138,7 +169,7 @@ jobs:
             fi
           fi
       - uses: actions/upload-artifact@v4
-        if: env.RESEARCH_STORAGE != 'backend'
+        if: (github.event_name != 'workflow_dispatch' || inputs.ui_only != true) && env.RESEARCH_STORAGE != 'backend'
         with:
           name: estate-model-and-validation-${{ github.run_id }}
           path: |
