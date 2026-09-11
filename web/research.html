@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>연구·대표 보고 · 수도권 아파트 리서치</title>
+  <link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="research.css"><link rel="icon" href="data:,">
+</head>
+<body class="research-page">
+<nav class="concept-nav" aria-label="모델 선택"><a class="brand-link" href="index.html">수도권 아파트 리서치</a><div><a href="index.html">01 실거래 저평가</a><a href="potential.html">02 상승 잠재력</a><a href="research.html" aria-current="page">03 연구·대표 보고</a><a href="model.html">사용법·검증</a></div></nav>
+<main class="research-main">
+  <header class="research-heading">
+    <p class="eyebrow">RESEARCH DESK · 2026.09.11 회차</p>
+    <h1>잠재력을 검증하고,<br>매물을 공부하는 과정</h1>
+    <p>현재 가격을 비교하는 모델을 바탕으로, 미래 매수 후보를 고르는 근거를 쌓습니다. 온라인 임장으로 특성을 확인하고, 과거 시점의 선택을 시뮬레이션해 잠재력 모델을 개선합니다.</p>
+    <nav class="research-sections" aria-label="연구 보고 목차"><a href="#decision">대표 판단</a><a href="#teams">팀별 진행</a><a href="#simulation">시뮬레이션</a><a href="#next">다음 회차</a></nav>
+  </header>
+  <section id="decision" class="decision-note" aria-labelledby="decision-title">
+    <div><p class="eyebrow">대표 판단</p><h2 id="decision-title">다음 목표는 잠재력 모델의 검증력</h2></div>
+    <div><p>현재 가격 비교는 운영 중입니다. 잠재력 순위는 연구 후보이며, 예산과 거래비용을 반영한 투자 성과는 아직 검증하지 못했습니다.</p><p>이번 회차에는 시뮬레이션 기반과 저장 안전장치를 준비했습니다. 대용량 실행은 저장 용량과 복원 가능성이 확인된 뒤 시작합니다.</p></div>
+  </section>
+  <section id="teams" aria-labelledby="teams-title">
+    <div class="section-heading"><h2 id="teams-title">팀별 진행</h2><span>확인한 사실과 남은 일을 함께 기록합니다</span></div>
+    <div class="team-reports">
+      <article><div class="report-label"><span>가격·모델팀</span><b class="state live">운영 중</b></div><h3>현재 가격 비교의 기반 확보</h3><p>서울·경기는 확장 이력 모델을 채택했고, 인천은 비교 검증에서 더 나았던 기존 모델을 유지합니다. 잠재력과 현재 가격 점수는 별도로 제공합니다.</p><a href="model.html#capital-retraining">지역별 검증 확인 →</a></article>
+      <article><div class="report-label"><span>온라인 임장팀</span><b class="state pending">원문 재확인 대기</b></div><h3>관측일과 근거를 갖춘 특성 학습</h3><p>호가·층·타입·생활환경을 출처와 확인 날짜로 관리합니다. 이번 재확인은 광고 원문을 확보하지 못해 새 확인 사실 0건입니다. 과거 관측을 현재 정보로 바꾸지 않습니다.</p><p class="report-foot">개인 주거 적합성과 일반 가격 학습 피처는 구분합니다.</p></article>
+      <article><div class="report-label"><span>독립 시뮬레이션팀</span><b class="state prepared">기반 준비</b></div><h3>그때 알 수 있었던 정보로 선택</h3><p>과거 정보 마감일, 예산, 비용, 잔금 시차를 고정해 보유와 갈아타기를 비교합니다. 현재는 합성 자료로 동작을 검증하는 단계이며 실제 수익률 결과는 없습니다.</p><a href="#simulation">실험 규칙 보기 →</a></article>
+      <article><div class="report-label"><span>저장·운영팀</span><b class="state pending">실행 조건 미충족</b></div><h3>대용량 자료는 Oracle·OCI에 보존</h3><p>원본과 체크포인트는 압축 파일과 DB 참조로 관리하고, Git에는 코드와 작은 공개 요약만 올립니다. 이번 환경의 접속·잔여 무료 용량·복원 증거가 없으면 대용량 실험을 차단합니다.</p><p class="report-foot">임장 DB 인계의 실제 반영 완료 여부도 별도로 확인합니다.</p></article>
+    </div>
+  </section>
+  <section id="simulation" aria-labelledby="simulation-title">
+    <div class="section-heading"><h2 id="simulation-title">과거 선택을 검증하는 규칙</h2><a href="https://github.com/jaesung0804/turbo-potato/tree/main/docs/simulation">실험 명세 →</a></div>
+    <div class="simulation-table" tabindex="0" role="region" aria-label="시뮬레이션 비교 기준"><table><thead><tr><th>비교 축</th><th>고정할 기준</th></tr></thead><tbody>
+      <tr><th>정보 마감</th><td>2023년 말 / 2024년 말까지 알 수 있었던 정보로 이후 후보 선정. 뒤늦게 공개된 계약과 미래 라벨은 제외.</td></tr>
+      <tr><th>예산</th><td>예산 구간별로 매수가·취득 비용·예비자금까지 포함. 초과 후보를 추천 결과에서 제외.</td></tr>
+      <tr><th>전략</th><td>한 채 보유 / 비용을 반영한 갈아타기 / 저가 매수 후 보유 / 현금 기준선 비교.</td></tr>
+      <tr><th>거래 현실</th><td>계약·잔금 시차, 매도대금 입금 후 재매수, 거래 부재와 청산 불가를 결과에 표시.</td></tr>
+      <tr><th>성과 판단</th><td>비용 차감 후 자산·미청산 자산·거래 가능 범위·예산 위반 여부를 함께 검토. 결과를 본 뒤 고른 최고 상승 매물은 사후 비교 기준으로만 사용.</td></tr>
+      <tr><th>자료 한계</th><td>당시 원본 스냅샷이 없으면 공개 시차를 가정한 재구성 실험으로 표시. 2026년 임장 특성은 과거 시점의 입력에서 제외.</td></tr>
+    </tbody></table></div>
+  </section>
+  <section id="next" class="next-round" aria-labelledby="next-title"><h2 id="next-title">다음 회차가 이어받을 일</h2><ol><li>비공개 실행 환경에서 저장소 연결·무료 용량·실제 복원 가능성을 확인합니다.</li><li>기존 임장 인계 25건을 중복 없이 DB에 반영하고 결과를 대조합니다.</li><li>2개 단지의 미확인 질문 4개에 필요한 광고·공식 원문을 확보합니다.</li><li>저장 조건이 통과하면 한 시점·한 예산·짧은 기간으로 최초 재현 실험을 시작합니다.</li></ol><p>회차 보고에는 확인한 학습, 모델에 반영할 근거, 막힌 일, 다음 행동만 남깁니다.</p></section>
+  <footer class="research-footer"><span>이 페이지는 2026년 9월 11일의 공개 연구 요약입니다. 실시간 작업 상태는 아닙니다.</span><a href="https://github.com/jaesung0804/turbo-potato">코드·검증 기록 ↗</a></footer>
+</main>
+</body></html>

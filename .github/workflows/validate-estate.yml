@@ -1,21 +1,30 @@
 name: Validate complete estate dashboard
 on:
   pull_request:
-  push:
-    branches: [codex/estate-data-recovery, codex/estate-model-improvements]
-    paths-ignore: [.github/workflows/estate-access.yml, .github/workflows/estate-collect.yml]
   workflow_dispatch:
+    inputs:
+      full_candidate:
+        description: Explicit full candidate/ML validation after backend storage readiness succeeds
+        type: boolean
+        default: false
 permissions:
   contents: read
 concurrency:
-  group: estate-validation
+  group: estate-validation-${{ github.ref }}
   cancel-in-progress: true
 jobs:
   validate:
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+      - name: Keep research originals and large payloads out of code changes
+        if: github.event_name == 'pull_request'
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        run: python verify_small_changes.py --base "$BASE_SHA"
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
@@ -24,7 +33,7 @@ jobs:
         with:
           node-version: '22'
       - run: pip install -r requirements.txt pytest
-      - name: Verify data, model isolation and full-result UI behavior
+      - name: Verify unit contracts and UI without production data
         run: |
           python -m pytest -q tests
           node --check web/app.js
@@ -33,29 +42,42 @@ jobs:
           node tests/test_ui.cjs
           node tests/test_model_guide.cjs
           node tests/test_potential_ui.cjs
-      - name: Restore complete data if the collection has finished
-        # PR/manual validation retains the complete candidate and ML checks.
-        # A code push runs unit/UI checks without downloading production state.
-        if: github.event_name != 'push'
-        id: raw
+  full-candidate:
+    if: github.event_name == 'workflow_dispatch' && inputs.full_candidate == true
+    needs: validate
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      RESEARCH_STORAGE: ${{ vars.RESEARCH_STORAGE }}
+      RESEARCH_BACKEND_URL: ${{ vars.RESEARCH_BACKEND_URL }}
+      RESEARCH_BACKEND_TOKEN: ${{ secrets.RESEARCH_BACKEND_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Require verified backend capacity and recovery before large work
+        run: python estate_research_storage.py
+      - run: pip install -r requirements.txt
+      - name: Restore verified complete backend state without publication
         run: |
-          set -euo pipefail
-          if [ -n "$(git ls-remote origin refs/heads/estate-raw-state)" ]; then
-            git fetch origin estate-raw-state
-            git worktree add --detach .work/raw-state FETCH_HEAD
-            python raw_estate_state.py restore --state-dir .work/raw-state
-            echo 'ready=true' >> "$GITHUB_OUTPUT"
-          fi
+          python backend_state.py pull --name estate-raw-state --state-dir .work/raw-state
+          python raw_estate_state.py restore --state-dir .work/raw-state
+          python backend_state.py pull --name estate-model-state --state-dir .work/model-state
+          python estate_model_state.py restore --state-dir .work/model-state
+          python backend_state.py pull --name estate-potential-state --state-dir .work/potential-state
+          python refresh_estate_potential.py restore --state-dir .work/potential-state
       - name: Build complete candidate and chronological validation
-        if: steps.raw.outputs.ready == 'true'
         run: |
           python build_public_site.py
           node tests/check_bundle.cjs .work/site
       - uses: actions/upload-artifact@v4
-        if: steps.raw.outputs.ready == 'true'
         with:
-          name: verified-estate-candidate-${{ github.run_id }}
+          name: estate-candidate-summary-${{ github.run_id }}
           path: |
-            .work/site/
-            models/
-          retention-days: 14
+            .work/site/data/dashboard_manifest.json
+            .work/site/data/model_validation.json
+          retention-days: 7
