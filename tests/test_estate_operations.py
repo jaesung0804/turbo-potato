@@ -37,6 +37,10 @@ def test_ui_refresh_preserves_data_and_provenance(tmp_path):
     result = refresh('https://example.test/', tmp_path / 'site', 'ui-commit', reader=lambda p, n: files[p])
     for key in ['catalog', 'history', 'recommendations', 'map', 'periods', 'coverage', 'collection', 'generated_at']:
         assert result[key] == old[key]
+    assert result['release_status']['mode'] == 'ui_only'
+    assert result['release_status']['transaction_refresh']['status'] == 'unknown'
+    review = result['model_review']
+    assert hashlib.sha256((tmp_path / 'site' / review['url']).read_bytes()).hexdigest() == review['sha256']
     assert result['data_code_commit'] == 'data-commit'
     assert result['code_commit'] == 'ui-commit'
     for name in UI_FILES:

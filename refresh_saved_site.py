@@ -12,6 +12,8 @@ from urllib.parse import urljoin, urlsplit
 from urllib.request import Request, urlopen
 
 from estate_ui_release import copy_ui
+from estate_model_review import publish_review
+from estate_release_status import attach_release_status
 
 MAX_RELEASE_BYTES = 64 * 1024 * 1024
 MAX_FILE_BYTES = 16 * 1024 * 1024
@@ -84,6 +86,9 @@ def refresh(base, output, code_commit, source=Path('web'), reader=None):
     manifest['release_id'] = os.getenv('GITHUB_RUN_ID', 'local-ui') + '-' + os.getenv('GITHUB_RUN_ATTEMPT', '1')
     manifest['ui_assets'] = copy_ui(output, source)
     manifest['ui_assets'][validation] = expected[validation][0]
+    manifest['model_review'] = publish_review(output)
+    manifest['ui_assets'][manifest['model_review']['url']] = manifest['model_review']['sha256']
+    attach_release_status(manifest, ui_only=True)
     (output / 'data/dashboard_manifest.json').write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
     return manifest
 

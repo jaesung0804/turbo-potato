@@ -108,3 +108,7 @@ body.dark-mode .quality-flags{color:#f2bc78!important}body.dark-mode .score-guid
 @media(max-width:650px){.lag-badge{margin-left:14px;margin-right:14px;font-size:9px}}
 
 .confidence-panel{margin:1rem 0;padding:1rem;border:1px solid #a6bab6;border-radius:.6rem;background:#f1f6f3}.confidence-panel h3{margin-top:0}
+/* Publication and collection have separate dates, including UI-only releases. */
+.release-status{font-size:13px;line-height:1.65;color:#4b5d73;background:#edf2f8;border-left:3px solid #5c7493;padding:10px 13px;margin:12px 0;border-radius:3px;overflow-wrap:anywhere}
+.release-status.refresh-paused{color:#74480c;background:#fff3dd;border-left-color:#b87416}
+.dark-mode .release-status{color:#d0dced;background:#1f2c3d}.dark-mode .release-status.refresh-paused{color:#f5d29f;background:#362b1b}

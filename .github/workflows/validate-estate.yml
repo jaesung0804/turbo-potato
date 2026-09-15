@@ -42,6 +42,7 @@ jobs:
           node tests/test_ui.cjs
           node tests/test_model_guide.cjs
           node tests/test_potential_ui.cjs
+          node tests/test_research_ui.cjs
   full-candidate:
     if: github.event_name == 'workflow_dispatch' && inputs.full_candidate == true
     needs: validate

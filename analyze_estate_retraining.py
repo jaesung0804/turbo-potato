@@ -13,6 +13,7 @@ import pandas as pd
 from lightgbm import LGBMRegressor
 
 from estate_io import write_json
+from estate_potential_comparison import compare_common_origins
 from estate_nowcast import PRICE_FEATURES, ACTIVITY_FEATURES, FLOOR_FEATURES, metric
 from estate_retraining_features import save_parquet
 from normalize_molit_capital_history import file_sha256
@@ -242,26 +243,17 @@ def potential_experiment(work, output):
         predictions.append(keep)
         print('potential fit',origin,'train',len(train),'B',len(test),flush=True)
     model_results=[r for r in results if r['method']=='learned_price']
-    eligible=[r for r in model_results if r['observation_rate_pct']>=50 and r['observed_complexes']>=20]
-    model_eligible_origins={r['origin'] for r in eligible}
-    eligible_origins={origin for origin in model_eligible_origins
-                      if all(r['observation_rate_pct']>=50 and r['observed_complexes']>=20
-                             for r in results if r['origin']==origin)}
-    comparison=[]
-    for method in ('learned_price','laggard','cheap_peer','momentum'):
-        same=[r for r in results if r['method']==method and r['origin'] in eligible_origins]
-        comparison.append({'method':method,'same_origins':len(same),
-            'median_origin_complex_excess_pct':float(np.median([r['complex_median_excess_pct'] for r in same])) if same else None,
-            'median_observation_rate_pct':float(np.median([r['observation_rate_pct'] for r in same])) if same else None,
-            'positive_origins':sum(r['complex_median_excess_pct']>0 for r in same)})
+    matched=compare_common_origins(results)
+    comparison=matched['comparison']
     result=finite({'schema_version':1,'status':'current_source_boundary_retrospective_diagnostic',
         'primary_geographic_confirmation':'blocked_pending_historical_boundary_and_identity_audit',
         'training_scope':'Seoul and Gwangmyeong only; excludes named cases; no B benchmark outcomes',
         'evaluation_scope':'All other Gyeonggi and Incheon; no outcome-based geographic selection',
         'horizon_months':24,'outcome_window_months':[18,24],
-        'model_evaluated_origins':len(model_results),'sufficiently_observed_origins':len(eligible),
-        'common_sufficiently_observed_origins':len(eligible_origins),
-        'sufficient_observation_gate_passed':len(eligible_origins)>=6,
+        'model_evaluated_origins':len(model_results),'sufficiently_observed_origins':matched['model_sufficient_origins'],
+        'common_sufficiently_observed_origins':matched['common_origins'],
+        'sufficient_observation_gate_passed':matched['common_origins']>=6,
+        'matched_origin_audit':matched,
         'comparison_same_model_eligible_origins':comparison,'results':results,'coverage':coverage,
         'skipped_training':skipped,'operational_decision':'retain_Seoul_Gwangmyeong_v2_scope',
         'limitations':['Current source addresses are not certified historical boundaries or physical IDs.',
