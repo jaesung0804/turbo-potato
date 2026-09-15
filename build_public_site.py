@@ -19,6 +19,8 @@ from shapely.geometry import shape, mapping, box
 from shapely.ops import unary_union
 
 from estate_ui_release import UI_FILES, copy_ui
+from estate_model_review import publish_review
+from estate_release_status import attach_release_status
 
 AMENITIES = ['households', 'elementary_500m', 'nearest_elementary_name', 'nearest_elementary_m',
              'subway_lines', 'subway_station', 'subway_distance_m', 'latitude', 'longitude']
@@ -171,6 +173,9 @@ def build(source, output, model_dir=Path('models'), month=None, summary_path=Non
     write_json(output/'data/model_validation.json',validation,indent=2)
     manifest['ui_assets'] = {name: hashlib.sha256((output/name).read_bytes()).hexdigest()
                              for name in UI_FILES + ['data/model_validation.json']}
+    manifest['model_review'] = publish_review(output)
+    manifest['ui_assets'][manifest['model_review']['url']] = manifest['model_review']['sha256']
+    attach_release_status(manifest)
     write_json(output/'data/dashboard_manifest.json',manifest,indent=2)
     print(json.dumps({'source_rows': summary['total_rows'], 'used_rows': summary['used_rows'],
           'coverage': manifest['coverage'], 'model_month': model['model_month'], 'validation': model['validation'],

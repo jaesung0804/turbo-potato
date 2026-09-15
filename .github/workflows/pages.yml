@@ -26,6 +26,7 @@ concurrency:
   group: estate-raw-data-update
   cancel-in-progress: false
 env:
+  ESTATE_REFRESH_STATUS: not_requested
   RESEARCH_STORAGE: ${{ vars.RESEARCH_STORAGE || 'git' }}
   RESEARCH_BACKEND_URL: ${{ vars.RESEARCH_BACKEND_URL }}
   RESEARCH_BACKEND_TOKEN: ${{ secrets.RESEARCH_BACKEND_TOKEN }}
@@ -56,6 +57,7 @@ jobs:
           node tests/test_ui.cjs
           node tests/test_model_guide.cjs
           node tests/test_potential_ui.cjs
+          node tests/test_research_ui.cjs
       - name: Validate manual publication scope
         if: github.event_name == 'workflow_dispatch' && inputs.ui_only == true && inputs.refresh == true
         run: |
@@ -82,15 +84,18 @@ jobs:
         env:
           MOLIT_API_KEY: ${{ secrets.MOLIT_API_KEY }}
         run: |
+          echo "ESTATE_REFRESH_ATTEMPTED_AT=$(date -u +%Y-%m-%dT%H:%M:%SZ)" >> "$GITHUB_ENV"
           if [ -z "$MOLIT_API_KEY" ]; then
             if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
               echo '::error::MOLIT_API_KEY is required for the requested refresh.'
               exit 1
             fi
             echo '::warning::MOLIT_API_KEY is missing. Preserving the verified saved collection and its original observation dates.'
+            echo 'ESTATE_REFRESH_STATUS=skipped_missing_key' >> "$GITHUB_ENV"
             echo 'Transaction refresh skipped: private MOLIT_API_KEY is missing; saved data dates remain unchanged.' >> "$GITHUB_STEP_SUMMARY"
           else
             python collect_estate_transactions.py --refresh-months 3 --workers 2
+            echo 'ESTATE_REFRESH_STATUS=completed' >> "$GITHUB_ENV"
           fi
       - name: Refresh dated public KB market context
         if: github.event_name != 'workflow_dispatch' || inputs.ui_only != true

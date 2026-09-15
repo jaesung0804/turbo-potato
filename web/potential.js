@@ -86,7 +86,7 @@ const Potential = (() => {
     try{theme(localStorage.getItem('realEstateDashboardDarkMode')==='1');}catch(_){theme(false);}
     wire();
     const response=await fetch('data/dashboard_manifest.json',{cache:'no-cache'});if(!response.ok)throw Error('후보 자료 목록을 불러오지 못했습니다. 새로고침해 주세요.');
-    const manifest=await response.json();if(!manifest.potential)throw Error('이 배포본에는 잠재력 후보 자료가 아직 없습니다.');
+    const manifest=await response.json();EstateReleaseStatus.render(manifest);if(!manifest.potential)throw Error('이 배포본에는 잠재력 후보 자료가 아직 없습니다.');
     const data=await DashboardData.compressed(manifest.potential);if(data.schema_version!==1||!Array.isArray(data.rows)||data.rows.length!==data.cohort_size)throw Error('후보 자료 건수가 일치하지 않습니다.');
     state.data=data;renderInfo(data);render(true);
   }
