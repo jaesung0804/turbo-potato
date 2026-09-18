@@ -7,6 +7,7 @@ from pathlib import Path
 from research_backend_client import BackendError
 
 from .engine import Costs, Policy, ReplayError, replay
+from .comparison import compare_replays
 from .fixtures import fixture
 from .storage import BackendSession, MAX_INPUT_BYTES, read_gzip_json
 
@@ -28,13 +29,21 @@ def main():
     try:
         if args.command == "demo":
             data, policy, costs = fixture()
-            results = {}
+            results, replays = {}, []
             for strategy in ("hold", "rotate", "cheapest_hold", "cash"):
                 result = replay(data, replace(policy, run_id="synthetic-demo-" + strategy, strategy=strategy), costs)
                 results[strategy] = result["summary"]
+                replays.append(result)
+            # Arithmetic fixture seeds only, not a registered historical experiment.
+            for seed in (7, 23, 41):
+                name = "random_hold_" + str(seed)
+                result = replay(data, replace(policy, run_id="synthetic-demo-" + name,
+                                              strategy="random_hold", random_seed=seed), costs)
+                results[name] = result["summary"]
+                replays.append(result)
             output = {"status": "synthetic_validation_only", "actual_historical_experiments": 0,
                       "notice": "Invented prices and cost assumptions; no evidence of model performance.",
-                      "scenarios": results}
+                      "scenarios": results, "comparison": compare_replays(replays, random_seeds=(7, 23, 41))}
         else:
             if args.policy.stat().st_size > 65_536:
                 raise ReplayError("Policy exceeds 64 KiB")
