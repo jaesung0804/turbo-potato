@@ -114,14 +114,20 @@ class Policy:
     max_quote_age_days: int
     switch_score_margin: float
     exit_signal_date: str | None = None
+    random_seed: int | None = None
 
     def __post_init__(self):
         object.__setattr__(self, "decision_dates", tuple(self.decision_dates))
         start, end = date.fromisoformat(self.start), date.fromisoformat(self.end)
         if end < start or (end - start).days > MAX_DAYS:
             raise ReplayError("Replay date range is invalid or too large")
-        if self.strategy not in {"hold", "rotate", "cheapest_hold", "cash"}:
+        if self.strategy not in {"hold", "rotate", "cheapest_hold", "cash", "random_hold"}:
             raise ReplayError("Unknown preregistered strategy")
+        if self.strategy == "random_hold":
+            if type(self.random_seed) is not int or not 0 <= self.random_seed < 2**32:
+                raise ReplayError("Random hold requires a preregistered uint32 seed")
+        elif self.random_seed is not None:
+            raise ReplayError("Only random hold accepts a random seed")
         if not self.run_id or len(self.run_id) > 100:
             raise ReplayError("A bounded run ID is required")
         for name in ("initial_cash_krw", "purchase_price_cap_krw"):
@@ -234,7 +240,7 @@ def _event(s: dict, day: date, kind: str, **values) -> None:
 
 def _choose(s: dict, data: dict, day: date, p: Policy, c: Costs) -> None:
     holding = s["holding"]
-    if p.strategy == "cash" or (holding and p.strategy in {"hold", "cheapest_hold"}):
+    if p.strategy == "cash" or (holding and p.strategy in {"hold", "cheapest_hold", "random_hold"}):
         return
     obs = observations_asof(data, day, p.max_observation_age_days)
     budget = s["cash_krw"]
@@ -246,13 +252,22 @@ def _choose(s: dict, data: dict, day: date, p: Policy, c: Costs) -> None:
         budget += c.sell(current["price_krw"], holding)["net_krw"]
     candidates = [r for r in obs.values() if r["price_krw"] <= p.purchase_price_cap_krw
                   and c.buy(r["price_krw"])["total_krw"] + p.reserve_krw <= budget]
-    candidates.sort(key=(lambda r: (r["price_krw"], r["asset_id"])) if p.strategy == "cheapest_hold"
-                    else (lambda r: (-r["score"], r["asset_id"])))
+    if p.strategy == "random_hold":
+        # Stable across row order, process restarts and checkpoint boundaries.
+        # Scores, future prices and run IDs never influence this ranking.
+        candidates.sort(key=lambda r: (digest(["random_hold_v1", p.random_seed, str(day), r["asset_id"]]),
+                                       r["asset_id"]))
+    elif p.strategy == "cheapest_hold":
+        candidates.sort(key=lambda r: (r["price_krw"], r["asset_id"]))
+    else:
+        candidates.sort(key=lambda r: (-r["score"], r["asset_id"]))
     chosen = candidates[0] if candidates else None
     _event(s, day, "decision", strategy=p.strategy, selected_asset=chosen["asset_id"] if chosen else None,
            eligible_count=len(candidates), available_budget_krw=budget,
            observation_id=chosen["observation_id"] if chosen else None,
            model_version=chosen["model_version"] if chosen else None)
+    if p.strategy == "random_hold":
+        s["ledger"][-1].update(random_seed=p.random_seed, selection_rule="random_hold_v1")
     if chosen is None:
         return
     if holding:
@@ -362,7 +377,7 @@ def _summary(s: dict, data: dict, p: Policy, c: Costs, day: date) -> dict:
         if row:
             mark = s["cash_krw"] + c.sell(row["price_krw"], s["holding"])["net_krw"]
     return {"research_status": "synthetic_validation_only" if data["kind"] == "synthetic_fixture" else "retrospective_scenario",
-            "strategy": p.strategy, "start": p.start, "end": p.end,
+            "strategy": p.strategy, "random_seed": p.random_seed, "start": p.start, "end": p.end,
             "initial_cash_krw": p.initial_cash_krw, "reserve_krw": p.reserve_krw,
             "purchase_price_cap_krw": p.purchase_price_cap_krw, "cost_scenario_id": c.scenario_id,
             "availability_mode": data["provenance"]["availability_mode"],
