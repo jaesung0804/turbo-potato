@@ -74,6 +74,7 @@ jobs:
           python refresh_saved_site.py --sha "$GITHUB_SHA"
           node tests/check_bundle.cjs .work/site
       - name: Restore checksum-verified complete raw state
+        id: restore_raw
         if: github.event_name != 'workflow_dispatch' || inputs.ui_only != true
         run: |
           set -euo pipefail
@@ -85,6 +86,7 @@ jobs:
           fi
           python raw_estate_state.py restore --state-dir .work/raw-state
       - name: Refresh recent transactions and rotate one historical month
+        id: refresh_transactions
         if: github.event_name == 'schedule' || (inputs.refresh == true && inputs.ui_only != true)
         env:
           MOLIT_API_KEY: ${{ secrets.MOLIT_API_KEY }}
@@ -105,6 +107,15 @@ jobs:
             python collect_estate_transactions.py --refresh-months 3 --workers 2
             echo 'ESTATE_REFRESH_STATUS=completed' >> "$GITHUB_ENV"
           fi
+      - name: Preserve verified CSV progress after a transport or validation failure
+        if: failure() && steps.restore_raw.outcome == 'success' && steps.refresh_transactions.outcome == 'failure' && inputs.refresh_source == 'public_csv' && env.RESEARCH_STORAGE == 'backend'
+        run: |
+          set -euo pipefail
+          # Keep the previous complete CSV and its observation date. Only the
+          # bounded download checkpoints can be added by this failed attempt.
+          python raw_estate_state.py pack --state-dir .work/raw-state
+          python backend_state.py push --name estate-raw-state --state-dir .work/raw-state
+          python backend_rows.py --csv data/capital_area_apt_trade_transactions.csv --dataset apt-trades --snapshot-name estate-raw-state --state-dir .work/raw-state
       - name: Refresh dated public KB market context
         if: github.event_name != 'workflow_dispatch' || inputs.ui_only != true
         run: |
