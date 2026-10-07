@@ -1,6 +1,7 @@
 // Pure data and application-function tests; no DOM or browser simulation.
 const assert=require('node:assert/strict'),fs=require('node:fs'),vm=require('node:vm');
 require('./test_multiselect.cjs');
+require('./test_excel_export.cjs');
 const {gzipSync}=require('node:zlib'),{createHash,webcrypto}=require('node:crypto');
 const root=process.cwd(),read=name=>fs.readFileSync(`${root}/web/${name}`,'utf8');
 const app=read('app.js').replace(/init\(\)\.catch\([\s\S]*$/, '');
