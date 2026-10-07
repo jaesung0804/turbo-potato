@@ -9,8 +9,8 @@ import numpy as np
 import pandas as pd
 import pytest
 
-from publish_estate_potential import public_payload
-from analyze_estate_potential_horizons import assumed_lag, cutoff_for, price_snapshot, evaluate, maturity_for_window
+from estate.models.potential.v2.publish import public_payload
+from estate.models.potential.v2.horizons import assumed_lag, cutoff_for, price_snapshot, evaluate, maturity_for_window
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -101,7 +101,7 @@ def test_five_year_backtest_cannot_use_labels_that_mature_after_prediction(monke
     def forbidden_fit(*args, **kwargs):
         raise AssertionError("No five-year training labels existed at any prediction origin")
 
-    monkeypatch.setattr("analyze_estate_potential_horizons.LGBMRegressor", forbidden_fit)
+    monkeypatch.setattr("estate.models.potential.v2.horizons.LGBMRegressor", forbidden_fit)
     out = evaluate(pd.concat(frames), pd.Timestamp("2026-09-08"))
     assert len(out["skipped_model_evaluations"]) == 3
     assert all(r["train_rows"] == 0 for r in out["skipped_model_evaluations"])

@@ -6,7 +6,7 @@ import joblib
 import numpy as np
 import pandas as pd
 
-from estate_regional_nowcast import ARTIFACT, MANIFEST, COLS, PRICE_LEVELS, relative_inputs
+from estate.models.nowcast.regional_v2.model import ARTIFACT, MANIFEST, COLS, PRICE_LEVELS, relative_inputs
 
 
 def test_frozen_release_routes_rows_and_preserves_incheon_exactly():

@@ -45,7 +45,7 @@
 ## 재현
 
 ```sh
-python analyze_estate_reporting_lag.py --raw-state .work/raw-state
+python -m estate.research.reporting.lag --raw-state .work/raw-state
 python -m pytest tests/test_reporting_lag.py tests/test_estate_vintages.py
 ```
 

@@ -9,18 +9,18 @@ from pathlib import Path
 import numpy as np
 import pytest
 
-import build_real_estate_dashboard_data as summary_builder
-import collect_estate_transactions as collector
-import estate_model as model
-import estate_model_state as model_state
-import raw_estate_state as raw_state
-from build_public_site import apply_amenities
-from dashboard_bundle import build_bundle
+import estate.site.summary as summary_builder
+import estate.data.collection.transactions as collector
+import estate.models.reference.v5.model as model
+import estate.data.storage.model_state as model_state
+import estate.data.storage.raw_state as raw_state
+from estate.site.build import apply_amenities
+from estate.site.bundle import build_bundle
 
 
 def test_month_changes_at_the_korean_midnight():
     from datetime import datetime, timezone
-    from estate_calendar import today
+    from estate.core.calendar import today
     assert today(datetime(2026,9,30,20,35,tzinfo=timezone.utc)).strftime('%Y-%m') == '2026-10'
 
 
@@ -336,7 +336,7 @@ def test_legacy_amenities_do_not_cross_same_name_lots(tmp_path):
 
 
 def test_same_code_cannot_hide_a_stale_public_data_release(tmp_path, monkeypatch):
-    import verify_public_site
+    import estate.site.verify as verify_public_site
     expected=tmp_path/'manifest.json'
     expected.write_text(json.dumps({'code_commit':'same','release_id':'today','generated_at':'2026-09-06'}))
     previous=json.dumps({'code_commit':'same','release_id':'yesterday','generated_at':'2026-09-05'}).encode()

@@ -1,9 +1,9 @@
 // Web Run:
 //   cd C:\code
-//   python run_real_estate_dashboard.py
+//   python -m estate.site.serve
 // This starts the web server and opens http://127.0.0.1:8000
 // Fast web-only run:
-//   python run_real_estate_dashboard.py --skip-build
+//   python -m estate.site.serve --skip-build
 
 const MAP_URL = "data/capital_area_adm_dong_light.geojson";
 const escapeHtml = ResultPages.escape;

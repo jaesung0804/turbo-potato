@@ -6,10 +6,10 @@ import zipfile
 
 import pytest
 
-from dashboard_bundle import asset
-from estate_io import write_json
-from refresh_saved_model import update
-from local_site_release import unpack
+from estate.site.bundle import asset
+from estate.core.io import write_json
+from estate.site.refresh_model import update
+from estate.site.local_release import unpack
 
 
 def test_sorted_model_output_is_joined_by_identity_not_position(tmp_path, monkeypatch):
@@ -28,7 +28,7 @@ def test_sorted_model_output_is_joined_by_identity_not_position(tmp_path, monkey
             r['current_valuation']['price_billion'] += 1
         model['recommendations'].reverse()
         model['nowcast'] = {'version': 'tested', 'available_types': 2}
-    monkeypatch.setattr('refresh_saved_model.attach_nowcast', attach)
+    monkeypatch.setattr('estate.site.refresh_model.attach_nowcast', attach)
     result = update(tmp_path, source, 'code')
     out = json.loads(gzip.decompress((tmp_path/result['recommendations']['url']).read_bytes()))
     assert [r[2]['price_billion'] for r in out['rows']] == [11, 21]
@@ -48,7 +48,7 @@ def test_local_release_rejects_bad_hash_and_path_before_extracting(tmp_path):
 
 
 def test_model_cache_requires_hash_before_loading(tmp_path, monkeypatch):
-    from estate_model_artifact import active_nowcast
+    from estate.models.nowcast.artifact import active_nowcast
     monkeypatch.chdir(tmp_path)
     path = tmp_path/'models/nowcast/frozen.joblib'
     path.parent.mkdir(parents=True); path.write_bytes(b'wrong')
@@ -59,7 +59,7 @@ def test_model_cache_requires_hash_before_loading(tmp_path, monkeypatch):
 
 
 def test_release_preserves_real_build_commit_instead_of_preview_label(tmp_path, monkeypatch):
-    import local_site_release as release
+    import estate.site.local_release as release
     (tmp_path/'data').mkdir()
     manifest = {'code_commit': 'a'*40, 'local_build_commit': 'local-quantile-preview', 'ui_assets': {}}
     monkeypatch.setattr(release, 'release_files', lambda _: (manifest, []))

@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 import pytest
 
-from estate_nowcast import history_features, weighted_median, predict_sample
+from estate.models.nowcast.v1.model import history_features, weighted_median, predict_sample
 
 
 def history(days, prices):
@@ -69,7 +69,7 @@ def test_release_checks_artifact_and_keeps_annual_ranking(tmp_path, monkeypatch)
     import hashlib
     import json
     import joblib
-    import estate_nowcast_release as release
+    import estate.models.nowcast.release as release
     artifact = tmp_path / 'model.joblib'
     joblib.dump({'trained_through': '2025-12-31'}, artifact)
     manifest = tmp_path / 'model.json'

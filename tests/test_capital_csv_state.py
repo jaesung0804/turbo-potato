@@ -3,9 +3,8 @@ from pathlib import Path
 import tempfile
 import unittest
 from unittest.mock import patch
-import capital_csv_state
-
-from capital_csv_state import pack, restore
+import estate.data.storage.csv_state as capital_csv_state
+from estate.data.storage.csv_state import pack, restore
 
 
 class CapitalCSVStateTests(unittest.TestCase):
@@ -57,7 +56,7 @@ class CapitalCSVStateTests(unittest.TestCase):
     def test_incremental_does_not_rewrite_unchanged_raw_file(self):
         pack(self.source, self.state)
         (self.source / "manifest.json").write_text('{"status":"complete"}')
-        with patch("capital_csv_state.copy_verified", wraps=capital_csv_state.copy_verified) as copy:
+        with patch("estate.data.storage.csv_state.copy_verified", wraps=capital_csv_state.copy_verified) as copy:
             pack(self.source, self.state, incremental=True)
         self.assertEqual(len(copy.call_args_list), 1)
         self.assertEqual(copy.call_args.args[1].name, "manifest.json")

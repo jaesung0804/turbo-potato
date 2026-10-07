@@ -2,9 +2,9 @@ import numpy as np
 import pandas as pd
 import pytest
 
-from estate_quantile_nowcast import (
+from estate.models.nowcast.quantile_v1.model import (
     LEVELS, QuantileResidualModel, fit, check_training, metrics, evaluate, attach_quantiles)
-from estate_regional_nowcast import COLS, PRICE_LEVELS
+from estate.models.nowcast.regional_v2.model import COLS, PRICE_LEVELS
 
 
 def panel(n=1200):
@@ -65,7 +65,7 @@ def test_crossing_rearrangement_and_scale_invariance():
 
 
 def test_retained_median_does_not_move_when_tails_cross():
-    from estate_quantile_nowcast import RetainedMedianQuantileModel
+    from estate.models.nowcast.quantile_v1.model import RetainedMedianQuantileModel
     model = RetainedMedianQuantileModel(QuantileResidualModel([Constant(.2), Constant(.3), Constant(-.4)]), Constant(.1))
     np.testing.assert_array_equal(model.predict_quantiles(panel(10))[0], [.1, .1, .1])
 
@@ -86,7 +86,7 @@ def test_evaluation_is_future_only_and_reports_groups():
 
 
 def test_monthly_inference_p50_is_identical_to_point_price_and_cutoff_is_shared():
-    from estate_nowcast import predict_sample
+    from estate.models.nowcast.v1.model import predict_sample
     dates = pd.to_datetime(['2026-06-01', '2026-07-01', '2026-08-20'])
     d = pd.DataFrame({'date': dates, 'month': dates.to_period('M').astype(str),
         'day': dates.values.astype('datetime64[D]').astype('int64'),
@@ -121,7 +121,7 @@ def test_quantile_release_requires_own_validation_and_matching_p50():
 
 
 def test_experiment_stops_before_reading_or_training_when_storage_is_blocked(tmp_path, monkeypatch, capsys):
-    import analyze_estate_quantiles as runner
+    import estate.research.price.quantiles as runner
     monkeypatch.setattr(runner, 'run_preflight', lambda **_: {'ready': False, 'blockers': ['live_capacity_missing']})
     monkeypatch.setattr(runner, 'load_transactions', lambda _: pytest.fail('Must not read inputs'))
     monkeypatch.setattr(runner, 'fit', lambda *_: pytest.fail('Must not train'))

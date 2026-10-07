@@ -19,7 +19,7 @@ LightGBM과 기존 17개 입력을 유지하고 `reference_anchor`를 보완한�
 
 ## 검증과 채택의 한계
 
-전체 자료를 같은 연도·같은 평형으로 비교했다. 연도 이전 자료로 학습하고 그보다 앞선 연도에서 혼합 비중과 오차 구간을 선택한다. 코드: `compare_sibling_models.py`, 전체 수치와 입력 SHA256: `sibling_model_comparison.json`.
+전체 자료를 같은 연도·같은 평형으로 비교했다. 연도 이전 자료로 학습하고 그보다 앞선 연도에서 혼합 비중과 오차 구간을 선택한다. 코드: `estate/research/price/compare_siblings.py`, 전체 수치와 입력 SHA256: `sibling_model_comparison.json`.
 
 | 시험 연도 | v4 전체 MAE | v5 전체 MAE | 보완 대상 수 | 보완 대상 v4 MAE | 보완 대상 v5 MAE |
 |---|---:|---:|---:|---:|---:|

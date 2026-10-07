@@ -2,9 +2,9 @@ import numpy as np
 import pandas as pd
 import pytest
 
-from analyze_estate_potential import CASES
-from analyze_estate_potential_horizons import price_snapshot
-from analyze_estate_potential_path import (
+from estate.models.potential.v1.experiment import CASES
+from estate.models.potential.v2.horizons import price_snapshot
+from estate.models.potential.research.path import (
     HORIZONS, METHODS, adoption_gate, detection_diagnostics, mature_training,
     mean_prediction_signal, observation_counts, path_labels, selected_keys,
 )

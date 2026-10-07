@@ -8,7 +8,7 @@ from pathlib import Path
 
 import pytest
 
-from estate_research_storage import LiveCapacityEvidence, run_preflight
+from estate.data.storage.readiness import LiveCapacityEvidence, run_preflight
 
 
 class MemoryBackend:

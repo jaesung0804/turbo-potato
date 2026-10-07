@@ -21,9 +21,16 @@ const ResultPages=(()=>{
     return r;
   }
   function csvCell(value){let v=String(value??"");if(/^[=+@\-\t\r]/.test(v))v="'"+v;return '"'+v.replace(/"/g,'""')+'"';}
+  const downloads=new Map();
+  function downloadName(name,now=new Date()){
+    const p=Object.fromEntries(new Intl.DateTimeFormat('en-GB',{timeZone:'Asia/Seoul',year:'2-digit',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hourCycle:'h23'}).formatToParts(now).map(x=>[x.type,x.value]));
+    const stamp=`${p.year}${p.month}${p.day}_${p.hour}_${p.minute}`,dot=name.lastIndexOf('.'),stem=dot<0?name:name.slice(0,dot),ext=dot<0?'':name.slice(dot),key=stem+'_'+stamp;
+    const count=(downloads.get(key)??0)+1;downloads.set(key,count);
+    return `${stem}${count>1?'_'+count:''}_${stamp}${ext}`;
+  }
   function downloadCsv(name,headers,rows){
     const csv="\ufeff"+[headers,...rows].map(row=>row.map(csvCell).join(",")).join("\r\n");
-    const url=URL.createObjectURL(new Blob([csv],{type:"text/csv;charset=utf-8"}));const a=document.createElement("a");a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
+    const url=URL.createObjectURL(new Blob([csv],{type:"text/csv;charset=utf-8"}));const a=document.createElement("a");a.href=url;a.download=downloadName(name);a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
   }
-  return {paginate,view,escape,csvCell,downloadCsv,set:(id,page)=>state.set(id,page),reset:()=>state.clear()};
+  return {paginate,view,escape,csvCell,downloadCsv,downloadName,set:(id,page)=>state.set(id,page),reset:()=>state.clear()};
 })();

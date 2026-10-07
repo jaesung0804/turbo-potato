@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 import pytest
 
-from estate_price_confidence import grades, complex_weights, weighted_quantile
+from estate.models.nowcast.confidence.model import grades, complex_weights, weighted_quantile
 
 
 def test_error_grades_have_explicit_price_bounds_and_no_trade_count_shortcut():
@@ -19,8 +19,8 @@ def test_published_band_keeps_prices_scores_and_requires_matching_model():
     import copy
     import json
     from pathlib import Path
-    from estate_price_confidence import FEATURES, attach_confidence
-    from estate_valuation import score_at_price
+    from estate.models.nowcast.confidence.model import FEATURES, attach_confidence
+    from estate.models.nowcast.valuation import score_at_price
 
     spec = json.loads(Path('metadata/nowcast_2026_capital_v2.json').read_text())
     f = pd.DataFrame([{**dict.fromkeys(FEATURES, 3.), 'key': 'sample',

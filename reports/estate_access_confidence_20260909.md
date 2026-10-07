@@ -47,8 +47,8 @@
 2025·2026년은 이미 앞선 연구에서 확인한 기간을 재사용했다. 독립적인 미래 검증이 아니며 실제 최초 공시 시점 대신 신고 지연 가정을 사용한다. 이 등급의 운영 이후 미래 거래 포함률을 계속 확인할 필요가 있다.
 
 - 설계: `estate_access_confidence_protocol_20260909.md` (메인 적용 커밋에 선행 고정)
-- 실행: `analyze_estate_access_confidence.py`
+- 실행: `estate/research/price/access_confidence.py`
 - 모든 사양·범위·분할·수치: `estate_access_results_20260909.json`, `estate_access_selection_20260909.json`, `estate_confidence_results_20260909.json`, `estate_confidence_calibration_20260909.json`
-- 운영 신뢰도: `estate_price_confidence.py`, `metadata/price_confidence_2026.*`
+- 운영 신뢰도: `estate/models/nowcast/confidence/model.py`, `metadata/price_confidence_2026.*`
 
 배포 계산에서 같은 날짜의 복수 거래 순서도 기존 가격 산출과 일치하도록 보존했다. 현재 산출 가능한 33,354개 평형 모두 표시 기준가가 첫 메인 배포본과 정확히 같음을 확인했다. 과거 연구의 안정 정렬·저장 예측은 별도로 보존하며, 새 가격 신뢰도는 이 일치한 기준가에만 붙인다.

@@ -1,0 +1,14 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>상승잠재력 모델 비교 · 2026-10-08</title>
+<style>body{margin:0;background:#101d24;color:#e9f0f3;font:16px/1.8 system-ui,sans-serif}main{max-width:940px;margin:auto;padding:32px 20px 80px}a{color:#8ccaff}h1{font-size:32px;line-height:1.4}h2{font-size:22px;margin-top:36px}p{color:#d3dee5}table{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}th,td{text-align:left;padding:12px;border-bottom:1px solid #43535e}th{background:#20343f}.result{padding:20px;background:#263a45;border:1px solid #678898;border-radius:12px}.scroll{overflow:auto}.muted{color:#b9c8d3}</style></head>
+<body><main><a href="potential.html">← 상승잠재력 후보</a><h1>상승잠재력 분위수 실험</h1><p class="muted">2026년 10월 8일 · 로컬 학습·시간 순서 검증</p>
+<div class="result"><b>기존 v2 유지 · 10월 후보 갱신</b><br>새 분위수 후보는 미래 상대 변화의 범위를 충분히 포괄하지 못했습니다. 기존 사양을 최신 자료로 재학습해 10월 1일 기준 3,454개 평형을 다시 계산했습니다.</div>
+<h2>새 모형으로 무엇을 시험했나요?</h2><p>기존 11개 가격·거래 특징에 최근 가격 분산, 거래 발생일 수, 대표 층을 추가하고 P10·P50·P90을 따로 학습했습니다. 낮은 거래를 가격 때문에 제거하거나 증여라고 분류하지 않았습니다. 각 판단일과 보정 시점에 이미 결과가 성숙한 과거 자료만 사용했습니다.</p>
+<h2>기대 범위가 좁았습니다</h2><p>서울·광명에서 2021년 7월부터 2024년 7월까지 7개 판단일을 비교했습니다. 아래 포함률은 판단일별 동일 가중 평균입니다. 목표는 80%이며, 두 공시 시차 가정 모두 75~85% 범위에 들어야 한다는 비교 기준을 충족하지 못했습니다.</p>
+<div class="scroll"><table><thead><tr><th>가정</th><th>확장 이력 L1 보정 비교군</th><th>새 분위수 후보</th></tr></thead><tbody><tr><td>기본 61→31일 공시 시차 · 포함률</td><td>78.27%</td><td>76.70%</td></tr><tr><td>모두 61일 시차 · 포함률</td><td>76.40%</td><td>73.53%</td></tr><tr><td>기본 시차 · 분위수 손실 ↓</td><td>0.019225</td><td>0.018778</td></tr><tr><td>모두 61일 · 분위수 손실 ↓</td><td>0.021044</td><td>0.020557</td></tr></tbody></table></div>
+<p>두 비교군 모두 2006년 이후 확장 이력으로 학습한 실험입니다. 특히 2024년 7월 판단일의 포함률은 기본 시차 54.8%, 61일 시차 53.0%로 낮았습니다. 전체 평균만 보고 안정적인 가격 범위라고 해석할 수 없습니다.</p>
+<h2>운영 중인 v2와도 따로 비교했습니다</h2><div class="scroll"><table><thead><tr><th>같은 7개 판단일의 순위상관 ↑</th><th>운영 v2 사양</th><th>분위수 후보</th></tr></thead><tbody><tr><td>기본 공시 시차</td><td>0.183</td><td>0.148</td></tr><tr><td>61일 공시 시차</td><td>0.151</td><td>0.183</td></tr></tbody></table></div><p>운영 사양은 2017년 이후 판단일로 학습합니다. 시차 가정에 따라 결과가 달라져 일관된 개선을 확인하지 못했습니다. 현재 가격 비교점수에는 이 실험을 가산하지 않습니다.</p>
+<h2>10월 후보의 기준</h2><p>판단일은 2026년 10월 1일, 입력 계약 마감일은 8월 31일입니다. 31일 공시 지연을 가정하며, 판단 전 180일 같은 전용면적 거래가 3건 이상인 서울·광명 단지를 다룹니다. 결과는 2028년 4~10월의 같은 생활권 대비 상대 변화로 평가할 예정입니다. 현재 기준가격·절대 수익률·상승 확률이 아닙니다.</p>
+<p>이번 평가는 과거 정정자료와 재사용한 시험 시점에 기반합니다. 2022년 하반기와 2023년 초에는 결과 표본이 특히 적습니다. 미래 독립 검증으로 해석하지 않습니다.</p>
+<p><a href="https://github.com/jaesung0804/turbo-potato/blob/main/reports/potential/quantile_v3/results_20261008.md">전체 관측량·원수치·선정 과정</a> · <a href="https://github.com/jaesung0804/turbo-potato/tree/main/estate/models/potential">모델 버전별 코드</a></p>
+</main></body></html>

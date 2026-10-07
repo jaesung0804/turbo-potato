@@ -2,7 +2,7 @@ import json
 
 import pytest
 
-from estate_research_progress import attach_research_progress
+from estate.research.reporting.progress import attach_research_progress
 
 
 def test_capital_research_does_not_replace_forecast(tmp_path):

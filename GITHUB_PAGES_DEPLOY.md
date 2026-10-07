@@ -4,7 +4,7 @@
 
 ## 화면·보고만 바꿀 때
 
-`Deploy dashboard to GitHub Pages`를 수동 실행하고 기본값 `ui_only=true`, `refresh=false`를 유지합니다. `refresh_saved_site.py`는 기존 공개 manifest의 완전성 및 각 주요 데이터의 크기·SHA-256을 검사한 뒤, 최대 64MiB 범위에서 공개 데이터를 재사용하고 `web/` 화면만 교체합니다. 원본 DB 복원, 자료 수집, 모델 학습을 하지 않습니다.
+`Deploy dashboard to GitHub Pages`를 수동 실행하고 기본값 `ui_only=true`, `refresh=false`를 유지합니다. `estate/site/refresh_ui.py`는 기존 공개 manifest의 완전성 및 각 주요 데이터의 크기·SHA-256을 검사한 뒤, 최대 64MiB 범위에서 공개 데이터를 재사용하고 `web/` 화면만 교체합니다. 원본 DB 복원, 자료 수집, 모델 학습을 하지 않습니다.
 
 자료의 `generated_at`, 수집일, 모델·데이터 해시는 바꾸지 않으며 `data_code_commit`에 자료를 만든 커밋을 유지합니다. `code_commit`은 새 UI 코드이고 `ui_source_release`는 직전 공개본의 manifest 해시입니다. 불완전·손상·한도 초과 데이터는 배포하지 않습니다. 실제 공개 URL의 모든 해시까지 확인한 뒤 완료로 보고합니다.
 

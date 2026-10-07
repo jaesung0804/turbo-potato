@@ -139,13 +139,13 @@
 Python 3.12, `requirements-nowcast.txt`의 고정 버전을 사용했다. 이전 보존 평가 체크포인트 `estate_nowcast_checkpoint_20260907.zip`을 `.work/previous-nowcast`에 풀어 사용한다. 원본 상태를 각각 `.work/capital-source`, `.work/older-history-state`, `.work/history-state`, `.work/raw-state`에 복원한 뒤 빈 출력 폴더에서 실행한다.
 
 ```bash
-python prepare_capital_history_inputs.py --older-state .work/older-history-state --history-state .work/history-state --raw-state .work/raw-state --output .work/retrain-inputs
-python prepare_estate_retraining.py --output .work/retraining-v3
-python estate_retraining_features.py --source .work/retraining-v3/transactions_extended.csv --output .work/retraining-v3/features.parquet
-python analyze_estate_retraining.py audit
-python analyze_estate_retraining.py price
-python analyze_estate_retraining.py potential
-python publish_estate_retraining_report.py
+python -m estate.data.preparation.capital_history --older-state .work/older-history-state --history-state .work/history-state --raw-state .work/raw-state --output .work/retrain-inputs
+python -m estate.models.nowcast.regional_v2.prepare --output .work/retraining-v3
+python -m estate.models.nowcast.regional_v2.features --source .work/retraining-v3/transactions_extended.csv --output .work/retraining-v3/features.parquet
+python -m estate.research.price.retraining audit
+python -m estate.research.price.retraining price
+python -m estate.research.price.retraining potential
+python -m estate.research.reporting.retraining
 ```
 
 최종 통합 CSV SHA-256: `ce90177fc97c3d7240367bbbf303bc090c7963d374d884e1441ee31ad602e4f3`. 정규화와 코드 지문은 상세 실행 원장에 보존했다.

@@ -4,9 +4,9 @@ import json
 
 import pytest
 
-from collect_estate_transactions import existing_key
-from estate_ui_release import UI_FILES
-from refresh_saved_site import refresh, safe_data_path
+from estate.data.collection.transactions import existing_key
+from estate.site.ui import UI_FILES
+from estate.site.refresh_ui import refresh, safe_data_path
 
 
 def test_credentials_require_private_environment(monkeypatch):

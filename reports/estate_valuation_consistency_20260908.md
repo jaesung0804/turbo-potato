@@ -68,7 +68,7 @@
 현재 기준가와의 차이가 ±1% 이내인데 종전 연간 점수가 80점 이상이었던 평형은 동보를 포함해 7개였다. 모든 평형을 대상으로 계산한 수치이며 일부 사례만 표본으로 고른 결과가 아니다. 다른 모형·표본 보정의 연간 점수와 현재 점수는 정의가 다르므로, 점수 변경 폭 자체를 가격 예측의 성능 향상 지표로 해석하지 않는다. 세부 검증 결과는 같은 이름 JSON의 `current_population_checks`에 보관한다.
 
 ```sh
-python estate_valuation.py --source data/capital_area_apt_trade_transactions.csv --month 2026-09
+python -m estate.models.nowcast.valuation --source data/capital_area_apt_trade_transactions.csv --month 2026-09
 python -m pytest -q tests/test_estate_valuation.py tests/test_estate_nowcast.py
 ```
 

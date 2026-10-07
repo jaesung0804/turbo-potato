@@ -7,9 +7,9 @@ import subprocess
 
 import pytest
 
-from estate_io import write_json
-from publish_estate_potential import public_payload
-from refresh_estate_potential import (
+from estate.core.io import write_json
+from estate.models.potential.v2.publish import public_payload
+from estate.models.potential.v2.refresh import (
     STATE_NAME, archive_snapshot, bootstrap, month_origin, next_scheduled_at,
     read_json, read_state, refresh, restore, restore_history, sha, verify_current,
 )

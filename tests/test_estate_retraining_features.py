@@ -2,8 +2,8 @@ import numpy as np
 import pandas as pd
 import pytest
 
-from estate_nowcast import build_features, history_features
-from estate_retraining_features import array_history, monthly_features
+from estate.models.nowcast.v1.model import build_features, history_features
+from estate.models.nowcast.regional_v2.features import array_history, monthly_features
 
 
 def test_array_reproduction_preserves_cutoff_outliers_and_missing_floors():

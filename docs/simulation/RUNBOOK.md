@@ -24,7 +24,7 @@ python -m pytest -q tests/test_estate_simulation.py tests/test_estate_simulation
 ## 후속 실제자료 준비 계약
 
 1. `PROTOCOL.md`의 컷오프·모집단·예산·기간·대조전략·비용·가설 버전을 사전 기록한다.
-2. 기존 `backend_state.py pull` 경로로 해당 DB/OCI 상태를 복원한다. 과거 공표시점 원장이 없으면 `reconstructed_lag_scenario`를 선택하고 공식 신고 지연과 정정·취소 한계를 기록한다.
+2. 기존 `estate/data/storage/backend_state.py pull` 경로로 해당 DB/OCI 상태를 복원한다. 과거 공표시점 원장이 없으면 `reconstructed_lag_scenario`를 선택하고 공식 신고 지연과 정정·취소 한계를 기록한다.
 3. 단지×정확면적 ID와 공개 정보만으로 작은 패널을 만든다. 패널은 `simulation.engine.canonical(data)` 바이트를 gzip 압축하고 불변 스냅샷에 저장한다. 일반 JSON의 공백이나 마지막 줄바꿈이 다른 바이트를 해시와 혼동하지 않는다. 입력은 비압축 5MB·10,000행 이하이다.
 4. 엔진·입력·정책/비용의 정확한 SHA를 고정한다. 새 실험의 준비 레코드는 명시적인 초기화 작업으로 `checkpoints`에 생성한다. 최소 payload는 `status=prepared`, `identity`, `source_snapshot_id`이다. 기존 실험이 있으면 먼저 읽고 재개한다. 체크포인트 누락을 빈 상태 재시작으로 숨기지 않는다.
 5. 무료 사용 설정, DB·파일 저장소 용량, 필요한 증분과 보존 여유를 실제 환경에서 검증한다. 현재는 이를 제공하는 `live_capacity_adapter`가 없어서 **실제자료 CLI는 실패하도록 닫혀 있다.** 정확한 계측이 구현·검증된 후 `BackendSession`의 `run_preflight` 호출에 연결한다. CLI 플래그로 체크를 건너뛰지 않는다.

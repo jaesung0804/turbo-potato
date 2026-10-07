@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 import pytest
 
-from analyze_estate_full_history_adaptation import COLS, PRICE_LEVELS, inputs, training_weights
+from estate.research.price.full_history import COLS, PRICE_LEVELS, inputs, training_weights
 
 
 def test_relative_inputs_do_not_depend_on_nominal_price_scale():

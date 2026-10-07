@@ -17,13 +17,13 @@
 
 ```bash
 # 기본: 입력/크기/출처 구조만 검사한다. 네트워크 요청과 쓰기는 없다.
-python sync_estate_research_records.py --input /private/round3-handoff.json
+python -m estate.research.reporting.sync_records --input /private/round3-handoff.json
 
 # 비공개 실행 환경에 RESEARCH_STORAGE=backend, estate용 URL/token 설정 후:
-python sync_estate_research_records.py --input /private/round3-handoff.json --check-backend
+python -m estate.research.reporting.sync_records --input /private/round3-handoff.json --check-backend
 
 # 실제 작은 기록 반영을 명시적으로 실행할 때만:
-python sync_estate_research_records.py --input /private/round3-handoff.json --apply
+python -m estate.research.reporting.sync_records --input /private/round3-handoff.json --apply
 ```
 
 스크립트는 관련 kind를 `list?limit=20`으로 확인하고 선택한 키만 get한다.
@@ -59,7 +59,7 @@ PUT 응답을 잃으면 `write_pending`은 성공도 실패도 확정되지 않�
 
 확인은 이미 만들어진 작은 압축 패널에 한한다. 최대 64개 파일·압축 합계
 64 MiB·해제 합계 256 MiB이며, 전체 실거래 corpus를 내려받거나 수집하지 않는다.
-`backend_state.py pull`로 상태를 복원하는 작업도 별도 명시된 실행이어야 한다.
+`estate/data/storage/backend_state.py pull`로 상태를 복원하는 작업도 별도 명시된 실행이어야 한다.
 빈 상태·없는 snapshot을 새로 만들거나 성공 receipt를 꾸며 통과시키지 않는다.
 checkpoint payload는 최소한 다음의 원본 연결을 보존해야 한다.
 
@@ -95,7 +95,7 @@ checkpoint payload는 최소한 다음의 원본 연결을 보존해야 한다.
 
 이 조건이 확인된 뒤에도 원본·중간 피처·큰 결과는 압축한 인증 파일 저장소에,
 SHA와 진행 상태는 작은 DB record에 둔다. Git에는 코드·작은 검증 요약·배포에
-필요한 최종 데이터만 반영한다. 기존 snapshot CAS와 `backend_rows.py` 절차를
+필요한 최종 데이터만 반영한다. 기존 snapshot CAS와 `estate/data/storage/rows.py` 절차를
 우회하지 않는다. 조사·부분 전세 자료는 canonical `apt-trades`에 넣지 않는다.
 
 ## 이번 회차 검증 범위와 인수인계

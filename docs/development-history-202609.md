@@ -35,7 +35,7 @@
 
 목록·지도·필터·입력 계산기·CSV는 `valuation_comparison`을 공통으로 사용합니다. 기준가 재입력은 정확히 50점이며 거래 표본 수는 가격 차이와 분리해 표시합니다. 현재 비교가격은 자료 마감까지 최근90일 실거래 중앙가이며, 계약 당시 점수와 구분합니다. 기본 목록은 기준가 입력 이력과 비교 거래가 각각3건 이상인 평형입니다. 전체 조회에서는 희소 자료와 미산출 평형도 보존합니다. 이전 연간 `house_match_score`는 감사용으로만 남깁니다.
 
-현재 월별 가격 모형은 `estate-nowcast-capital-v2`의 지역별 채택 정책입니다. 서울·경기는 확장 이력 v2를, 인천은 검증에서 더 나았던 v1을 유지하며, 점수 표현은 `estate-discount-v1`입니다. 2026년 3월 이후 계약별 재평가는 `estate_valuation.py`에서 원천·모형·명세 해시를 확인해 생성합니다. 1~2월과 학습 연도의 계약에 검증되지 않은 점수를 채우지 않습니다. 상세 계약 자료와 잠재력 자료는 별도 gzip으로 나누며 필요할 때만 읽습니다.
+현재 월별 가격 모형은 `estate-nowcast-capital-v2`의 지역별 채택 정책입니다. 서울·경기는 확장 이력 v2를, 인천은 검증에서 더 나았던 v1을 유지하며, 점수 표현은 `estate-discount-v1`입니다. 2026년 3월 이후 계약별 재평가는 `estate/models/nowcast/valuation.py`에서 원천·모형·명세 해시를 확인해 생성합니다. 1~2월과 학습 연도의 계약에 검증되지 않은 점수를 채우지 않습니다. 상세 계약 자료와 잠재력 자료는 별도 gzip으로 나누며 필요할 때만 읽습니다.
 
 잠재력은 `price_activity_relative_growth_24m_policy_v2`의 고정 연구 후보입니다. 현재 적정가와 합산하지 않고, 실제 입력·주요 모형 기여·31/61일 시차 가정에 따른 순위 변화를 함께 표시합니다. 5년 목표와 추가 데이터 설계는 [잠재력 설계 기록](../reports/estate_potential_design_v2.md), 현재 가격의 전체 일관성 검사는 [가격 검증 기록](../reports/estate_valuation_consistency_20260908.md), 실제 공개 시차 관측은 [시차 감사](../reports/estate_reporting_lag.md)에 있습니다.
 
@@ -47,7 +47,7 @@
 
 [24·36·48·60개월 경로 실험](../reports/estate_potential_path.md)은 결과 가격창을12개월로 넓혀17개 시점을 시험했습니다. 측정 가능성은 개선됐지만 고정한 비교에서 단순 소외 규칙보다 좋지 않아 미채택했습니다. 기존24개월 운영후보에 새 경로점수를 합산하지 않습니다.
 
-`refresh_estate_potential.py`와 월별 workflow는 서울·광명의 기존24개월 v2만 재검증하고 새 월의 학습표·모형·예측·검증 지문을 `estate-potential-state`에 보존합니다. 같은 달 예측을 덮어쓰지 않으며, 매월10일05:00UTC에 실행해 성공한 후보를 Pages로 배포합니다. 원본 불일치·관측 부족·실행 실패에서는 이전 공개본을 유지합니다. 최초9월은 원래 예측을 그대로 가져왔으며 당시 exporter가 저장하지 않았던 fitted model을 복원했다고 주장하지 않습니다.
+`estate/models/potential/v2/refresh.py`와 월별 workflow는 서울·광명의 기존24개월 v2만 재검증하고 새 월의 학습표·모형·예측·검증 지문을 `estate-potential-state`에 보존합니다. 같은 달 예측을 덮어쓰지 않으며, 매월10일05:00UTC에 실행해 성공한 후보를 Pages로 배포합니다. 원본 불일치·관측 부족·실행 실패에서는 이전 공개본을 유지합니다. 최초9월은 원래 예측을 그대로 가져왔으며 당시 exporter가 저장하지 않았던 fitted model을 복원했다고 주장하지 않습니다.
 
 [서울 공식 세대수 원장](../reports/estate_household_sources_next.md)2,887개를 확보했습니다. 공적인 주소 대조까지 완료한 마포그랑자이의 현재 표시만66→1,248세대로 정정합니다. 단지 전체 거래 범위·과거 분모 유효시점이 미검증이므로 회전율 학습에는 사용하지 않습니다.
 
@@ -84,12 +84,12 @@
 
 ```bash
 # 전체 집계가 만들어진 뒤 동일 자료로 두 모델 재비교
-python compare_estate_models.py
+python -m estate.research.price.compare
 # 기존 v3 월 모델과 별개로 v4 월 모델 생성/재사용
-python train_house_match_model.py --model-version estate-reference-v4 --output .work/build/recommendations_v4.json
+python -m estate.models.reference.v5.train --model-version estate-reference-v4 --output .work/build/recommendations_v4.json
 # 후보의 전체 결과를 별도 로컬 사이트로 생성
-python build_public_site.py --model-version estate-reference-v4 --output .work/site-v4
-python run_real_estate_dashboard.py --skip-build --site-dir .work/site-v4
+python -m estate.site.build --model-version estate-reference-v4 --output .work/site-v4
+python -m estate.site.serve --skip-build --site-dir .work/site-v4
 ```
 
 Windows/Python 3.12 환경에서 LightGBM 4.7.0의 최소 학습·추론 예제가 접근 위반으로 실패해 Windows만 4.6.0을 사용합니다. Linux의 4.7.0 고정은 유지합니다. 비교 JSON에는 실행 환경과 입력 SHA-256을 기록합니다. 한국어 JSON·HTML은 UTF-8로, 텍스트 줄바꿈은 LF로 저장합니다.
@@ -104,7 +104,7 @@ Windows/Python 3.12 환경에서 LightGBM 4.7.0의 최소 학습·추론 예제�
 동일 행의 중복 건수도 원본에 보존합니다. 다운로드 원본과 출처는 같은 원본
 스냅샷에 보관합니다. 수동 실행의 소스 선택은 기존 예약 일정에 영향을 주지 않습니다.
 
-`collect_estate_transactions.py`는 국토부 일반 아파트 매매 API의 모든 페이지를 읽습니다. 상세 API의 권한에 의존하지 않습니다. 2026년 9월 기준 83개 시군구와 2021년 이후 계약 월을 조회합니다. 부천·화성·인천 개편 지역의 과거 자료가 새 코드로 반환되는지 별도로 확인했습니다.
+`estate/data/collection/transactions.py`는 국토부 일반 아파트 매매 API의 모든 페이지를 읽습니다. 상세 API의 권한에 의존하지 않습니다. 2026년 9월 기준 83개 시군구와 2021년 이후 계약 월을 조회합니다. 부천·화성·인천 개편 지역의 과거 자료가 새 코드로 반환되는지 별도로 확인했습니다.
 
 - 완결된 `계약 월 × 시군구` 파티션마다 해시·응답 건수·조회 시각을 저장합니다.
 - 인증서를 검증하는 TLS 1.2 연결을 작업별로 재사용합니다. 요청마다 25초 제한과 재시도, 실패한 파티션만 다시 처리하는 체크포인트가 있습니다. 연속 10개 파티션이 모두 실패하면 연결 장애로 중단해 무한 대기를 피합니다.
@@ -121,14 +121,14 @@ Python 3.12를 사용합니다.
 ```bash
 pip install -r requirements.txt
 # estate-raw-state와 estate-model-state를 별도 디렉터리로 받아 복원
-python raw_estate_state.py restore --state-dir .work/raw-state
-python estate_model_state.py restore --state-dir .work/model-state
+python -m estate.data.storage.raw_state restore --state-dir .work/raw-state
+python -m estate.data.storage.model_state restore --state-dir .work/model-state
 # 완전성 확인 → 전체 집계 → 해당 월 모델 생성/재사용 → 압축 사이트
-python build_public_site.py
-python run_real_estate_dashboard.py --skip-build
+python -m estate.site.build
+python -m estate.site.serve --skip-build
 ```
 
-처음 모델 상태가 없을 때는 모델 복원을 생략하면 `build_public_site.py`가 새 월 모델을 생성합니다. `train_house_match_model.py --mode infer`는 기존 월 모델만 사용하며 `--mode train`은 이미 있는 월 모델을 덮어쓰지 않습니다.
+처음 모델 상태가 없을 때는 모델 복원을 생략하면 `estate/site/build.py`가 새 월 모델을 생성합니다. `estate/models/reference/v5/train.py --mode infer`는 기존 월 모델만 사용하며 `--mode train`은 이미 있는 월 모델을 덮어쓰지 않습니다.
 
 검증:
 

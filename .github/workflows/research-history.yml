@@ -27,13 +27,13 @@ jobs:
       - name: Restore and validate the saved historical export
         if: env.RESEARCH_STORAGE == 'backend'
         run: |
-          python backend_state.py pull --name estate-history-state --state-dir .work/history-state
-          python backend_state.py reuse-history --state-dir .work/history-state --history-kind history --output-dir .work/history
+          python -m estate.data.storage.backend_state pull --name estate-history-state --state-dir .work/history-state
+          python -m estate.data.storage.backend_state reuse-history --state-dir .work/history-state --history-kind history --output-dir .work/history
       - name: Collect 2016–2020 Seoul and Gwangmyeong sales
         if: env.RESEARCH_STORAGE != 'backend' || inputs.refresh == true
         env:
           MOLIT_API_KEY: ${{ secrets.MOLIT_API_KEY }}
-        run: python collect_estate_history.py
+        run: python -m estate.data.collection.history
       - name: Preserve completed research input separately
         if: env.RESEARCH_STORAGE != 'backend' || inputs.refresh == true
         run: |
@@ -46,8 +46,8 @@ jobs:
           fi
           cp /tmp/estate-history-export/* .work/history-state/
           if [ "$RESEARCH_STORAGE" = "backend" ]; then
-            python backend_state.py push --name estate-history-state --state-dir .work/history-state
-            python backend_rows.py --csv .work/history-state/research-history.csv.gz --dataset apt-trades --snapshot-name estate-history-state --state-dir .work/history-state
+            python -m estate.data.storage.backend_state push --name estate-history-state --state-dir .work/history-state
+            python -m estate.data.storage.rows --csv .work/history-state/research-history.csv.gz --dataset apt-trades --snapshot-name estate-history-state --state-dir .work/history-state
           else
             git -C .work/history-state config user.name 'github-actions[bot]'
             git -C .work/history-state config user.email '41898282+github-actions[bot]@users.noreply.github.com'

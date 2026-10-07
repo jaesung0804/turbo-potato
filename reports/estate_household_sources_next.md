@@ -18,7 +18,7 @@
 공식 [Sheet 스키마](https://data.seoul.go.kr/dataList/sheetView.do?infId=OA-15818&srvType=S)는 `APT_CD`를 아파트 코드, `TNOHSH`를 **전체세대수**, `WHOL_DONG_CNT`를 **전체동수**로 정의한다. `APT_RDN_ADDR`, 시군구·읍면동, 등록·수정시각도 보존했다. 전체 단지를 분모로 삼을 수 있는 원천 필드가 존재한다는 뜻이며, 특정 실거래 묶음과 그 전체 범위가 같다는 뜻은 아니다.
 
 - 정규화 스냅샷: `metadata/verified_households_seoul_20260908.json.gz`
-- 재현 수집기: `collect_verified_households.py`
+- 재현 수집기: `estate/data/collection/households.py`
 - 실제 수집시각: **2026-09-08 22:55:27.310392 UTC** / 2026-09-09 07:55:27 KST
 - 원문 JSON: 3,096,066 bytes
 - 원문 SHA256: `f533ce268e0a614d0e9aa167f6525483f52ceb1682e3b48445b351cca76c086e`

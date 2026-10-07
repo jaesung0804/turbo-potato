@@ -16,7 +16,7 @@ jobs:
         run: |
           import json,time,http.client,ssl,urllib.parse,xml.etree.ElementTree as ET,sys,os
           sys.path.insert(0,os.getcwd())
-          from collect_estate_transactions import existing_key,validate,URL
+          from estate.data.collection.transactions import existing_key,validate,URL
           key=existing_key();print('::add-mask::'+key,flush=True)
           context=ssl.create_default_context();context.maximum_version=ssl.TLSVersion.TLSv1_2
           conn=None;success=0

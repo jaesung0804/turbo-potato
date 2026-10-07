@@ -7,7 +7,7 @@ from pathlib import Path
 
 import pytest
 
-from research_backend_client import BackendError
+from estate.data.storage.client import BackendError
 from simulation.engine import ReplayError, canonical, replay
 from simulation.fixtures import fixture
 from simulation.storage import BackendSession, read_gzip_json
@@ -59,13 +59,13 @@ def setup_session(tmp_path):
 
 def permit_test_storage(monkeypatch):
     # Explicit test monkeypatch: never a production readiness receipt.
-    monkeypatch.setattr("estate_research_storage.run_preflight", lambda **kwargs:
+    monkeypatch.setattr("estate.data.storage.readiness.run_preflight", lambda **kwargs:
                         {"ready": True, "snapshot_id": "test-snapshot"})
 
 
 def test_failed_live_gate_performs_no_checkpoint_or_file_writes(tmp_path, monkeypatch):
     session, client, result = setup_session(tmp_path)
-    monkeypatch.setattr("estate_research_storage.run_preflight", lambda **kwargs:
+    monkeypatch.setattr("estate.data.storage.readiness.run_preflight", lambda **kwargs:
                         {"ready": False, "blockers": [{"code": "capacity_unverified"}]})
     with pytest.raises(ReplayError, match="capacity_unverified"):
         session.authorize(result["identity"])

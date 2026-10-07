@@ -6,10 +6,10 @@ from pathlib import Path
 import shutil
 import tarfile
 import pytest
-from backend_state import bundle_partitions, restore_partitions, restore_checkpoints, reuse_history
-from backend_state import pull_state, fetch_file, verified_rent_paths
-from backend_state import mark_shard, verify_shards
-from research_backend_client import BackendError
+from estate.data.storage.backend_state import bundle_partitions, restore_partitions, restore_checkpoints, reuse_history
+from estate.data.storage.backend_state import pull_state, fetch_file, verified_rent_paths
+from estate.data.storage.backend_state import mark_shard, verify_shards
+from estate.data.storage.client import BackendError
 
 
 def test_monthly_archive_is_deterministic_and_restores_bytes(tmp_path):
@@ -47,7 +47,7 @@ def test_unsafe_archive_is_rejected_before_extracting_members(tmp_path):
 
 
 def checkpoint_state(tmp_path, monkeypatch):
-    import collect_estate_transactions as collector
+    import estate.data.collection.transactions as collector
     codes = sorted(collector.REGIONS)[:2]
     monkeypatch.setattr(collector, 'REGIONS', {code: collector.REGIONS[code] for code in codes})
     state = tmp_path / 'state'
@@ -69,7 +69,7 @@ def checkpoint_state(tmp_path, monkeypatch):
 
 
 def test_restored_shard_reuses_complete_checkpoints_without_any_api_fetch(tmp_path, monkeypatch):
-    import collect_estate_transactions as collector
+    import estate.data.collection.transactions as collector
     state, codes = checkpoint_state(tmp_path, monkeypatch)
     cache = tmp_path / 'cache'
     restore_checkpoints(state, cache, shard_index=0, shard_count=2)
@@ -183,7 +183,7 @@ def test_planning_fetch_downloads_only_one_bounded_manifest(tmp_path):
 
 
 def rent_partition(root):
-    from collect_estate_rents import URL
+    from estate.data.collection.rents import URL
     path = root / 'rents/202307-11740.json.gz'
     path.parent.mkdir(parents=True)
     data = {'source': URL, 'complete': True, 'code': '11740', 'month': '202307',
@@ -193,7 +193,7 @@ def rent_partition(root):
 
 
 def test_saved_rent_partitions_resume_without_api_and_ignore_interrupted_temp(tmp_path, monkeypatch):
-    import collect_estate_rents as rents
+    import estate.data.collection.rents as rents
     path, data = rent_partition(tmp_path)
     (path.parent / '202308-11740.json.tmp').write_text('interrupted write')
     (tmp_path / 'local-report.json').write_text('not a state payload')
@@ -222,7 +222,7 @@ def test_empty_rent_state_cannot_be_committed(tmp_path):
 
 
 def test_push_updates_displayed_revision_and_excludes_unselected_reports(tmp_path, monkeypatch, capsys):
-    import backend_state
+    import estate.data.storage.backend_state as backend_state
     receipt = tmp_path / '.backend-receipt.json'
     receipt.write_text(json.dumps({'snapshot_id': 'a' * 32}))
     (tmp_path / 'collection').mkdir()
@@ -234,11 +234,11 @@ def test_push_updates_displayed_revision_and_excludes_unselected_reports(tmp_pat
             assert paths == ['collection']
             return {'snapshot_id': 'b' * 32, 'files': 1, 'changed': True}
     monkeypatch.setattr(backend_state, 'Client', lambda **kwargs: SavedState())
-    monkeypatch.setattr('sys.argv', ['backend_state.py', 'push', '--name', 'estate-capital-history-state',
+    monkeypatch.setattr('sys.argv', ['estate.data.storage.estate/data/storage/backend_state.py', 'push', '--name', 'estate-capital-history-state',
                                    '--state-dir', str(tmp_path), '--paths', 'collection'])
     backend_state.main()
     capsys.readouterr()
-    monkeypatch.setattr('sys.argv', ['backend_state.py', 'revision', '--state-dir', str(tmp_path)])
+    monkeypatch.setattr('sys.argv', ['estate.data.storage.estate/data/storage/backend_state.py', 'revision', '--state-dir', str(tmp_path)])
     backend_state.main()
     assert capsys.readouterr().out.strip() == 'backend:' + 'b' * 32
 

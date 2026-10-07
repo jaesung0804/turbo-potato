@@ -5,11 +5,9 @@ import io
 import json
 
 import pytest
-import collect_estate_transactions as collector
-from get_molit_apt_trade_data import DASHBOARD_FIELDNAMES
-import prepare_capital_history_inputs as inputs
-
-
+import estate.data.collection.transactions as collector
+from estate.data.collection.molit_api import DASHBOARD_FIELDNAMES
+import estate.data.preparation.capital_history as inputs
 def csv_body(day):
     row = dict.fromkeys(DASHBOARD_FIELDNAMES, '')
     row.update(CTRT_DAY=day, CGG_CD='11110')

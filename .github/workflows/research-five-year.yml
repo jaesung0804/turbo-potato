@@ -27,8 +27,8 @@ jobs:
       - name: Restore and validate the saved older historical export
         if: env.RESEARCH_STORAGE == 'backend'
         run: |
-          python backend_state.py pull --name estate-history-extended-state --state-dir .work/older-history-state
-          python backend_state.py reuse-history --state-dir .work/older-history-state --history-kind older-history --output-dir .work/five-year-history
+          python -m estate.data.storage.backend_state pull --name estate-history-extended-state --state-dir .work/older-history-state
+          python -m estate.data.storage.backend_state reuse-history --state-dir .work/older-history-state --history-kind older-history --output-dir .work/five-year-history
       - uses: actions/cache/restore@v4
         if: env.RESEARCH_STORAGE != 'backend' || inputs.refresh == true
         with:
@@ -39,7 +39,7 @@ jobs:
         if: env.RESEARCH_STORAGE != 'backend' || inputs.refresh == true
         env:
           MOLIT_API_KEY: ${{ secrets.MOLIT_API_KEY }}
-        run: python collect_estate_older_history.py
+        run: python -m estate.data.collection.older_history
       - name: Preserve complete older research input separately
         if: env.RESEARCH_STORAGE != 'backend' || inputs.refresh == true
         env:
@@ -63,8 +63,8 @@ jobs:
           cp .work/five-year-history/research-older-history.json "$snapshot_dir/"
           cp "$snapshot_dir"/* "$state_dir/"
           if [ "$RESEARCH_STORAGE" = "backend" ]; then
-            python backend_state.py push --name estate-history-extended-state --state-dir "$state_dir"
-            python backend_rows.py --csv "$state_dir/research-older-history.csv.gz" --dataset apt-trades --snapshot-name estate-history-extended-state --state-dir "$state_dir"
+            python -m estate.data.storage.backend_state push --name estate-history-extended-state --state-dir "$state_dir"
+            python -m estate.data.storage.rows --csv "$state_dir/research-older-history.csv.gz" --dataset apt-trades --snapshot-name estate-history-extended-state --state-dir "$state_dir"
           else
             git -C "$state_dir" config user.name 'github-actions[bot]'
             git -C "$state_dir" config user.email '41898282+github-actions[bot]@users.noreply.github.com'

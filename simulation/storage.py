@@ -31,7 +31,7 @@ class BackendSession:
     def __init__(self, *, state_dir: Path, snapshot_name: str, input_path: str,
                  checkpoint_key: str, expected_checkpoint_version: int,
                  required_growth_bytes: int, client=None):
-        from research_backend_client import Client, safe_path
+        from estate.data.storage.client import Client, safe_path
         self.client = client or Client(project="estate")
         if self.client.project != "estate":
             raise ReplayError("A simulation cannot use another project's data")
@@ -54,7 +54,7 @@ class BackendSession:
         return "/records/checkpoints/" + quote(self.checkpoint_key, safe="")
 
     def _preflight(self, identity):
-        from estate_research_storage import run_preflight
+        from estate.data.storage.readiness import run_preflight
         result = run_preflight(state_dir=self.state_dir, snapshot_name=self.snapshot_name,
                                required_files=[self.input_path], checkpoint_key=self.checkpoint_key,
                                expected_checkpoint_version=self.expected_version,

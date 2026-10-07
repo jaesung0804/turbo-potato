@@ -3,7 +3,7 @@ import json
 
 import pytest
 
-from collect_verified_households import apply_verified_households, normalize
+from estate.data.collection.households import apply_verified_households, normalize
 
 
 def source():

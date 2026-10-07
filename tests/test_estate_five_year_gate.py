@@ -1,5 +1,5 @@
 """Protect the prespecified horizon-promotion gate from incomplete comparisons."""
-from summarize_estate_five_year import assess
+from estate.models.potential.research.five_year import assess
 
 
 def rows(regime, count=6):

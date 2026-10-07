@@ -43,4 +43,4 @@
 
 잠재력 페이지에는 실제 5년 실험의 완료 상태와 미채택 사유를 별도로 표시한다. 기존 24개월 v2의 3,699개 후보, 예측값, 자료 지문과 검증표는 바꾸지 않는다. 현재 저평가 점수에도 5년 예측값을 더하지 않는다.
 
-재현: `merge_estate_potential_history.py`로 두 원본 지문을 확인하고 결합한 뒤 `analyze_estate_potential_horizons.py --history .work/history/transactions_2006_2020.csv --origin-start 2007-01-01 --origin-end 2021-07-01 --horizons 60 --regimes historical_policy --output reports/estate_potential_five_year.json --cache .work/potential-five-year`, 이어 `summarize_estate_five_year.py`를 실행한다. 시험 결과는 최종 수정 자료에 신고기한을 가정한 회고 연구이며 당시 최초 공개본의 완전한 재현은 아니다.
+재현: `estate/data/preparation/merge_potential_history.py`로 두 원본 지문을 확인하고 결합한 뒤 `estate/models/potential/v2/horizons.py --history .work/history/transactions_2006_2020.csv --origin-start 2007-01-01 --origin-end 2021-07-01 --horizons 60 --regimes historical_policy --output reports/estate_potential_five_year.json --cache .work/potential-five-year`, 이어 `estate/models/potential/research/five_year.py`를 실행한다. 시험 결과는 최종 수정 자료에 신고기한을 가정한 회고 연구이며 당시 최초 공개본의 완전한 재현은 아니다.

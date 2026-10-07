@@ -35,19 +35,19 @@ jobs:
           if [ "$INITIALIZE_RENT" = "true" ]; then
             args+=(--initialize-if-missing)
           fi
-          python backend_state.py pull --name estate-rent-state --state-dir .work/market-data "${args[@]}"
+          python -m estate.data.storage.backend_state pull --name estate-rent-state --state-dir .work/market-data "${args[@]}"
       - name: Collect published lease records for the three study districts
         id: collect
         env:
           MOLIT_API_KEY: ${{ secrets.MOLIT_API_KEY }}
-        run: python collect_estate_rents.py --start 202307 --end 202412 --use-existing-config
+        run: python -m estate.data.collection.rents --start 202307 --end 202412 --use-existing-config
       - name: Save completed rent partitions and collection progress
         id: persist
         if: always() && env.RESEARCH_STORAGE == 'backend' && steps.restore.outcome == 'success' && steps.collect.outcome != 'skipped'
         run: |
           set -euo pipefail
           test -d .work/market-data/rents
-          python backend_state.py push --name estate-rent-state --state-dir .work/market-data --paths rents
+          python -m estate.data.storage.backend_state push --name estate-rent-state --state-dir .work/market-data --paths rents
       - uses: actions/upload-artifact@v4
         if: (success() && env.RESEARCH_STORAGE != 'backend') || (always() && env.RESEARCH_STORAGE == 'backend' && steps.persist.outcome == 'failure')
         with:

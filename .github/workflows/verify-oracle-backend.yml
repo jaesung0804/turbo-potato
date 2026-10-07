@@ -17,4 +17,4 @@ jobs:
         with:
           python-version: '3.12'
       - name: Verify database and one small file without collection
-        run: python verify_research_backend.py --project estate
+        run: python -m estate.data.storage.verify_backend --project estate

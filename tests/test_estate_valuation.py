@@ -5,7 +5,7 @@ import numpy as np
 import pandas as pd
 import pytest
 
-from estate_valuation import (
+from estate.models.nowcast.valuation import (
     attach_current_comparisons, attach_recent_comparison_prices, attach_transaction_replay, canonical_price,
     compare_price, replay_transactions, score_at_price,
 )

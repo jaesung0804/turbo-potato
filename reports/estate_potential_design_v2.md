@@ -101,6 +101,6 @@ y_{i,t,H}=\log(P_{i,t+H}/P_{i,t,entry})
 
 ## 재현
 
-`requirements-nowcast.txt`를 설치하고, 두 매매 입력의 계약 기간이 겹치지 않는 상태에서 `analyze_estate_potential_horizons.py`를 실행한다. 입력 파일 지문·판단 시작/종료·목표 기간·지연 가정이 바뀌면 캐시를 다시 만든다. 그 결과와 같은 지문의 입력을 `export_estate_potential_v2.py`에 전달해 고정 예측을 만들고 `publish_estate_potential.py`로 공개용 자료를 생성한다. 고정 예측은 같은 경로 덮어쓰기를 거부한다.
+`requirements-nowcast.txt`를 설치하고, 두 매매 입력의 계약 기간이 겹치지 않는 상태에서 `estate/models/potential/v2/horizons.py`를 실행한다. 입력 파일 지문·판단 시작/종료·목표 기간·지연 가정이 바뀌면 캐시를 다시 만든다. 그 결과와 같은 지문의 입력을 `estate/models/potential/v2/export.py`에 전달해 고정 예측을 만들고 `estate/models/potential/v2/publish.py`로 공개용 자료를 생성한다. 고정 예측은 같은 경로 덮어쓰기를 거부한다.
 
 별도의 5년 실험에는 `--origin-start`, `--origin-end`, `--horizons 60`, `--regimes historical_policy`를 지정하고 별도 `--cache`, `--output`을 사용한다. 원수치에는 성숙 라벨 부족으로 생략한 모델 평가와 결과 미관측 후보도 남는다.

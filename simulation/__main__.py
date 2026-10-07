@@ -4,7 +4,7 @@ from dataclasses import replace
 import json
 from pathlib import Path
 
-from research_backend_client import BackendError
+from estate.data.storage.client import BackendError
 
 from .engine import Costs, Policy, ReplayError, replay
 from .comparison import compare_replays

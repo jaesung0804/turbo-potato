@@ -24,7 +24,7 @@ jobs:
         if: github.event_name == 'pull_request'
         env:
           BASE_SHA: ${{ github.event.pull_request.base.sha }}
-        run: python verify_small_changes.py --base "$BASE_SHA"
+        run: python -m estate.tools.verify_changes --base "$BASE_SHA"
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
@@ -61,19 +61,19 @@ jobs:
         with:
           node-version: '22'
       - name: Require verified backend capacity and recovery before large work
-        run: python estate_research_storage.py
+        run: python -m estate.data.storage.readiness
       - run: pip install -r requirements.txt
       - name: Restore verified complete backend state without publication
         run: |
-          python backend_state.py pull --name estate-raw-state --state-dir .work/raw-state
-          python raw_estate_state.py restore --state-dir .work/raw-state
-          python backend_state.py pull --name estate-model-state --state-dir .work/model-state
-          python estate_model_state.py restore --state-dir .work/model-state
-          python backend_state.py pull --name estate-potential-state --state-dir .work/potential-state
-          python refresh_estate_potential.py restore --state-dir .work/potential-state
+          python -m estate.data.storage.backend_state pull --name estate-raw-state --state-dir .work/raw-state
+          python -m estate.data.storage.raw_state restore --state-dir .work/raw-state
+          python -m estate.data.storage.backend_state pull --name estate-model-state --state-dir .work/model-state
+          python -m estate.data.storage.model_state restore --state-dir .work/model-state
+          python -m estate.data.storage.backend_state pull --name estate-potential-state --state-dir .work/potential-state
+          python -m estate.models.potential.v2.refresh restore --state-dir .work/potential-state
       - name: Build complete candidate and chronological validation
         run: |
-          python build_public_site.py
+          python -m estate.site.build
           node tests/check_bundle.cjs .work/site
       - uses: actions/upload-artifact@v4
         with:
