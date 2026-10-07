@@ -17,51 +17,28 @@
 <html lang="ko">
 <head>
 <meta charset="utf-8"/>
-<link rel="icon" href="data:,"/>
+<link href="data:," rel="icon"/>
 <meta content="width=device-width, initial-scale=1" name="viewport"/>
 <title>실거래 저평가 비교 · 수도권 아파트</title>
 <link crossorigin="" href="vendor/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" rel="stylesheet"/>
 <link href="styles.css" rel="stylesheet"/>
+<link href="product.css" rel="stylesheet"/>
 </head>
-<body>
-<nav class="concept-nav" aria-label="모델 선택"><a class="brand-link" href="index.html">수도권 아파트 리서치</a><div><a href="index.html" aria-current="page">01 실거래 저평가</a><a href="potential.html">02 상승 잠재력</a><a href="research.html">03 연구·대표 보고</a><a href="model.html">사용법·검증</a></div></nav><main class="app-shell">
-<section class="map-pane"><div class="map-heading"><h2>수도권 지역 비교</h2><span>지역을 눌러 단지 보기</span></div>
-
-<div aria-label="수도권 시도·시군구별 아파트 가격 비교 지도" id="map"></div>
-
-
-
-
-
-
-<p id="map-status" role="status">굵은 선: 시도 · 가는 선: 시군구 · 확대하면 지역명 표시. 2025년 경계이며 2026년 개편 지역은 목록에서 확인하세요.</p><div class="map-scope">
-<button class="scope-button selected" data-map-mode="global" type="button">수도권 전체</button>
-<button class="scope-button" data-map-mode="sido" type="button">선택 시도</button>
-<button class="scope-button" data-map-mode="gu" type="button">선택 시군구</button>
-
-</div><div class="map-view-actions"><button class="map-reset" id="map-reset" type="button">본토 중심</button><button class="map-reset" id="map-full-extent" type="button">도서 포함 전체</button></div><div class="legend">
-<div class="legend-title" id="legend-title">전체연도 · 수도권 전체 · 거래가_억원</div>
-<div class="legend-gradient"></div><p id="legend-explanation" class="score-note">색은 선택한 지표의 지역 평균입니다.</p>
-<div class="legend-scale">
-<span id="legend-min">낮음</span>
-<span id="legend-mid">중간</span>
-<span id="legend-max">높음</span>
-</div>
-</div></section>
-<aside class="detail-pane">
-<header class="panel-header"><p class="eyebrow">01 / CURRENT VALUE</p><h1>실거래 저평가 비교 · 수도권 아파트</h1><p id="data-status" role="status">전체 자료를 불러오는 중…</p><p id="coverage-note"></p><a class="guide-link" href="model.html">모델 사용법 · 검증 · 자료 범위 →</a><p class="score-note"><a href="quantile-validation.html">10월 8일 모델 비교 · 중앙값과 하위·상위 10% 가격 →</a></p></header>
-<p id="release-status" class="release-status" role="status">거래자료 기준일을 확인하고 있습니다.</p>
-<section class="score-guide-inline" aria-label="점수 읽는 법">
-<div class="score-guide-title"><strong>점수는 가격 차이의 방향입니다</strong><span>상승 확률이 아닙니다</span></div>
-<div class="score-guide-scale"><div><b>50 미만</b><span>기준보다 높은 가격</span></div><div><b>50</b><span>기준가격과 같음</span></div><div><b>50 초과</b><span>기준보다 낮은 가격</span></div></div>
-<p>목록·지도·직접 입력은 <strong>같은 현재 기준가와 계산식</strong>을 사용합니다. 자료 마감까지 최근 90일 실거래 중앙가를 현재 월 기준가와 비교하며, <strong>기준가보다 몇 % 낮은지</strong>를 먼저 보세요. 미래 상대 상승 후보는 <a href="potential.html">상승 잠재력</a>에서 확인합니다.</p>
-</section>
-<details class="location-filters" id="location-filters" open><summary>연도·지역·면적 선택</summary><p class="multi-filter-note">지역·평형·연식·호선은 여러 개 선택할 수 있습니다. 같은 항목은 선택한 조건 중 하나, 다른 항목은 모든 조건에 맞는 결과를 표시합니다.</p><section class="control-grid">
-<label>
+<body class="dashboard-page">
+<a class="skip-link" href="#main-content">본문 바로가기</a><nav aria-label="주요 메뉴" class="concept-nav"><a aria-label="수도권 아파트 리서치 홈" class="brand-link" href="index.html"><span aria-hidden="true" class="brand-symbol"><svg fill="none" viewbox="0 0 28 28"><path d="M5 23V11l9-6 9 6v12M10 23v-8h8v8M3 23h22" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg></span><span>수도권 아파트 <small>리서치</small></span></a><div><a aria-current="page" href="index.html">실거래 비교</a><a href="potential.html">상승 잠재력</a><a href="research.html">리서치</a><a href="model.html">이용 가이드</a></div></nav><main class="dashboard-workspace" id="main-content"><header class="workspace-heading"><div><h1>실거래 비교</h1><p class="workspace-description">같은 조건의 기준가로, 더 분명한 선택.</p></div><div class="workspace-tools"><section class="primary-search"><label>
+<span>지역·단지 검색</span>
+<input id="search-input" placeholder="지역, 단지명 또는 면적 검색" type="search"/>
+</label></section><button aria-label="다크모드 전환" class="dark-mode-toggle" id="dark-mode-toggle" type="button">다크</button></div></header><p class="release-status" id="release-status" role="status">거래자료 기준일을 확인하고 있습니다.</p><p class="workspace-alert" id="workspace-alert" role="alert" hidden></p><section aria-label="단지 탐색 조건" class="filter-workspace"><details class="location-filters" id="location-filters" open=""><summary>지역·면적·조회 기준</summary><section class="control-grid">
+<div class="filter-field"><span id="sido-select-label">시도</span><select aria-labelledby="sido-select-label" data-multi-filter="" id="sido-select" multiple=""></select></div><div class="filter-field"><span id="gu-select-label">시군구</span><select aria-labelledby="gu-select-label" data-multi-filter="" id="gu-select" multiple=""></select></div><div class="filter-field"><span id="dong-select-label">읍면동</span><select aria-labelledby="dong-select-label" data-multi-filter="" id="dong-select" multiple=""></select></div><div class="filter-field"><span id="area-range-select-label">평형 구간</span><select aria-labelledby="area-range-select-label" data-multi-filter="" id="area-range-select" multiple="">
+<option value="all">전체</option>
+<option value="lte14">14평 이하</option>
+<option value="gt14_lte26">14평 초과 26평 이하</option>
+<option value="gt26_lte34">26평 초과 34평 이하</option>
+<option value="gt34">34평 초과</option>
+</select></div><label>
 <span>실거래 집계 연도</span>
 <select id="year-select"></select>
-</label>
-<label>
+</label><label>
 <span>대표 지표</span>
 <select id="metric-select">
 <option value="price_billion">평균 거래가(억)</option>
@@ -70,36 +47,8 @@
 <option value="yoy_rate">전년 대비 상승률</option>
 <option value="ai_score">가격 비교점수</option>
 </select>
-</label>
-<div class="filter-field"><span id="area-range-select-label">평형 구간</span><select id="area-range-select" multiple data-multi-filter aria-labelledby="area-range-select-label">
-<option value="all">전체</option>
-<option value="lte14">14평 이하</option>
-<option value="gt14_lte26">14평 초과 26평 이하</option>
-<option value="gt26_lte34">26평 초과 34평 이하</option>
-<option value="gt34">34평 초과</option>
-</select></div>
-<div class="filter-field"><span id="sido-select-label">시도</span><select id="sido-select" multiple data-multi-filter aria-labelledby="sido-select-label"></select></div>
-<div class="filter-field"><span id="gu-select-label">시군구</span><select id="gu-select" multiple data-multi-filter aria-labelledby="gu-select-label"></select></div>
-<div class="filter-field"><span id="dong-select-label">읍면동</span><select id="dong-select" multiple data-multi-filter aria-labelledby="dong-select-label"></select></div>
-
-</section>
-</details><div class="active-filter-chips" id="active-filter-chips" aria-label="선택한 필터"></div><section class="primary-search"><label>
-<span>검색</span>
-<input id="search-input" placeholder="시도·시군구·읍면동·단지·면적 검색" type="search"/>
-</label><button id="clear-filter" type="button">초기화</button><button aria-label="다크모드 전환" class="dark-mode-toggle" id="dark-mode-toggle" type="button">Dark</button></section>
-<section class="review-score-filter" aria-label="가격 비교점수 필터">
-<label><span>거래 근거 범위</span><select id="recent-evidence-select" aria-describedby="recent-evidence-note"><option value="recent">최근 근거 3건 이상 · 기본</option><option value="all">전체 평형 보기 · 자료 희소 포함</option></select></label>
-<p class="score-note" id="recent-evidence-note">기준가 입력 이력과 비교 90일 거래가 각각 3건 이상인 평형을 먼저 봅니다. 3건은 정확도 보장 기준이 아닙니다.</p>
-<label><span>가격 비교점수 하한</span><input id="review-score-min-input" type="number" min="0" max="100" step="0.1" placeholder="전체" aria-describedby="review-score-filter-note"/></label>
-<div class="review-score-presets" role="group" aria-label="가격 비교점수 빠른 선택">
-<button type="button" data-review-score="" aria-pressed="true">전체</button>
-<button type="button" data-review-score="60" aria-pressed="false">60점 이상</button>
-<button type="button" data-review-score="65" aria-pressed="false">65점 이상</button>
-<button type="button" data-review-score="70" aria-pressed="false">70점 이상</button>
-</div><p class="score-note" id="review-score-filter-note" role="status">점수 조건 없음 · 미산출 평형도 포함합니다.</p>
-</section>
-<details class="advanced-filters" id="advanced-filters"><summary>가격·세대수·연식·입지 필터</summary><section class="search-row">
-
+</label></section>
+</details><div class="filter-toolbar"><details class="advanced-filters filter-popover" data-popover="" id="advanced-filters"><summary>가격·입지</summary><div class="popover-panel advanced-panel"><section class="search-row">
 <label>
 <span>비교 실거래 중앙가 하한(억)</span>
 <input id="min-price-input" min="0" placeholder="전체" step="0.1" type="number"/>
@@ -116,7 +65,7 @@
 <span>연간 최소 거래수</span>
 <input id="trade-count-input" min="0" placeholder="전체" step="1" type="number"/>
 </label>
-<div class="filter-field"><span id="age-range-select-label">연식</span><select id="age-range-select" multiple data-multi-filter aria-labelledby="age-range-select-label">
+<div class="filter-field"><span id="age-range-select-label">연식</span><select aria-labelledby="age-range-select-label" data-multi-filter="" id="age-range-select" multiple="">
 <option value="all">전체</option>
 <option value="new">신축 0~5년</option>
 <option value="semi_new">준신축 6~15년</option>
@@ -124,9 +73,7 @@
 <option value="old">구축 21~29년</option>
 <option value="very_old">노후 30년 이상</option>
 </select></div>
-
-
-</section><div class="facility-filters"><div class="filter-field"><span id="subway-line-select-label">호선</span><select id="subway-line-select" multiple data-multi-filter aria-labelledby="subway-line-select-label">
+</section><div class="facility-filters"><div class="filter-field"><span id="subway-line-select-label">호선</span><select aria-labelledby="subway-line-select-label" data-multi-filter="" id="subway-line-select" multiple="">
 <option value="all">전체</option>
 </select></div><label>
 <span>역세권</span>
@@ -139,44 +86,62 @@
 </label><label class="checkbox-filter">
 <span>초품아</span>
 <input id="elementary-filter" type="checkbox"/>
-</label></div><div class="result-actions"><button id="export-results" type="button">조건에 맞는 전체 평형 CSV</button></div><p class="score-note">최신 연도 가격 필터는 최근 90일 중앙가, 과거 연도는 연간 중앙가를 사용합니다. 세대수는 공식 주소 대조가 완료된 값과 기존 미검증 값을 상세 화면·CSV에서 구분합니다. 다운로드는 현재 페이지와 관계없이 조건에 맞는 결과 전부를 포함합니다.</p></details>
-<div class="result-actions"><button id="export-comparison" type="button">임장 비교표 Excel</button><a class="export-helper" href="downloads/estate-excel-helper.zip" download>자동 채우기 받기</a><span class="score-note">한 장에 비교 · 임장·메모는 직접 기록</span></div><div id="export-settings"></div><p class="score-note" id="export-status" role="status" aria-live="polite"></p>
-<section class="stats-grid">
-<div>
-<span>거래횟수</span>
-<strong id="total-used">-</strong>
+</label></div><div class="result-actions"><button id="export-results" type="button">조건에 맞는 전체 평형 CSV</button></div><p class="score-note">최신 연도 가격 필터는 최근 90일 중앙가, 과거 연도는 연간 중앙가를 사용합니다. 세대수는 공식 주소 대조가 완료된 값과 기존 미검증 값을 상세 화면·CSV에서 구분합니다. 다운로드는 현재 페이지와 관계없이 조건에 맞는 결과 전부를 포함합니다.</p></div></details><details class="filter-popover" data-popover=""><summary>점수·근거</summary><div class="popover-panel"><section aria-label="가격 비교점수 필터" class="review-score-filter">
+<label><span>거래 근거 범위</span><select aria-describedby="recent-evidence-note" id="recent-evidence-select"><option value="recent">최근 근거 3건 이상 · 기본</option><option value="all">전체 평형 보기 · 자료 희소 포함</option></select></label>
+<p class="score-note" id="recent-evidence-note">기준가 입력 이력과 비교 90일 거래가 각각 3건 이상인 평형을 먼저 봅니다. 3건은 정확도 보장 기준이 아닙니다.</p>
+<label><span>가격 비교점수 하한</span><input aria-describedby="review-score-filter-note" id="review-score-min-input" max="100" min="0" placeholder="전체" step="0.1" type="number"/></label>
+<div aria-label="가격 비교점수 빠른 선택" class="review-score-presets" role="group">
+<button aria-pressed="true" data-review-score="" type="button">전체</button>
+<button aria-pressed="false" data-review-score="60" type="button">60점 이상</button>
+<button aria-pressed="false" data-review-score="65" type="button">65점 이상</button>
+<button aria-pressed="false" data-review-score="70" type="button">70점 이상</button>
+</div><p class="score-note" id="review-score-filter-note" role="status">점수 조건 없음 · 미산출 평형도 포함합니다.</p>
+</section></div></details><details class="filter-popover score-help" data-popover=""><summary>점수 안내</summary><div class="popover-panel"><section aria-label="점수 읽는 법" class="score-guide-inline">
+<div class="score-guide-title"><strong>점수는 가격 차이의 방향입니다</strong><span>상승 확률이 아닙니다</span></div>
+<div class="score-guide-scale"><div><b>50 미만</b><span>기준보다 높은 가격</span></div><div><b>50</b><span>기준가격과 같음</span></div><div><b>50 초과</b><span>기준보다 낮은 가격</span></div></div>
+<p>목록·지도·직접 입력은 <strong>같은 현재 기준가와 계산식</strong>을 사용합니다. 자료 마감까지 최근 90일 실거래 중앙가를 현재 월 기준가와 비교하며, <strong>기준가보다 몇 % 낮은지</strong>를 먼저 보세요. 미래 상대 상승 후보는 <a href="potential.html">상승 잠재력</a>에서 확인합니다.</p>
+</section></div></details><span class="filter-toolbar-hint">여러 조건을 함께 선택할 수 있어요</span><button id="clear-filter" type="button">초기화</button></div><div aria-label="선택한 필터" class="active-filter-chips" id="active-filter-chips"></div></section><div aria-label="탐색 화면" class="mobile-view-switch" role="group"><button aria-pressed="true" data-workspace-view="list" type="button">단지 목록</button><button aria-pressed="false" data-workspace-view="map" type="button">지역 지도</button></div><div class="app-shell"><section class="map-pane" id="map-pane"><div class="map-heading"><h2>지역으로 살펴보기</h2><span>지도를 눌러 지역 선택</span></div>
+<div aria-label="수도권 시도·시군구별 아파트 가격 비교 지도" id="map"></div>
+<div class="map-scope">
+<button class="scope-button selected" data-map-mode="global" type="button">수도권 전체</button>
+<button class="scope-button" data-map-mode="sido" type="button">선택 시도</button>
+<button class="scope-button" data-map-mode="gu" type="button">선택 시군구</button>
+</div><div class="map-view-actions"><button class="map-reset" id="map-reset" type="button">본토 중심</button><button class="map-reset" id="map-full-extent" type="button">도서 포함 전체</button></div><div class="legend">
+<div class="legend-title" id="legend-title">전체연도 · 수도권 전체 · 거래가_억원</div>
+<div class="legend-gradient"></div><p class="score-note" id="legend-explanation">색은 선택한 지표의 지역 평균입니다.</p>
+<div class="legend-scale">
+<span id="legend-min">낮음</span>
+<span id="legend-mid">중간</span>
+<span id="legend-max">높음</span>
 </div>
-<div>
-<span>조건에 맞는 전체 단지</span>
+</div><details class="map-notes"><summary>지도 기준 안내</summary><p id="map-status" role="status">굵은 선: 시도 · 가는 선: 시군구 · 확대하면 지역명 표시. 2025년 경계이며 2026년 개편 지역은 목록에서 확인하세요.</p></details></section><section aria-label="단지 비교 결과" class="detail-pane" id="results-pane"><div class="results-heading"><div><h2>조건에 맞는 단지</h2><section class="stats-grid"><div>
+<span>단지</span>
 <strong id="total-buildings">-</strong>
 </div>
-
-
-
-</section>
-<section class="selected-region" id="selected-region"></section>
-<section class="market-tabs">
-<div aria-label="매물 목록" class="tab-buttons" role="tablist">
-<button class="tab-button active" data-market-tab="ai" type="button">저평가 비교 <span id="ai-count">0</span></button>
-<button class="tab-button" data-market-tab="all" type="button">전체 단지 <span id="all-count">0</span></button>
-<button class="tab-button" data-market-tab="hot" type="button">지표 상위 <span id="hot-count">0</span></button>
-<button class="tab-button" data-market-tab="cold" type="button">지표 하위 <span id="cold-count">0</span></button>
+<div>
+<span>거래</span>
+<strong id="total-used">-</strong>
 </div>
-
-<div class="tab-panel active" data-market-panel="ai">
+</section></div><details class="filter-popover export-menu" data-popover=""><summary>내보내기 <span aria-hidden="true">↓</span></summary><div class="popover-panel"><div class="result-actions"><button id="export-comparison" type="button">임장 비교표 Excel</button><a class="export-helper" download="" href="downloads/estate-excel-helper.zip">자동 채우기 받기</a><span class="score-note">한 장에 비교 · 임장·메모는 직접 기록</span></div><div id="export-settings"></div><p aria-live="polite" class="score-note" id="export-status" role="status"></p></div></details></div><p class="results-disclaimer">50점 = 기준가 · 높을수록 기준가보다 낮은 가격 <span>· 상승 확률 아님</span></p><section class="selected-region" hidden="" id="selected-region"></section><section class="market-tabs">
+<div aria-label="매물 목록" class="tab-buttons" role="tablist">
+<button aria-controls="panel-ai" aria-selected="true" class="tab-button active" data-market-tab="ai" id="tab-ai" role="tab" tabindex="0" type="button">저평가 비교 <span id="ai-count">0</span></button>
+<button aria-controls="panel-all" aria-selected="false" class="tab-button" data-market-tab="all" id="tab-all" role="tab" tabindex="-1" type="button">전체 단지 <span id="all-count">0</span></button>
+<button aria-controls="panel-hot" aria-selected="false" class="tab-button" data-market-tab="hot" id="tab-hot" role="tab" tabindex="-1" type="button">지표 상위 <span id="hot-count">0</span></button>
+<button aria-controls="panel-cold" aria-selected="false" class="tab-button" data-market-tab="cold" id="tab-cold" role="tab" tabindex="-1" type="button">지표 하위 <span id="cold-count">0</span></button>
+</div>
+<div aria-labelledby="tab-ai" class="tab-panel active" data-market-panel="ai" id="panel-ai" role="tabpanel">
 <ol class="ai-list" id="ai-list"></ol>
 </div>
-<div class="tab-panel" data-market-panel="all">
+<div aria-labelledby="tab-all" class="tab-panel" data-market-panel="all" id="panel-all" role="tabpanel">
 <ol class="asset-list" id="all-list"></ol>
 </div>
-<div class="tab-panel" data-market-panel="hot">
+<div aria-labelledby="tab-hot" class="tab-panel" data-market-panel="hot" id="panel-hot" role="tabpanel">
 <ol class="asset-list compact" id="hot-list"></ol>
 </div>
-<div class="tab-panel" data-market-panel="cold">
+<div aria-labelledby="tab-cold" class="tab-panel" data-market-panel="cold" id="panel-cold" role="tabpanel">
 <ol class="asset-list compact" id="cold-list"></ol>
 </div>
-</section>
-<details class="analysis-panel" id="analysis-panel"><summary>지역별 상승률·가격 비교점수 분석</summary><div class="growth-summary" id="growth-summary"></div><section class="growth-ranking">
+</section><details class="analysis-panel" id="analysis-panel"><summary>지역별 상승률·가격 비교점수 분석</summary><div class="growth-summary" id="growth-summary"></div><section class="growth-ranking">
 <div class="growth-ranking-head">
 <strong>상승률 랭킹</strong>
 <select aria-label="상승률 랭킹 단위" id="growth-level-select">
@@ -206,10 +171,8 @@
 <input id="ai-score-min-input" placeholder="가격 비교점수 하한" step="0.1" type="number"/>
 </div>
 <ol class="growth-ranking-list" id="ai-score-ranking-list"></ol>
-</section></details></aside>
-</main>
+</section></details><details class="data-info"><summary>자료 범위와 모델 안내</summary><div class="data-info-body"><p id="data-status" role="status">전체 자료를 불러오는 중…</p><p id="coverage-note"></p><a class="guide-link" href="model.html">모델 사용법 · 검증 · 자료 범위 →</a><p><a href="quantile-validation.html">10월 8일 모델 비교 · 중앙값과 하위·상위 10% 가격 →</a></p><p class="multi-filter-note">지역·평형·연식·호선은 여러 개 선택할 수 있습니다. 같은 항목은 선택한 조건 중 하나, 다른 항목은 모든 조건에 맞는 결과를 표시합니다.</p></div></details></section></div></main>
 <script crossorigin="" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" src="vendor/leaflet.js"></script>
-
 <script src="data-store.js"></script>
 <script src="result-pages.js"></script>
 <script src="filter-select.js"></script>
@@ -217,5 +180,6 @@
 <script src="xlsx-export.js"></script>
 <script src="estate-export.js"></script>
 <script src="app.js"></script>
+<script src="product.js"></script>
 </body>
 </html>

@@ -94,9 +94,16 @@ function applyDarkMode(enabled) {
   const button = document.getElementById("dark-mode-toggle");
   if (button) {
     button.classList.toggle("active", enabled);
-    button.textContent = enabled ? "Light" : "Dark";
+    button.textContent = enabled ? "라이트" : "다크";
+    button.setAttribute("aria-label", enabled ? "라이트 모드로 전환" : "다크 모드로 전환");
     button.setAttribute("aria-pressed", String(enabled));
   }
+}
+
+function showWorkspaceError(message) {
+  const alert = document.getElementById('workspace-alert');
+  alert.textContent = message;
+  alert.hidden = false;
 }
 
 function setElementaryFilterChecked(checked) {
@@ -832,12 +839,23 @@ function recommendationMatchesFilters(item) {
 function renderAiRecommendations() {
  const cache=viewCache(),rows=cache.ai??(cache.ai=typeItems().map(type=>({type,rec:aiRecommendationForItem(type)})).filter(x=>valuationComparison(x.rec)).sort((a,b)=>aiScoreForItem(b.type)-aiScoreForItem(a.type)||a.rec.building_key.localeCompare(b.rec.building_key)));
  document.getElementById("ai-count").textContent=rows.length.toLocaleString("ko-KR");if(state.activeTab!=='ai')return;const page=ResultPages.view("ai-list",rows);
- document.getElementById("ai-list").innerHTML=page.rows.length?page.rows.map(({type,rec})=>{const c=valuationComparison(rec),v=currentValuation(rec);return `<li><button type="button" class="ai-row" data-group-id="${escapeHtml(groupId(type.region,type.building))}" data-type-id="${escapeHtml(typeId(type.region,type.building))}"><span class="ai-main"><strong>${escapeHtml(rec.building_name)}</strong><small>${escapeHtml(rec.gu_name)} ${escapeHtml(rec.dong_name)} · ${escapeHtml(rec.area_type)}</small><small class="neutral-price">50점 기준가 ${totalPriceLabel(c.neutral_price_billion)} · 비교 실거래 ${totalPriceLabel(c.comparison_price_billion)}</small><span class="discount-value">${discountLabel(c)}</span><small>${escapeHtml(c.valuation_month)} 기준가 ↔ 최근 90일 중앙가 · ${c.comparison_trade_count}건</small><small>${escapeHtml(c.comparison_window_start)} ~ ${escapeHtml(c.comparison_window_end)}</small><small>${escapeHtml(priceConfidenceLabel(rec))}</small><small>${hasRecentEvidence(rec)?'최근 근거 조건 충족':'자료 희소'} · 기준가 입력 ${v?.recent_trade_count??0}건 · 마지막 입력 ${v?.last_trade_age_days??'미확인'}일 전</small></span><span class="ai-score"><small>가격 비교</small><strong>${format(c.score,"ai_score")}</strong><small>50 = 기준가</small></span></button></li>`;}).join(""):`<li class="growth-empty">${state.year===state.recommendations?.target_year?'현재 조건에 맞는 가격 비교 결과가 없습니다. 자료가 희소한 단지는 거래 근거 범위를 ‘전체 평형 보기’로 바꾸고, 점수 조건을 풀어 거래 통계를 확인하세요.':'과거 연도는 실거래 통계만 제공합니다. 현재 가격 비교는 최신 연도를 선택하세요.'}</li>`;
+ document.getElementById("ai-list").innerHTML=page.rows.length?page.rows.map(({type,rec})=>{
+   const c=valuationComparison(rec);
+   return `<li><button type="button" class="ai-row" data-group-id="${escapeHtml(groupId(type.region,type.building))}" data-type-id="${escapeHtml(typeId(type.region,type.building))}">
+     <span class="ai-main"><strong>${escapeHtml(rec.building_name)}</strong><small>${escapeHtml(rec.gu_name)} ${escapeHtml(rec.dong_name)} · ${escapeHtml(rec.area_type)}</small>
+       <span class="listing-prices"><span><small>비교 실거래 · 90일 중앙가</small><b>${totalPriceLabel(c.comparison_price_billion)}</b></span><span class="reference-price"><small>${escapeHtml(c.valuation_month)} · 50점 기준가</small><b>${totalPriceLabel(c.neutral_price_billion)}</b></span></span>
+       <span class="discount-value">${discountLabel(c)}</span>
+       <small>${escapeHtml(priceConfidenceLabel(rec))} · ${hasRecentEvidence(rec)?'최근 근거 조건 충족':'자료 희소'}</small>
+     </span>
+     <span class="ai-score"><small>가격 비교</small><strong>${format(c.score,"ai_score")}</strong><small>50 = 기준가</small></span>
+     <span class="listing-evidence"><span>${escapeHtml(c.comparison_window_start)} ~ ${escapeHtml(c.comparison_window_end)} · ${c.comparison_trade_count}건</span><span>상세 근거 보기 ↗</span></span>
+   </button></li>`;
+ }).join(""):`<li class="growth-empty">${state.year===state.recommendations?.target_year?'현재 조건에 맞는 가격 비교 결과가 없습니다. 자료가 희소한 단지는 거래 근거 범위를 ‘전체 평형 보기’로 바꾸고, 점수 조건을 풀어 거래 통계를 확인하세요.':'과거 연도는 실거래 통계만 제공합니다. 현재 가격 비교는 최신 연도를 선택하세요.'}</li>`;
 }
 
 function renderGroupList(listId,countId,groups) {
  document.getElementById(countId).textContent=groups.length.toLocaleString("ko-KR");const page=ResultPages.view(listId,groups);
- document.getElementById(listId).innerHTML=page.rows.map(g=>`<li><button type="button" class="asset-row" data-group-id="${escapeHtml(g.id)}"><span>${escapeHtml(g.building_name)}</span><small>${escapeHtml(g.region.gu_name)} ${escapeHtml(g.region.dong_name)} · ${g.typeCount}개 평형</small><strong>${formatHtml(g.value)} · ${g.count.toLocaleString("ko-KR")}건</strong></button></li>`).join("");
+ document.getElementById(listId).innerHTML=page.rows.length?page.rows.map(g=>`<li><button type="button" class="asset-row" data-group-id="${escapeHtml(g.id)}"><span>${escapeHtml(g.building_name)}</span><small>${escapeHtml(g.region.gu_name)} ${escapeHtml(g.region.dong_name)} · ${g.typeCount}개 평형</small><strong>${formatHtml(g.value)} · ${g.count.toLocaleString("ko-KR")}건</strong></button></li>`).join(""):'<li class="growth-empty">조건에 맞는 단지가 없습니다. 검색어나 선택한 필터를 조정해 보세요.</li>';
 }
 
 function renderSummary(groups=groupedBuildings()) {document.getElementById("total-used").textContent=typeItems().reduce((s,r)=>s+r.building.count,0).toLocaleString("ko-KR");document.getElementById("total-buildings").textContent=groups.length.toLocaleString("ko-KR");}
@@ -852,6 +870,7 @@ function renderSelectedRegion(groups = groupedBuildings()) {
     const selectedRate = buildingYoyRate(selected);
     state.selectedTypeId = typeId(region, building);
     document.getElementById("selected-region").innerHTML = `
+      <button type="button" class="detail-close" data-close-detail>← 단지 목록으로</button>
       <div class="region-title">
         <div>
           <h2>${escapeHtml(group.building_name)}</h2>
@@ -1276,7 +1295,7 @@ async function selectGroup(id, preferredTypeId = null) {
   renderSelectedRegion();
   document.getElementById('selected-region').scrollIntoView({block:'start',behavior:'smooth'});
   try{await ensureHistory();renderSelectedRegion();}
-  catch(e){document.getElementById('data-status').textContent='과거 비교 자료를 불러오지 못했습니다. '+e.message;}
+  catch(e){showWorkspaceError('과거 비교 자료를 불러오지 못했습니다. '+e.message);}
 }
 
 function wireEvents() {
@@ -1294,7 +1313,7 @@ function wireEvents() {
     const previous=state.metric;
     state.metric = event.target.value;
     try{if(state.metric==='yoy_rate')await ensureHistory();}
-    catch(e){state.metric=previous;event.target.value=previous;document.getElementById('data-status').textContent=e.message;return;}
+    catch(e){state.metric=previous;event.target.value=previous;showWorkspaceError(e.message);return;}
     refresh();
   });
 
@@ -1497,15 +1516,36 @@ function wireEvents() {
       state.activeTab=tab;
       document.querySelectorAll("[data-market-tab]").forEach((item) => {
         item.classList.toggle("active", item.dataset.marketTab === tab);
+        item.setAttribute('aria-selected', String(item.dataset.marketTab === tab));
+        item.tabIndex = item.dataset.marketTab === tab ? 0 : -1;
       });
       document.querySelectorAll("[data-market-panel]").forEach((panel) => {
         panel.classList.toggle("active", panel.dataset.marketPanel === tab);
       });
       renderAiRecommendations();renderAssetLists();
     });
+    button.addEventListener('keydown', event => {
+      if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return;
+      event.preventDefault();
+      const tabs = [...document.querySelectorAll('[data-market-tab]')];
+      const index = tabs.indexOf(button);
+      const next = event.key === 'Home' ? 0 : event.key === 'End' ? tabs.length - 1 : (index + (event.key === 'ArrowRight' ? 1 : -1) + tabs.length) % tabs.length;
+      tabs[next].focus();
+      tabs[next].click();
+    });
   });
 
   document.body.addEventListener("click", (event) => {
+    if (event.target.closest('[data-close-detail]')) {
+      const previousGroup = state.selectedGroupId;
+      state.selectedGroupId = null;
+      state.selectedTypeId = null;
+      renderSelectedRegion();
+      const card = [...document.querySelectorAll('[data-group-id]')].find(item => item.dataset.groupId === previousGroup);
+      if (card) card.focus({preventScroll: true});
+      document.querySelector('.market-tabs').scrollIntoView({block: 'start', behavior: 'smooth'});
+      return;
+    }
     const dongButton = event.target.closest("[data-dong-code]");
     if (dongButton) {
       selectDong(dongButton.dataset.dongCode);
@@ -1532,9 +1572,12 @@ function wireEvents() {
 }
 
 async function init() {
- const compact=window.matchMedia('(max-width:600px)');
+ const compact=window.matchMedia('(max-width:760px)');
  const syncFilters=()=>{document.getElementById('location-filters').open=!compact.matches;};
- syncFilters();compact.addEventListener('change',syncFilters);
+ syncFilters();compact.addEventListener('change',()=>{
+   syncFilters();
+   if(!compact.matches && map){map.invalidateSize();focusSelectedMap();}
+ });
  try { applyDarkMode(localStorage.getItem("realEstateDashboardDarkMode")==="1"); } catch (_) { applyDarkMode(false); }
  const store=await DashboardData.open();state.dataStore=store;state.summary=store.summary;state.year=store.manifest.default_year;state.recommendations=store.recommendations;
  state.recommendationByType=new Map(store.recommendations.recommendations.map(r=>[recommendationKey(r.region_code,r.building_key),r]));
@@ -1553,7 +1596,7 @@ async function init() {
   state.provinceLayer=L.geoJSON(geojson.province_boundaries??{type:'FeatureCollection',features:[]},{pane:'provinceBorders',interactive:false,style:{color:'#263b53',weight:2.6,fill:false,opacity:.95}}).addTo(map);
   state.mapLabels=L.layerGroup().addTo(map);map.on('zoomend',renderMapLabels);
   map.invalidateSize();fitDefaultMapView();renderMapLabels();
- }catch(e){document.getElementById("map-status").textContent="지도를 불러오지 못했습니다. 전체 목록·검색·다운로드는 이용할 수 있습니다.";}
+ }catch(e){document.getElementById("map-status").textContent="지도를 불러오지 못했습니다. 전체 목록·검색·다운로드는 이용할 수 있습니다.";document.querySelector('.map-notes').open=true;}
 }
 
 function fitDefaultMapView(full=false) {
@@ -1588,7 +1631,7 @@ function renderMapLabels() {
 
 
 function renderDataStatus(){const m=state.dataStore.manifest,c=m.coverage[state.year];EstateReleaseStatus.render(m);document.getElementById("data-status").textContent=`자료 ${m.generated_at} · 모델 ${m.model.model_month} · ${m.model.nowcast?.release_note??'월별 가격 비교'} · ${c.available_types.toLocaleString("ko-KR")}개 평형 전체 조회`;document.getElementById("coverage-note").textContent=c.complete?"모든 집계 거래가 단지·평형 목록에 보존돼 있습니다. 페이지 수와 관계없이 전체를 검색·다운로드합니다.":`기존 저장본에서 개별 목록 ${c.unrepresented_trades.toLocaleString("ko-KR")}건이 누락돼 있습니다. 전체 복구와 구분해 표시합니다.`;}
-async function changeYear(year){const id=(state.yearRequest??0)+1;state.yearRequest=id;state.loading=true;document.querySelector(".detail-pane").setAttribute("aria-busy","true");try{if(!await state.dataStore.loadPeriod(year))return;state.year=year;state.selectedGroupId=null;state.selectedTypeId=null;state.loading=false;populateSubwayLineSelect();refresh();}catch(e){if(id===state.yearRequest){document.getElementById("year-select").value=state.year;document.getElementById("data-status").textContent=`불러오기 실패: ${e.message}. 이전 결과를 유지합니다.`;}}finally{if(id===state.yearRequest){state.loading=false;document.querySelector(".detail-pane").setAttribute("aria-busy","false");}}}
+async function changeYear(year){const id=(state.yearRequest??0)+1;state.yearRequest=id;state.loading=true;document.querySelector(".detail-pane").setAttribute("aria-busy","true");try{if(!await state.dataStore.loadPeriod(year))return;state.year=year;document.getElementById('workspace-alert').hidden=true;state.selectedGroupId=null;state.selectedTypeId=null;state.loading=false;populateSubwayLineSelect();refresh();}catch(e){if(id===state.yearRequest){document.getElementById("year-select").value=state.year;showWorkspaceError(`불러오기 실패: ${e.message}. 이전 결과를 유지합니다.`);}}finally{if(id===state.yearRequest){state.loading=false;document.querySelector(".detail-pane").setAttribute("aria-busy","false");}}}
 function exportResults(){const rows=typeItems().map(({region:r,building:b})=>{const m=aiRecommendationForItem({region:r,building:b}),c=valuationComparison(m),v=currentValuation(m),recent=m?.recent_price_comparison;return [state.year,r.sido_name,r.gu_name,r.dong_name,b.building_name,b.area_type,b.key,b.count,b.metrics.price_billion.avg,b.metrics.price_billion.median,b.metrics.price_per_pyeong.median,b.households,b.built_year,c?.score,v?.price_billion,c?.comparison_price_billion,c?.discount_pct,c?.valuation_month,c?.comparison_period,v?.recent_trade_count,c?.score_version,recent?.window_start,recent?.window_end,recent?.data_through,recent?.trade_count,v?.recent_history_start,v?.feature_cutoff,v?.last_trade_age_days,c?.evidence_level,v?.floor,v?.floor_basis,b.households_verified?'공식 주소 대조 완료':'기존 자료·범위 미검증',b.official_complex_id,b.household_observed_at,v?.model_version,v?.release_version,v?.confidence?.grade,v?.confidence?.lower_price_billion,v?.confidence?.upper_price_billion,v?.confidence?.historical_grade_coverage_pct,v?.confidence?.version];});ResultPages.downloadCsv(`apartment-valuation-${state.year}.csv`,["실거래 집계 연도","시도","시군구","읍면동","단지","평형","식별키","연간 거래수","연간 평균 거래가(억)","연간 중앙 거래가(억)","중앙 평단가(만원)","표시 세대수","준공연도","가격 비교점수","현재 50점 기준가(억)","점수에 사용한 최근90일 중앙가(억)","기준가보다 낮은 비율(%)","기준가 산출 월","비교 실거래 기간","기준가 입력 최근 이력 거래수","점수 버전","비교90일 시작일(포함)","비교90일 종료일(포함)","비교 자료 마감일","비교90일 거래수","기준가 입력 최근 이력 시작일","기준가 입력 마감일","마지막 입력거래 경과일(기준월초)","최근 근거 구분","기준가 대표층","대표층 기준","세대수 출처 상태","공식 단지 ID","세대수 관측일","적용 가격 모델","가격 모델 배포 버전","가격 추정 신뢰도","목표80% 참고가격 하단(억)","목표80% 참고가격 상단(억)","2026년 해당등급 실제 포함률(%)","신뢰도 버전"],rows);}
 function renderPage(id){if(id==="ai-list")renderAiRecommendations();else if(id==="growth-ranking-list")renderGrowthRankings();else if(id==="ai-score-ranking-list")renderAiScoreRankings();else renderAssetLists();}
 function exportComparison(){
@@ -1613,7 +1656,15 @@ window.addEventListener("resize", () => {
   }, 120);
 });
 
+window.addEventListener('workspaceviewchange', () => {
+  if (document.body.dataset.workspaceView === 'map' && map) {
+    map.invalidateSize();
+    focusSelectedMap();
+  }
+});
+
 init().catch((error) => {
+  document.getElementById("selected-region").hidden = false;
   document.getElementById("selected-region").innerHTML =
     `<p class="empty-state">데이터를 불러오지 못했습니다. ${escapeHtml(error.message)}<br>잠시 후 새로고침해 주세요.</p>`;
 });

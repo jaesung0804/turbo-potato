@@ -31,7 +31,7 @@ const Potential = (() => {
     document.getElementById('potential-result-count').textContent=`조건에 맞는 ${rows.length.toLocaleString('ko-KR')}개 평형 · 전체 ${state.data.cohort_size.toLocaleString('ko-KR')}개`;
     document.getElementById('potential-list').innerHTML=page.rows.length?page.rows.map(r=>rowHtml(r,state.data,state.selected===r.key)).join(''):'<li class="empty-state">현재 조건에 맞는 후보가 없습니다. 지역·가격 또는 순위 범위를 넓혀 보세요.</li>';
   }
-  function theme(enabled){document.body.classList.toggle('dark-mode',enabled);document.getElementById('potential-theme').textContent=enabled?'Light':'Dark';document.getElementById('potential-theme').setAttribute('aria-pressed',String(enabled));}
+  function theme(enabled){document.body.classList.toggle('dark-mode',enabled);document.getElementById('potential-theme').textContent=enabled?'라이트':'다크';document.getElementById('potential-theme').setAttribute('aria-pressed',String(enabled));}
   function fiveYearHtml(result) {
     if(!result)return '';
     return `<p>${Number(result.raw_rows_added).toLocaleString('ko-KR')}건의 과거 매매를 추가해 ${Number(result.model_test_origins)}개 판단 시점에서 5년 모형을 시험했습니다. 모델과 단순 소외 후보의 관측 조건을 모두 충족한 시점은 ${Number(result.common_eligible_origins)}개로, 채택에 필요한 ${Number(result.required_common_origins)}개보다 적었습니다.</p><div class="potential-detail-grid"><div><span>공통 유효 시점 · 모델 상대 변화 중앙값</span><strong>${signed(result.model_median_excess_pct)}</strong></div><div><span>같은 시점 · 단순 소외 후보</span><strong>${signed(result.benchmark_median_excess_pct)}</strong></div></div><p>${esc(result.outcome_window)}로 비교한 결과입니다. 현재 후보는 검증 범위가 더 넓은 18~24개월 모델을 유지합니다.</p><p>${esc(result.meaning??'')} ${esc(result.next_direction??'')}</p>`;
@@ -106,4 +106,4 @@ const Potential = (() => {
   }
   return {init,filterRows,rowHtml,number,signed,fiveYearHtml,pathValidationHtml};
 })();
-Potential.init().catch(error=>{document.getElementById('potential-status').textContent=error.message;});
+Potential.init().catch(error=>{document.getElementById('potential-status').textContent=error.message;document.querySelector('.potential-data-info').open=true;});
