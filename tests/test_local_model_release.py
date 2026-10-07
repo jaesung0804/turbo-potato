@@ -56,3 +56,16 @@ def test_model_cache_requires_hash_before_loading(tmp_path, monkeypatch):
         {'artifact': 'models/nowcast/frozen.joblib', 'artifact_bytes': 5, 'sha256': '0'*64})
     with pytest.raises(ValueError, match='checksum'):
         active_nowcast()
+
+
+def test_release_preserves_real_build_commit_instead_of_preview_label(tmp_path, monkeypatch):
+    import local_site_release as release
+    (tmp_path/'data').mkdir()
+    manifest = {'code_commit': 'a'*40, 'local_build_commit': 'local-quantile-preview', 'ui_assets': {}}
+    monkeypatch.setattr(release, 'release_files', lambda _: (manifest, []))
+    monkeypatch.setattr(release, 'copy_ui', lambda _: {})
+    release.stamp(tmp_path, 'b'*40)
+    assert manifest['code_commit'] == 'b'*40
+    assert manifest['local_build_commit'] == 'a'*40
+    release.stamp(tmp_path, 'c'*40)
+    assert manifest['local_build_commit'] == 'a'*40
