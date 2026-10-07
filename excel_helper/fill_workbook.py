@@ -6,6 +6,7 @@ from datetime import datetime, timedelta
 from concurrent.futures import ProcessPoolExecutor, as_completed
 import hashlib
 import json
+import math
 from pathlib import Path
 import re
 import time
@@ -18,6 +19,20 @@ import requests
 
 ALLOWED = {'search.naver.com', 'm.richgo.ai', 'realty.daangn.com'}
 AUTO = '임장 자동 채우기'
+
+
+def layout_photo_row(ws, row):
+    """Keep existing and collected long text inside the photo's own columns."""
+    lines = 1
+    for col in (2, 3, 9, 20, 21, 27, 34):
+        cell = ws.cell(row, col)
+        cell.alignment = openpyxl.styles.Alignment(wrap_text=True, vertical='center', horizontal='center')
+        width = max(8, (ws.column_dimensions[cell.column_letter].width or 14)-3)
+        text = str(cell.value or '')
+        needed = sum(max(1, math.ceil(sum(2 if ord(c)>255 else 1 for c in part)/width))
+                     for part in text.split('\n'))
+        lines = max(lines, needed)
+    ws.row_dimensions[row].height = min(409, max(25, lines*17+8))
 
 
 def number(value):
@@ -305,6 +320,9 @@ def fill(path, output=None, cache=None, refresh=False, limit=None, routes=True, 
     today = datetime.now().astimezone().isoformat(timespec='seconds')
     changed = processed = 0
     tasks=[]
+    if template:
+        for row in range(2, ws.max_row+1):
+            layout_photo_row(ws, row)
     for row in range(2, ws.max_row+1):
         if limit is not None and len(tasks) >= limit:
             break
@@ -358,6 +376,8 @@ def fill(path, output=None, cache=None, refresh=False, limit=None, routes=True, 
         missing = [h for h in ('주차대수','20평대 호가','30평대 호가','40평대 호가','용적률(%)','대지지분(㎡)','지하주차장','승강기 연결','커뮤니티','조합여부') if h in headers and ws.cell(row,headers[h]).value is None]
         if missing:
             note += '\n공개 출처에서 확정하지 못한 항목: '+', '.join(missing)
+        if template:
+            layout_photo_row(ws, row)
         notes.append([f'자동 조회 {row-1}. {identity[0]} {identity[2]}㎡', note])
         notes.cell(notes.max_row, 2).alignment = openpyxl.styles.Alignment(wrap_text=True, vertical='top')
         notes.row_dimensions[notes.max_row].height = min(240, 18*(note.count('\n')+2))
