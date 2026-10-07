@@ -5,7 +5,7 @@ const site=path.resolve(process.argv[2]||'.work/site'),origin=process.argv[3];
 const read=p=>fs.readFileSync(path.join(site,p),'utf8');
 const context=vm.createContext({console,window:{addEventListener(){}},setTimeout,URL,Map,Set,Blob,Response,DecompressionStream,crypto:webcrypto,
  fetch:async (url,options)=>origin ? fetch(new URL(url,origin.endsWith('/')?origin:origin+'/'),{...options,signal:AbortSignal.timeout(45000)}) : new Response(fs.readFileSync(path.join(site,url)))});
-vm.runInContext(read('result-pages.js')+'\n'+read('data-store.js')+'\n'+read('app.js').replace(/init\(\)\.catch\([\s\S]*$/, ''),context);
+vm.runInContext(read('result-pages.js')+'\n'+read('filter-select.js')+'\n'+read('data-store.js')+'\n'+read('app.js').replace(/init\(\)\.catch\([\s\S]*$/, ''),context);
 const run=s=>vm.runInContext(s,context);
 (async()=>{
  await run(`DashboardData.open().then(s=>{state.dataStore=s;state.summary=s.summary;state.recommendations=s.recommendations;
@@ -71,6 +71,17 @@ const run=s=>vm.runInContext(s,context);
  }
  run('state.search="";state.metric="price_billion";');
  const items=run('typeItems()');assert.ok(items.length);
+ const comparisonYear=run('generatedYear()');
+ const expectedUnion=items.filter(({region:r,building:b})=>['서울특별시','경기도'].includes(r.sido_name)
+   && b.built_year && Math.max(0,comparisonYear-b.built_year)<=15);
+ run('state.selectedSido=["서울특별시","경기도"];state.ageRange=["new","semi_new"];');
+ assert.deepEqual(Array.from(run('typeItems().map(x=>x.region.code+"|"+x.building.key)')),
+   expectedUnion.map(x=>x.region.code+'|'+x.building.key),'Combined filters must preserve the exact union across provinces and ages');
+ run('globalThis.exportedRows=null;ResultPages.downloadCsv=(name,headers,rows)=>{exportedRows=rows;};exportResults();');
+ assert.equal(run('exportedRows.length'),expectedUnion.length,'CSV must include every matching type, independent of pagination');
+ assert.deepEqual(Array.from(run('exportedRows.map(r=>r[6])')),expectedUnion.map(x=>x.building.key));
+ console.log(`Multi-select listing and CSV verified: ${expectedUnion.length} matching types.`);
+ run('state.selectedSido=[];state.ageRange=[];');
  context.lastName=items.at(-1).building.building_name;
  assert.ok(run('state.search=lastName;typeItems().length')>0,'The final uncapped result must remain searchable');
  console.log(origin?'Public client data decoding and reachability verified.':'Real release data and ranking verification passed.');

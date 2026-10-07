@@ -2,7 +2,7 @@
 const assert=require('node:assert/strict'),fs=require('node:fs'),vm=require('node:vm'),zlib=require('node:zlib');
 const context=vm.createContext({console,Map,Set,Number,URL,encodeURIComponent});
 const page=fs.readFileSync('web/potential.html','utf8'),code=fs.readFileSync('web/potential.js','utf8').replace(/Potential\.init\(\)\.catch[\s\S]*$/,'');
-vm.runInContext(fs.readFileSync('web/result-pages.js','utf8')+'\n'+code,context);
+vm.runInContext(fs.readFileSync('web/result-pages.js','utf8')+'\n'+fs.readFileSync('web/filter-select.js','utf8')+'\n'+code,context);
 const run=s=>vm.runInContext(s,context);
 const data=JSON.parse(zlib.gunzipSync(fs.readFileSync('metadata/potential_candidates.json.gz')));
 context.data=data;context.filters={search:'',district:'all',min:null,max:null,area:'all',top:100,trades:3,sort:'rank'};
@@ -22,6 +22,12 @@ const district=data.rows[0].gu;context.district=district;
 const regional=run('Potential.filterRows(data.rows,{...filters,district})');
 assert.ok(regional.length>0);assert.ok(regional.every(r=>r.gu===district));
 assert.equal(regional[0].research_rank,1,'Filtering must preserve the global research rank');
+// Multiple districts and areas are unions; price and trade thresholds still intersect.
+context.districts=[...new Set(data.rows.map(r=>r.gu))].slice(0,2);
+const multi=run('Potential.filterRows(data.rows,{...filters,district:districts,area:["small","large"],min:5,max:10})');
+const expected=data.rows.filter(r=>context.districts.includes(r.gu)&&(r.area<=60||r.area>85)&&r.entry_reference_oku>=5&&r.entry_reference_oku<=10).sort((a,b)=>a.research_rank-b.research_rank);
+assert.ok(multi.length>0);assert.deepEqual(Array.from(multi,r=>r.key),expected.map(r=>r.key));
+assert.equal(run('Potential.filterRows(data.rows,{...filters,district:[],area:[]}).length'),data.cohort_size);
 const bounded=run('Potential.filterRows(data.rows,{...filters,min:5,max:10,area:"small",trades:5})');
 assert.ok(bounded.length>0);assert.ok(bounded.every(r=>r.entry_reference_oku>=5&&r.entry_reference_oku<=10&&r.area<=60&&r.entry_n>=5));
 const sorted=run('Potential.filterRows(data.rows,{...filters,sort:"price"})');for(let i=1;i<sorted.length;i++)assert.ok(sorted[i-1].entry_reference_oku<=sorted[i].entry_reference_oku);

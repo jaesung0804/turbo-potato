@@ -1,15 +1,15 @@
 const Potential = (() => {
   const esc=ResultPages.escape;
-  const state={data:null,search:'',district:'all',min:null,max:null,area:'all',top:100,trades:3,sort:'rank',lag:'all',selected:null};
+  const state={data:null,search:'',district:[],min:null,max:null,area:[],top:100,trades:3,sort:'rank',lag:'all',selected:null};
   const number=value=>value===''?null:Number.isFinite(Number(value))?Number(value):null;
   const signed=value=>Number.isFinite(value)?`${value>0?'+':''}${value.toFixed(2)}%`:'표본 부족';
   const price=value=>Number.isFinite(value)?`${value.toLocaleString('ko-KR',{maximumFractionDigits:4})}억`:'미확인';
   function filterRows(rows,filters) {
     const query=filters.search.trim().toLocaleLowerCase();
     return rows.filter(r=>(!query||`${r.key} ${r.district} ${r.dong} ${r.name}`.toLocaleLowerCase().includes(query))
-      && (filters.district==='all'||r.gu===filters.district)
+      && FilterSelect.matches(filters.district,r.gu)
       && (filters.min==null||r.entry_reference_oku>=filters.min) && (filters.max==null||r.entry_reference_oku<=filters.max)
-      && (filters.area==='all'||filters.area==='small'&&r.area<=60||filters.area==='medium'&&r.area>60&&r.area<=85||filters.area==='large'&&r.area>85)
+      && FilterSelect.matches(filters.area,r.area<=60?'small':r.area<=85?'medium':'large')
       && r.top_percent<=filters.top && r.entry_n>=(filters.trades??3) && (filters.lag!=='stable'||r.lag_sensitivity?.both_top_decile===true))
       .sort((a,b)=>(filters.sort==='price'?a.entry_reference_oku-b.entry_reference_oku:filters.sort==='trades'?b.entry_n-a.entry_n:a.research_rank-b.research_rank)||a.research_rank-b.research_rank);
   }
@@ -60,7 +60,7 @@ const Potential = (() => {
     document.getElementById('potential-cutoff').textContent=data.feature_cutoff;
     document.getElementById('potential-total').textContent=data.cohort_size.toLocaleString('ko-KR');
     document.getElementById('potential-status').textContent=`판단 기준일 ${data.origin} · 실제 산출 ${new Date(data.created_at).toLocaleString('ko-KR',{timeZone:'Asia/Seoul',hour12:false})} (한국시간). 서울·광명, 같은 면적의 180일 매매 3건 이상인 후보를 고정해 표시합니다.`;
-    document.getElementById('potential-district').innerHTML='<option value="all">전체 지역</option>'+[...new Map(data.rows.map(r=>[r.gu,r.district])).entries()].sort((a,b)=>a[1].localeCompare(b[1],'ko')).map(([code,name])=>`<option value="${esc(code)}">${esc(name)}</option>`).join('');
+    FilterSelect.set('potential-district',state.district,[...new Map(data.rows.map(r=>[r.gu,r.district])).entries()].sort((a,b)=>a[1].localeCompare(b[1],'ko')).map(([value,label])=>({value,label})));
     document.getElementById('potential-weighting').textContent=data.weighting;
     const names=Object.fromEntries(data.features.map(f=>[f.key,f.label]));
     document.getElementById('potential-importance').innerHTML=(data.feature_importance??[]).slice().sort((a,b)=>b.mean_abs_shap_share_pct-a.mean_abs_shap_share_pct).map(f=>`<div class="importance-row"><span>${esc(names[f.key]??f.key)}</span><b>${f.mean_abs_shap_share_pct.toFixed(1)}%</b><meter min="0" max="100" value="${f.mean_abs_shap_share_pct}" aria-label="${esc(names[f.key]??f.key)} 모델 의존도"></meter></div>`).join('');
@@ -75,8 +75,22 @@ const Potential = (() => {
   function exportRows(){const rows=filterRows(state.data.rows,state);ResultPages.downloadCsv(`apartment-potential-${state.data.origin}.csv`,['판단 기준일','실거래 반영 마감','전체 순위','전체 중 상위(%)','지역','동','단지','전용면적(㎡)','판단 전 대표가격(억)','180일 거래수','예상 상대 가격 변화(%)','61일 지연 가정 순위','31·61일 모두 상위10%','결과 시작','결과 종료','식별키'],rows.map(r=>[state.data.origin,state.data.feature_cutoff,r.research_rank,r.top_percent,r.district,r.dong,r.name,r.area,r.entry_reference_oku,r.entry_n,r.predicted_relative_change_pct,r.lag_sensitivity?.alternate_rank,r.lag_sensitivity?.both_top_decile,state.data.outcome_start,state.data.outcome_end,r.key]));}
   function wire(){
     const controls={search:'search',district:'district','price-min':'min','price-max':'max',area:'area',top:'top',trades:'trades',sort:'sort',lag:'lag'};let timer;
-    for(const [id,key] of Object.entries(controls))document.getElementById(`potential-${id}`).addEventListener('input',event=>{state[key]=['min','max','top','trades'].includes(key)?number(event.target.value):event.target.value;state.selected=null;clearTimeout(timer);timer=setTimeout(()=>render(true),120);});
-    document.getElementById('potential-reset').addEventListener('click',()=>{Object.assign(state,{search:'',district:'all',min:null,max:null,area:'all',top:100,trades:3,sort:'rank',lag:'all',selected:null});for(const [id,key]of Object.entries(controls))document.getElementById(`potential-${id}`).value=state[key]??'';render(true);});
+    for(const [id,key] of Object.entries(controls)) {
+      const multi=['district','area'].includes(key),control=document.getElementById(`potential-${id}`);
+      control.addEventListener(multi?'change':'input',event=>{
+        state[key]=multi?FilterSelect.read(control.id):['min','max','top','trades'].includes(key)?number(event.target.value):event.target.value;
+        state.selected=null;clearTimeout(timer);timer=setTimeout(()=>render(true),120);
+      });
+    }
+    document.getElementById('potential-reset').addEventListener('click',()=>{
+      clearTimeout(timer);
+      Object.assign(state,{search:'',district:[],min:null,max:null,area:[],top:100,trades:3,sort:'rank',lag:'all',selected:null});
+      for(const [id,key] of Object.entries(controls)) {
+        if(['district','area'].includes(key))FilterSelect.set(`potential-${id}`,[]);
+        else document.getElementById(`potential-${id}`).value=state[key]??'';
+      }
+      render(true);
+    });
     document.getElementById('potential-export').addEventListener('click',exportRows);
     document.getElementById('potential-theme').addEventListener('click',()=>{const enabled=!document.body.classList.contains('dark-mode');theme(enabled);try{localStorage.setItem('realEstateDashboardDarkMode',enabled?'1':'0');}catch(_){}});
     document.body.addEventListener('click',event=>{const page=event.target.closest('[data-page-list]');if(page){ResultPages.set(page.dataset.pageList,page.dataset.page);render();document.getElementById('potential-list').scrollIntoView({block:'start'});return;}const row=event.target.closest('[data-potential-key]');if(row){state.selected=state.selected===row.dataset.potentialKey?null:row.dataset.potentialKey;render();}});
@@ -88,7 +102,7 @@ const Potential = (() => {
     const response=await fetch('data/dashboard_manifest.json',{cache:'no-cache'});if(!response.ok)throw Error('후보 자료 목록을 불러오지 못했습니다. 새로고침해 주세요.');
     const manifest=await response.json();EstateReleaseStatus.render(manifest);if(!manifest.potential)throw Error('이 배포본에는 잠재력 후보 자료가 아직 없습니다.');
     const data=await DashboardData.compressed(manifest.potential);if(data.schema_version!==1||!Array.isArray(data.rows)||data.rows.length!==data.cohort_size)throw Error('후보 자료 건수가 일치하지 않습니다.');
-    state.data=data;renderInfo(data);render(true);
+    state.data=data;renderInfo(data);FilterSelect.init();render(true);
   }
   return {init,filterRows,rowHtml,number,signed,fiveYearHtml,pathValidationHtml};
 })();
