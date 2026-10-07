@@ -140,6 +140,7 @@
 <span>초품아</span>
 <input id="elementary-filter" type="checkbox"/>
 </label></div><div class="result-actions"><button id="export-results" type="button">조건에 맞는 전체 평형 CSV</button></div><p class="score-note">최신 연도 가격 필터는 최근 90일 중앙가, 과거 연도는 연간 중앙가를 사용합니다. 세대수는 공식 주소 대조가 완료된 값과 기존 미검증 값을 상세 화면·CSV에서 구분합니다. 다운로드는 현재 페이지와 관계없이 조건에 맞는 결과 전부를 포함합니다.</p></details>
+<div class="result-actions"><button id="export-comparison" type="button">임장 비교표 Excel</button><span class="score-note">현재 필터 결과 전체 · 임장 칸은 빈 칸</span></div><div id="export-settings"></div><p class="score-note" id="export-status" role="status" aria-live="polite"></p>
 <section class="stats-grid">
 <div>
 <span>거래횟수</span>
@@ -213,6 +214,8 @@
 <script src="result-pages.js"></script>
 <script src="filter-select.js"></script>
 <script src="release-status.js"></script>
+<script src="xlsx-export.js"></script>
+<script src="estate-export.js"></script>
 <script src="app.js"></script>
 </body>
 </html>
