@@ -586,13 +586,25 @@ function askingPriceResult(rec, text) {
   return `<div class="metric-grid">${metricCard('입력한 가격',totalPriceLabel(price),'text')}${metricCard('동일 기준 가격 비교점수',score,'ai_score')}</div><p class="price-verdict">${comparison}</p>`;
 }
 
+function directPriceQuantiles(rec) {
+  const v=currentValuation(rec),q=v?.quantiles,p=q?.prices_billion;
+  if(q?.status!=='available'||JSON.stringify(q.levels)!=='[0.1,0.5,0.9]'||!p)return null;
+  if(![p.p10,p.p50,p.p90].every(x=>Number.isFinite(x)&&x>0)||p.p10>p.p50||p.p50>p.p90||canonicalPrice(p.p50)!==canonicalPrice(v.price_billion))return null;
+  return q;
+}
+
 function priceConfidenceLabel(rec) {
+  if(directPriceQuantiles(rec))return '가격 분포 P10–P90';
   const q=currentValuation(rec)?.confidence;
   if(!q || !/^[ABCD]$/.test(q.grade??''))return '가격 신뢰도 미산출';
   return `가격 신뢰도 ${q.grade}${q.status==='available'?'':' · 범위 미검증'}`;
 }
 
 function priceConfidencePanel(rec) {
+  const direct=directPriceQuantiles(rec);
+  if(direct){const p=direct.prices_billion;
+    return `<div class="confidence-panel"><h3>조건부 거래가격 분포</h3><div class="metric-grid">${metricCard('하위 10% 경계 · P10',totalPriceLabel(p.p10),'text')}${metricCard('중앙값 · P50',totalPriceLabel(p.p50),'text')}${metricCard('상위 10% 경계 · P90',totalPriceLabel(p.p90),'text')}</div><p class="score-note">과거 거래에서 세 분위수를 각각 직접 학습했습니다. P10~P90은 목표 80%의 거래가격 범위이며, 중앙값 양쪽의 폭이 다를 수 있습니다. ${escapeHtml(direct.validation_period)} 검증 포함률 ${Number(direct.historical_coverage_pct).toFixed(1)}%.</p><p class="score-note">급매 등 낮은 가격도 학습에 보존합니다. 범위 밖이라는 이유로 오류·증여 거래로 판정하거나 제외하지 않습니다. 조건이 비슷한 거래의 가격 분포이며 상승 확률이나 개별 매물 가격의 보장이 아닙니다. 현재 표시는 과거 365일 대표 층 기준으로, 실제 층·상태에 따라 달라집니다.</p></div>`;
+  }
   const q=currentValuation(rec)?.confidence;
   if(!q)return '';
   if(q.status!=='available')return `<p class="score-note">${escapeHtml(priceConfidenceLabel(rec))} · 검증 근거가 충분한 범위는 아직 없습니다.</p>`;

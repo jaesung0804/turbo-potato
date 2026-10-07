@@ -41,6 +41,13 @@ def attach_nowcast(model, source, artifact_path=ARTIFACT, manifest_path=MANIFEST
     artifact = joblib.load(artifact_path)
     if artifact['trained_through'] != spec['trained_through']:
         raise ValueError('Monthly valuation training date mismatch')
+    direct_quantiles = hasattr(artifact.get('model'), 'predict_quantiles')
+    if direct_quantiles != bool(spec.get('quantiles')):
+        raise ValueError('Quantile artifact and manifest must match')
+    if direct_quantiles and spec.get('confidence'):
+        raise ValueError('Legacy symmetric calibration cannot label direct quantiles')
+    if direct_quantiles and spec.get('feature_engine') != artifact.get('feature_engine'):
+        raise ValueError('Direct quantile feature engine differs from training')
     d, quality = load_transactions(source)
     attach_recent_comparison_prices(model, d, quality)
     origin = pd.Period(month).start_time
@@ -74,6 +81,9 @@ def attach_nowcast(model, source, artifact_path=ARTIFACT, manifest_path=MANIFEST
             'active_trade_days': int(r['active_days90']),
             'score_error_scale': spec['score_error_scale'],
         }
+        if direct_quantiles:
+            from estate_quantile_nowcast import attach_quantiles
+            attach_quantiles(rec['current_valuation'], r, spec)
         meta['available_types'] += 1
     if spec.get('confidence') and not predicted.empty:
         from estate_price_confidence import attach_confidence
