@@ -335,14 +335,26 @@ def predict_sample(d, sample, artifact, month, lag_days=31, feature_engine=None)
         row['log_price'] = row['price_oku'] = np.nan
         templates.append(row)
     synthetic = pd.concat([base, pd.DataFrame(templates)], ignore_index=True)
-    if feature_engine == 'array_equivalent_legacy_ties_v1':
+    if feature_engine in ('array_equivalent_legacy_ties_v1', 'array_stable_publication_v1'):
         from estate_retraining_features import monthly_features
-        f = monthly_features(synthetic, month, month, policy=False, uniform_lag=lag_days, legacy_order=True)
+        stable = feature_engine == 'array_stable_publication_v1'
+        f = monthly_features(synthetic, month, month, policy=stable, uniform_lag=lag_days, legacy_order=not stable)
     else:
         f = build_features(synthetic, lag_days, month, month)
     if f.empty:
         raise ValueError('No supported prediction rows')
-    if artifact['model'] is None:
+    quantile_columns = []
+    if hasattr(artifact['model'], 'predict_quantiles'):
+        from estate_quantile_nowcast import LEVELS, NAMES
+        if artifact.get('quantile_levels') != list(LEVELS):
+            raise ValueError('Unsupported quantile artifact levels')
+        levels = f.anchor.to_numpy()[:, None] + artifact['model'].predict_quantiles(f[artifact['columns']])
+        predicted = levels[:, 1]
+        for index, name in enumerate(NAMES):
+            col = name + '_price_oku'
+            f[col] = np.exp(levels[:, index]) * f.area / 10000
+            quantile_columns.append(col)
+    elif artifact['model'] is None:
         predicted = f[artifact['selected']].to_numpy()
     else:
         predicted = f.anchor + artifact['model'].predict(f[artifact['columns']])
@@ -350,7 +362,7 @@ def predict_sample(d, sample, artifact, month, lag_days=31, feature_engine=None)
     f['floor_basis'] = 'previous observable 365-day median; no individual listing floor supplied'
     return f[list(dict.fromkeys(['key','month','feature_cutoff','lag_days','floor','floor_basis',
               'estimated_price_oku','n90','last_age','eff90','active_days90','region',
-              *PRICE_FEATURES,*ACTIVITY_FEATURES,*FLOOR_FEATURES]))]
+              *PRICE_FEATURES,*ACTIVITY_FEATURES,*FLOOR_FEATURES,*quantile_columns]))]
 
 
 if __name__ == '__main__':

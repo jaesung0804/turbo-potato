@@ -1,7 +1,7 @@
 # Data Build Only:
 #   cd C:\code
 #   python build_real_estate_dashboard_data.py
-# This only rebuilds web\data\seoul_real_estate_summary.json.
+# 로컬 작업 폴더의 집계 JSON만 생성합니다. 공개는 build_public_site.py에서 합니다.
 
 from __future__ import annotations
 
@@ -21,7 +21,7 @@ from typing import Any
 # - 실거래 원천 행을 연도/시도/시군구/읍면동/건물/평형 단위로 묶습니다.
 # - 직거래와 취소거래를 제외해 왜곡된 가격이 대시보드에 들어오지 않게 합니다.
 # - 세대수, 연식, 초품아, 역세권 같은 보조 정보를 매칭해 매물 비교에 필요한 지표를 만듭니다.
-# - 결과물은 web/data/seoul_real_estate_summary.json이며 GitHub Pages에서 정적으로 배포됩니다.
+# - 결과물은 .work/build/summary.json이며 검증 후 압축된 공개본으로 변환합니다.
 
 
 SQM_PER_PYEONG = 3.3058
@@ -883,7 +883,7 @@ def fill_missing_built_years(addresses: dict[str, Any]) -> None:
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="서울 부동산 CSV를 지도 대시보드용 JSON으로 변환합니다.")
     parser.add_argument("--input", default="data/capital_area_apt_trade_transactions.csv")
-    parser.add_argument("--output", default="web/data/seoul_real_estate_summary.json")
+    parser.add_argument("--output", default=".work/build/summary.json")
     parser.add_argument("--apt-detail", default=str(APT_DETAIL_PATH), help="중간 수집된 K-APT 역세권 상세 CSV 경로")
     parser.add_argument("--property-types", nargs="*", default=sorted(DEFAULT_PROPERTY_TYPES))
     parser.add_argument("--address-limit-per-region-year", type=int, default=0)

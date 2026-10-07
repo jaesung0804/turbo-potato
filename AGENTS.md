@@ -1,20 +1,28 @@
-# Research data access
+# 작업 원칙
 
-When `RESEARCH_STORAGE=backend`, use `backend_records.py` for agent memory:
+## 로컬 학습·평가
 
-- Start with `list --kind <kind> --limit 20`, then `get` only the selected keys.
-- Write one bounded JSON record using `put --expected-version <last-read-version>`; use 0 only for a new key. On HTTP 409, reread and merge the change.
-- Use `complexes`, `visits`, `research`, `agents`, `tasks`, `decisions`, `sources`, `experiments`, and `checkpoints` as appropriate. Preserve source date and collection provenance.
-- Photos and large originals belong in the authenticated file store; save their SHA-256 references in records. Do not embed photo bytes in JSON or commit them to Git.
-- API URL and project token come from the private execution environment. Never put tokens, Wallet files, DB credentials, or private location details in prompts, logs, code, browser JavaScript, or Git.
-- Restore the matching state with `backend_state.py pull` before changing collector/model data. Keep the existing raw/model manifest validators and immutable model versions.
-- A missing required snapshot, failed restore, invalid checksum, or missing coverage required by the next stage is a reason to stop that dependent task. A verified partial checkpoint may resume its explicitly requested collection, but cannot pass a complete-data publication gate. Do not delete checkpoints, start an empty state, fetch all originals again, or fall back to Git to hide a backend error. First-time state initialization requires an explicit request and the supported initialization option.
-- Publish state through `backend_state.py push` using the receipt from the initial restore. Its compare-and-swap check must reject a changed head. On conflict, stop and review/recompute against the new source; never fetch a fresh receipt merely to publish already-computed stale output. Preserve the original Git source commit, backend snapshot ID, manifest hashes, and partial/completeness metadata.
-- For sharded full-history jobs, restore the shard with `backend_state.py restore-checkpoints` before collection. Reuse verified 2016–2020/2006–2015 exports with `backend_state.py reuse-history`; run the bounded collector only when collection is explicitly requested.
-- Raw/history publication must keep the existing `backend_rows.py` enqueue step after a successful snapshot push. Partial capital research and rent records must not enter the canonical `apt-trades` dataset. A failed enqueue must remain visible; do not mark SQL publication complete just because the files were saved.
-- Ordinary website serving reads a saved release. Collection, training, and `--rebuild` must be explicit tasks.
-- A code push, website request, or agent startup must not trigger production collection or model training. Push jobs are unit/UI validation only. Pull requests must not collect source data or publish state; pull requests run bounded unit/UI validation only. Full candidate and ML validation remains available through explicit manual validation after the backend storage-readiness gate succeeds. This follows the user's 2026-09-11 requirement to avoid large Git transfers and unverified storage experiments. Do not restore push triggers on the collector, API access probe, or Pages publication workflows.
-- Use an explicitly requested collector workflow for new research. Preserve the existing approved daily incremental and monthly research schedules; do not expand them into historical backfills. For a daily update, restore checkpoints first and fetch only the needed current/recent partitions and the configured one-month historical rotation. Reuse completed older partitions, respect source quotas, and save bounded progress. A full historical backfill or retraining experiment needs an explicit scope, date range, and output destination.
-- In backend mode, raw files, photos, model binaries, and durable checkpoints belong in DB/OCI snapshots, never in a Git state branch or duplicated long-lived CI artifacts. Keep only code, small manifests/reports, and the existing short-lived diagnostic/shard artifacts in their intended locations. Do not commit private `.env` files, API keys, tokens, Oracle Wallets, or credentials, even when a user has authorized using them at runtime.
+2026년 10월 8일 사용자가 모델 재학습·비교 평가를 로컬에서 실행하도록 요청했다. 검증된 로컬 원자료·특징 파일의 실험은 백엔드 용량 점검에 의존하지 않는다. 원본 해시, 범위, 학습·검증 시점, 실행 환경과 결과를 기록하고 중간 파일·모델은 `.work/` 또는 `models/`에 보관한다. 클라우드 오류를 숨기려고 빈 자료나 다른 원본으로 전환하지 않는다.
 
-Without backend configuration, preserve the existing storage behavior and do not silently switch to an empty database. A ChatGPT project conversation does not automatically configure the execution environment.
+수집·학습·재빌드는 명시적으로 실행한다. 푸시·페이지 조회·에이전트 시작으로 자동 실행하지 않는다. PR은 제한된 단위·화면 검증만 하며 운영 원본 수집·상태 게시를 하지 않는다. 웹사이트는 저장된 공개본을 읽는다.
+
+낮은 가격만으로 증여라고 판정하지 않는다. 가격 때문에 원본 행을 제거·중복 제거하거나 가중치를 낮추지 않는다. 기존 해제·직거래 제외 정책은 원본 보존과 구분한다. 같은 평가 거래에서 비교한 뒤 후보를 명시적으로 채택한다. 재사용 평가를 독립 홀드아웃이라고 부르지 않는다.
+
+직장·본가, 인증키, `.env`, Oracle Wallet, DB 자격증명을 Git·공개 데이터·공개 브라우저 코드에 넣지 않는다. 엑셀의 개인 목적지는 내려받는 파일과 로컬 브라우저에만 둔다.
+
+## 백엔드 상태 읽기·쓰기
+
+다음은 `RESEARCH_STORAGE=backend` 작업에 적용하며 로컬 실험을 차단하는 규칙이 아니다.
+
+- 에이전트 기록은 `backend_records.py list --kind <종류> --limit 20`으로 목록을 읽은 뒤 필요한 키만 `get`한다. 작은 JSON 하나를 `put --expected-version <마지막 읽은 버전>`으로 기록한다. 신규 키에만 버전 0을 쓰고 HTTP 409면 다시 읽어 병합한다.
+- 기록 종류는 `complexes`, `visits`, `research`, `agents`, `tasks`, `decisions`, `sources`, `experiments`, `checkpoints`를 사용하고 출처·자료일을 보존한다. 사진·큰 원본은 인증된 파일 저장소에 넣고 SHA-256 참조만 기록한다. 사진 바이트를 JSON·Git에 넣지 않는다. API 주소·프로젝트 토큰은 비공개 실행 환경에서만 가져온다.
+- 수집·모델 상태 변경 전 `backend_state.py pull`로 대응하는 상태를 복원한다. 기존 원본·모델 검증기와 불변 모델 버전을 유지한다.
+- 필수 스냅샷 누락, 복원 실패, 체크섬 오류, 다음 단계에 필요한 범위 부족이면 그 의존 작업을 중단한다. 검증된 부분 체크포인트로 명시된 수집을 재개할 수 있지만 완전한 공개본으로 처리하지 않는다. 오류를 숨기려고 체크포인트 삭제·빈 상태 생성·전체 재수집·Git 우회를 하지 않는다. 최초 초기화는 명시적인 요청과 지원 옵션이 필요하다.
+- `backend_state.py push`는 최초 복원 영수증을 사용한다. 대상 헤드 변경은 CAS 검사로 거절해야 한다. 충돌하면 새 자료를 검토·재계산하며 오래된 결과를 게시하려고 영수증만 갱신하지 않는다. 원래 Git 커밋·스냅샷 ID·매니페스트 해시·부분/완전성 정보를 보존한다.
+- 과거자료 분할 작업은 `restore-checkpoints`로 해당 조각을 먼저 복원한다. 검증된 2016~2020년·2006~2015년 자료는 `reuse-history`로 재사용하고 명시적으로 요청한 범위만 수집한다.
+- 원본 게시 후 `backend_rows.py` 적재 요청을 유지한다. 수도권 부분 연구·전세 자료를 표준 `apt-trades`에 섞지 않는다. 적재 요청 실패는 명시하며 파일 저장만으로 SQL 적재를 완료 처리하지 않는다.
+- 클라우드 전체 후보·ML 검증은 명시적인 수동 실행이며 저장공간·복구 점검을 먼저 한다. 2026년 9월 11일의 대용량 Git 전송·미검증 저장 실험 방지 요구를 유지한다. 수집·API 점검·Pages 워크플로에 푸시 트리거를 복원하지 않는다.
+- 승인된 일별 증분·월별 연구 일정을 유지하되 과거 전체 수집으로 확대하지 않는다. 일 갱신은 체크포인트 복원 후 최근 필요 월과 순환 과거 한 달만 읽는다. 완료 파티션·출처 조회 제한을 존중하고 진행을 보존한다. 전체 과거 수집·재학습은 범위·기간·출력 위치를 명시한다.
+- 백엔드 모드의 원본·사진·모델·장기 체크포인트는 DB/OCI 스냅샷에 보관한다. Git 상태 브랜치나 중복된 장기 CI 산출물에 넣지 않는다. 코드·작은 매니페스트·보고서와 기존 단기 진단/분할 산출물만 정해진 위치에 둔다.
+
+백엔드 설정이 없으면 기존 저장 동작을 보존한다. 프로젝트에 속한 대화라는 이유만으로 실행 환경이 설정됐다고 가정하지 않는다.

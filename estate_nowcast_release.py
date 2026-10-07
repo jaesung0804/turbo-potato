@@ -18,14 +18,19 @@ ARTIFACT = Path(ACTIVE_ARTIFACT)
 MANIFEST = Path(ACTIVE_MANIFEST)
 
 
-def attach_nowcast(model, source, artifact_path=ARTIFACT, manifest_path=MANIFEST):
-    spec = json.loads(manifest_path.read_text())
+def attach_nowcast(model, source, artifact_path=None, manifest_path=None):
+    if artifact_path is None and manifest_path is None:
+        from estate_model_artifact import active_nowcast
+        artifact_path, manifest_path = active_nowcast()
+    elif artifact_path is None or manifest_path is None:
+        raise ValueError('Provide both artifact and manifest paths')
+    spec = json.loads(manifest_path.read_text(encoding='utf-8'))
     body = artifact_path.read_bytes()
     if hashlib.sha256(body).hexdigest() != spec['sha256']:
         raise ValueError('Monthly valuation artifact checksum mismatch')
     month = model['model_month']
     # Never extrapolate an unvalidated January/February or new training year.
-    supported = month[:4] == spec['prediction_year'] and int(month[5:]) >= 3
+    supported = month[:4] == spec['prediction_year'] and int(month[5:]) >= 3 and month >= spec.get('available_from_month', month)
     meta = {**spec, 'month': month, 'status': 'available' if supported else 'unsupported_period',
             'available_types': 0, 'total_types': len(model['recommendations'])}
     for rec in model['recommendations']:
@@ -41,6 +46,13 @@ def attach_nowcast(model, source, artifact_path=ARTIFACT, manifest_path=MANIFEST
     artifact = joblib.load(artifact_path)
     if artifact['trained_through'] != spec['trained_through']:
         raise ValueError('Monthly valuation training date mismatch')
+    direct_quantiles = hasattr(artifact.get('model'), 'predict_quantiles')
+    if direct_quantiles != bool(spec.get('quantiles')):
+        raise ValueError('Quantile artifact and manifest must match')
+    if direct_quantiles and spec.get('confidence'):
+        raise ValueError('Legacy symmetric calibration cannot label direct quantiles')
+    if direct_quantiles and spec.get('feature_engine') != artifact.get('feature_engine'):
+        raise ValueError('Direct quantile feature engine differs from training')
     d, quality = load_transactions(source)
     attach_recent_comparison_prices(model, d, quality)
     origin = pd.Period(month).start_time
@@ -74,6 +86,9 @@ def attach_nowcast(model, source, artifact_path=ARTIFACT, manifest_path=MANIFEST
             'active_trade_days': int(r['active_days90']),
             'score_error_scale': spec['score_error_scale'],
         }
+        if direct_quantiles:
+            from estate_quantile_nowcast import attach_quantiles
+            attach_quantiles(rec['current_valuation'], r, spec)
         meta['available_types'] += 1
     if spec.get('confidence') and not predicted.empty:
         from estate_price_confidence import attach_confidence
