@@ -38,7 +38,9 @@ def safe_name(name):
 
 def stamp(site, code_sha):
     manifest, _ = release_files(site)
-    manifest.setdefault('local_build_commit', manifest['code_commit'])
+    if not re.fullmatch('[a-f0-9]{40}', manifest.get('local_build_commit', '')):
+        previous = manifest.get('code_commit', '')
+        manifest['local_build_commit'] = previous if re.fullmatch('[a-f0-9]{40}', previous) else code_sha
     manifest['code_commit'] = code_sha
     manifest['release_id'] = os.getenv('GITHUB_RUN_ID', 'local-model')+'-'+os.getenv('GITHUB_RUN_ATTEMPT', '1')
     manifest['ui_assets'].update(copy_ui(site))
