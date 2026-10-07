@@ -145,6 +145,8 @@ def test_plan_stays_within_recent_three_months_and_one_rotation():
     ('산15', '0015', '0000', ('산15', '')),
     ('가-', '0000', '0000', ('가', '')),
     ('BL-', '0000', '0000', ('BL', '')),
+    ('가-238', '0238', '0000', ('가', '238')),
+    ('지구BL', '0000', '0000', ('지구BL', '')),
 ])
 def test_source_parcel_qualifiers_match_api_representation(parcel, main, sub, expected):
     raw = {'시군구': '경기도 이천시 대월면 사동리', '번지': parcel, '본번': main,

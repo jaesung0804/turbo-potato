@@ -27,7 +27,7 @@ from collect_molit_capital_csv import (
 from estate_calendar import today
 from estate_io import write_binary, write_json
 from estate_vintages import observe_partition
-from get_molit_apt_trade_data import DASHBOARD_FIELDNAMES
+from get_molit_apt_trade_data import DASHBOARD_FIELDNAMES, split_jibun
 from normalize_molit_capital_history import AddressRegistry, normalize_row, dashboard_row
 
 
@@ -43,8 +43,10 @@ def normalize_export_row(raw, info, number, registry):
                         and int(sub) == int(mountain[2] or 0))
     # Published provisional parcels also occur in API jibun. Preserve their
     # label rather than merging them into an invented numeric parcel '0'.
-    provisional = (parcel in {'가-', 'BL-'} and main.isdigit() and sub.isdigit()
-                   and int(main) == 0 and int(sub) == 0)
+    labelled_number = re.fullmatch(r'가-(\d+)', parcel)
+    provisional = (main.isdigit() and sub.isdigit() and int(sub) == 0 and (
+        (parcel in {'가-', 'BL-', '지구BL'} and int(main) == 0)
+        or (labelled_number and int(main) == int(labelled_number[1]))))
     if mountain_matches or provisional:
         record['quality_flags'] = [flag for flag in record['quality_flags'] if flag != 'lot_source_disagrees']
     row, reason = dashboard_row(record)
@@ -54,7 +56,7 @@ def normalize_export_row(raw, info, number, registry):
         row['MNO'] = '산' + str(int(mountain[1]))
         row['SNO'] = str(int(mountain[2])) if int(mountain[2] or 0) else ''
     elif provisional:
-        row['MNO'], row['SNO'] = parcel[:-1], ''
+        row['MNO'], row['SNO'] = split_jibun(parcel)
     else:
         row['MNO'] = str(int(row['MNO']))
         row['SNO'] = str(int(row['SNO'])) if int(row['SNO']) else ''
