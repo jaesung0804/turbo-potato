@@ -26,7 +26,7 @@ jobs:
           set -euo pipefail
           potential_state_dir=.work/potential-state
           if [ "$RESEARCH_STORAGE" = "backend" ]; then
-            python backend_state.py pull --name estate-potential-state --state-dir "$potential_state_dir"
+            python -m estate.data.storage.backend_state pull --name estate-potential-state --state-dir "$potential_state_dir"
           else
             if git ls-remote --exit-code --heads origin estate-potential-state > /dev/null; then
               git fetch origin estate-potential-state
@@ -37,13 +37,13 @@ jobs:
               git -C "$potential_state_dir" rm -rf --quiet .
             fi
           fi
-          python refresh_estate_potential.py bootstrap --state-dir "$potential_state_dir"
+          python -m estate.models.potential.v2.refresh bootstrap --state-dir "$potential_state_dir"
       - name: Check whether this month is already frozen
         id: plan
         run: |
           python - <<'PY' >> "$GITHUB_OUTPUT"
           from pathlib import Path
-          from refresh_estate_potential import month_origin, read_state
+          from estate.models.potential.v2.refresh import month_origin, read_state
           state = read_state(Path('.work/potential-state'))
           needed = month_origin()[:7] not in state['snapshots']
           print('needs_refresh=' + str(needed).lower())
@@ -57,17 +57,17 @@ jobs:
         run: |
           set -euo pipefail
           if [ "$RESEARCH_STORAGE" = "backend" ]; then
-            python backend_state.py pull --name estate-raw-state --state-dir .work/raw-state
-            python backend_state.py pull --name estate-history-state --state-dir .work/history-state
+            python -m estate.data.storage.backend_state pull --name estate-raw-state --state-dir .work/raw-state
+            python -m estate.data.storage.backend_state pull --name estate-history-state --state-dir .work/history-state
           else
             git fetch origin estate-raw-state estate-history-state
             git worktree add --detach .work/raw-state origin/estate-raw-state
             git worktree add --detach .work/history-state origin/estate-history-state
           fi
-          python raw_estate_state.py restore --state-dir .work/raw-state
+          python -m estate.data.storage.raw_state restore --state-dir .work/raw-state
           if [ "$RESEARCH_STORAGE" = "backend" ]; then
-            echo "raw_commit=$(python backend_state.py revision --state-dir .work/raw-state)" >> "$GITHUB_OUTPUT"
-            echo "history_commit=$(python backend_state.py revision --state-dir .work/history-state)" >> "$GITHUB_OUTPUT"
+            echo "raw_commit=$(python -m estate.data.storage.backend_state revision --state-dir .work/raw-state)" >> "$GITHUB_OUTPUT"
+            echo "history_commit=$(python -m estate.data.storage.backend_state revision --state-dir .work/history-state)" >> "$GITHUB_OUTPUT"
           else
             echo "raw_commit=$(git -C .work/raw-state rev-parse HEAD)" >> "$GITHUB_OUTPUT"
             echo "history_commit=$(git -C .work/history-state rev-parse HEAD)" >> "$GITHUB_OUTPUT"
@@ -77,18 +77,18 @@ jobs:
         # Allow verified last-attempt status to be saved before failing the job.
         continue-on-error: true
         run: |
-          python refresh_estate_potential.py refresh --state-dir .work/potential-state --history-state .work/history-state --raw-state-commit '${{ steps.sources.outputs.raw_commit }}' --history-state-commit '${{ steps.sources.outputs.history_commit }}'
+          python -m estate.models.potential.v2.refresh refresh --state-dir .work/potential-state --history-state .work/history-state --raw-state-commit '${{ steps.sources.outputs.raw_commit }}' --history-state-commit '${{ steps.sources.outputs.history_commit }}'
       - name: Preserve verified forecasts and the latest successful pointer
         if: always() && !cancelled() && steps.refresh.outcome != 'skipped'
         run: |
           set -euo pipefail
           python - <<'PY'
           from pathlib import Path
-          from refresh_estate_potential import read_state
+          from estate.models.potential.v2.refresh import read_state
           print('Verified latest research month:', read_state(Path('.work/potential-state'))['latest'])
           PY
           if [ "$RESEARCH_STORAGE" = "backend" ]; then
-            python backend_state.py push --name estate-potential-state --state-dir .work/potential-state
+            python -m estate.data.storage.backend_state push --name estate-potential-state --state-dir .work/potential-state
           else
             git -C .work/potential-state config user.name 'github-actions[bot]'
             git -C .work/potential-state config user.email '41898282+github-actions[bot]@users.noreply.github.com'
@@ -100,7 +100,7 @@ jobs:
           fi
       - name: Verify the public research payload restores exactly
         if: steps.refresh.outcome == 'success'
-        run: python refresh_estate_potential.py restore --state-dir .work/potential-state --output .work/potential-restored.json.gz --status-output .work/potential-refresh-status.json
+        run: python -m estate.models.potential.v2.refresh restore --state-dir .work/potential-state --output .work/potential-restored.json.gz --status-output .work/potential-refresh-status.json
       - name: Report a failed refresh while retaining the prior published cohort
         if: always() && steps.refresh.outcome == 'failure'
         run: |

@@ -36,14 +36,14 @@ jobs:
         env:
           SHARD: ${{ matrix.shard }}
         run: |
-          python backend_state.py pull --name estate-raw-state --state-dir .work/raw-state
-          python backend_state.py restore-checkpoints --state-dir .work/raw-state --shard-count 4 --shard-index "$SHARD"
-          python backend_state.py mark-shard --state-dir .work/raw-state --shard-count 4 --shard-index "$SHARD"
+          python -m estate.data.storage.backend_state pull --name estate-raw-state --state-dir .work/raw-state
+          python -m estate.data.storage.backend_state restore-checkpoints --state-dir .work/raw-state --shard-count 4 --shard-index "$SHARD"
+          python -m estate.data.storage.backend_state mark-shard --state-dir .work/raw-state --shard-count 4 --shard-index "$SHARD"
       - name: Collect every page in the assigned districts
         env:
           MOLIT_API_KEY: ${{ secrets.MOLIT_API_KEY }}
           SHARD: ${{ matrix.shard }}
-        run: python collect_estate_transactions.py --start 202101 --end 202609 --refresh-months 0 --workers 2 --shard-count 4 --shard-index "$SHARD" --use-existing-config
+        run: python -m estate.data.collection.transactions --start 202101 --end 202609 --refresh-months 0 --workers 2 --shard-count 4 --shard-index "$SHARD" --use-existing-config
       - name: Preserve completed checkpoints after success or failure
         if: always() && env.RESEARCH_STORAGE != 'backend'
         uses: actions/cache/save@v4
@@ -76,10 +76,10 @@ jobs:
         if: env.RESEARCH_STORAGE == 'backend'
         run: |
           set -euo pipefail
-          python backend_state.py pull --name estate-raw-state --state-dir .work/raw-state
-          python backend_state.py verify-shards --state-dir .work/raw-state --shard-count 4
+          python -m estate.data.storage.backend_state pull --name estate-raw-state --state-dir .work/raw-state
+          python -m estate.data.storage.backend_state verify-shards --state-dir .work/raw-state --shard-count 4
       - name: Verify all 83 districts and assemble the complete CSV
-        run: python collect_estate_transactions.py --start 202101 --end 202609 --refresh-months 0
+        run: python -m estate.data.collection.transactions --start 202101 --end 202609 --refresh-months 0
       - name: Prepare persistent raw state
         run: |
           set -euo pipefail
@@ -92,7 +92,7 @@ jobs:
               git -C .work/raw-state switch --orphan estate-raw-state
             fi
           fi
-          python raw_estate_state.py pack --state-dir .work/raw-state
+          python -m estate.data.storage.raw_state pack --state-dir .work/raw-state
       - uses: actions/upload-artifact@v4
         if: env.RESEARCH_STORAGE != 'backend'
         with:
@@ -106,8 +106,8 @@ jobs:
         run: |
           set -euo pipefail
           if [ "$RESEARCH_STORAGE" = "backend" ]; then
-            python backend_state.py push --name estate-raw-state --state-dir .work/raw-state
-            python backend_rows.py --csv data/capital_area_apt_trade_transactions.csv --dataset apt-trades --snapshot-name estate-raw-state --state-dir .work/raw-state
+            python -m estate.data.storage.backend_state push --name estate-raw-state --state-dir .work/raw-state
+            python -m estate.data.storage.rows --csv data/capital_area_apt_trade_transactions.csv --dataset apt-trades --snapshot-name estate-raw-state --state-dir .work/raw-state
           else
             git -C .work/raw-state config user.name github-actions[bot]
             git -C .work/raw-state config user.email 41898282+github-actions[bot]@users.noreply.github.com

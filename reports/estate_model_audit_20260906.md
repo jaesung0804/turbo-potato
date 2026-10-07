@@ -9,7 +9,7 @@
 | 저장소 | `jaesung0804/turbo-potato` |
 | 기존 작업 폴더 | `C:/code` |
 | 기존 브랜치 | `split-address-shards`, `171def9` |
-| 기존 미커밋 변경 | `get_molit_apt_trade_data.py`의 빈 줄 1개 |
+| 기존 미커밋 변경 | `estate/data/collection/molit_api.py`의 빈 줄 1개 |
 | 최신 원격 main | `c7f82af37c4a89718a5eb01698ad4b8bb20f8195` |
 | 로컬 HEAD와 원격 main | 각자 고유 커밋 1개, 분기된 상태 |
 | 원본 보관 브랜치 | `estate-raw-state`, `5ef38ec` |

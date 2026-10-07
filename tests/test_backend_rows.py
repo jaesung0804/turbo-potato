@@ -10,10 +10,10 @@ import pytest
 
 def load_producer():
     root = Path(__file__).resolve().parents[1]
-    directory = root if (root / "backend_rows.py").is_file() else root / "scripts"
+    directory = root if (root / "estate/data/storage/rows.py").is_file() else root / "scripts"
     sys.path.insert(0, str(directory))
     try:
-        spec = importlib.util.spec_from_file_location("rows_producer_under_test", directory / "backend_rows.py")
+        spec = importlib.util.spec_from_file_location("rows_producer_under_test", directory / "estate/data/storage/rows.py")
         module = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(module)
         return module

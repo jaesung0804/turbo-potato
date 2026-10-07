@@ -36,7 +36,7 @@ jobs:
         env:
           RELEASE_TAG: ${{ inputs.release_tag }}
           SITE_SHA256: ${{ inputs.site_sha256 }}
-        run: python local_site_release.py download --tag "$RELEASE_TAG" --checksum "$SITE_SHA256" --sha "$GITHUB_SHA"
+        run: python -m estate.site.local_release download --tag "$RELEASE_TAG" --checksum "$SITE_SHA256" --sha "$GITHUB_SHA"
       - name: 가격·전체 목록·분위수 연결 검사
         run: node tests/check_bundle.cjs .work/site
       - uses: actions/configure-pages@v5
@@ -46,4 +46,4 @@ jobs:
       - uses: actions/deploy-pages@v4
         id: deployment
       - name: 실제 공개 파일 확인
-        run: python verify_public_site.py --url 'https://jaesung0804.github.io/turbo-potato/' --sha "$GITHUB_SHA"
+        run: python -m estate.site.verify --url 'https://jaesung0804.github.io/turbo-potato/' --sha "$GITHUB_SHA"

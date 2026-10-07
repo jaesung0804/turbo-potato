@@ -5,8 +5,8 @@ from pathlib import Path
 import pytest
 import numpy as np
 
-from estate_model_review import build_review
-from estate_potential_comparison import METHODS, compare_common_origins
+from estate.research.reporting.model_review import build_review
+from estate.models.potential.research.comparison import METHODS, compare_common_origins
 
 
 def cohort(origin='2020-01-01', **kwargs):

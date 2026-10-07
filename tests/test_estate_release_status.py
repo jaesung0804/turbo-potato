@@ -2,7 +2,7 @@ from copy import deepcopy
 
 import pytest
 
-from estate_release_status import attach_release_status
+from estate.site.status import attach_release_status
 
 
 def source():

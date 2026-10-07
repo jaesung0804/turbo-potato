@@ -8,11 +8,11 @@ import json
 
 import pytest
 
-import refresh_estate_public_csv as refresh
-from collect_estate_transactions import read_partition, rows_bytes, digest
-from collect_molit_capital_csv import PublicCSVClient, CollectionError
-from estate_vintages import rows_as_observed
-from get_molit_apt_trade_data import DASHBOARD_FIELDNAMES
+import estate.data.preparation.refresh_public_csv as refresh
+from estate.data.collection.transactions import read_partition, rows_bytes, digest
+from estate.data.collection.molit_csv import PublicCSVClient, CollectionError
+from estate.data.storage.vintages import rows_as_observed
+from estate.data.collection.molit_api import DASHBOARD_FIELDNAMES
 
 CUTOFF = date(2026, 10, 7)
 FIELDS = ['NO', '시군구', '번지', '본번', '부번', '단지명', '전용면적(㎡)',

@@ -7,9 +7,7 @@ from pathlib import Path
 
 import pytest
 
-import normalize_molit_capital_history as normalizer
-
-
+import estate.data.preparation.normalize_capital_history as normalizer
 FIXTURES = Path(__file__).parent / 'fixtures' / 'molit_capital_csv'
 
 

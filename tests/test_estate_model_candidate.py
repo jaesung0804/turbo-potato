@@ -4,7 +4,7 @@ import json
 import numpy as np
 import pytest
 
-import estate_model as model
+import estate.models.reference.v5.model as model
 from test_estate_pipeline import annual_fixture
 
 
@@ -78,7 +78,7 @@ def test_candidate_month_is_separate_and_inference_reuses_bytes(tmp_path):
     # Legacy model results remain auditable above but must not leak into the
     # browser's current calculator, which has a separate valuation contract.
     import gzip
-    from dashboard_bundle import build_bundle
+    from estate.site.bundle import build_bundle
     manifest=build_bundle(annual_fixture(),candidate,tmp_path/'site/data/bundle',{'type':'FeatureCollection','features':[]})
     packed=json.loads(gzip.decompress((tmp_path/'site'/manifest['recommendations']['url']).read_bytes()))
     values=dict(zip(packed['fields'],packed['rows'][0][2:]))
@@ -105,7 +105,7 @@ def test_calibration_uses_independent_complexes_and_sample_scale(monkeypatch):
 
 
 def test_json_output_has_portable_korean_text_and_line_endings(tmp_path):
-    from estate_io import write_json
+    from estate.core.io import write_json
     path=tmp_path/'report.json';write_json(path,{'지역':'서울특별시','메모':'과거 검증'},indent=2)
     body=path.read_bytes()
     assert b'\r\n' not in body

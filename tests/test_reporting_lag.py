@@ -4,8 +4,8 @@ import json
 
 import pytest
 
-from analyze_estate_reporting_lag import audit, inspect_partition
-from estate_vintages import advance
+from estate.research.reporting.lag import audit, inspect_partition
+from estate.data.storage.vintages import advance
 
 A = '2026-09-01T00:00:00+00:00'
 B = '2026-09-02T00:00:00+00:00'

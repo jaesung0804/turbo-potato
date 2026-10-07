@@ -1,7 +1,7 @@
 import json
 import pytest
 from shapely.geometry import box, mapping, MultiPolygon, shape, Point
-from build_public_site import light_map
+from estate.site.build import light_map
 
 
 def test_map_dissolves_internal_dong_edges_but_keeps_districts(tmp_path):

@@ -91,12 +91,12 @@ python -m research_backend.cli --env-file backend.env import-data --project inve
 투자 저장소에서:
 
 ```powershell
-python scripts/backend_records.py list --kind agents --limit 20
-python scripts/backend_records.py get --kind research --key <record-key>
-python scripts/backend_records.py put --kind research --key <record-key> --input <새-내용.json> --expected-version 3 --summary "이번 분석 요약"
+python scripts/estate/data/storage/records.py list --kind agents --limit 20
+python scripts/estate/data/storage/records.py get --kind research --key <record-key>
+python scripts/estate/data/storage/records.py put --kind research --key <record-key> --input <새-내용.json> --expected-version 3 --summary "이번 분석 요약"
 ```
 
-부동산 저장소는 동일한 명령의 스크립트 경로가 `backend_records.py`다. 새 기록의 `expected-version`은 0이고, 수정은 직전에 읽은 버전을 사용한다. 409면 최신 내용을 다시 읽고 병합한다. 전체 연구 라이브러리를 매 대화에 다운로드하지 않는다.
+부동산 저장소는 동일한 명령의 스크립트 경로가 `estate/data/storage/records.py`다. 새 기록의 `expected-version`은 0이고, 수정은 직전에 읽은 버전을 사용한다. 409면 최신 내용을 다시 읽고 병합한다. 전체 연구 라이브러리를 매 대화에 다운로드하지 않는다.
 
 ChatGPT 프로젝트에는 DB 연결이 자동 추가되지 않는다. 해당 프로젝트에서 실행되는 코드 환경에 API 주소·비공개 토큰을 설정하고 이 클라이언트를 사용할 수 있어야 한다. 일반 대화의 텍스트 메모만으로 실행 환경에 비밀값을 전달하지 않는다.
 
@@ -115,7 +115,7 @@ ChatGPT 프로젝트에는 DB 연결이 자동 추가되지 않는다. 해당 �
 
 1. HTTPS API를 운영 서버에 배포하고 프로젝트별 `ready`를 확인한다. 로컬 API 주소는 GitHub Actions에서 접근할 수 없다.
 2. 기존 최신 Git 상태를 검증한 후 초기 스냅샷을 업로드한다. 투자 `pipeline-state`, 부동산 `estate-raw-state`, `estate-model-state`, `estate-potential-state`, `estate-history-state`, `estate-history-extended-state`를 실제 워크플로에서 사용하는 상태와 대조한다.
-3. 빈 별도 폴더로 전부 복원하고 파일 수·크기·해시와 기존 검증기를 확인한다. 투자에서는 `unpack_dashboard_state.py`, 부동산에서는 `backend_state.py pull` 뒤 해당 raw/model 복원 명령을 사용한다. 데이터셋 이관 후 행 수와 날짜 범위를 비교한다.
+3. 빈 별도 폴더로 전부 복원하고 파일 수·크기·해시와 기존 검증기를 확인한다. 투자에서는 `unpack_dashboard_state.py`, 부동산에서는 `estate/data/storage/backend_state.py pull` 뒤 해당 raw/model 복원 명령을 사용한다. 데이터셋 이관 후 행 수와 날짜 범위를 비교한다.
 4. 각 저장소에 비밀값 `RESEARCH_BACKEND_TOKEN`, 변수 `RESEARCH_BACKEND_URL`을 저장하고 연결 코드를 반영한다.
 5. 예약 배치가 돌지 않는 시점에 최종 동기화한 뒤 변수 `RESEARCH_STORAGE=backend`로 전환한다. 그 전까지는 기존 Git 방식이 기본이다.
 6. 배치 한 번을 실행해 백엔드 스냅샷 저장과 공개 대시보드 산출물을 확인한다.
@@ -127,7 +127,7 @@ ChatGPT 프로젝트에는 DB 연결이 자동 추가되지 않는다. 해당 �
 # 투자: 검증하여 복원한 프로젝트 폴더에서 기존 기본 경로를 사용
 python scripts/pack_dashboard_state.py --state-dir .dashboard-state
 # 부동산: 기존 pack 명령으로 검증된 상태 폴더를 사용
-python backend_state.py push --name estate-raw-state --state-dir <검증된-raw-state-folder>
+python -m estate.data.storage.backend_state push --name estate-raw-state --state-dir <검증된-raw-state-folder>
 ```
 
 위 투자 예시는 `RESEARCH_STORAGE=backend`를 해당 이관 프로세스에만 설정한 뒤 실행한다. 전체 저장소나 사용자 문서 폴더를 이관 대상으로 지정하지 않는다. 별도 파일은 클라이언트의 `push --paths`에 실제 경로를 명시한다. 클라이언트는 `.git`, `.env*`, 심볼릭 링크, 경로 이탈을 거부한다. 최초 업로드 이후에는 항상 `pull` → 업무 변경 → `push` 순서다.

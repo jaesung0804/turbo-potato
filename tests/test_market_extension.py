@@ -1,8 +1,8 @@
 import numpy as np
 import pandas as pd
-from collect_seoul_lease_files import normalize
-from analyze_estate_market_extension import index_features,lease_snapshot
-from estate_kb import period_rows
+from estate.data.collection.seoul_leases import normalize
+from estate.research.market.extension import index_features,lease_snapshot
+from estate.research.market.kb import period_rows
 
 
 def leases():

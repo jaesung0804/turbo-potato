@@ -3,8 +3,8 @@ import json
 
 import pytest
 
-from research_backend_client import BackendError
-from sync_estate_research_records import read_handoff, sync_records, validate_handoff
+from estate.data.storage.client import BackendError
+from estate.research.reporting.sync_records import read_handoff, sync_records, validate_handoff
 
 
 def handoff(count=2):

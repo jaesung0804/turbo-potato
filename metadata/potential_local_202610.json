@@ -1,0 +1,10 @@
+{
+  "schema_version": 1,
+  "origin": "2026-10-01",
+  "model": "price_activity_relative_growth_24m_policy_v2",
+  "url": "https://github.com/jaesung0804/turbo-potato/releases/download/estate-quantiles-20261008-fieldwork/potential-public.json.gz",
+  "sha256": "f42ecfef3ae73ebe25093cac6e6dd3138dcdf2c8d19db02639275a88e04ba899",
+  "bytes": 617680,
+  "report": "reports/potential/quantile_v3/results_20261008.md",
+  "decision": "v2 유지 · 10월 재학습 후보 고정"
+}

@@ -71,7 +71,7 @@ jobs:
       - name: Refresh only the UI from the saved public release
         if: github.event_name == 'workflow_dispatch' && inputs.ui_only == true
         run: |
-          python refresh_saved_site.py --sha "$GITHUB_SHA"
+          python -m estate.site.refresh_ui --sha "$GITHUB_SHA"
           node tests/check_bundle.cjs .work/site
       - name: Restore checksum-verified complete raw state
         id: restore_raw
@@ -79,12 +79,12 @@ jobs:
         run: |
           set -euo pipefail
           if [ "$RESEARCH_STORAGE" = "backend" ]; then
-            python backend_state.py pull --name estate-raw-state --state-dir .work/raw-state
+            python -m estate.data.storage.backend_state pull --name estate-raw-state --state-dir .work/raw-state
           else
             git fetch origin estate-raw-state
             git worktree add --detach .work/raw-state FETCH_HEAD
           fi
-          python raw_estate_state.py restore --state-dir .work/raw-state
+          python -m estate.data.storage.raw_state restore --state-dir .work/raw-state
       - name: Refresh recent transactions and rotate one historical month
         id: refresh_transactions
         if: github.event_name == 'schedule' || (inputs.refresh == true && inputs.ui_only != true)
@@ -93,7 +93,7 @@ jobs:
         run: |
           echo "ESTATE_REFRESH_ATTEMPTED_AT=$(date -u +%Y-%m-%dT%H:%M:%SZ)" >> "$GITHUB_ENV"
           if [ "${{ github.event_name }}" = "workflow_dispatch" ] && [ "${{ inputs.refresh_source }}" = "public_csv" ]; then
-            python refresh_estate_public_csv.py --exports ".work/raw-state/public_csv_exports/$(TZ=Asia/Seoul date +%F)"
+            python -m estate.data.preparation.refresh_public_csv --exports ".work/raw-state/public_csv_exports/$(TZ=Asia/Seoul date +%F)"
             echo 'ESTATE_REFRESH_STATUS=completed' >> "$GITHUB_ENV"
           elif [ -z "$MOLIT_API_KEY" ]; then
             if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
@@ -104,7 +104,7 @@ jobs:
             echo 'ESTATE_REFRESH_STATUS=skipped_missing_key' >> "$GITHUB_ENV"
             echo 'Transaction refresh skipped: private MOLIT_API_KEY is missing; saved data dates remain unchanged.' >> "$GITHUB_STEP_SUMMARY"
           else
-            python collect_estate_transactions.py --refresh-months 3 --workers 2
+            python -m estate.data.collection.transactions --refresh-months 3 --workers 2
             echo 'ESTATE_REFRESH_STATUS=completed' >> "$GITHUB_ENV"
           fi
       - name: Preserve verified CSV progress after a transport or validation failure
@@ -113,22 +113,22 @@ jobs:
           set -euo pipefail
           # Keep the previous complete CSV and its observation date. Only the
           # bounded download checkpoints can be added by this failed attempt.
-          python raw_estate_state.py pack --state-dir .work/raw-state
-          python backend_state.py push --name estate-raw-state --state-dir .work/raw-state
-          python backend_rows.py --csv data/capital_area_apt_trade_transactions.csv --dataset apt-trades --snapshot-name estate-raw-state --state-dir .work/raw-state
+          python -m estate.data.storage.raw_state pack --state-dir .work/raw-state
+          python -m estate.data.storage.backend_state push --name estate-raw-state --state-dir .work/raw-state
+          python -m estate.data.storage.rows --csv data/capital_area_apt_trade_transactions.csv --dataset apt-trades --snapshot-name estate-raw-state --state-dir .work/raw-state
       - name: Refresh dated public KB market context
         if: github.event_name != 'workflow_dispatch' || inputs.ui_only != true
         run: |
-          python collect_kb_public_statistics.py --previous .work/raw-state/market_context.json
+          python -m estate.data.collection.kb_statistics --previous .work/raw-state/market_context.json
       - name: Persist complete raw state and dated market context
         if: github.event_name != 'workflow_dispatch' || inputs.ui_only != true
         run: |
           set -euo pipefail
-          python raw_estate_state.py pack --state-dir .work/raw-state
+          python -m estate.data.storage.raw_state pack --state-dir .work/raw-state
           cp metadata/market_context.json .work/raw-state/market_context.json
           if [ "$RESEARCH_STORAGE" = "backend" ]; then
-            python backend_state.py push --name estate-raw-state --state-dir .work/raw-state
-            python backend_rows.py --csv data/capital_area_apt_trade_transactions.csv --dataset apt-trades --snapshot-name estate-raw-state --state-dir .work/raw-state
+            python -m estate.data.storage.backend_state push --name estate-raw-state --state-dir .work/raw-state
+            python -m estate.data.storage.rows --csv data/capital_area_apt_trade_transactions.csv --dataset apt-trades --snapshot-name estate-raw-state --state-dir .work/raw-state
           else
             git -C .work/raw-state config user.name github-actions[bot]
             git -C .work/raw-state config user.email 41898282+github-actions[bot]@users.noreply.github.com
@@ -143,13 +143,13 @@ jobs:
         run: |
           set -euo pipefail
           if [ "$RESEARCH_STORAGE" = "backend" ]; then
-            python backend_state.py pull --name estate-model-state --state-dir .work/model-state
-            python estate_model_state.py restore --state-dir .work/model-state
+            python -m estate.data.storage.backend_state pull --name estate-model-state --state-dir .work/model-state
+            python -m estate.data.storage.model_state restore --state-dir .work/model-state
           else
             if [ -n "$(git ls-remote origin refs/heads/estate-model-state)" ]; then
               git fetch origin estate-model-state
               git worktree add --detach .work/model-state FETCH_HEAD
-              python estate_model_state.py restore --state-dir .work/model-state
+              python -m estate.data.storage.model_state restore --state-dir .work/model-state
             else
               git worktree add --detach .work/model-state HEAD
               git -C .work/model-state switch --orphan estate-model-state
@@ -160,13 +160,13 @@ jobs:
         run: |
           set -euo pipefail
           if [ "$RESEARCH_STORAGE" = "backend" ]; then
-            python backend_state.py pull --name estate-potential-state --state-dir .work/potential-state
-            python refresh_estate_potential.py restore --state-dir .work/potential-state
+            python -m estate.data.storage.backend_state pull --name estate-potential-state --state-dir .work/potential-state
+            python -m estate.models.potential.v2.refresh restore --state-dir .work/potential-state
           else
             if git ls-remote --exit-code --heads origin estate-potential-state > /dev/null; then
               git fetch origin estate-potential-state
               git worktree add --detach .work/potential-state FETCH_HEAD
-              python refresh_estate_potential.py restore --state-dir .work/potential-state
+              python -m estate.models.potential.v2.refresh restore --state-dir .work/potential-state
             else
               echo 'Using the committed baseline potential forecast; no state archive exists yet.'
             fi
@@ -174,15 +174,15 @@ jobs:
       - name: Build full results with the frozen monthly model
         if: github.event_name != 'workflow_dispatch' || inputs.ui_only != true
         run: |
-          python build_public_site.py
+          python -m estate.site.build
           node tests/check_bundle.cjs .work/site
       - name: Persist the model before public deployment
         if: github.event_name != 'workflow_dispatch' || inputs.ui_only != true
         run: |
           set -euo pipefail
-          python estate_model_state.py pack --state-dir .work/model-state
+          python -m estate.data.storage.model_state pack --state-dir .work/model-state
           if [ "$RESEARCH_STORAGE" = "backend" ]; then
-            python backend_state.py push --name estate-model-state --state-dir .work/model-state
+            python -m estate.data.storage.backend_state push --name estate-model-state --state-dir .work/model-state
           else
             git -C .work/model-state config user.name github-actions[bot]
             git -C .work/model-state config user.email 41898282+github-actions[bot]@users.noreply.github.com
@@ -223,5 +223,5 @@ jobs:
         env:
           PAGE_URL: ${{ steps.deployment.outputs.page_url }}
         run: |
-          python verify_public_site.py --url "$PAGE_URL" --sha "$GITHUB_SHA"
+          python -m estate.site.verify --url "$PAGE_URL" --sha "$GITHUB_SHA"
           node tests/check_bundle.cjs .work/site "$PAGE_URL"

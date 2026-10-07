@@ -17,13 +17,13 @@
 
 현재 세션에는 비공개 backend URL/token이 없다. 기존 `/ready`는 연결 상태만 알려주며 전체 무료 용량·사용량·보존·쓰기 복원 증거를 제공하지 않는다. 과거 연결 성공 로그만으로 이번 큰 실험의 안전성을 확정하지 않는다.
 
-`python estate_research_storage.py`는 compact 결과와 종료코드 2로 차단한다. 이를 통과시키는 자가 작성 확인서나 `verified=true` 레코드는 없다. `LiveCapacityAdapter`는 미래 인터페이스이며 현재 운영 구현이 없다. 계측을 연결하기 전 실제자료 수집·큰 패널·학습·시뮬레이션을 실행하지 않는다. 기존 승인 일일/월간 증분 일정은 확장하지 않는다.
+`python -m estate.data.storage.readiness`는 compact 결과와 종료코드 2로 차단한다. 이를 통과시키는 자가 작성 확인서나 `verified=true` 레코드는 없다. `LiveCapacityAdapter`는 미래 인터페이스이며 현재 운영 구현이 없다. 계측을 연결하기 전 실제자료 수집·큰 패널·학습·시뮬레이션을 실행하지 않는다. 기존 승인 일일/월간 증분 일정은 확장하지 않는다.
 
 ## 다음 실행 순서
 
 1. 관리자 접근 환경에서 이전 키를 폐기·재발급하고 Actions secret을 등록한다. `main` 보호 정책도 적용한다. 현재 연결 도구에는 secret/branch-protection 수정이나 새 workflow dispatch 기능이 없었다.
 2. [저장 준비 지침](storage-readiness.md)에 따라 실제 계정의 무료 구성·총 사용량·보존·복원 근거를 연결한다. 같은 자원을 쓰는 다른 프로젝트의 사용량도 합산한다. 작은 기록 이관과 대용량 실험의 조건을 혼동하지 않는다.
-3. 기존 비공개 `apartment_round3_db_handoff_2026-09-11.json`을 찾아 [이관 CLI](../sync_estate_research_records.py)로 read-only 확인 후 충돌 없는 기록만 적용한다. 원본 의미 지문은 `a594ad9e2ec141c79e613c9ab73f52c6437b90debe14926e126df7dd0f16fa79`. 이는 원본 파일 바이트 SHA가 아닌 canonical JSON SHA다. 적용 결과의 서버 확인 버전·실패 키를 작은 비공개 체크포인트로 남긴다.
+3. 기존 비공개 `apartment_round3_db_handoff_2026-09-11.json`을 찾아 [이관 CLI](../estate/research/reporting/sync_records.py)로 read-only 확인 후 충돌 없는 기록만 적용한다. 원본 의미 지문은 `a594ad9e2ec141c79e613c9ab73f52c6437b90debe14926e126df7dd0f16fa79`. 이는 원본 파일 바이트 SHA가 아닌 canonical JSON SHA다. 적용 결과의 서버 확인 버전·실패 키를 작은 비공개 체크포인트로 남긴다.
 4. 두 단지의 네 미확인 질문에 대한 정확한 광고/공식 원문을 확보한다. 관측일·공개일·출처를 기록하고, 개인 적합성과 학습 가능 여부를 따로 판정한다. 2026년 임장 관측을 2023/24 입력에 소급하지 않는다.
 5. [시뮬레이션 실행 인계](simulation/RUNBOOK.md)를 따라 당시 공개 패널과 비용 근거를 준비한다. 엄밀한 당시 원장이 없으면 신고지연 가정의 재구성 실험으로 명시한다. 저장 조건 통과 후 한 시점·한 예산·짧은 기간으로 먼저 실행한다.
 6. 실제 세제·대출·임시거주 비용 모듈, 사후 최고 상승 상한·추가 대조군 집계, 모델 피처 연결은 후속 작업이다. 합성 결과를 투자 성과로 쓰지 않는다.

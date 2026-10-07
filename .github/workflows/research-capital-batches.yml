@@ -24,7 +24,7 @@ jobs:
         run: |
           set -euo pipefail
           if [ "$RESEARCH_STORAGE" = "backend" ]; then
-            python backend_state.py fetch-file --name estate-capital-history-state --relative-path collection/manifest.json --output checkpoint.json
+            python -m estate.data.storage.backend_state fetch-file --name estate-capital-history-state --relative-path collection/manifest.json --output checkpoint.json
           else
             git fetch --depth=1 origin estate-capital-history-state
             git show FETCH_HEAD:collection/manifest.json > checkpoint.json
@@ -32,7 +32,7 @@ jobs:
           python - <<'PY'
           import json, os
           from datetime import date
-          from collect_molit_capital_csv import expansion_requests
+          from estate.data.collection.molit_csv import expansion_requests
           m = json.load(open('checkpoint.json'))
           plan = expansion_requests(date(2026, 9, 9), True)
           assert set(m['planned_keys']) == {r.key for r in plan}
@@ -59,12 +59,12 @@ jobs:
         run: |
           set -euo pipefail
           if [ "$RESEARCH_STORAGE" = "backend" ]; then
-            python backend_state.py pull --name estate-capital-history-state --state-dir .work/batch-state
+            python -m estate.data.storage.backend_state pull --name estate-capital-history-state --state-dir .work/batch-state
           else
             git fetch --depth=1 origin estate-capital-history-state
             git worktree add --detach .work/batch-state FETCH_HEAD
           fi
-          timeout --signal=TERM --kill-after=5s 60s python capital_csv_state.py restore --state .work/batch-state --output .work/batch-input
+          timeout --signal=TERM --kill-after=5s 60s python -m estate.data.storage.csv_state restore --state .work/batch-state --output .work/batch-input
       - id: collect
         name: Collect and save each file on the same runner
         shell: bash
@@ -80,12 +80,12 @@ jobs:
           for ((batch_index=1; batch_index<=FILE_LIMIT; batch_index++)); do
             echo "Starting file $batch_index/$FILE_LIMIT on this runner"
             collect_status=0
-            timeout --signal=INT --kill-after=5s 240s python -u trace_molit_transport.py --output .work/batch-input --cutoff 2026-09-09 --include-current-sales --incheon-sales-descending --max-new-partitions 1 --cache-hashes-only --metadata-timeout 30 --csv-timeout 120 --pause 1 --transport-retries 1 --retry-delay 5 --daily-limit 90 || collect_status=$?
-            timeout --signal=TERM --kill-after=5s 60s python capital_csv_state.py pack --source .work/batch-input --state .work/batch-state --incremental
+            timeout --signal=INT --kill-after=5s 240s python -u -m estate.data.collection.transport_diagnostics --output .work/batch-input --cutoff 2026-09-09 --include-current-sales --incheon-sales-descending --max-new-partitions 1 --cache-hashes-only --metadata-timeout 30 --csv-timeout 120 --pause 1 --transport-retries 1 --retry-delay 5 --daily-limit 90 || collect_status=$?
+            timeout --signal=TERM --kill-after=5s 60s python -m estate.data.storage.csv_state pack --source .work/batch-input --state .work/batch-state --incremental
             if [ "$RESEARCH_STORAGE" = "backend" ]; then
               paths=(collection state_files.json)
               if [ -d .work/batch-state/objects ]; then paths+=(objects); fi
-              python backend_state.py push --name estate-capital-history-state --state-dir .work/batch-state --paths "${paths[@]}"
+              python -m estate.data.storage.backend_state push --name estate-capital-history-state --state-dir .work/batch-state --paths "${paths[@]}"
             else
               git -C .work/batch-state add -A
               if ! git -C .work/batch-state diff --cached --quiet; then

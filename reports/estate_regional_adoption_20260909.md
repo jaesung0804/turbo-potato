@@ -21,4 +21,4 @@
 
 검증: 기존에 고정했던 2026년 거래 119,313건에서 서울·경기 106,548건은 연구 후보와 동일하고 인천 12,765건은 기존 예측과 정확히 일치했다. 지역 선택·가격 입력 불변성·소급 표시·기존 점수 재현·전체 UI 테스트를 통과했다. 전체 결과 묶음과 실제 공개본은 배포 과정에서 추가 검증한다.
 
-재현 코드: `estate_regional_nowcast.py`, `estate_nowcast_release.py`, `estate_valuation.py`. 원본 연구와 모든 후보 결과는 `estate_full_history_adaptation_20260909.md`를 참조한다.
+재현 코드: `estate/models/nowcast/regional_v2/model.py`, `estate/models/nowcast/release.py`, `estate/models/nowcast/valuation.py`. 원본 연구와 모든 후보 결과는 `estate_full_history_adaptation_20260909.md`를 참조한다.

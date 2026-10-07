@@ -13,9 +13,7 @@ import urllib.error
 
 import pytest
 
-import collect_molit_capital_csv as collector
-
-
+import estate.data.collection.molit_csv as collector
 CUTOFF = date(2026, 9, 9)
 SIDO_CODES = {"seoul": "11000", "gyeonggi": "41000", "incheon": "28000"}
 SALE_COLUMNS = ["시군구", "단지명", "전용면적(㎡)", "계약년월", "계약일",

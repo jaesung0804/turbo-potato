@@ -1,5 +1,5 @@
 import pytest
-from estate_vintages import advance,observe_partition,rows_as_observed
+from estate.data.storage.vintages import advance,observe_partition,rows_as_observed
 A='2026-09-01T00:00:00+00:00'
 B='2026-09-02T00:00:00+00:00'
 C='2026-09-03T00:00:00+00:00'

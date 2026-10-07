@@ -105,8 +105,8 @@ LightGBM 사양은 1차 비교와 동일하며 가중치는 평균 1로 맞춘�
 ## 재현
 
 ```bash
-python analyze_estate_full_history_adaptation.py
-python publish_estate_full_history_report.py
+python -m estate.research.price.full_history
+python -m estate.research.reporting.full_history
 ```
 
 1차 연구 입력 복원 방법은 estate_retraining_results_20260909.md에 있다. 후속 입력 지문·개발 선택·지역 결과·단지 대응 부트스트랩은 같은 이름의 JSON에 저장했다. 행별 예측과 연구 모델은 후속 체크포인트에 보존한다.

@@ -8,7 +8,7 @@ from types import SimpleNamespace
 import pytest
 
 
-SCRIPT = Path(__file__).resolve().parents[1] / 'run_real_estate_dashboard.py'
+SCRIPT = Path(__file__).resolve().parents[1] / 'estate/site/serve.py'
 
 
 def run_server(monkeypatch, site, flags, events):
@@ -18,7 +18,7 @@ def run_server(monkeypatch, site, flags, events):
         (output / 'data').mkdir(parents=True, exist_ok=True)
         (output / 'data/dashboard_manifest.json').write_text('{}')
     def importing(name, *args, **kwargs):
-        if name == 'build_public_site':
+        if name == 'estate.site.build':
             events.append(('import_build',))
             return SimpleNamespace(build=build)
         return original_import(name, *args, **kwargs)

@@ -1,6 +1,6 @@
 import pandas as pd
 import pytest
-from estate_market_features import latest_index_vintage,lease_features,asking_features
+from estate.research.market.features import latest_index_vintage,lease_features,asking_features
 
 def test_later_index_revision_cannot_enter_old_prediction():
     d=pd.DataFrame([{'series_id':'official-sale','period':'2024-01','available_at':'2024-02-15','value':100},{'series_id':'official-sale','period':'2024-01','available_at':'2024-03-15','value':110}])
