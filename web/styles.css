@@ -39,7 +39,9 @@
 .guide-link { color: var(--focus); font-weight: 700; text-underline-offset: 4px; }
 #data-status { color: var(--ink); font-size: 12px; font-weight: 650; }
 #coverage-note, .score-note { color: var(--muted); font-size: 12px; line-height: 1.65; }
-.result-actions { display: flex; justify-content: flex-end; margin: 8px 0; }
+.result-actions { display: flex; justify-content: flex-end; align-items: center; flex-wrap: wrap; gap: 10px; margin: 8px 0; }
+.result-actions .export-helper { padding: 9px 13px; border: 1px solid var(--line); border-radius: 8px; color: var(--focus); text-decoration: none; font-size: 12px; }
+.result-actions > .score-note { flex-basis: 100%; text-align: right; }
 .result-actions button { padding: 9px 13px; border: 1px solid var(--line); border-radius: 8px; color: var(--ink); background: var(--panel); cursor: pointer; }
 .result-pagination { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin: 10px 0 16px; font-size: 12px; }
 .result-pagination span { flex: 1 1 150px; color: var(--muted); }
