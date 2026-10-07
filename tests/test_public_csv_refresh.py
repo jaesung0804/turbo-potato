@@ -138,3 +138,22 @@ def test_plan_stays_within_recent_three_months_and_one_rotation():
         assert set(selected) == set(months[-3:]+[audit])
         assert len(requests) <= 9
         assert all(r.start.year == r.end.year and r.end <= cutoff for r in requests)
+
+
+@pytest.mark.parametrize('parcel,main,sub,expected', [
+    ('산92-1', '0092', '0001', ('산92', '1')),
+    ('산15', '0015', '0000', ('산15', '')),
+    ('가-', '0000', '0000', ('가', '')),
+    ('BL-', '0000', '0000', ('BL', '')),
+])
+def test_source_parcel_qualifiers_match_api_representation(parcel, main, sub, expected):
+    raw = {'시군구': '경기도 이천시 대월면 사동리', '번지': parcel, '본번': main,
+           '부번': sub, '단지명': '시험', '전용면적(㎡)': '59.9700',
+           '계약년월': '202608', '계약일': '01', '거래금액(만원)': '40000',
+           '층': '3', '건축년도': '2000', '해제사유발생일': '-', '거래유형': '중개거래'}
+    info = {'source_id': 'test', 'kind': 'sale', 'sido': '경기도', 'start': '2026-08-01',
+            'end': '2026-08-31', 'sha256': 'fixture', 'observed_at': '2026-10-07T00:00:00Z'}
+    row, reason = refresh.normalize_export_row(raw, info, 1, refresh.AddressRegistry())
+    assert reason is None and (row['MNO'], row['SNO']) == expected
+    raw['본번'] = '0888'
+    assert refresh.normalize_export_row(raw, info, 1, refresh.AddressRegistry())[1] == 'lot_source_disagrees'

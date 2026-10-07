@@ -13,6 +13,7 @@ from datetime import date
 import gzip
 import json
 from pathlib import Path
+import re
 import shutil
 import tempfile
 
@@ -28,6 +29,36 @@ from estate_io import write_binary, write_json
 from estate_vintages import observe_partition
 from get_molit_apt_trade_data import DASHBOARD_FIELDNAMES
 from normalize_molit_capital_history import AddressRegistry, normalize_row, dashboard_row
+
+
+def normalize_export_row(raw, info, number, registry):
+    record = normalize_row(raw, info, number, registry)
+    parcel = raw['번지'].strip()
+    mountain = re.fullmatch(r'산(\d+)(?:-(\d+))?', parcel)
+    main, sub = raw['본번'].strip(), raw['부번'].strip()
+    # The public export splits a mountain parcel into numeric fields and puts
+    # the '산' qualifier only in 번지. The API keeps that qualifier in jibun.
+    mountain_matches = (mountain and main.isdigit() and sub.isdigit()
+                        and int(main) == int(mountain[1])
+                        and int(sub) == int(mountain[2] or 0))
+    # Published provisional parcels also occur in API jibun. Preserve their
+    # label rather than merging them into an invented numeric parcel '0'.
+    provisional = (parcel in {'가-', 'BL-'} and main.isdigit() and sub.isdigit()
+                   and int(main) == 0 and int(sub) == 0)
+    if mountain_matches or provisional:
+        record['quality_flags'] = [flag for flag in record['quality_flags'] if flag != 'lot_source_disagrees']
+    row, reason = dashboard_row(record)
+    if reason:
+        return row, reason
+    if mountain_matches:
+        row['MNO'] = '산' + str(int(mountain[1]))
+        row['SNO'] = str(int(mountain[2])) if int(mountain[2] or 0) else ''
+    elif provisional:
+        row['MNO'], row['SNO'] = parcel[:-1], ''
+    else:
+        row['MNO'] = str(int(row['MNO']))
+        row['SNO'] = str(int(row['SNO'])) if int(row['SNO']) else ''
+    return row, None
 
 
 def refresh_plan(start: str, cutoff: date):
@@ -113,15 +144,12 @@ def publish_to_local_cache(root: Path, exports: Path, baseline: dict, cutoff: da
                 'sha256': entry['raw_sha256'], 'observed_at': observed}
         count = 0
         for count, raw_row in enumerate(iter_csv_records(raw), 1):
-            row, reason = dashboard_row(normalize_row(raw_row, info, count, registry))
+            row, reason = normalize_export_row(raw_row, info, count, registry)
             if reason:
                 raise ValueError(f'Cannot normalize {request.key} row {count}: {reason}')
             key = row['CTRT_DAY'][:6], row['CGG_CD']
             if key not in groups or row['CGG_CD'] not in province_codes:
                 raise ValueError('Public CSV district/month is outside the requested current registry')
-            # Match the API representation for parcel numbers, without changing exact area.
-            row['MNO'] = str(int(row['MNO']))
-            row['SNO'] = str(int(row['SNO'])) if int(row['SNO']) else ''
             groups[key].append(row)
         if count != entry['row_count']:
             raise ValueError('Normalized source row count differs from the verified export')
@@ -181,7 +209,7 @@ def run(root: Path, exports: Path, cutoff: date, client=None):
         raise ValueError('Missing older coverage requires a separately scoped recovery')
     manifest = collect(requests, exports, cutoff,
                        client or PublicCSVClient(metadata_timeout=30, csv_timeout=120),
-                       daily_limit=20, transport_retries=1, retry_delay=5)
+                       daily_limit=20, transport_retries=2, retry_delay=5)
     return publish_to_local_cache(root, exports, baseline, cutoff, manifest)
 
 
