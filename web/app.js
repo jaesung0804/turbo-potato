@@ -33,12 +33,12 @@ const state = {
   year: "all",
   metric: "ai_score",
   activeTab: "ai",
-  selectedSido: "all",
-  selectedGu: "all",
-  selectedDong: "all",
+  selectedSido: [],
+  selectedGu: [],
+  selectedDong: [],
   selectedGroupId: null,
   selectedTypeId: null,
-  areaRange: "all",
+  areaRange: [],
   minPriceBillion: null,
   maxPriceBillion: null,
   minHouseholds: null,
@@ -46,9 +46,9 @@ const state = {
   minReviewScore: null,
   recentEvidenceOnly: true,
   askingPrices: new Map(),
-  ageRange: "all",
+  ageRange: [],
   elementary500mOnly: false,
-  subwayLine: "all",
+  subwayLine: [],
   subwayWalkMinutes: "all",
   mapMode: "global",
   search: "",
@@ -214,12 +214,8 @@ function formatHtml(value, metric = state.metric) {
 }
 
 function activeRegions() {
-  return state.summary.regions.filter((region) => {
-    if (state.selectedSido !== "all" && region.sido_name !== state.selectedSido) return false;
-    if (state.selectedGu !== "all" && region.gu_code !== state.selectedGu) return false;
-    if (state.selectedDong !== "all" && region.code !== state.selectedDong) return false;
-    return (bucketFor(region)?.addresses?.length ?? 0) > 0;
-  });
+  return state.summary.regions.filter(region => regionMatchesSelection(region)
+    && (bucketFor(region)?.addresses?.length ?? 0) > 0);
 }
 
 function regionMatchesSearch(region) {
@@ -237,13 +233,22 @@ function filteredRegions() {
   return activeRegions().filter(regionMatchesSearch);
 }
 
+function regionMatchesSelection(region) {
+  return FilterSelect.matches(state.selectedSido, region.sido_name)
+    && FilterSelect.matches(state.selectedGu, region.gu_code)
+    && FilterSelect.matches(state.selectedDong, region.code);
+}
+
+function regionInMapScope(region) {
+  if (state.mapMode === 'global') return true;
+  if (!FilterSelect.matches(state.selectedSido, region.sido_name)) return false;
+  if (state.mapMode === 'sido') return true;
+  if (!FilterSelect.matches(state.selectedGu, region.gu_code)) return false;
+  return state.mapMode !== 'dong' || FilterSelect.matches(state.selectedDong, region.code);
+}
+
 function mapBaseRegions() {
-  return state.summary.regions.filter((region) => {
-    if (state.mapMode === "sido" && state.selectedSido !== "all" && region.sido_name !== state.selectedSido) return false;
-    if (state.mapMode === "gu" && state.selectedGu !== "all" && region.gu_code !== state.selectedGu) return false;
-    if (state.mapMode === "dong" && state.selectedDong !== "all" && region.code !== state.selectedDong) return false;
-    return cachedRegionMetricValue(region) !== null;
-  });
+  return state.summary.regions.filter(region => regionInMapScope(region) && cachedRegionMetricValue(region) !== null);
 }
 
 function quantile(values, q) {
@@ -285,21 +290,12 @@ function colorFor(value, dist) {
 
 function styleFeature(feature) {
   const regions = regionsForFeature(feature);
-  const region = regions[0];
   const value = featureMetricValue(regions);
-  const isSelectedDong = state.selectedDong !== "all" && state.selectedDong === region?.code;
-  const isSelectedGu = state.selectedDong === "all" && state.selectedGu !== "all" && state.selectedGu === region?.gu_code;
-  const isSelectedSido =
-    state.selectedDong === "all" &&
-    state.selectedGu === "all" &&
-    state.selectedSido !== "all" &&
-    state.selectedSido === region?.sido_name;
-  const isSelected = isSelectedDong || isSelectedGu || isSelectedSido;
-  const inMapScope =
-    state.mapMode === "global" ||
-    (state.mapMode === "sido" && state.selectedSido !== "all" && region?.sido_name === state.selectedSido) ||
-    (state.mapMode === "gu" && state.selectedGu !== "all" && region?.gu_code === state.selectedGu) ||
-    (state.mapMode === "dong" && state.selectedDong !== "all" && region?.code === state.selectedDong);
+  const isSelected = regions.some(region => regionMatchesSelection(region)) &&
+    [state.selectedSido, state.selectedGu, state.selectedDong].some(FilterSelect.has);
+  const isSelectedGu = isSelected && FilterSelect.has(state.selectedGu);
+  const isSelectedSido = isSelected && !isSelectedGu;
+  const inMapScope = regions.some(regionInMapScope);
   const dist = state.mapDist;
 
   return {
@@ -343,7 +339,7 @@ function guName(code) {
 }
 
 function selectedSidoLabel() {
-  return state.selectedSido === "all" ? "수도권 전체" : state.selectedSido;
+  return FilterSelect.label(state.selectedSido, name => name, "수도권 전체");
 }
 
 function areaRangeLabel() {
@@ -354,7 +350,7 @@ function areaRangeLabel() {
     gt26_lte34: "26평 초과 34평 이하",
     gt34: "34평 초과",
   };
-  return labels[state.areaRange] ?? "전체 평형";
+  return FilterSelect.label(state.areaRange, value => labels[value], "전체 평형");
 }
 
 function priceFilterLabel() {
@@ -378,12 +374,12 @@ function ageFilterLabel() {
   const labels = {
     all: "전체 연식",
     new: "신축 0~5년",
-    semi_new: "준신축 5~15년",
-    middle: "중간연식 15~20년",
-    old: "구축 20~30년",
+    semi_new: "준신축 6~15년",
+    middle: "중간연식 16~20년",
+    old: "구축 21~29년",
     very_old: "노후 구축 30년+",
   };
-  return labels[state.ageRange] ?? labels.all;
+  return FilterSelect.label(state.ageRange, value => labels[value], labels.all);
 }
 
 function elementaryFilterLabel() {
@@ -391,23 +387,26 @@ function elementaryFilterLabel() {
 }
 
 function subwayFilterLabel() {
-  const line = state.subwayLine === "all" ? "전체 호선" : state.subwayLine;
+  const line = FilterSelect.label(state.subwayLine, value => value, "전체 호선");
   const walk = state.subwayWalkMinutes === "all" ? "전체 역세권" : `도보 ${state.subwayWalkMinutes}분`;
   return `${line} · ${walk}`;
 }
 
+function regionSelectionLabel() {
+  if (FilterSelect.has(state.selectedDong)) return FilterSelect.label(state.selectedDong, code => {
+    const r = state.regionByCode.get(code);
+    return r ? `${r.sido_name} ${r.gu_name} ${r.dong_name}` : code;
+  });
+  if (FilterSelect.has(state.selectedGu)) return FilterSelect.label(state.selectedGu, code => {
+    const r = state.summary.regions.find(r => r.gu_code === code);
+    return r ? `${r.sido_name} ${r.gu_name}` : code;
+  });
+  return selectedSidoLabel();
+}
+
 function mapScopeLabel() {
-  if (state.mapMode === "sido") {
-    return state.selectedSido === "all" ? "선택 시도 없음" : `${state.selectedSido} 기준`;
-  }
-  if (state.mapMode === "gu") {
-    return state.selectedGu === "all" ? "선택 구 없음" : `${guName(state.selectedGu)} 기준`;
-  }
-  if (state.mapMode === "dong") {
-    const region = state.regionByCode.get(state.selectedDong);
-    return region ? `${escapeHtml(region.gu_name)} ${escapeHtml(region.dong_name)} 기준` : "선택 동 없음";
-  }
-  return "수도권 전체";
+  if (state.mapMode === 'global') return '수도권 전체';
+  return `${state.mapMode === 'sido' ? selectedSidoLabel() : regionSelectionLabel()} 기준`;
 }
 
 function typeId(region, building) {
@@ -425,13 +424,11 @@ function priceBillion(building) {
 }
 
 function areaMatches(building) {
+  if (!FilterSelect.has(state.areaRange)) return true;
   const area = areaPyeong(building);
-  if (area === null) return state.areaRange === "all";
-  if (state.areaRange === "lte14") return area <= 14;
-  if (state.areaRange === "gt14_lte26") return area > 14 && area <= 26;
-  if (state.areaRange === "gt26_lte34") return area > 26 && area <= 34;
-  if (state.areaRange === "gt34") return area > 34;
-  return true;
+  if (area === null) return false;
+  const category = area <= 14 ? 'lte14' : area <= 26 ? 'gt14_lte26' : area <= 34 ? 'gt26_lte34' : 'gt34';
+  return FilterSelect.matches(state.areaRange, category);
 }
 
 function comparisonPriceForItem(building, region) {
@@ -459,7 +456,7 @@ function tradeCountMatches(building) {
 }
 
 function ageMatches(building) {
-  return state.ageRange === "all" || ageCategory(building) === state.ageRange;
+  return FilterSelect.matches(state.ageRange, ageCategory(building));
 }
 
 function elementaryMatches(building) {
@@ -467,7 +464,7 @@ function elementaryMatches(building) {
 }
 
 function subwayMatches(building) {
-  if (state.subwayLine !== "all" && !(building.subway_lines ?? []).includes(state.subwayLine)) return false;
+  if (FilterSelect.has(state.subwayLine) && !(building.subway_lines ?? []).some(line => FilterSelect.matches(state.subwayLine, line))) return false;
   if (state.subwayWalkMinutes === "all") return true;
   const distance = building.subway_distance_m;
   if (distance === null || distance === undefined) return false;
@@ -799,14 +796,15 @@ function renderAssetLists(groups=groupedBuildings()) {
 function recommendationMatchesFilters(item) {
   if (!item) return false;
   if (state.year !== "all" && item.year !== state.year) return false;
-  if (state.selectedSido !== "all" && item.sido_name !== state.selectedSido) return false;
-  if (state.selectedGu !== "all" && item.gu_code !== state.selectedGu) return false;
-  if (state.selectedDong !== "all" && item.region_code !== state.selectedDong) return false;
+  if (FilterSelect.has(state.selectedSido) && !FilterSelect.matches(state.selectedSido, item.sido_name)) return false;
+  if (FilterSelect.has(state.selectedGu) && !FilterSelect.matches(state.selectedGu, item.gu_code)) return false;
+  if (FilterSelect.has(state.selectedDong) && !FilterSelect.matches(state.selectedDong, item.region_code)) return false;
 
   const pseudoBuilding = {
     key: item.building_key,
     count: item.trade_count,
     households: item.households,
+    built_year: item.built_year,
     elementary_500m: item.elementary_500m,
     subway_lines: item.subway_lines ?? [],
     subway_distance_m: item.subway_distance_m,
@@ -905,16 +903,12 @@ function renderSelectedRegion(groups = groupedBuildings()) {
   }
 
   const regions = filteredRegions();
-  const title = state.selectedDong !== "all"
-    ? `${state.regionByCode.get(state.selectedDong)?.gu_name} ${state.regionByCode.get(state.selectedDong)?.dong_name}`
-    : state.selectedGu !== "all"
-      ? guName(state.selectedGu)
-      : selectedSidoLabel();
+  const title = regionSelectionLabel();
 
   document.getElementById("selected-region").innerHTML = `
     <div class="region-title">
       <div>
-        <h2>${title}</h2>
+        <h2>${escapeHtml(title)}</h2>
         <span>지도에서 지역을 선택하거나 전체 매물에서 건물을 선택하세요.</span>
       </div>
     </div>
@@ -965,9 +959,9 @@ function groupNameForLevel(region, level) {
 function aggregateRegionRates(level, valueGetter, scoped = false) {
   const groups = new Map();
   for (const region of state.summary.regions) {
-    if (scoped && state.selectedSido !== "all" && region.sido_name !== state.selectedSido) continue;
-    if (scoped && level !== "sido" && state.selectedGu !== "all" && region.gu_code !== state.selectedGu) continue;
-    if (scoped && level === "dong" && state.selectedDong !== "all" && region.code !== state.selectedDong) continue;
+    if (scoped && FilterSelect.has(state.selectedSido) && !FilterSelect.matches(state.selectedSido, region.sido_name)) continue;
+    if (scoped && level !== "sido" && FilterSelect.has(state.selectedGu) && !FilterSelect.matches(state.selectedGu, region.gu_code)) continue;
+    if (scoped && level === "dong" && FilterSelect.has(state.selectedDong) && !FilterSelect.matches(state.selectedDong, region.code)) continue;
 
     const value = valueGetter(region);
     if (value === null) continue;
@@ -1097,35 +1091,33 @@ function populateSidoSelect() {
       if (ai !== -1 || bi !== -1) return (ai === -1 ? 99 : ai) - (bi === -1 ? 99 : bi);
       return a.localeCompare(b, "ko-KR");
     });
-  document.getElementById("sido-select").innerHTML = `
-    <option value="all">전체 시도</option>
-    ${sidos.map((name) => `<option value="${name}">${name}</option>`).join("")}
-  `;
-  document.getElementById("sido-select").value = state.selectedSido;
+  state.selectedSido = FilterSelect.set('sido-select', state.selectedSido, sidos.map(name => ({value: name, label: name})));
+}
+
+function guChoices() {
+  const regions = state.summary.regions.filter(r => FilterSelect.matches(state.selectedSido, r.sido_name));
+  return [...new Map(regions.map(r => [r.gu_code, {value: r.gu_code, label: `${r.sido_name} ${r.gu_name}`}])).values()]
+    .sort((a, b) => a.label.localeCompare(b.label, 'ko'));
+}
+
+function dongChoices() {
+  return state.summary.regions.filter(r => FilterSelect.matches(state.selectedSido, r.sido_name)
+    && FilterSelect.matches(state.selectedGu, r.gu_code))
+    .map(r => ({value: r.code, label: `${r.sido_name} ${r.gu_name} ${r.dong_name}`}))
+    .sort((a, b) => a.label.localeCompare(b.label, 'ko'));
+}
+
+function reconcileRegionSelections() {
+  state.selectedGu = FilterSelect.retain(state.selectedGu, guChoices());
+  state.selectedDong = FilterSelect.retain(state.selectedDong, dongChoices());
 }
 
 function populateGuSelect() {
-  const regions = state.summary.regions
-    .filter((region) => state.selectedSido === "all" || region.sido_name === state.selectedSido);
-  const guItems = [...new Map(regions.map((region) => [region.gu_code, region.gu_name])).entries()]
-    .sort((a, b) => a[1].localeCompare(b[1], "ko-KR"));
-  document.getElementById("gu-select").innerHTML = `
-    <option value="all">전체 시군구</option>
-    ${guItems.map(([code, name]) => `<option value="${code}">${name}</option>`).join("")}
-  `;
-  document.getElementById("gu-select").value = state.selectedGu;
+  state.selectedGu = FilterSelect.set('gu-select', state.selectedGu, guChoices());
 }
 
 function populateDongSelect() {
-  const dongs = state.summary.regions
-    .filter((region) => state.selectedSido === "all" || region.sido_name === state.selectedSido)
-    .filter((region) => state.selectedGu === "all" || region.gu_code === state.selectedGu)
-    .sort((a, b) => a.dong_name.localeCompare(b.dong_name, "ko-KR"));
-  document.getElementById("dong-select").innerHTML = `
-    <option value="all">전체 읍면동</option>
-    ${dongs.map((region) => `<option value="${region.code}">${escapeHtml(region.gu_name)} ${escapeHtml(region.dong_name)}</option>`).join("")}
-  `;
-  document.getElementById("dong-select").value = state.selectedDong;
+  state.selectedDong = FilterSelect.set('dong-select', state.selectedDong, dongChoices());
 }
 
 function populateGrowthPeriodSelect() {document.getElementById("growth-period-select").innerHTML='<option value="all">전체 완결기간</option>'+completedYears().slice().reverse().map(y=>`<option value="${y}">${y}</option>`).join("");document.getElementById("growth-period-select").value=state.growthPeriod;}
@@ -1142,11 +1134,7 @@ function populateSubwayLineSelect() {
     }
   }
   const sorted = [...lines].sort((a, b) => a.localeCompare(b, "ko-KR", { numeric: true }));
-  document.getElementById("subway-line-select").innerHTML = `
-    <option value="all">전체</option>
-    ${sorted.map((line) => `<option value="${line}">${line}</option>`).join("")}
-  `;
-  document.getElementById("subway-line-select").value = state.subwayLine;
+  state.subwayLine = FilterSelect.set('subway-line-select', state.subwayLine, sorted.map(line => ({value: line, label: line})));
 }
 
 function refresh(resetPages=true) {
@@ -1164,6 +1152,7 @@ function refresh(resetPages=true) {
   renderAssetLists(groups);
   renderDataStatus();
   renderReviewScoreFilter();
+  renderActiveFilters();
 }
 
 function renderReviewScoreFilter() {
@@ -1195,57 +1184,63 @@ async function renderAnalysis(){
  renderGrowthSummary();renderGrowthRankings();renderAiScoreRankings();state.analysisKey=key;
 }
 
-function selectSido(sidoName) {
-  state.selectedSido = sidoName;
-  state.selectedGu = "all";
-  state.selectedDong = "all";
+function setRegionSelection(field, selection) {
+  state[field] = FilterSelect.values(selection);
+  reconcileRegionSelections();
   state.selectedGroupId = null;
   state.selectedTypeId = null;
-  populateSidoSelect();
+  FilterSelect.set('sido-select', state.selectedSido);
   populateGuSelect();
   populateDongSelect();
   refresh();
   focusSelectedMap();
 }
 
+// Map and ranking clicks drill into a single location; checkboxes combine locations.
+function selectSido(sidoName) {
+  state.selectedGu = [];
+  state.selectedDong = [];
+  setRegionSelection('selectedSido', sidoName);
+}
+
 function selectGu(guCode) {
-  const region = state.summary.regions.find((item) => item.gu_code === guCode);
-  if (region) state.selectedSido = region.sido_name || "all";
-  state.selectedGu = guCode;
-  state.selectedDong = "all";
-  state.selectedGroupId = null;
-  state.selectedTypeId = null;
-  document.getElementById("sido-select").value = state.selectedSido;
-  populateGuSelect();
-  document.getElementById("gu-select").value = guCode;
-  populateDongSelect();
-  refresh();
-  focusSelectedMap();
+  const region = state.summary.regions.find(r => r.gu_code === guCode);
+  if (region) state.selectedSido = [region.sido_name];
+  state.selectedDong = [];
+  setRegionSelection('selectedGu', guCode);
 }
 
 function selectDong(dongCode) {
   const region = state.regionByCode.get(dongCode);
   if (!region) return;
-  state.selectedSido = region.sido_name || "all";
-  state.selectedGu = region.gu_code;
-  state.selectedDong = dongCode;
-  state.selectedGroupId = null;
-  state.selectedTypeId = null;
-  document.getElementById("sido-select").value = state.selectedSido;
-  populateGuSelect();
-  document.getElementById("gu-select").value = region.gu_code;
-  populateDongSelect();
-  document.getElementById("dong-select").value = dongCode;
-  refresh();
-  focusSelectedMap();
+  state.selectedSido = [region.sido_name];
+  state.selectedGu = [region.gu_code];
+  setRegionSelection('selectedDong', dongCode);
+}
+
+const multiFilterFields = {
+  'sido-select': 'selectedSido', 'gu-select': 'selectedGu', 'dong-select': 'selectedDong',
+  'area-range-select': 'areaRange', 'age-range-select': 'ageRange', 'subway-line-select': 'subwayLine',
+};
+
+function renderActiveFilters() {
+  const container = document.getElementById('active-filter-chips');
+  container.innerHTML = Object.entries(multiFilterFields).flatMap(([id, field]) => {
+    const options = [...document.getElementById(id).options];
+    return FilterSelect.values(state[field]).map(value => {
+      const name = options.find(o => o.value === value)?.textContent ?? value;
+      return `<button type="button" class="filter-chip" data-remove-filter="${id}" data-value="${escapeHtml(value)}" aria-label="${escapeHtml(name)} 선택 해제">${escapeHtml(name)} <span aria-hidden="true">×</span></button>`;
+    });
+  }).join('');
+  container.hidden = !container.children.length;
 }
 
 function setMapMode(mode) {
-  if (mode === "sido" && state.selectedSido === "all") {
+  if (mode === "sido" && !FilterSelect.has(state.selectedSido)) {
     state.mapMode = "global";
-  } else if (mode === "gu" && state.selectedGu === "all") {
+  } else if (mode === "gu" && !FilterSelect.has(state.selectedGu)) {
     state.mapMode = "global";
-  } else if (mode === "dong" && state.selectedDong === "all") {
+  } else if (mode === "dong" && !FilterSelect.has(state.selectedDong)) {
     state.mapMode = "global";
   } else {
     state.mapMode = mode;
@@ -1291,7 +1286,7 @@ function wireEvents() {
   });
 
   document.getElementById("area-range-select").addEventListener("change", (event) => {
-    state.areaRange = event.target.value;
+    state.areaRange = FilterSelect.read("area-range-select");
     state.selectedGroupId = null;
     state.selectedTypeId = null;
     refresh();
@@ -1338,7 +1333,7 @@ function wireEvents() {
   });
 
   document.getElementById("age-range-select").addEventListener("change", (event) => {
-    state.ageRange = event.target.value;
+    state.ageRange = FilterSelect.read("age-range-select");
     state.selectedGroupId = null;
     state.selectedTypeId = null;
     refresh();
@@ -1355,7 +1350,7 @@ function wireEvents() {
   });
 
   document.getElementById("subway-line-select").addEventListener("change", (event) => {
-    state.subwayLine = event.target.value;
+    state.subwayLine = FilterSelect.read("subway-line-select");
     state.selectedGroupId = null;
     state.selectedTypeId = null;
     refresh();
@@ -1368,23 +1363,18 @@ function wireEvents() {
     refresh();
   });
 
-  document.getElementById("sido-select").addEventListener("change", (event) => {
-    selectSido(event.target.value);
-  });
-
-  document.getElementById("gu-select").addEventListener("change", (event) => {
-    selectGu(event.target.value);
-  });
-
-  document.getElementById("dong-select").addEventListener("change", (event) => {
-    if (event.target.value === "all") {
-      state.selectedDong = "all";
-      state.selectedGroupId = null;
-      state.selectedTypeId = null;
-      refresh();
-    } else {
-      selectDong(event.target.value);
-    }
+  for (const [id, field] of Object.entries(multiFilterFields).slice(0, 3)) {
+    document.getElementById(id).addEventListener('change', () => setRegionSelection(field, FilterSelect.read(id)));
+  }
+  document.getElementById('active-filter-chips').addEventListener('click', event => {
+    const button = event.target.closest('[data-remove-filter]');
+    if (!button) return;
+    const id = button.dataset.removeFilter, field = multiFilterFields[id];
+    const selection = FilterSelect.values(state[field]).filter(value => value !== button.dataset.value);
+    const control = document.querySelector(`[data-filter="${id}"] summary`);
+    control.focus();
+    FilterSelect.set(id, selection);
+    document.getElementById(id).dispatchEvent(new Event('change', {bubbles: true}));
   });
 
   document.getElementById("search-input").addEventListener("input", (event) => {
@@ -1432,40 +1422,40 @@ function wireEvents() {
   });
 
   document.getElementById("clear-filter").addEventListener("click", () => {
-    state.selectedSido = "all";
-    state.selectedGu = "all";
-    state.selectedDong = "all";
+    state.selectedSido = [];
+    state.selectedGu = [];
+    state.selectedDong = [];
     state.selectedGroupId = null;
     state.selectedTypeId = null;
     state.search = "";
-    state.areaRange = "all";
+    state.areaRange = [];
     state.minPriceBillion = null;
     state.maxPriceBillion = null;
     state.minHouseholds = null;
     state.minTradeCount = null;
     state.minReviewScore = null;
     state.recentEvidenceOnly = true;
-    state.ageRange = "all";
+    state.ageRange = [];
     state.elementary500mOnly = false;
-    state.subwayLine = "all";
+    state.subwayLine = [];
     state.subwayWalkMinutes = "all";
     state.mapMode = "global";
     state.growthSearch = "";
     state.growthMinRate = null;
     state.aiScoreSearch = "";
     state.aiScoreMin = null;
-    document.getElementById("sido-select").value = "all";
+    FilterSelect.set("sido-select", []);
     populateGuSelect();
-    document.getElementById("gu-select").value = "all";
-    document.getElementById("area-range-select").value = "all";
+    FilterSelect.set("gu-select", []);
+    FilterSelect.set("area-range-select", []);
     document.getElementById("min-price-input").value = "";
     document.getElementById("price-input").value = "";
     document.getElementById("households-input").value = "";
     document.getElementById("trade-count-input").value = "";
     document.getElementById("review-score-min-input").value = "";
-    document.getElementById("age-range-select").value = "all";
+    FilterSelect.set("age-range-select", []);
     setElementaryFilterChecked(false);
-    document.getElementById("subway-line-select").value = "all";
+    FilterSelect.set("subway-line-select", []);
     document.getElementById("subway-walk-select").value = "all";
     document.getElementById("search-input").value = "";
     document.getElementById("growth-search-input").value = "";
@@ -1539,7 +1529,7 @@ async function init() {
  for(const r of summary.regions)for(const code of new Set((r.map_codes??[r.code]).flatMap(c=>[c,c.slice(0,5)]))){if(!state.regionByMapCode.has(code))state.regionByMapCode.set(code,[]);state.regionByMapCode.get(code).push(r);}
  document.getElementById("year-select").innerHTML='<option value="all">전체연도</option>'+summary.years.map(y=>`<option value="${y}">${y}</option>`).join("");document.getElementById("year-select").value=state.year;
  document.getElementById('metric-select').value=state.metric;
- populateSidoSelect();populateGuSelect();populateDongSelect();populateGrowthPeriodSelect();populateSubwayLineSelect();wireEvents();wireResultEvents();refresh();
+ populateSidoSelect();populateGuSelect();populateDongSelect();populateGrowthPeriodSelect();populateSubwayLineSelect();FilterSelect.init();wireEvents();wireResultEvents();refresh();
  document.getElementById('analysis-panel').addEventListener('toggle',()=>renderAnalysis().catch(e=>{document.getElementById('growth-summary').textContent=e.message;}));
  try {
   if(!map)throw Error("지도 로드 실패");const data=await DashboardData.compressed(store.manifest.map);
@@ -1561,10 +1551,10 @@ function fitDefaultMapView(full=false) {
 
 function focusSelectedMap() {
  if(!map||!state.topologyLayer)return;
- if(state.selectedSido==='all'){fitDefaultMapView();return;}
+ if(![state.selectedSido,state.selectedGu,state.selectedDong].some(FilterSelect.has)){fitDefaultMapView();return;}
  const bounds=L.latLngBounds([]);
  state.topologyLayer.eachLayer(layer=>{
-  const matches=regionsForFeature(layer.feature).some(r=>state.selectedGu!=='all'?r.gu_code===state.selectedGu:r.sido_name===state.selectedSido);
+  const matches=regionsForFeature(layer.feature).some(regionMatchesSelection);
   if(matches)bounds.extend(layer.getBounds());
  });
  if(bounds.isValid())map.fitBounds(bounds,{padding:[28,28],maxZoom:11.5,animate:false});

@@ -1,10 +1,11 @@
 // Pure data and application-function tests; no DOM or browser simulation.
 const assert=require('node:assert/strict'),fs=require('node:fs'),vm=require('node:vm');
+require('./test_multiselect.cjs');
 const {gzipSync}=require('node:zlib'),{createHash,webcrypto}=require('node:crypto');
 const root=process.cwd(),read=name=>fs.readFileSync(`${root}/web/${name}`,'utf8');
 const app=read('app.js').replace(/init\(\)\.catch\([\s\S]*$/, '');
 const context=vm.createContext({console,window:{addEventListener(){}},setTimeout,URL,Map,Set,Blob,Response,DecompressionStream,crypto:webcrypto});
-vm.runInContext(read('release-status.js')+'\n'+read('result-pages.js')+'\n'+read('data-store.js')+'\n'+app,context);
+vm.runInContext(read('release-status.js')+'\n'+read('result-pages.js')+'\n'+read('filter-select.js')+'\n'+read('data-store.js')+'\n'+app,context);
 function evaluate(code){return vm.runInContext(code,context);}
 
 const all=Array.from({length:1007},(_,i)=>i);context.all=all;

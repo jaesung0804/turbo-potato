@@ -5,7 +5,7 @@ from pathlib import Path
 
 UI_FILES = ['index.html', 'model.html', 'potential.html', 'research.html', 'research.css',
             'research.js', 'release-status.js',
-            'styles.css', 'app.js', 'potential.js', 'data-store.js', 'result-pages.js',
+            'styles.css', 'filter-select.js', 'app.js', 'potential.js', 'data-store.js', 'result-pages.js',
             'model.js', '404.html', 'vendor/leaflet.css', 'vendor/leaflet.js', 'vendor/LICENSE.txt']
 
 
