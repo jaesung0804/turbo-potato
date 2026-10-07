@@ -16,7 +16,10 @@ import csv
 from dataclasses import dataclass
 from datetime import date, datetime, timezone
 from decimal import Decimal, InvalidOperation
-import fcntl
+try:
+    import fcntl
+except ImportError:  # Windows uses a nonblocking byte-range lock.
+    fcntl = None
 import gzip
 import hashlib
 import http.client
@@ -56,6 +59,23 @@ class CollectionError(RuntimeError):
 
 class TransportError(CollectionError):
     """A network transport failure eligible for an explicitly bounded retry."""
+
+
+def lock_collection(stream):
+    """Hold one writer lock until the collection's file context closes."""
+    try:
+        if fcntl is not None:
+            fcntl.flock(stream, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        else:
+            import msvcrt
+            stream.seek(0, 2)
+            if stream.tell() == 0:
+                stream.write("0")
+                stream.flush()
+            stream.seek(0)
+            msvcrt.locking(stream.fileno(), msvcrt.LK_NBLCK, 1)
+    except OSError as exc:
+        raise CollectionError("Another collector is using this output; run only one session") from exc
 
 
 def transport_diagnostic(exc: Exception) -> dict[str, Any]:
@@ -491,10 +511,7 @@ def collect(requests: list[ExportRequest], output: Path, cutoff: date,
     output = Path(output)
     output.mkdir(parents=True, exist_ok=True)
     with (output / ".collection.lock").open("a+") as lock:
-        try:
-            fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
-        except BlockingIOError:
-            raise CollectionError("Another collector is using this output; run only one session") from None
+        lock_collection(lock)
         manifest_path = output / "manifest.json"
         manifest = json.loads(manifest_path.read_text("utf-8")) if manifest_path.exists() else {
             "format_version": FORMAT_VERSION, "source": ORIGIN + PAGE_PATH,

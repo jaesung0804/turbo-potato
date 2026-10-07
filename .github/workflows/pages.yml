@@ -18,6 +18,11 @@ on:
         description: Refresh the recent 3 months and one older month before publishing
         type: boolean
         default: false
+      refresh_source:
+        description: Source for the explicitly requested transaction refresh
+        type: choice
+        options: [public_csv, api]
+        default: public_csv
 permissions:
   contents: write
   pages: write
@@ -85,7 +90,10 @@ jobs:
           MOLIT_API_KEY: ${{ secrets.MOLIT_API_KEY }}
         run: |
           echo "ESTATE_REFRESH_ATTEMPTED_AT=$(date -u +%Y-%m-%dT%H:%M:%SZ)" >> "$GITHUB_ENV"
-          if [ -z "$MOLIT_API_KEY" ]; then
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ] && [ "${{ inputs.refresh_source }}" = "public_csv" ]; then
+            python refresh_estate_public_csv.py --exports ".work/raw-state/public_csv_exports/$(TZ=Asia/Seoul date +%F)"
+            echo 'ESTATE_REFRESH_STATUS=completed' >> "$GITHUB_ENV"
+          elif [ -z "$MOLIT_API_KEY" ]; then
             if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
               echo '::error::MOLIT_API_KEY is required for the requested refresh.'
               exit 1
