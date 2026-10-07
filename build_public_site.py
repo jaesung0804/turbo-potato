@@ -145,7 +145,7 @@ def build(source, output, model_dir=Path('models'), month=None, summary_path=Non
         raise ValueError('A source partition was truncated; publication refused')
     if len(model['recommendations']) != manifest['coverage'][model['target_year']]['available_types']:
         raise ValueError('The latest model output does not cover every observed type')
-    manifest['collection'] = {k: collection.get(k) for k in ['complete', 'normalizer_version', 'start', 'end', 'rows', 'partition_count', 'region_count', 'fetched_at', 'sha256']}
+    manifest['collection'] = {k: collection.get(k) for k in ['complete', 'normalizer_version', 'start', 'end', 'rows', 'partition_count', 'region_count', 'fetched_at', 'sha256', 'source', 'refresh_method', 'refreshed_contract_months', 'historical_audit_month']}
     manifest['release_id'] = os.getenv('GITHUB_RUN_ID', 'local')+'-'+os.getenv('GITHUB_RUN_ATTEMPT', '1')
     manifest['amenities'] = amenities
     manifest['map_note'] = '2025-06-30 시군구 경계. 2026년 개편 지역은 전체 목록에서 조회합니다.'
