@@ -103,3 +103,12 @@ def test_photo_autofill_routes_formulas_and_manual_edits(tmp_path,monkeypatch):
     s['H2']=1.5;s['H2'].comment=Comment('저장값: 1.2\n출처',helper.AUTO)
     edited=tmp_path/'edited.xlsx';w.save(edited)
     again=fill(edited);assert openpyxl.load_workbook(again['output']).worksheets[0]['H2'].value==1.5
+
+
+def test_photo_layout_also_wraps_preexisting_community_text():
+    from excel_helper.fill_workbook import layout_photo_row
+    w=openpyxl.Workbook();s=w.active;s.column_dimensions['T'].width=25
+    text='관리사무소, 노인정, 주민공동시설, 어린이놀이터, 자전거보관소'
+    s['T2']=text;layout_photo_row(s,2)
+    assert s['T2'].value==text and s['T2'].alignment.wrap_text
+    assert s.row_dimensions[2].height>=59
