@@ -603,7 +603,8 @@ function priceConfidenceLabel(rec) {
 function priceConfidencePanel(rec) {
   const direct=directPriceQuantiles(rec);
   if(direct){const p=direct.prices_billion;
-    return `<div class="confidence-panel"><h3>조건부 거래가격 분포</h3><div class="metric-grid">${metricCard('하위 10% 경계 · P10',totalPriceLabel(p.p10),'text')}${metricCard('중앙값 · P50',totalPriceLabel(p.p50),'text')}${metricCard('상위 10% 경계 · P90',totalPriceLabel(p.p90),'text')}</div><p class="score-note">과거 거래에서 세 분위수를 각각 직접 학습했습니다. P10~P90은 목표 80%의 거래가격 범위이며, 중앙값 양쪽의 폭이 다를 수 있습니다. ${escapeHtml(direct.validation_period)} 검증 포함률 ${Number(direct.historical_coverage_pct).toFixed(1)}%.</p><p class="score-note">급매 등 낮은 가격도 학습에 보존합니다. 범위 밖이라는 이유로 오류·증여 거래로 판정하거나 제외하지 않습니다. 조건이 비슷한 거래의 가격 분포이며 상승 확률이나 개별 매물 가격의 보장이 아닙니다. 현재 표시는 과거 365일 대표 층 기준으로, 실제 층·상태에 따라 달라집니다.</p></div>`;
+    const method=direct.median_method==='retained_l1'?'검증된 중앙값 모델을 유지하고 하위·상위 분위수를 별도로 학습·보정했습니다.':'과거 거래에서 세 분위수를 각각 직접 학습했습니다.';
+    return `<div class="confidence-panel"><h3>조건부 거래가격 분포</h3><div class="metric-grid">${metricCard('하위 10% 경계 · P10',totalPriceLabel(p.p10),'text')}${metricCard('중앙값 · P50',totalPriceLabel(p.p50),'text')}${metricCard('상위 10% 경계 · P90',totalPriceLabel(p.p90),'text')}</div><p class="score-note">${method} P10~P90은 목표 80%의 거래가격 범위이며, 중앙값 양쪽의 폭이 다를 수 있습니다. ${escapeHtml(direct.validation_period)} 포함률 ${Number(direct.historical_coverage_pct).toFixed(1)}%. <a href="quantile-validation.html">모델 비교 결과 →</a></p><p class="score-note">급매 등 낮은 가격도 학습에 보존합니다. 범위 밖이라는 이유로 오류·증여 거래로 판정하거나 제외하지 않습니다. 조건이 비슷한 거래의 가격 분포이며 상승 확률이나 개별 매물 가격의 보장이 아닙니다. 현재 표시는 과거 365일 대표 층 기준으로, 실제 층·상태에 따라 달라집니다.</p></div>`;
   }
   const q=currentValuation(rec)?.confidence;
   if(!q)return '';

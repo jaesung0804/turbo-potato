@@ -30,3 +30,9 @@ Thumbs.db
 /.research-backend/
 *.sqlite3
 /backend.env
+
+# 임장 개인자료·자동 조회 캐시는 로컬에만 보관합니다.
+**/.임장조회캐시/
+excel_helper/.venv/
+*.xlsx
+*.xlsm

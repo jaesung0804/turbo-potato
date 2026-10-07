@@ -18,14 +18,19 @@ ARTIFACT = Path(ACTIVE_ARTIFACT)
 MANIFEST = Path(ACTIVE_MANIFEST)
 
 
-def attach_nowcast(model, source, artifact_path=ARTIFACT, manifest_path=MANIFEST):
-    spec = json.loads(manifest_path.read_text())
+def attach_nowcast(model, source, artifact_path=None, manifest_path=None):
+    if artifact_path is None and manifest_path is None:
+        from estate_model_artifact import active_nowcast
+        artifact_path, manifest_path = active_nowcast()
+    elif artifact_path is None or manifest_path is None:
+        raise ValueError('Provide both artifact and manifest paths')
+    spec = json.loads(manifest_path.read_text(encoding='utf-8'))
     body = artifact_path.read_bytes()
     if hashlib.sha256(body).hexdigest() != spec['sha256']:
         raise ValueError('Monthly valuation artifact checksum mismatch')
     month = model['model_month']
     # Never extrapolate an unvalidated January/February or new training year.
-    supported = month[:4] == spec['prediction_year'] and int(month[5:]) >= 3
+    supported = month[:4] == spec['prediction_year'] and int(month[5:]) >= 3 and month >= spec.get('available_from_month', month)
     meta = {**spec, 'month': month, 'status': 'available' if supported else 'unsupported_period',
             'available_types': 0, 'total_types': len(model['recommendations'])}
     for rec in model['recommendations']:

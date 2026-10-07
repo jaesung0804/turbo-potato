@@ -1,0 +1,814 @@
+{
+  "evaluation_period": "2026-07~2026-08",
+  "calibration": {
+    "contract_period": "2026-03~2026-05",
+    "available_after": "2026-07-01",
+    "publication_lag_days": 31,
+    "rows": 74506,
+    "offsets": [
+      -0.009751964528535773,
+      -0.0016295744315866223,
+      0.011396432660878641
+    ],
+    "method": "out_of_time_quantile_residual_offsets; retained L1 median"
+  },
+  "candidate": {
+    "overall": {
+      "transactions": 37296,
+      "complexes": 8731,
+      "pinball_log": {
+        "p10": 0.01305029112070945,
+        "p50": 0.027416921836766448,
+        "p90": 0.013713230005813436
+      },
+      "mean_pinball_log": 0.018060147654429783,
+      "cdf_pct": {
+        "p10": 6.743350493350493,
+        "p50": 46.31864006864007,
+        "p90": 86.88599313599313
+      },
+      "coverage80_pct": 80.14264264264264,
+      "complex_balanced_coverage80_pct": 79.59765448401903,
+      "median_mae_oku": 0.3795600588476801,
+      "median_mape_pct": 5.519287951142779,
+      "mean_width_oku": 1.2341567240787905
+    },
+    "raw_crossing_pct": 0.10725010725010724,
+    "groups": [
+      {
+        "dimension": "region",
+        "label": "경기도",
+        "transactions": 24273,
+        "complexes": 4775,
+        "pinball_log": {
+          "p10": 0.012321799190655602,
+          "p50": 0.02649360453896704,
+          "p90": 0.01357183325860281
+        },
+        "mean_pinball_log": 0.017462412329408483,
+        "cdf_pct": {
+          "p10": 7.226136035924691,
+          "p50": 47.51781815185597,
+          "p90": 86.24397478680015
+        },
+        "coverage80_pct": 79.01783875087546,
+        "complex_balanced_coverage80_pct": 78.94498346100033,
+        "median_mae_oku": 0.2978380177661744,
+        "median_mape_pct": 5.273784471720664,
+        "mean_width_oku": 0.9269800416515415
+      },
+      {
+        "dimension": "region",
+        "label": "서울특별시",
+        "transactions": 8705,
+        "complexes": 2877,
+        "pinball_log": {
+          "p10": 0.015939880949061656,
+          "p50": 0.031248609265945554,
+          "p90": 0.015010931294437877
+        },
+        "mean_pinball_log": 0.02073314050314843,
+        "cdf_pct": {
+          "p10": 3.9172889144170018,
+          "p50": 39.90809879379667,
+          "p90": 85.03159103963239
+        },
+        "coverage80_pct": 81.1143021252154,
+        "complex_balanced_coverage80_pct": 79.32234435363574,
+        "median_mae_oku": 0.6998823013639346,
+        "median_mape_pct": 6.45108258094393,
+        "mean_width_oku": 2.372095216319662
+      },
+      {
+        "dimension": "region",
+        "label": "인천광역시",
+        "transactions": 4318,
+        "complexes": 1079,
+        "pinball_log": {
+          "p10": 0.011320046832241885,
+          "p50": 0.024882610048547464,
+          "p90": 0.011891931610160564
+        },
+        "mean_pinball_log": 0.016031529496983336,
+        "cdf_pct": {
+          "p10": 9.726725335803613,
+          "p50": 52.50115794349236,
+          "p90": 94.23344140805928
+        },
+        "coverage80_pct": 84.50671607225567,
+        "complex_balanced_coverage80_pct": 83.22005613371972,
+        "median_mae_oku": 0.1931853441805639,
+        "median_mape_pct": 5.02087055966385,
+        "mean_width_oku": 0.6668443196322484
+      },
+      {
+        "dimension": "month",
+        "label": "2026-07",
+        "transactions": 21331,
+        "complexes": 7020,
+        "pinball_log": {
+          "p10": 0.012847531244895592,
+          "p50": 0.027046782016369796,
+          "p90": 0.013678399227028971
+        },
+        "mean_pinball_log": 0.017857570829431478,
+        "cdf_pct": {
+          "p10": 6.263185035863297,
+          "p50": 45.31901926773241,
+          "p90": 86.85950025784071
+        },
+        "coverage80_pct": 80.5963152219774,
+        "complex_balanced_coverage80_pct": 80.16978008852936,
+        "median_mae_oku": 0.3887130607425566,
+        "median_mape_pct": 5.411348415302889,
+        "mean_width_oku": 1.2772846837086096
+      },
+      {
+        "dimension": "month",
+        "label": "2026-08",
+        "transactions": 15965,
+        "complexes": 6301,
+        "pinball_log": {
+          "p10": 0.013321200667279485,
+          "p50": 0.027911469441456244,
+          "p90": 0.013759767766054823
+        },
+        "mean_pinball_log": 0.018330812624930182,
+        "cdf_pct": {
+          "p10": 7.3849044785468205,
+          "p50": 47.654243658001874,
+          "p90": 86.92139054181021
+        },
+        "coverage80_pct": 79.5364860632634,
+        "complex_balanced_coverage80_pct": 79.41759742590673,
+        "median_mae_oku": 0.3673306392786472,
+        "median_mape_pct": 5.663507070403706,
+        "mean_width_oku": 1.176533015537377
+      },
+      {
+        "dimension": "history",
+        "label": "sparse_lt3",
+        "transactions": 15049,
+        "complexes": 6863,
+        "pinball_log": {
+          "p10": 0.016276043495428435,
+          "p50": 0.03493186100797138,
+          "p90": 0.017145354132194535
+        },
+        "mean_pinball_log": 0.022784419545198147,
+        "cdf_pct": {
+          "p10": 7.309455777792544,
+          "p50": 47.896870223935146,
+          "p90": 86.98252375573128
+        },
+        "coverage80_pct": 79.67306797793874,
+        "complex_balanced_coverage80_pct": 79.32257530301389,
+        "median_mae_oku": 0.513010651503193,
+        "median_mape_pct": 7.104780656362706,
+        "mean_width_oku": 1.5925773584448082
+      },
+      {
+        "dimension": "history",
+        "label": "supported_ge3",
+        "transactions": 22247,
+        "complexes": 4407,
+        "pinball_log": {
+          "p10": 0.010868228483628504,
+          "p50": 0.022333435542548182,
+          "p90": 0.011391567041013495
+        },
+        "mean_pinball_log": 0.014864410355730044,
+        "cdf_pct": {
+          "p10": 6.3604081449184156,
+          "p50": 45.25104508473052,
+          "p90": 86.82069492515845
+        },
+        "coverage80_pct": 80.46028678024003,
+        "complex_balanced_coverage80_pct": 80.21332236974649,
+        "median_mae_oku": 0.28928730436964656,
+        "median_mape_pct": 4.446780209835876,
+        "mean_width_oku": 0.9917028144921407
+      },
+      {
+        "dimension": "floor",
+        "label": "above3",
+        "transactions": 30991,
+        "complexes": 7935,
+        "pinball_log": {
+          "p10": 0.01270153362058139,
+          "p50": 0.026619178700719805,
+          "p90": 0.013539652847980263
+        },
+        "mean_pinball_log": 0.01762012172309386,
+        "cdf_pct": {
+          "p10": 6.789067793875642,
+          "p50": 46.126294730728276,
+          "p90": 86.62837598012327
+        },
+        "coverage80_pct": 79.83930818624762,
+        "complex_balanced_coverage80_pct": 79.27318473091836,
+        "median_mae_oku": 0.3748513150638426,
+        "median_mape_pct": 5.331681053370191,
+        "mean_width_oku": 1.2213153746643863
+      },
+      {
+        "dimension": "floor",
+        "label": "low_1to3",
+        "transactions": 6305,
+        "complexes": 3833,
+        "pinball_log": {
+          "p10": 0.014764540714122514,
+          "p50": 0.031338072911978924,
+          "p90": 0.014566414731969022
+        },
+        "mean_pinball_log": 0.02022300945269016,
+        "cdf_pct": {
+          "p10": 6.5186360031720865,
+          "p50": 47.26407613005551,
+          "p90": 88.152260111023
+        },
+        "coverage80_pct": 81.6336241078509,
+        "complex_balanced_coverage80_pct": 81.41044811929237,
+        "median_mae_oku": 0.4027049721870788,
+        "median_mape_pct": 6.4414331325655105,
+        "mean_width_oku": 1.2972758770846273
+      }
+    ]
+  },
+  "baseline": {
+    "transactions": 37296,
+    "complexes": 8731,
+    "pinball_log": {
+      "p10": 0.01297006416632063,
+      "p50": 0.027416921836766448,
+      "p90": 0.014014290527282534
+    },
+    "mean_pinball_log": 0.018133758843456426,
+    "cdf_pct": {
+      "p10": 8.41913341913342,
+      "p50": 46.31864006864007,
+      "p90": 86.41141141141141
+    },
+    "coverage80_pct": 77.99227799227799,
+    "complex_balanced_coverage80_pct": 77.62234190171307,
+    "median_mae_oku": 0.3795600588476801,
+    "median_mape_pct": 5.519287951142779,
+    "mean_width_oku": 1.1483291930757322
+  },
+  "decision": {
+    "checks": {
+      "pinball_improves": true,
+      "median_error_within_2pct": true,
+      "coverage80_75to85": true,
+      "complex_coverage80_75to85": true,
+      "subgroup_coverage_70to90": true,
+      "minimum_evaluation_rows": true
+    },
+    "passes_diagnostic_gates": true,
+    "production_approved": true,
+    "reason": "중앙값 동일, 분위수 손실 개선, 거래·단지 균등 포함률 및 집단 기준 충족. 9월 별도 진단도 공개. 명시적인 로컬 모델 교체 요청에 따라 채택."
+  },
+  "september_diagnostic": {
+    "candidate": {
+      "overall": {
+        "transactions": 12778,
+        "complexes": 5387,
+        "pinball_log": {
+          "p10": 0.012860081694680286,
+          "p50": 0.027297493224224038,
+          "p90": 0.01314649386870761
+        },
+        "mean_pinball_log": 0.017768022929204055,
+        "cdf_pct": {
+          "p10": 6.86335889810612,
+          "p50": 50.14086711535452,
+          "p90": 88.3315072781343
+        },
+        "coverage80_pct": 81.46814838002817,
+        "complex_balanced_coverage80_pct": 81.072673643079,
+        "median_mae_oku": 0.34017618827106966,
+        "median_mape_pct": 5.547681684080727,
+        "mean_width_oku": 1.0974119261501567
+      },
+      "raw_crossing_pct": 0.10173736108937237,
+      "groups": [
+        {
+          "dimension": "region",
+          "label": "경기도",
+          "transactions": 8953,
+          "complexes": 3394,
+          "pinball_log": {
+            "p10": 0.01230562535732754,
+            "p50": 0.026456474205856177,
+            "p90": 0.013005828787763463
+          },
+          "mean_pinball_log": 0.017255976116982378,
+          "cdf_pct": {
+            "p10": 7.0367474589523065,
+            "p50": 49.98324583938344,
+            "p90": 87.27800737183067
+          },
+          "coverage80_pct": 80.24125991287836,
+          "complex_balanced_coverage80_pct": 79.82576735839582,
+          "median_mae_oku": 0.27489494591265345,
+          "median_mape_pct": 5.348066730341385,
+          "mean_width_oku": 0.877399151208023
+        },
+        {
+          "dimension": "region",
+          "label": "서울특별시",
+          "transactions": 2058,
+          "complexes": 1281,
+          "pinball_log": {
+            "p10": 0.016858338353082352,
+            "p50": 0.03319558250678569,
+            "p90": 0.014784708393591531
+          },
+          "mean_pinball_log": 0.021612876417819848,
+          "cdf_pct": {
+            "p10": 5.00485908649174,
+            "p50": 48.63945578231292,
+            "p90": 87.41496598639455
+          },
+          "coverage80_pct": 82.41010689990281,
+          "complex_balanced_coverage80_pct": 82.60901081744173,
+          "median_mae_oku": 0.753476177858112,
+          "median_mape_pct": 6.900193799401663,
+          "mean_width_oku": 2.4187571968829356
+        },
+        {
+          "dimension": "region",
+          "label": "인천광역시",
+          "transactions": 1767,
+          "complexes": 712,
+          "pinball_log": {
+            "p10": 0.011012676706184629,
+            "p50": 0.02468932996895413,
+            "p90": 0.011951207494900216
+          },
+          "mean_pinball_log": 0.015884404723346315,
+          "cdf_pct": {
+            "p10": 8.149405772495756,
+            "p50": 52.68817204301075,
+            "p90": 94.73684210526315
+          },
+          "coverage80_pct": 86.5874363327674,
+          "complex_balanced_coverage80_pct": 84.25238152209023,
+          "median_mae_oku": 0.1895771980417358,
+          "median_mape_pct": 4.983834908471133,
+          "mean_width_oku": 0.6732160047516649
+        },
+        {
+          "dimension": "month",
+          "label": "2026-09",
+          "transactions": 12778,
+          "complexes": 5387,
+          "pinball_log": {
+            "p10": 0.012860081694680286,
+            "p50": 0.027297493224224038,
+            "p90": 0.01314649386870761
+          },
+          "mean_pinball_log": 0.017768022929204055,
+          "cdf_pct": {
+            "p10": 6.86335889810612,
+            "p50": 50.14086711535452,
+            "p90": 88.3315072781343
+          },
+          "coverage80_pct": 81.46814838002817,
+          "complex_balanced_coverage80_pct": 81.072673643079,
+          "median_mae_oku": 0.34017618827106966,
+          "median_mape_pct": 5.547681684080727,
+          "mean_width_oku": 1.0974119261501567
+        },
+        {
+          "dimension": "history",
+          "label": "sparse_lt3",
+          "transactions": 5177,
+          "complexes": 3478,
+          "pinball_log": {
+            "p10": 0.015720833790632983,
+            "p50": 0.03425891767916138,
+            "p90": 0.015653040136469135
+          },
+          "mean_pinball_log": 0.021877597202087852,
+          "cdf_pct": {
+            "p10": 7.707166312536218,
+            "p50": 50.87888738651729,
+            "p90": 89.08634344214796
+          },
+          "coverage80_pct": 81.37917712961175,
+          "complex_balanced_coverage80_pct": 80.75481256332321,
+          "median_mae_oku": 0.44250590645819116,
+          "median_mape_pct": 7.0787412254314885,
+          "mean_width_oku": 1.3982244150303293
+        },
+        {
+          "dimension": "history",
+          "label": "supported_ge3",
+          "transactions": 7601,
+          "complexes": 2852,
+          "pinball_log": {
+            "p10": 0.010911638910737806,
+            "p50": 0.02255610466966436,
+            "p90": 0.011439298759090331
+          },
+          "mean_pinball_log": 0.014969014113164137,
+          "cdf_pct": {
+            "p10": 6.288646230759111,
+            "p50": 49.63820549927641,
+            "p90": 87.81739244836206
+          },
+          "coverage80_pct": 81.52874621760294,
+          "complex_balanced_coverage80_pct": 81.63472083583984,
+          "median_mae_oku": 0.2704799705293609,
+          "median_mape_pct": 4.504885309186254,
+          "mean_width_oku": 0.8925301665221274
+        },
+        {
+          "dimension": "floor",
+          "label": "above3",
+          "transactions": 10606,
+          "complexes": 4791,
+          "pinball_log": {
+            "p10": 0.012355078913271275,
+            "p50": 0.02589474884841983,
+            "p90": 0.012712934679087186
+          },
+          "mean_pinball_log": 0.016987587480259473,
+          "cdf_pct": {
+            "p10": 6.7320384687912505,
+            "p50": 49.575711861210635,
+            "p90": 88.27079011880068
+          },
+          "coverage80_pct": 81.53875165000943,
+          "complex_balanced_coverage80_pct": 81.03530082421514,
+          "median_mae_oku": 0.33421914757336163,
+          "median_mape_pct": 5.20471306749833,
+          "mean_width_oku": 1.0838190162144805
+        },
+        {
+          "dimension": "floor",
+          "label": "low_1to3",
+          "transactions": 2172,
+          "complexes": 1735,
+          "pinball_log": {
+            "p10": 0.015326039107030094,
+            "p50": 0.03414717409428857,
+            "p90": 0.015263588143622489
+          },
+          "mean_pinball_log": 0.021578933781647075,
+          "cdf_pct": {
+            "p10": 7.504604051565378,
+            "p50": 52.90055248618785,
+            "p90": 88.6279926335175
+          },
+          "coverage80_pct": 81.12338858195211,
+          "complex_balanced_coverage80_pct": 81.41066282420749,
+          "median_mae_oku": 0.3692647580868576,
+          "median_mape_pct": 7.222417019013,
+          "mean_width_oku": 1.163786881388546
+        }
+      ]
+    },
+    "baseline": {
+      "transactions": 12778,
+      "complexes": 5387,
+      "pinball_log": {
+        "p10": 0.012845672994336645,
+        "p50": 0.027297493224224038,
+        "p90": 0.013664140846789624
+      },
+      "mean_pinball_log": 0.017935769021783534,
+      "cdf_pct": {
+        "p10": 9.610267647519173,
+        "p50": 50.14086711535452,
+        "p90": 87.61934575050869
+      },
+      "coverage80_pct": 78.00907810298952,
+      "complex_balanced_coverage80_pct": 77.47851244057478,
+      "median_mae_oku": 0.34017618827106966,
+      "median_mape_pct": 5.547681684080727,
+      "mean_width_oku": 1.0238559528082987
+    }
+  },
+  "training": {
+    "rows": 727966,
+    "trees": 600,
+    "leaves": 31,
+    "positive_weight_rows": 727966,
+    "first_month": "2021-03",
+    "last_month": "2025-12",
+    "minimum_weight": 0.6171424155001286,
+    "effective_sample_size": 682979.0946028124
+  },
+  "artifact_sha256": "3dcc5a8299dc5a3a65b76d6511e3b74b530b7696b79be05f61d0e0d49d16d13f",
+  "artifact": {
+    "version": "estate-quantile-capital-v1",
+    "prediction_year": "2026",
+    "available_from_month": "2026-07",
+    "trained_through": "2026-06-30",
+    "base_trained_through": "2025-12-31",
+    "artifact": "models/nowcast/estate-quantile-capital-v1.joblib",
+    "artifact_bytes": 3299820,
+    "artifact_url": "https://github.com/jaesung0804/turbo-potato/releases/download/estate-quantiles-20261008-v1/model.joblib",
+    "sha256": "1eefac2f334a5b162c217ca6f15ea87411aaf754509931f07ff9a1b26a3359c2",
+    "score_error_scale": 0.08094263165106064,
+    "assumed_reporting_lag_days": 31,
+    "feature_engine": "array_equivalent_legacy_ties_v1",
+    "training": {
+      "rows": 727966,
+      "trees": 600,
+      "leaves": 31,
+      "positive_weight_rows": 727966,
+      "first_month": "2021-03",
+      "last_month": "2025-12",
+      "minimum_weight": 0.6171424155001286,
+      "effective_sample_size": 682979.0946028124
+    },
+    "calibration": {
+      "contract_period": "2026-03~2026-05",
+      "available_after": "2026-07-01",
+      "publication_lag_days": 31,
+      "rows": 74506,
+      "offsets": [
+        -0.009751964528535773,
+        -0.0016295744315866223,
+        0.011396432660878641
+      ],
+      "method": "out_of_time_quantile_residual_offsets; retained L1 median"
+    },
+    "retained_median_sha256": "f902e7a30ccc012f56563c5f3798b7a1998de38335fc0a7c14a1d700bd6c7fd7",
+    "quantiles": {
+      "levels": [
+        0.1,
+        0.5,
+        0.9
+      ],
+      "validation_passed": true,
+      "validation_period": "2026년 7~8월 · 재사용 자료 평가",
+      "historical_coverage_pct": 80.14264264264264,
+      "method": "direct_pinball_tails_temporal_calibration",
+      "median_method": "retained_l1",
+      "validation_report": "reports/estate_quantile_results_20261008.json"
+    },
+    "release_note": "기존 L1 중앙값 유지 · P10/P90 별도 학습 · 2026년 봄 거래로 보정 · 저가 거래 원본 보존",
+    "source_sha256": "8e33df9b92e9680b7ba0e736e190effd46c7be60eaa43c77805a34eac4d9b6a7",
+    "environment": {
+      "python": "3.12.4",
+      "lightgbm": "4.6.0"
+    }
+  },
+  "selection_note": "여러 후보를 순차적으로 비교한 사후 선택. 2026년 자료는 기존 연구에서 재사용했으며 독립 홀드아웃 아님.",
+  "source": {
+    "source": {
+      "raw_rows": 1160508,
+      "used_rows": 1052567,
+      "cancelled": 59331,
+      "direct_excluded": 48610,
+      "unknown_deal_type": 214019,
+      "source_sha256": "8e33df9b92e9680b7ba0e736e190effd46c7be60eaa43c77805a34eac4d9b6a7",
+      "min_date": "2021-01-01",
+      "max_date": "2026-10-06"
+    },
+    "rows": 876342,
+    "first": "2021-03",
+    "last": "2026-09",
+    "feature_sha256": "de47fed76b71193c7d05c8c44009c73899e35ab6290033cca5135c63bbde0c0f",
+    "implementation_sha256": "ac41cf9cdb4da0277c18d3ca296407e3c233842f84be38b36c2309941143a6d6",
+    "availability_policy": "historical_61_31",
+    "normalization": "log nominal 10000 KRW per sqm; no fitted scaler",
+    "january_february": "excluded to preserve original validation design",
+    "feature_engine": "array_equivalent_legacy_ties_v1",
+    "tie_order_validation": "2026-03 all numeric input columns identical to full legacy feature engine"
+  },
+  "experiments": [
+    {
+      "candidate": "direct-v1",
+      "evaluation_period": "2026-03~2026-08",
+      "metrics": {
+        "transactions": 135300,
+        "complexes": 12479,
+        "pinball_log": {
+          "p10": 0.013597832572588862,
+          "p50": 0.02854794189392044,
+          "p90": 0.013997539389702093
+        },
+        "mean_pinball_log": 0.01871443795207064,
+        "cdf_pct": {
+          "p10": 10.537324464153732,
+          "p50": 47.51589061345159,
+          "p90": 86.30598669623059
+        },
+        "coverage80_pct": 75.76866223207686,
+        "complex_balanced_coverage80_pct": 76.63786356487337,
+        "median_mae_oku": 0.447112770272517,
+        "median_mape_pct": 5.7515733494801005,
+        "mean_width_oku": 1.2674466496598464
+      },
+      "decision": {
+        "checks": {
+          "pinball_improves": false,
+          "median_error_within_2pct": true,
+          "coverage80_75to85": true,
+          "complex_coverage80_75to85": true,
+          "subgroup_coverage_70to90": true,
+          "minimum_evaluation_rows": true
+        },
+        "passes_diagnostic_gates": false,
+        "production_approved": false,
+        "reason": "Retrospective data already used in prior research; inspect all groups and approve an immutable release separately."
+      }
+    },
+    {
+      "candidate": "calibrated-v1",
+      "evaluation_period": "2026-03~2026-08",
+      "metrics": {
+        "transactions": 135300,
+        "complexes": 12479,
+        "pinball_log": {
+          "p10": 0.01369033007021555,
+          "p50": 0.028505017880258807,
+          "p90": 0.013766721641931177
+        },
+        "mean_pinball_log": 0.01865402319746846,
+        "cdf_pct": {
+          "p10": 12.504065040650406,
+          "p50": 50.265336289726534,
+          "p90": 89.52180339985219
+        },
+        "coverage80_pct": 77.01773835920177,
+        "complex_balanced_coverage80_pct": 77.76921893997896,
+        "median_mae_oku": 0.44536551785577805,
+        "median_mape_pct": 5.765198977901992,
+        "mean_width_oku": 1.3170836256832015
+      },
+      "decision": {
+        "checks": {
+          "pinball_improves": false,
+          "median_error_within_2pct": true,
+          "coverage80_75to85": true,
+          "complex_coverage80_75to85": true,
+          "subgroup_coverage_70to90": true,
+          "minimum_evaluation_rows": true
+        },
+        "passes_diagnostic_gates": false,
+        "production_approved": false,
+        "reason": "Retrospective data already used in prior research; inspect all groups and approve an immutable release separately."
+      }
+    },
+    {
+      "candidate": "retained-v2",
+      "evaluation_period": "2026-03~2026-08",
+      "metrics": {
+        "transactions": 135300,
+        "complexes": 12479,
+        "pinball_log": {
+          "p10": 0.013678247851516038,
+          "p50": 0.028022284919238454,
+          "p90": 0.013788037145125817
+        },
+        "mean_pinball_log": 0.018496189971960012,
+        "cdf_pct": {
+          "p10": 12.356984478935699,
+          "p50": 51.73762010347376,
+          "p90": 89.4220251293422
+        },
+        "coverage80_pct": 77.0650406504065,
+        "complex_balanced_coverage80_pct": 77.80441705385223,
+        "median_mae_oku": 0.441127656763935,
+        "median_mape_pct": 5.72368362494898,
+        "mean_width_oku": 1.3192040692631477
+      },
+      "decision": {
+        "checks": {
+          "pinball_improves": false,
+          "median_error_within_2pct": true,
+          "coverage80_75to85": true,
+          "complex_coverage80_75to85": true,
+          "subgroup_coverage_70to90": true,
+          "minimum_evaluation_rows": true
+        },
+        "passes_diagnostic_gates": false,
+        "production_approved": false,
+        "reason": "Retrospective data already used in prior research; inspect all groups and approve an immutable release separately."
+      }
+    },
+    {
+      "candidate": "recent-calibrated-v3",
+      "evaluation_period": "2026-07~2026-08",
+      "metrics": {
+        "transactions": 37296,
+        "complexes": 8731,
+        "pinball_log": {
+          "p10": 0.013397919525715098,
+          "p50": 0.027416921836766448,
+          "p90": 0.013990023540267264
+        },
+        "mean_pinball_log": 0.018268288300916223,
+        "cdf_pct": {
+          "p10": 7.027563277563277,
+          "p50": 46.31864006864007,
+          "p90": 86.52134277134277
+        },
+        "coverage80_pct": 79.4937794937795,
+        "complex_balanced_coverage80_pct": 78.93191826666023,
+        "median_mae_oku": 0.3795600588476801,
+        "median_mape_pct": 5.519287951142779,
+        "mean_width_oku": 1.2492337890448306
+      },
+      "decision": {
+        "checks": {
+          "pinball_improves": false,
+          "median_error_within_2pct": true,
+          "coverage80_75to85": true,
+          "complex_coverage80_75to85": true,
+          "subgroup_coverage_70to90": true,
+          "minimum_evaluation_rows": true
+        },
+        "passes_diagnostic_gates": false,
+        "production_approved": false,
+        "reason": "Retrospective data already used in prior research; inspect all groups and approve an immutable release separately."
+      }
+    },
+    {
+      "candidate": "conditional-tails-v4",
+      "evaluation_period": "2026-07~2026-08",
+      "metrics": {
+        "transactions": 37296,
+        "complexes": 8731,
+        "pinball_log": {
+          "p10": 0.01312375849105447,
+          "p50": 0.027416921836766448,
+          "p90": 0.014302020623133535
+        },
+        "mean_pinball_log": 0.018280900316984747,
+        "cdf_pct": {
+          "p10": 6.692406692406692,
+          "p50": 46.31864006864007,
+          "p90": 83.0464392964393
+        },
+        "coverage80_pct": 76.35403260403261,
+        "complex_balanced_coverage80_pct": 76.03647386603471,
+        "median_mae_oku": 0.3795600588476801,
+        "median_mape_pct": 5.519287951142779,
+        "mean_width_oku": 1.0845638237893611
+      },
+      "decision": {
+        "checks": {
+          "pinball_improves": false,
+          "median_error_within_2pct": true,
+          "coverage80_75to85": true,
+          "complex_coverage80_75to85": true,
+          "subgroup_coverage_70to90": true,
+          "minimum_evaluation_rows": true
+        },
+        "passes_diagnostic_gates": false,
+        "production_approved": false,
+        "reason": "Retrospective data already used in prior research; inspect all groups and approve an immutable release separately."
+      }
+    },
+    {
+      "candidate": "larger-v5",
+      "evaluation_period": "2026-03~2026-08",
+      "metrics": {
+        "transactions": 135300,
+        "complexes": 12479,
+        "pinball_log": {
+          "p10": 0.013335511815544961,
+          "p50": 0.028022284919238454,
+          "p90": 0.013905767442206262
+        },
+        "mean_pinball_log": 0.018421188058996507,
+        "cdf_pct": {
+          "p10": 11.277161862527716,
+          "p50": 51.73762010347376,
+          "p90": 85.29859571322986
+        },
+        "coverage80_pct": 74.02143385070215,
+        "complex_balanced_coverage80_pct": 75.64570535398215,
+        "median_mae_oku": 0.441127656763935,
+        "median_mape_pct": 5.72368362494898,
+        "mean_width_oku": 1.196922378835746
+      },
+      "decision": {
+        "checks": {
+          "pinball_improves": true,
+          "median_error_within_2pct": true,
+          "coverage80_75to85": false,
+          "complex_coverage80_75to85": true,
+          "subgroup_coverage_70to90": true,
+          "minimum_evaluation_rows": true
+        },
+        "passes_diagnostic_gates": false,
+        "production_approved": false,
+        "reason": "Retrospective data already used in prior research; inspect all groups and approve an immutable release separately."
+      }
+    }
+  ],
+  "public_refresh_comparison": {
+    "current_types": 34240,
+    "changed_point_prices": 117,
+    "max_relative_change_pct": 3.9423185293716356,
+    "note": "동일 입력의 중앙값 모델은 정확히 동일. 공개본 대비 117개 가격 변경은 로컬 추론 원본·동일 날짜 정렬 이력 차이 포함. 공개 집계 원본은 보존."
+  }
+}

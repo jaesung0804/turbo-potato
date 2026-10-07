@@ -61,13 +61,90 @@ class QuantileResidualModel:
         return self.predict_quantiles(frame)[:, 1]
 
 
-def fit(frame, through):
+class CalibratedQuantileModel(QuantileResidualModel):
+    """Out-of-time quantile offsets, fitted before the evaluation year."""
+
+    def __init__(self, base, offsets):
+        self.base = base
+        self.offsets = np.asarray(offsets, dtype=float)
+        if self.offsets.shape != (3,) or not np.isfinite(self.offsets).all():
+            raise ValueError('Require three finite calibration offsets')
+
+    def raw_quantiles(self, frame):
+        return self.base.raw_quantiles(frame) + self.offsets
+
+
+class RetainedMedianQuantileModel(QuantileResidualModel):
+    """Keep the validated L1 (= P50) model and train both conditional tails."""
+
+    def __init__(self, tails, median):
+        self.tails, self.median = tails, median
+
+    def raw_quantiles(self, frame):
+        q = self.tails.raw_quantiles(frame)
+        q[:, 1] = self.median.predict(frame)
+        return q
+
+    def predict_quantiles(self, frame):
+        q = self.raw_quantiles(frame)
+        q[:, 0] = np.minimum(q[:, 0], q[:, 1])
+        q[:, 2] = np.maximum(q[:, 2], q[:, 1])
+        return q
+
+
+class ConditionalTailModel(QuantileResidualModel):
+    """Direct conditional error quantiles around a frozen L1 median model."""
+
+    def __init__(self, median, lower, upper):
+        self.median, self.lower, self.upper = median, lower, upper
+
+    def raw_quantiles(self, frame):
+        median = self.median.predict(frame)
+        x = relative_inputs(frame)
+        x['median_residual'] = median
+        return np.column_stack([median+self.lower.predict(x), median, median+self.upper.predict(x)])
+
+    def predict_quantiles(self, frame):
+        q = self.raw_quantiles(frame)
+        q[:, 0] = np.minimum(q[:, 0], q[:, 1])
+        q[:, 2] = np.maximum(q[:, 2], q[:, 1])
+        return q
+
+
+def fit_conditional_tails(frame, median_artifact, through='2026-06-30'):
+    # Median was frozen before these contracts; these are out-of-training errors.
+    if not (pd.to_datetime(frame.month+'-01') > pd.Timestamp(median_artifact['trained_through'])).all():
+        raise ValueError('Tail labels overlap the median model training period')
+    check_training(frame, '2026-05-31')
+    if frame.month.max() > '2026-05' or through != '2026-06-30':
+        raise ValueError('Tail training and reporting lag scope changed')
+    median = median_artifact['model']
+    point = median.predict(frame)
+    x = relative_inputs(frame); x['median_residual'] = point
+    y = frame.actual.to_numpy()-frame.anchor.to_numpy()-point
+    tails = []
+    for level in (.1, .9):
+        model = LGBMRegressor(objective='quantile', alpha=level, n_estimators=120,
+            learning_rate=.04, num_leaves=7, min_child_samples=500, reg_lambda=20,
+            random_state=20261008, n_jobs=4, verbosity=-1)
+        model.fit(x, y)
+        tails.append(model)
+    return {'model': ConditionalTailModel(median, *tails), 'columns': median_artifact['columns'],
+        'quantile_levels': list(LEVELS), 'version': 'estate-conditional-quantiles-v1',
+        'trained_through': through, 'base_trained_through': median_artifact['trained_through'],
+        'feature_engine': 'array_equivalent_legacy_ties_v1',
+        'training': {'rows': len(frame), 'positive_weight_rows': len(frame),
+            'first_month': str(frame.month.min()), 'last_month': str(frame.month.max()),
+            'reporting_lag_days': 31, 'all_weights': 1,
+            'method': 'P10/P90 conditional residual pinball; frozen L1 P50 retained'}}
+
+def fit(frame, through, *, trees=220, leaves=23):
     weights = check_training(frame, through)
     x, y = relative_inputs(frame), frame.actual - frame.anchor
     models = []
     for level in LEVELS:
         model = LGBMRegressor(objective='quantile', alpha=level,
-            n_estimators=220, learning_rate=.04, num_leaves=23,
+            n_estimators=trees, learning_rate=.04, num_leaves=leaves,
             min_child_samples=100, reg_lambda=10, random_state=20261008,
             n_jobs=4, verbosity=-1)
         model.fit(x, y, sample_weight=weights)
@@ -75,7 +152,7 @@ def fit(frame, through):
     return {'model': QuantileResidualModel(models), 'columns': COLS,
             'trained_through': through, 'quantile_levels': list(LEVELS),
             'version': VERSION, 'feature_engine': 'array_stable_publication_v1',
-            'training': {'rows': len(frame),
+            'training': {'rows': len(frame), 'trees': trees, 'leaves': leaves,
             'positive_weight_rows': int((weights > 0).sum()),
             'first_month': str(frame.month.min()), 'last_month': str(frame.month.max()),
             'minimum_weight': float(weights.min()),
@@ -113,7 +190,7 @@ def evaluate(frame, artifact):
     if not (pd.to_datetime(frame.month+'-01') > pd.Timestamp(artifact['trained_through'])).all():
         raise ValueError('Evaluation overlaps training')
     raw = artifact['model'].raw_quantiles(frame)
-    q = frame.anchor.to_numpy()[:, None] + np.sort(raw, axis=1)
+    q = frame.anchor.to_numpy()[:, None] + artifact['model'].predict_quantiles(frame)
     result = {'overall': metrics(frame, q),
               'raw_crossing_pct': float((np.diff(raw, axis=1) < 0).any(axis=1).mean()*100),
               'groups': []}
@@ -146,7 +223,8 @@ def attach_quantiles(valuation, row, spec):
         raise ValueError('P50 does not match the canonical point price')
     valuation['quantiles'] = {'status': 'available', 'levels': list(LEVELS),
         'prices_billion': dict(zip(NAMES, map(canonical_price, values))),
-        'method': 'direct_pinball_relative_lagged_features',
+        'method': config.get('method', 'direct_pinball_relative_lagged_features'),
+        'median_method': config.get('median_method', 'direct_pinball'),
         'basis': 'conditional_transaction_price_at_representative_floor',
         'nominal_coverage': .8, 'validation_period': config['validation_period'],
         'historical_coverage_pct': config['historical_coverage_pct']}

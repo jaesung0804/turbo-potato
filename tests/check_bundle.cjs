@@ -20,6 +20,18 @@ const run=s=>vm.runInContext(s,context);
     'Every displayed neutral price must produce exactly 50');
  }
  console.log(`Canonical price/score contract verified for ${scored.length} types.`);
+ if(manifest.model.nowcast?.quantiles){
+  const valued=run('state.recommendations.recommendations.filter(r=>r.current_valuation?.status==="available")');
+  assert.equal(valued.length,manifest.model.nowcast.available_types);
+  for(const rec of valued){
+   context.rec=rec;
+   const q=run('directPriceQuantiles(rec)');
+   assert.ok(q,'Every available current price must carry ordered matching P10/P50/P90');
+   assert.equal(q.prices_billion.p50,rec.current_valuation.price_billion);
+   assert.equal(run('reviewScoreAtPrice(rec,rec.current_valuation.price_billion)'),50);
+  }
+  console.log(`Direct quantiles verified for ${valued.length} types.`);
+ }
  if(manifest.model.nowcast?.price_confidence){
   const valued=run('state.recommendations.recommendations.filter(r=>r.current_valuation?.status==="available")');
   const counts={};

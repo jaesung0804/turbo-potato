@@ -64,6 +64,12 @@ def test_crossing_rearrangement_and_scale_invariance():
     np.testing.assert_array_equal(model.predict_quantiles(frame), model.predict_quantiles(shifted))
 
 
+def test_retained_median_does_not_move_when_tails_cross():
+    from estate_quantile_nowcast import RetainedMedianQuantileModel
+    model = RetainedMedianQuantileModel(QuantileResidualModel([Constant(.2), Constant(.3), Constant(-.4)]), Constant(.1))
+    np.testing.assert_array_equal(model.predict_quantiles(panel(10))[0], [.1, .1, .1])
+
+
 def test_evaluation_is_future_only_and_reports_groups():
     model = QuantileResidualModel([Constant(-.5), Constant(0), Constant(.3)])
     artifact = {'model': model, 'trained_through': '2025-12-31'}

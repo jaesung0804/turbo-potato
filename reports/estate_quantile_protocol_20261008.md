@@ -1,95 +1,11 @@
-# Direct price quantile candidate — 2026-10-08
+# 분위수 모델 설계 기록 — 2026년 10월 8일
 
-Status: implementation and synthetic contracts only. No real-data fit, market
-accuracy result, or production quantile artifact has been produced. The current
-published price model and its separate symmetric error band remain active.
+초기에는 백엔드 실험 경로만 구현했으나, 사용자의 명시적인 로컬 실행 요청에 따라 검증된 로컬 자료로 학습·비교를 완료했다. 현재 상태는 [최종 결과](estate_quantile_results_20261008.md)와 [실행 지침](../docs/local-model-and-release.md)에 기록했다.
 
-## Choice and interpretation
+TFT의 다중 분위수 출력 취지를 참고해 P10/P50/P90의 조건부 거래가격 분포를 모델링한다. 불규칙하고 희소한 거래에 시차·주변 가격·층·거래량을 공유할 수 있는 LightGBM 분위수 회귀를 선택했다. TFT 또는 Chronos-2를 직접 학습해 우열을 비교한 것은 아니다.
 
-Use pooled LightGBM pinball regressors at 0.1, 0.5 and 0.9, with the existing
-lagged transaction, neighborhood, exact-area, age, activity and floor features.
-Targets are log unit-price residuals relative to the historical anchor; historical
-price levels enter as relative differences, and every eligible past row retains
-positive recency weight (48-month half-life). Three independent fits permit
-asymmetric tails. Increasing rearrangement resolves quantile crossing and is
-reported separately. The rearranged P50 is the canonical current price.
+가격이 낮다는 이유로 원본을 제거하거나 중복을 줄이거나 가중치를 낮추지 않는다. 기존 취소·직거래 제외 정책은 별도다. 가격 분포는 증여 여부를 판정하지 않으며 저가 거래가 많으면 중앙값도 움직인다. 현재 월의 거래가격 추정과 미래 상승률을 구분한다.
 
-This is a conditional transaction-price distribution at the stated month/floor,
-not a confidence interval for its median or an inference about related parties.
-No low-price exclusion, winsorization, duplicate suppression or price-dependent
-weight is added. Existing source rules excluding cancellations and direct deals
-remain explicit. Original repeated rows survive. If low sales dominate the local
-history, even its median can move: quantiles do not identify a gift or guarantee
-robustness to an arbitrary mixture. A cheap sale outside the band remains visible.
+기존 백엔드 실행기 `analyze_estate_quantiles.py`는 해당 환경의 복원·용량·CAS 검사를 유지한다. 로컬 실행기 `train_estate_quantiles_local.py`는 검증된 파일의 해시·범위·학습 시점을 검사한다. 로컬 작업을 백엔드 용량 검사로 막지 않는다.
 
-TFT supplies the useful multi-quantile objective and covariate distinction.
-Chronos-2 is a contemporary covariate-aware forecasting alternative. Sparse,
-irregular exact-area transactions with transaction-specific floors make a pooled
-tabular quantile baseline a practical first experiment; superiority to TFT or
-Chronos is not claimed without an actual matched benchmark. The implementation
-is a monthly nowcast, not a multi-horizon future appreciation model.
-
-- [TFT paper, Google Research](https://research.google/pubs/temporal-fusion-transformers-for-interpretable-multi-horizon-time-series-forecasting/)
-- [Chronos-2, Amazon Science](https://www.amazon.science/blog/introducing-chronos-2-from-univariate-to-universal-forecasting)
-- [LightGBM objective and alpha parameters](https://lightgbm.readthedocs.io/en/latest/Parameters.html)
-
-## Frozen experiment scope
-
-Reuse already saved, verified capital-region history; collect no new originals.
-Training targets: March–December 2007–2025. Evaluation: March–August 2026.
-January/February remain excluded consistently with the existing feature engine.
-The feature cutoff respects the historical 61/31-day availability policy; actual
-publication vintages are unavailable, so retrospective revisions/cancellations
-remain a limitation. New inference uses the same stable tie ordering as training.
-
-Keep parameters at 220 trees, learning rate 0.04, 23 leaves, minimum child 100,
-lambda 10, seed 20261008. No search guided by the named low-price example. Compare
-to the exact frozen 2026 production median and error-band artifacts after checking
-their SHA-256s. The baseline endpoints are its old symmetric 80% error band; they
-are not relabeled as directly trained quantiles.
-
-Report pinball loss for each level, observed CDF, median MAE/MAPE, interval width,
-80% transaction coverage, complex-balanced coverage and crossings. Break down by
-region, month, fewer than three recent trades, and low/missing/other floors.
-Diagnostic gates require improved mean pinball, median MAE no more than 2% worse,
-75–85% overall and complex-balanced coverage, and 70–90% coverage in groups with
-at least 100 trades. Require at least 1,000 evaluation trades. Small groups remain
-unverified. These diagnostics do not automatically approve production.
-
-The 2026 period was used in prior research and the motivating case is known.
-Results must therefore be labeled retrospective, not untouched holdout results.
-Record later observed months separately for prospective monitoring after an
-explicitly validated release.
-
-## Storage and release boundary
-
-`analyze_estate_quantiles.py` requires the existing read-only storage readiness
-gate before reading a source or fitting. The current gate has no live provider
-capacity/free-resource/retention/conflict-probe adapter and returns `ready=false`.
-Its 64 MiB compressed / 256 MiB expanded verification limits also cannot be
-silently raised to fit a large corpus. Resolve those prerequisites with actual
-provider evidence and a verified supported input scope; do not fabricate a
-certificate or bypass the gate with an unverified local raw file.
-
-Restore the exact source and `estate-model-state` before processing. Candidate
-output is a new directory inside the restored model state. Retain the original
-source snapshot, destination receipt, input and code hashes. Verify destination
-head again before saving, and publish only via the existing CAS push using the
-original receipt. A conflict requires review/recomputation, not a refreshed
-receipt for stale output. No model binaries or private profiles belong in Git.
-
-There is no push-triggered training workflow. The runner is an explicit candidate
-experiment, never an active model switch. Promotion additionally requires a new
-immutable validated manifest with `quantiles`, matching stable feature-engine
-identity and P50, and no legacy `confidence` configuration. Until then the UI and
-Excel keep old reference bands distinct from empty direct-quantile fields.
-
-## Excel and travel scope
-
-The separately deployed Excel feature exports the complete filtered result and
-blank visit cells. Four destinations use weekday 08:00 public transit. Locally
-stored, source-dated facility facts and verified Naver observations are private
-browser data. Only the example complex has all four routes verified so far;
-this is not an automatic all-complex transit scraper. Unqueried travel times,
-unverified FAR/land shares and asking prices remain blank. 2024-10 facility data
-are labeled with that date, not presented as a current facility audit.
+엑셀은 비교표와 출처 두 시트로 정리했으며, 공개 단지 정보와 네이버 지도 08:00 대중교통 경로를 로컬 프로그램으로 채운다. 실제 두 단지·네 목적지를 확인했다. 미조회 자료나 정확한 대지지분이 없는 경우는 빈 칸으로 두며 개인 목적지는 공개하지 않는다.

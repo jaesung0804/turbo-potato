@@ -1,0 +1,49 @@
+name: 로컬 검증 결과 배포
+on:
+  workflow_dispatch:
+    inputs:
+      release_tag:
+        description: 검증한 로컬 모델 릴리스 태그
+        type: string
+        required: true
+      site_sha256:
+        description: 로컬에서 계산한 site.zip SHA-256
+        type: string
+        required: true
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+concurrency:
+  group: estate-raw-data-update
+  cancel-in-progress: false
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: 로컬 계산 결과의 크기·체크섬·경로 검증
+        env:
+          RELEASE_TAG: ${{ inputs.release_tag }}
+          SITE_SHA256: ${{ inputs.site_sha256 }}
+        run: python local_site_release.py download --tag "$RELEASE_TAG" --checksum "$SITE_SHA256" --sha "$GITHUB_SHA"
+      - name: 가격·전체 목록·분위수 연결 검사
+        run: node tests/check_bundle.cjs .work/site
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: .work/site
+      - uses: actions/deploy-pages@v4
+        id: deployment
+      - name: 실제 공개 파일 확인
+        run: python verify_public_site.py --url 'https://jaesung0804.github.io/turbo-potato/' --sha "$GITHUB_SHA"

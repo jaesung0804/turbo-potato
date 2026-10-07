@@ -1,0 +1,56 @@
+{
+  "version": "estate-quantile-capital-v1",
+  "prediction_year": "2026",
+  "available_from_month": "2026-07",
+  "trained_through": "2026-06-30",
+  "base_trained_through": "2025-12-31",
+  "artifact": "models/nowcast/estate-quantile-capital-v1.joblib",
+  "artifact_bytes": 3299820,
+  "artifact_url": "https://github.com/jaesung0804/turbo-potato/releases/download/estate-quantiles-20261008-v1/model.joblib",
+  "sha256": "1eefac2f334a5b162c217ca6f15ea87411aaf754509931f07ff9a1b26a3359c2",
+  "score_error_scale": 0.08094263165106064,
+  "assumed_reporting_lag_days": 31,
+  "feature_engine": "array_equivalent_legacy_ties_v1",
+  "training": {
+    "rows": 727966,
+    "trees": 600,
+    "leaves": 31,
+    "positive_weight_rows": 727966,
+    "first_month": "2021-03",
+    "last_month": "2025-12",
+    "minimum_weight": 0.6171424155001286,
+    "effective_sample_size": 682979.0946028124
+  },
+  "calibration": {
+    "contract_period": "2026-03~2026-05",
+    "available_after": "2026-07-01",
+    "publication_lag_days": 31,
+    "rows": 74506,
+    "offsets": [
+      -0.009751964528535773,
+      -0.0016295744315866223,
+      0.011396432660878641
+    ],
+    "method": "out_of_time_quantile_residual_offsets; retained L1 median"
+  },
+  "retained_median_sha256": "f902e7a30ccc012f56563c5f3798b7a1998de38335fc0a7c14a1d700bd6c7fd7",
+  "quantiles": {
+    "levels": [
+      0.1,
+      0.5,
+      0.9
+    ],
+    "validation_passed": true,
+    "validation_period": "2026년 7~8월 · 재사용 자료 평가",
+    "historical_coverage_pct": 80.14264264264264,
+    "method": "direct_pinball_tails_temporal_calibration",
+    "median_method": "retained_l1",
+    "validation_report": "reports/estate_quantile_results_20261008.json"
+  },
+  "release_note": "기존 L1 중앙값 유지 · P10/P90 별도 학습 · 2026년 봄 거래로 보정 · 저가 거래 원본 보존",
+  "source_sha256": "8e33df9b92e9680b7ba0e736e190effd46c7be60eaa43c77805a34eac4d9b6a7",
+  "environment": {
+    "python": "3.12.4",
+    "lightgbm": "4.6.0"
+  }
+}
