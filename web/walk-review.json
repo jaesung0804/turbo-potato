@@ -1,5 +1,5 @@
 {
-  "schema_version": "mullae-walk-review-v1",
+  "schema_version": "mullae-walk-review-v3",
   "review_only": true,
   "operating_model_changed": false,
   "source_contract_sha256": "3b2397abc325ae1396eefce61279f3780800552786dd89b08ac50e2e652a48ca",
@@ -10,7 +10,11 @@
     "estimated": 31,
     "disconnected": 11,
     "terrain_reference": 27,
-    "terrain_excluded": 4
+    "terrain_excluded": 4,
+    "route_review": 30,
+    "review_estimated": 25,
+    "review_disconnected": 5,
+    "comparison_estimated": 6
   },
   "sources": [
     {
@@ -78,7 +82,14 @@
         "used_in_duration": false
       },
       "bus_reported": null,
-      "school_reference_date": null
+      "school_reference_date": null,
+      "station_name": "신도림역",
+      "route_review_status": "no_specific_flag",
+      "route_review_reason": null,
+      "route_review_reasons": [],
+      "route_review_notes": [
+        "양 끝 중 50m 이상인 직선 연결이 있습니다. 길이만으로 통행 오류를 판정하지 않았습니다."
+      ]
     },
     {
       "id": "expanded:ffc3ded8089bfe87371a4560",
@@ -121,7 +132,14 @@
         "used_in_duration": false
       },
       "bus_reported": null,
-      "school_reference_date": "2026-10-01"
+      "school_reference_date": "2026-10-01",
+      "station_name": null,
+      "route_review_status": "no_specific_flag",
+      "route_review_reason": null,
+      "route_review_reasons": [],
+      "route_review_notes": [
+        "양 끝 중 50m 이상인 직선 연결이 있습니다. 길이만으로 통행 오류를 판정하지 않았습니다."
+      ]
     },
     {
       "id": "expanded:74683d102881b74ef7cbe298",
@@ -164,7 +182,14 @@
         "used_in_duration": false
       },
       "bus_reported": null,
-      "school_reference_date": null
+      "school_reference_date": null,
+      "station_name": null,
+      "route_review_status": "no_specific_flag",
+      "route_review_reason": null,
+      "route_review_reasons": [],
+      "route_review_notes": [
+        "양 끝 중 50m 이상인 직선 연결이 있습니다. 길이만으로 통행 오류를 판정하지 않았습니다."
+      ]
     },
     {
       "id": "expanded:25479068d1dfd8eb3431f0b5",
@@ -201,7 +226,14 @@
         "used_in_duration": false
       },
       "bus_reported": null,
-      "school_reference_date": null
+      "school_reference_date": null,
+      "station_name": "도림천역",
+      "route_review_status": "no_specific_flag",
+      "route_review_reason": null,
+      "route_review_reasons": [],
+      "route_review_notes": [
+        "양 끝 중 50m 이상인 직선 연결이 있습니다. 길이만으로 통행 오류를 판정하지 않았습니다."
+      ]
     },
     {
       "id": "expanded:f64d019fe68d3e7bb8174237",
@@ -244,7 +276,21 @@
         "used_in_duration": false
       },
       "bus_reported": null,
-      "school_reference_date": "2026-10-01"
+      "school_reference_date": "2026-10-01",
+      "station_name": null,
+      "route_review_status": "needs_review",
+      "route_review_reason": "차도 횡단 미확인",
+      "route_review_reasons": [
+        {
+          "code": "road_crossing",
+          "label": "차도 횡단 미확인",
+          "detail": "직선 연결이 도로 중심선을 가로지릅니다. 실제 횡단보도·접근 동선을 확인해야 합니다."
+        }
+      ],
+      "route_review_notes": [
+        "양 끝 중 50m 이상인 직선 연결이 있습니다. 길이만으로 통행 오류를 판정하지 않았습니다.",
+        "건물 안 대표점의 출입 동선은 미확인입니다. 중간 건물 관통과는 구분합니다."
+      ]
     },
     {
       "id": "expanded:4b7dcc84d89197ed5f1e34ef",
@@ -287,7 +333,20 @@
         "used_in_duration": false
       },
       "bus_reported": null,
-      "school_reference_date": null
+      "school_reference_date": null,
+      "station_name": null,
+      "route_review_status": "needs_review",
+      "route_review_reason": "직선 연결 비중 큼",
+      "route_review_reasons": [
+        {
+          "code": "connector_dominant",
+          "label": "직선 연결 비중 큼",
+          "detail": "거리 합계의 절반 이상이 실제 보행을 확인하지 않은 직선 연결입니다."
+        }
+      ],
+      "route_review_notes": [
+        "양 끝 중 50m 이상인 직선 연결이 있습니다. 길이만으로 통행 오류를 판정하지 않았습니다."
+      ]
     },
     {
       "id": "expanded:03246a60e3740070339a5f00",
@@ -324,7 +383,14 @@
         "used_in_duration": false
       },
       "bus_reported": null,
-      "school_reference_date": null
+      "school_reference_date": null,
+      "station_name": "도림천역",
+      "route_review_status": "no_specific_flag",
+      "route_review_reason": null,
+      "route_review_reasons": [],
+      "route_review_notes": [
+        "양 끝 중 50m 이상인 직선 연결이 있습니다. 길이만으로 통행 오류를 판정하지 않았습니다."
+      ]
     },
     {
       "id": "expanded:0907287ae7c9ddd18a33968d",
@@ -367,7 +433,21 @@
         "used_in_duration": false
       },
       "bus_reported": null,
-      "school_reference_date": "2026-10-01"
+      "school_reference_date": "2026-10-01",
+      "station_name": null,
+      "route_review_status": "needs_review",
+      "route_review_reason": "차도 횡단 미확인",
+      "route_review_reasons": [
+        {
+          "code": "road_crossing",
+          "label": "차도 횡단 미확인",
+          "detail": "직선 연결이 도로 중심선을 가로지릅니다. 실제 횡단보도·접근 동선을 확인해야 합니다."
+        }
+      ],
+      "route_review_notes": [
+        "양 끝 중 50m 이상인 직선 연결이 있습니다. 길이만으로 통행 오류를 판정하지 않았습니다.",
+        "건물 안 대표점의 출입 동선은 미확인입니다. 중간 건물 관통과는 구분합니다."
+      ]
     },
     {
       "id": "expanded:be532420e8933a73b6605452",
@@ -410,7 +490,14 @@
         "used_in_duration": false
       },
       "bus_reported": null,
-      "school_reference_date": null
+      "school_reference_date": null,
+      "station_name": null,
+      "route_review_status": "no_specific_flag",
+      "route_review_reason": null,
+      "route_review_reasons": [],
+      "route_review_notes": [
+        "양 끝 중 50m 이상인 직선 연결이 있습니다. 길이만으로 통행 오류를 판정하지 않았습니다."
+      ]
     },
     {
       "id": "expanded:16aef4b47aee977916feaafb",
@@ -447,7 +534,23 @@
         "used_in_duration": false
       },
       "bus_reported": null,
-      "school_reference_date": null
+      "school_reference_date": null,
+      "station_name": "양평역",
+      "route_review_status": "needs_review",
+      "route_review_reason": "건물 윤곽 통과 · 큰길 접속 미확인",
+      "route_review_reasons": [
+        {
+          "code": "building_crossing",
+          "label": "건물 윤곽 통과",
+          "detail": "직선 연결이 저장된 건물 윤곽을 통과합니다. 실제 통로·출입구 확인이 필요합니다."
+        },
+        {
+          "code": "road_attachment",
+          "label": "큰길 접속 미확인",
+          "detail": "직선 연결이 주요 도로의 중심점에 붙습니다. 보도·횡단 동선을 확인해야 합니다."
+        }
+      ],
+      "route_review_notes": []
     },
     {
       "id": "expanded:4e587c43cc80c4c9de1e0206",
@@ -490,7 +593,25 @@
         "used_in_duration": false
       },
       "bus_reported": null,
-      "school_reference_date": "2026-10-01"
+      "school_reference_date": "2026-10-01",
+      "station_name": null,
+      "route_review_status": "needs_review",
+      "route_review_reason": "건물 윤곽 통과 · 차도 횡단 미확인",
+      "route_review_reasons": [
+        {
+          "code": "building_crossing",
+          "label": "건물 윤곽 통과",
+          "detail": "직선 연결이 저장된 건물 윤곽을 통과합니다. 실제 통로·출입구 확인이 필요합니다."
+        },
+        {
+          "code": "road_crossing",
+          "label": "차도 횡단 미확인",
+          "detail": "직선 연결이 도로 중심선을 가로지릅니다. 실제 횡단보도·접근 동선을 확인해야 합니다."
+        }
+      ],
+      "route_review_notes": [
+        "건물 안 대표점의 출입 동선은 미확인입니다. 중간 건물 관통과는 구분합니다."
+      ]
     },
     {
       "id": "expanded:9187eec7225c1a22f728dde7",
@@ -533,7 +654,18 @@
         "used_in_duration": false
       },
       "bus_reported": null,
-      "school_reference_date": null
+      "school_reference_date": null,
+      "station_name": null,
+      "route_review_status": "needs_review",
+      "route_review_reason": "건물 윤곽 통과",
+      "route_review_reasons": [
+        {
+          "code": "building_crossing",
+          "label": "건물 윤곽 통과",
+          "detail": "직선 연결이 저장된 건물 윤곽을 통과합니다. 실제 통로·출입구 확인이 필요합니다."
+        }
+      ],
+      "route_review_notes": []
     },
     {
       "id": "expanded:d106da0e4982c6c29e3a2e5c",
@@ -570,7 +702,20 @@
         "used_in_duration": false
       },
       "bus_reported": null,
-      "school_reference_date": null
+      "school_reference_date": null,
+      "station_name": "도림천역",
+      "route_review_status": "needs_review",
+      "route_review_reason": "건물 윤곽 통과",
+      "route_review_reasons": [
+        {
+          "code": "building_crossing",
+          "label": "건물 윤곽 통과",
+          "detail": "직선 연결이 저장된 건물 윤곽을 통과합니다. 실제 통로·출입구 확인이 필요합니다."
+        }
+      ],
+      "route_review_notes": [
+        "양 끝 중 50m 이상인 직선 연결이 있습니다. 길이만으로 통행 오류를 판정하지 않았습니다."
+      ]
     },
     {
       "id": "expanded:3dc99fc313b27af614e63b1d",
@@ -613,7 +758,26 @@
         "used_in_duration": false
       },
       "bus_reported": null,
-      "school_reference_date": "2026-10-01"
+      "school_reference_date": "2026-10-01",
+      "station_name": null,
+      "route_review_status": "needs_review",
+      "route_review_reason": "건물 윤곽 통과 · 차도 횡단 미확인",
+      "route_review_reasons": [
+        {
+          "code": "building_crossing",
+          "label": "건물 윤곽 통과",
+          "detail": "직선 연결이 저장된 건물 윤곽을 통과합니다. 실제 통로·출입구 확인이 필요합니다."
+        },
+        {
+          "code": "road_crossing",
+          "label": "차도 횡단 미확인",
+          "detail": "직선 연결이 도로 중심선을 가로지릅니다. 실제 횡단보도·접근 동선을 확인해야 합니다."
+        }
+      ],
+      "route_review_notes": [
+        "양 끝 중 50m 이상인 직선 연결이 있습니다. 길이만으로 통행 오류를 판정하지 않았습니다.",
+        "건물 안 대표점의 출입 동선은 미확인입니다. 중간 건물 관통과는 구분합니다."
+      ]
     },
     {
       "id": "expanded:ac074b0474024f6e13876e5d",
@@ -656,7 +820,20 @@
         "used_in_duration": false
       },
       "bus_reported": null,
-      "school_reference_date": null
+      "school_reference_date": null,
+      "station_name": null,
+      "route_review_status": "needs_review",
+      "route_review_reason": "건물 윤곽 통과",
+      "route_review_reasons": [
+        {
+          "code": "building_crossing",
+          "label": "건물 윤곽 통과",
+          "detail": "직선 연결이 저장된 건물 윤곽을 통과합니다. 실제 통로·출입구 확인이 필요합니다."
+        }
+      ],
+      "route_review_notes": [
+        "양 끝 중 50m 이상인 직선 연결이 있습니다. 길이만으로 통행 오류를 판정하지 않았습니다."
+      ]
     },
     {
       "id": "expanded:e03218787a72e06950f179d4",
@@ -693,7 +870,25 @@
         "used_in_duration": false
       },
       "bus_reported": null,
-      "school_reference_date": null
+      "school_reference_date": null,
+      "station_name": "양평역",
+      "route_review_status": "needs_review",
+      "route_review_reason": "건물 윤곽 통과 · 큰길 접속 미확인",
+      "route_review_reasons": [
+        {
+          "code": "building_crossing",
+          "label": "건물 윤곽 통과",
+          "detail": "직선 연결이 저장된 건물 윤곽을 통과합니다. 실제 통로·출입구 확인이 필요합니다."
+        },
+        {
+          "code": "road_attachment",
+          "label": "큰길 접속 미확인",
+          "detail": "직선 연결이 주요 도로의 중심점에 붙습니다. 보도·횡단 동선을 확인해야 합니다."
+        }
+      ],
+      "route_review_notes": [
+        "양 끝 중 50m 이상인 직선 연결이 있습니다. 길이만으로 통행 오류를 판정하지 않았습니다."
+      ]
     },
     {
       "id": "expanded:0aed907a4a7adf7848626162",
@@ -736,7 +931,26 @@
         "used_in_duration": false
       },
       "bus_reported": null,
-      "school_reference_date": "2026-10-01"
+      "school_reference_date": "2026-10-01",
+      "station_name": null,
+      "route_review_status": "needs_review",
+      "route_review_reason": "건물 윤곽 통과 · 차도 횡단 미확인",
+      "route_review_reasons": [
+        {
+          "code": "building_crossing",
+          "label": "건물 윤곽 통과",
+          "detail": "직선 연결이 저장된 건물 윤곽을 통과합니다. 실제 통로·출입구 확인이 필요합니다."
+        },
+        {
+          "code": "road_crossing",
+          "label": "차도 횡단 미확인",
+          "detail": "직선 연결이 도로 중심선을 가로지릅니다. 실제 횡단보도·접근 동선을 확인해야 합니다."
+        }
+      ],
+      "route_review_notes": [
+        "양 끝 중 50m 이상인 직선 연결이 있습니다. 길이만으로 통행 오류를 판정하지 않았습니다.",
+        "건물 안 대표점의 출입 동선은 미확인입니다. 중간 건물 관통과는 구분합니다."
+      ]
     },
     {
       "id": "expanded:b52fcaf01dd23ea1820375ba",
@@ -779,7 +993,25 @@
         "used_in_duration": false
       },
       "bus_reported": null,
-      "school_reference_date": null
+      "school_reference_date": null,
+      "station_name": null,
+      "route_review_status": "needs_review",
+      "route_review_reason": "건물 윤곽 통과 · 직선 연결 비중 큼",
+      "route_review_reasons": [
+        {
+          "code": "building_crossing",
+          "label": "건물 윤곽 통과",
+          "detail": "직선 연결이 저장된 건물 윤곽을 통과합니다. 실제 통로·출입구 확인이 필요합니다."
+        },
+        {
+          "code": "connector_dominant",
+          "label": "직선 연결 비중 큼",
+          "detail": "거리 합계의 절반 이상이 실제 보행을 확인하지 않은 직선 연결입니다."
+        }
+      ],
+      "route_review_notes": [
+        "양 끝 중 50m 이상인 직선 연결이 있습니다. 길이만으로 통행 오류를 판정하지 않았습니다."
+      ]
     },
     {
       "id": "expanded:c1e246b31d26e90796741945",
@@ -816,7 +1048,14 @@
         "used_in_duration": false
       },
       "bus_reported": null,
-      "school_reference_date": null
+      "school_reference_date": null,
+      "station_name": "도림천역",
+      "route_review_status": "no_specific_flag",
+      "route_review_reason": null,
+      "route_review_reasons": [],
+      "route_review_notes": [
+        "건물 안 대표점의 출입 동선은 미확인입니다. 중간 건물 관통과는 구분합니다."
+      ]
     },
     {
       "id": "expanded:9ac51a876a8092419c9bec8c",
@@ -859,7 +1098,20 @@
         "used_in_duration": false
       },
       "bus_reported": null,
-      "school_reference_date": "2026-10-01"
+      "school_reference_date": "2026-10-01",
+      "station_name": null,
+      "route_review_status": "needs_review",
+      "route_review_reason": "차도 횡단 미확인",
+      "route_review_reasons": [
+        {
+          "code": "road_crossing",
+          "label": "차도 횡단 미확인",
+          "detail": "직선 연결이 도로 중심선을 가로지릅니다. 실제 횡단보도·접근 동선을 확인해야 합니다."
+        }
+      ],
+      "route_review_notes": [
+        "건물 안 대표점의 출입 동선은 미확인입니다. 중간 건물 관통과는 구분합니다."
+      ]
     },
     {
       "id": "expanded:4bd7fca6a196da13bfae2254",
@@ -902,7 +1154,14 @@
         "used_in_duration": false
       },
       "bus_reported": null,
-      "school_reference_date": null
+      "school_reference_date": null,
+      "station_name": null,
+      "route_review_status": "no_specific_flag",
+      "route_review_reason": null,
+      "route_review_reasons": [],
+      "route_review_notes": [
+        "건물 안 대표점의 출입 동선은 미확인입니다. 중간 건물 관통과는 구분합니다."
+      ]
     },
     {
       "id": "expanded:e7eb6ee49fd7823b98840b5e",
@@ -939,7 +1198,14 @@
         "used_in_duration": false
       },
       "bus_reported": null,
-      "school_reference_date": null
+      "school_reference_date": null,
+      "station_name": "도림천역",
+      "route_review_status": "no_specific_flag",
+      "route_review_reason": null,
+      "route_review_reasons": [],
+      "route_review_notes": [
+        "양 끝 중 50m 이상인 직선 연결이 있습니다. 길이만으로 통행 오류를 판정하지 않았습니다."
+      ]
     },
     {
       "id": "expanded:6c03669ea34e7da948810441",
@@ -982,7 +1248,21 @@
         "used_in_duration": false
       },
       "bus_reported": null,
-      "school_reference_date": "2026-10-01"
+      "school_reference_date": "2026-10-01",
+      "station_name": null,
+      "route_review_status": "needs_review",
+      "route_review_reason": "차도 횡단 미확인",
+      "route_review_reasons": [
+        {
+          "code": "road_crossing",
+          "label": "차도 횡단 미확인",
+          "detail": "직선 연결이 도로 중심선을 가로지릅니다. 실제 횡단보도·접근 동선을 확인해야 합니다."
+        }
+      ],
+      "route_review_notes": [
+        "양 끝 중 50m 이상인 직선 연결이 있습니다. 길이만으로 통행 오류를 판정하지 않았습니다.",
+        "건물 안 대표점의 출입 동선은 미확인입니다. 중간 건물 관통과는 구분합니다."
+      ]
     },
     {
       "id": "expanded:5a813b2fd17548225f0311e7",
@@ -1025,7 +1305,20 @@
         "used_in_duration": false
       },
       "bus_reported": null,
-      "school_reference_date": null
+      "school_reference_date": null,
+      "station_name": null,
+      "route_review_status": "needs_review",
+      "route_review_reason": "직선 연결 비중 큼",
+      "route_review_reasons": [
+        {
+          "code": "connector_dominant",
+          "label": "직선 연결 비중 큼",
+          "detail": "거리 합계의 절반 이상이 실제 보행을 확인하지 않은 직선 연결입니다."
+        }
+      ],
+      "route_review_notes": [
+        "양 끝 중 50m 이상인 직선 연결이 있습니다. 길이만으로 통행 오류를 판정하지 않았습니다."
+      ]
     },
     {
       "id": "expanded:6dada71ceecf0aa354d5cf6e",
@@ -1062,7 +1355,18 @@
         "used_in_duration": false
       },
       "bus_reported": null,
-      "school_reference_date": null
+      "school_reference_date": null,
+      "station_name": "도림천역",
+      "route_review_status": "needs_review",
+      "route_review_reason": "건물 윤곽 통과",
+      "route_review_reasons": [
+        {
+          "code": "building_crossing",
+          "label": "건물 윤곽 통과",
+          "detail": "직선 연결이 저장된 건물 윤곽을 통과합니다. 실제 통로·출입구 확인이 필요합니다."
+        }
+      ],
+      "route_review_notes": []
     },
     {
       "id": "expanded:49b7b01a882b20a71318bd09",
@@ -1105,7 +1409,25 @@
         "used_in_duration": false
       },
       "bus_reported": null,
-      "school_reference_date": "2026-10-01"
+      "school_reference_date": "2026-10-01",
+      "station_name": null,
+      "route_review_status": "needs_review",
+      "route_review_reason": "건물 윤곽 통과 · 차도 횡단 미확인",
+      "route_review_reasons": [
+        {
+          "code": "building_crossing",
+          "label": "건물 윤곽 통과",
+          "detail": "직선 연결이 저장된 건물 윤곽을 통과합니다. 실제 통로·출입구 확인이 필요합니다."
+        },
+        {
+          "code": "road_crossing",
+          "label": "차도 횡단 미확인",
+          "detail": "직선 연결이 도로 중심선을 가로지릅니다. 실제 횡단보도·접근 동선을 확인해야 합니다."
+        }
+      ],
+      "route_review_notes": [
+        "건물 안 대표점의 출입 동선은 미확인입니다. 중간 건물 관통과는 구분합니다."
+      ]
     },
     {
       "id": "expanded:3e4b22784be985d926f8efb9",
@@ -1162,7 +1484,23 @@
         "exact_boarding_sign_coordinates": null,
         "reproduction_url": "https://map.naver.com/p/bus/bus-station/%EB%8F%99%EC%96%91%EB%B3%BC%EB%A7%81%EC%9E%A5/bus-station/112252?c=14.00,0,0,0,adh&p=ZjyLRjoGrxAeWHB9S_750A,-37.5,0,55.94,Float"
       },
-      "school_reference_date": null
+      "school_reference_date": null,
+      "station_name": null,
+      "route_review_status": "needs_review",
+      "route_review_reason": "건물 윤곽 통과 · 큰길 접속 미확인",
+      "route_review_reasons": [
+        {
+          "code": "building_crossing",
+          "label": "건물 윤곽 통과",
+          "detail": "직선 연결이 저장된 건물 윤곽을 통과합니다. 실제 통로·출입구 확인이 필요합니다."
+        },
+        {
+          "code": "road_attachment",
+          "label": "큰길 접속 미확인",
+          "detail": "직선 연결이 주요 도로의 중심점에 붙습니다. 보도·횡단 동선을 확인해야 합니다."
+        }
+      ],
+      "route_review_notes": []
     },
     {
       "id": "expanded:69560090e84637f3e672fc00",
@@ -1199,7 +1537,12 @@
         "used_in_duration": false
       },
       "bus_reported": null,
-      "school_reference_date": null
+      "school_reference_date": null,
+      "station_name": "도림천역",
+      "route_review_status": "no_specific_flag",
+      "route_review_reason": null,
+      "route_review_reasons": [],
+      "route_review_notes": []
     },
     {
       "id": "expanded:ab71d814038e9710f2f14420",
@@ -1242,7 +1585,20 @@
         "used_in_duration": false
       },
       "bus_reported": null,
-      "school_reference_date": "2026-10-01"
+      "school_reference_date": "2026-10-01",
+      "station_name": null,
+      "route_review_status": "needs_review",
+      "route_review_reason": "차도 횡단 미확인",
+      "route_review_reasons": [
+        {
+          "code": "road_crossing",
+          "label": "차도 횡단 미확인",
+          "detail": "직선 연결이 도로 중심선을 가로지릅니다. 실제 횡단보도·접근 동선을 확인해야 합니다."
+        }
+      ],
+      "route_review_notes": [
+        "건물 안 대표점의 출입 동선은 미확인입니다. 중간 건물 관통과는 구분합니다."
+      ]
     },
     {
       "id": "expanded:e59c869a082e1a19bbd8401d",
@@ -1285,7 +1641,18 @@
         "used_in_duration": false
       },
       "bus_reported": null,
-      "school_reference_date": null
+      "school_reference_date": null,
+      "station_name": null,
+      "route_review_status": "needs_review",
+      "route_review_reason": "직선 연결 비중 큼",
+      "route_review_reasons": [
+        {
+          "code": "connector_dominant",
+          "label": "직선 연결 비중 큼",
+          "detail": "거리 합계의 절반 이상이 실제 보행을 확인하지 않은 직선 연결입니다."
+        }
+      ],
+      "route_review_notes": []
     },
     {
       "id": "expanded:2bddbae6dbc4f4b258dbfc96",
@@ -1328,7 +1695,18 @@
         "used_in_duration": false
       },
       "bus_reported": null,
-      "school_reference_date": null
+      "school_reference_date": null,
+      "station_name": "문래역",
+      "route_review_status": "needs_review",
+      "route_review_reason": "큰길 접속 미확인",
+      "route_review_reasons": [
+        {
+          "code": "road_attachment",
+          "label": "큰길 접속 미확인",
+          "detail": "직선 연결이 주요 도로의 중심점에 붙습니다. 보도·횡단 동선을 확인해야 합니다."
+        }
+      ],
+      "route_review_notes": []
     },
     {
       "id": "expanded:7cfe3a7db9302bdcd3e2e708",
@@ -1371,7 +1749,12 @@
         "used_in_duration": false
       },
       "bus_reported": null,
-      "school_reference_date": "2026-10-01"
+      "school_reference_date": "2026-10-01",
+      "station_name": null,
+      "route_review_status": "no_specific_flag",
+      "route_review_reason": null,
+      "route_review_reasons": [],
+      "route_review_notes": []
     },
     {
       "id": "expanded:0561a007d494de51713cbdc9",
@@ -1414,7 +1797,18 @@
         "used_in_duration": false
       },
       "bus_reported": null,
-      "school_reference_date": null
+      "school_reference_date": null,
+      "station_name": null,
+      "route_review_status": "needs_review",
+      "route_review_reason": "큰길 접속 미확인",
+      "route_review_reasons": [
+        {
+          "code": "road_attachment",
+          "label": "큰길 접속 미확인",
+          "detail": "직선 연결이 주요 도로의 중심점에 붙습니다. 보도·횡단 동선을 확인해야 합니다."
+        }
+      ],
+      "route_review_notes": []
     },
     {
       "id": "expanded:cb2d6b6cea602e4b360a02b2",
@@ -1457,7 +1851,23 @@
         "used_in_duration": false
       },
       "bus_reported": null,
-      "school_reference_date": null
+      "school_reference_date": null,
+      "station_name": "문래역",
+      "route_review_status": "needs_review",
+      "route_review_reason": "큰 우회 재검토 · 큰길 접속 미확인",
+      "route_review_reasons": [
+        {
+          "code": "large_detour",
+          "label": "큰 우회 재검토",
+          "detail": "단지 내부와 외부 보행망의 연결·스냅 및 큰 우회 경로를 재검토하고 있습니다."
+        },
+        {
+          "code": "road_attachment",
+          "label": "큰길 접속 미확인",
+          "detail": "직선 연결이 주요 도로의 중심점에 붙습니다. 보도·횡단 동선을 확인해야 합니다."
+        }
+      ],
+      "route_review_notes": []
     },
     {
       "id": "expanded:0097a5f60711a297b318ffe4",
@@ -1500,7 +1910,18 @@
         "used_in_duration": false
       },
       "bus_reported": null,
-      "school_reference_date": "2026-10-01"
+      "school_reference_date": "2026-10-01",
+      "station_name": null,
+      "route_review_status": "needs_review",
+      "route_review_reason": "큰 우회 재검토",
+      "route_review_reasons": [
+        {
+          "code": "large_detour",
+          "label": "큰 우회 재검토",
+          "detail": "단지 내부와 외부 보행망의 연결·스냅 및 큰 우회 경로를 재검토하고 있습니다."
+        }
+      ],
+      "route_review_notes": []
     },
     {
       "id": "expanded:83d06c837404f34a21993d8d",
@@ -1543,7 +1964,23 @@
         "used_in_duration": false
       },
       "bus_reported": null,
-      "school_reference_date": null
+      "school_reference_date": null,
+      "station_name": null,
+      "route_review_status": "needs_review",
+      "route_review_reason": "큰 우회 재검토 · 큰길 접속 미확인",
+      "route_review_reasons": [
+        {
+          "code": "large_detour",
+          "label": "큰 우회 재검토",
+          "detail": "단지 내부와 외부 보행망의 연결·스냅 및 큰 우회 경로를 재검토하고 있습니다."
+        },
+        {
+          "code": "road_attachment",
+          "label": "큰길 접속 미확인",
+          "detail": "직선 연결이 주요 도로의 중심점에 붙습니다. 보도·횡단 동선을 확인해야 합니다."
+        }
+      ],
+      "route_review_notes": []
     },
     {
       "id": "expanded:f9d03ce3fde6cc0eee329365",
@@ -1580,7 +2017,14 @@
         "used_in_duration": false
       },
       "bus_reported": null,
-      "school_reference_date": null
+      "school_reference_date": null,
+      "station_name": "도림천역",
+      "route_review_status": "no_specific_flag",
+      "route_review_reason": null,
+      "route_review_reasons": [],
+      "route_review_notes": [
+        "건물 안 대표점의 출입 동선은 미확인입니다. 중간 건물 관통과는 구분합니다."
+      ]
     },
     {
       "id": "expanded:e5332329c677b262e7cbafb2",
@@ -1623,7 +2067,20 @@
         "used_in_duration": false
       },
       "bus_reported": null,
-      "school_reference_date": "2026-10-01"
+      "school_reference_date": "2026-10-01",
+      "station_name": null,
+      "route_review_status": "needs_review",
+      "route_review_reason": "차도 횡단 미확인",
+      "route_review_reasons": [
+        {
+          "code": "road_crossing",
+          "label": "차도 횡단 미확인",
+          "detail": "직선 연결이 도로 중심선을 가로지릅니다. 실제 횡단보도·접근 동선을 확인해야 합니다."
+        }
+      ],
+      "route_review_notes": [
+        "건물 안 대표점의 출입 동선은 미확인입니다. 중간 건물 관통과는 구분합니다."
+      ]
     },
     {
       "id": "expanded:e10df35716aedb8a25727fee",
@@ -1680,7 +2137,20 @@
         "exact_boarding_sign_coordinates": null,
         "reproduction_url": "https://map.naver.com/p/bus/bus-station/%EB%8F%99%EC%96%91%EB%B3%BC%EB%A7%81%EC%9E%A5/bus-station/112252?c=14.00,0,0,0,adh&p=ZjyLRjoGrxAeWHB9S_750A,-37.5,0,55.94,Float"
       },
-      "school_reference_date": null
+      "school_reference_date": null,
+      "station_name": null,
+      "route_review_status": "needs_review",
+      "route_review_reason": "큰길 접속 미확인",
+      "route_review_reasons": [
+        {
+          "code": "road_attachment",
+          "label": "큰길 접속 미확인",
+          "detail": "직선 연결이 주요 도로의 중심점에 붙습니다. 보도·횡단 동선을 확인해야 합니다."
+        }
+      ],
+      "route_review_notes": [
+        "건물 안 대표점의 출입 동선은 미확인입니다. 중간 건물 관통과는 구분합니다."
+      ]
     },
     {
       "id": "expanded:400be5b5b689f4fe901ae535",
@@ -1723,7 +2193,26 @@
         "used_in_duration": false
       },
       "bus_reported": null,
-      "school_reference_date": null
+      "school_reference_date": null,
+      "station_name": "신도림역",
+      "route_review_status": "needs_review",
+      "route_review_reason": "건물 윤곽 통과 · 차도 횡단 미확인",
+      "route_review_reasons": [
+        {
+          "code": "building_crossing",
+          "label": "건물 윤곽 통과",
+          "detail": "직선 연결이 저장된 건물 윤곽을 통과합니다. 실제 통로·출입구 확인이 필요합니다."
+        },
+        {
+          "code": "road_crossing",
+          "label": "차도 횡단 미확인",
+          "detail": "직선 연결이 도로 중심선을 가로지릅니다. 실제 횡단보도·접근 동선을 확인해야 합니다."
+        }
+      ],
+      "route_review_notes": [
+        "양 끝 중 50m 이상인 직선 연결이 있습니다. 길이만으로 통행 오류를 판정하지 않았습니다.",
+        "건물 안 대표점의 출입 동선은 미확인입니다. 중간 건물 관통과는 구분합니다."
+      ]
     },
     {
       "id": "expanded:dcd211f2645b4c334abaabfa",
@@ -1760,7 +2249,26 @@
         "used_in_duration": false
       },
       "bus_reported": null,
-      "school_reference_date": "2026-10-01"
+      "school_reference_date": "2026-10-01",
+      "station_name": null,
+      "route_review_status": "needs_review",
+      "route_review_reason": "건물 윤곽 통과 · 차도 횡단 미확인",
+      "route_review_reasons": [
+        {
+          "code": "building_crossing",
+          "label": "건물 윤곽 통과",
+          "detail": "직선 연결이 저장된 건물 윤곽을 통과합니다. 실제 통로·출입구 확인이 필요합니다."
+        },
+        {
+          "code": "road_crossing",
+          "label": "차도 횡단 미확인",
+          "detail": "직선 연결이 도로 중심선을 가로지릅니다. 실제 횡단보도·접근 동선을 확인해야 합니다."
+        }
+      ],
+      "route_review_notes": [
+        "양 끝 중 50m 이상인 직선 연결이 있습니다. 길이만으로 통행 오류를 판정하지 않았습니다.",
+        "건물 안 대표점의 출입 동선은 미확인입니다. 중간 건물 관통과는 구분합니다."
+      ]
     },
     {
       "id": "expanded:4c34b1ea8279b5e74f79ccd9",
@@ -1803,7 +2311,43 @@
         "used_in_duration": false
       },
       "bus_reported": null,
-      "school_reference_date": null
+      "school_reference_date": null,
+      "station_name": null,
+      "route_review_status": "needs_review",
+      "route_review_reason": "건물 윤곽 통과 · 차도 횡단 미확인",
+      "route_review_reasons": [
+        {
+          "code": "building_crossing",
+          "label": "건물 윤곽 통과",
+          "detail": "직선 연결이 저장된 건물 윤곽을 통과합니다. 실제 통로·출입구 확인이 필요합니다."
+        },
+        {
+          "code": "road_crossing",
+          "label": "차도 횡단 미확인",
+          "detail": "직선 연결이 도로 중심선을 가로지릅니다. 실제 횡단보도·접근 동선을 확인해야 합니다."
+        }
+      ],
+      "route_review_notes": [
+        "양 끝 중 50m 이상인 직선 연결이 있습니다. 길이만으로 통행 오류를 판정하지 않았습니다.",
+        "건물 안 대표점의 출입 동선은 미확인입니다. 중간 건물 관통과는 구분합니다."
+      ]
     }
-  ]
+  ],
+  "quality_screening": {
+    "kind": "geometry_review_not_verified_access",
+    "date": "2026-10-21",
+    "rules": [
+      "building footprint through-crossing",
+      "interior road centerline crossing",
+      "straight connector fraction >= 0.5",
+      "major road centerline attachment",
+      "mapped surface obstacle/restriction contact",
+      "previous Hanshin detour review"
+    ],
+    "not_error_verdict": true,
+    "remaining_estimates_are_measured": false,
+    "absolute_connector_50m_alone_blocks_comparison": false,
+    "building_endpoint_inside_alone_blocks_comparison": false,
+    "distance_or_speed_adjusted": false
+  }
 }
