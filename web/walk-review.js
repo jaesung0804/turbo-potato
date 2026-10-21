@@ -3,6 +3,8 @@ const WalkReview = (() => {
   const DATA_SHA256 = '15ad72cbf8a5f95a01388c07d2292e2fa9958083cdb8c56c98351a09992e54bd';
   const purposes = {station: '역', school: '초등학교', bus_stop: '버스 정류장'};
   const reviewCodes = ['large_detour', 'building_crossing', 'road_crossing', 'connector_dominant', 'road_attachment', 'mapped_obstacle'];
+  const reviewLabel = '보행 경로 미검증 · 비교 보류';
+  const reviewNote = '출입구·횡단보도·보행로 연결 확인이 필요해 거리·시간 비교에서 제외했습니다.';
   const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'}[c]));
   const number = (value, digits = 1) => Number.isFinite(value) ? value.toLocaleString('ko-KR', {minimumFractionDigits: digits, maximumFractionDigits: digits}) : '—';
   const nonnegative = value => Number.isFinite(value) && value >= 0;
@@ -115,7 +117,7 @@ const WalkReview = (() => {
       r.purpose === 'bus_stop' ? '<p>지도상 승강장 대표점입니다. 운영기관의 방향·노선과 정확한 승차 위치는 미확인입니다.</p>' :
       '<p>지도상 역 출구 후보입니다. 현재 출입 가능 여부와 단지의 실제 출입구 동선은 미확인입니다.</p>';
     const reported = r.bus_reported ? '<p>지도 전달 정보: ' + esc(r.bus_reported.name) + ' · ' + esc(r.bus_reported.direction) + ' · ' + esc(r.bus_reported.routes.join(', ')) + '. 운영기관 확인과 구분합니다.</p>' : '';
-    const review = r.route_review_status === 'needs_review' ? '<div class="walk-review-warning"><b>확인 필요 · 비교 대표값으로 사용하지 않음</b>' + qualityReasons(r, true) + '<p>기하상 위험과 연결 의심을 표시한 것으로 실제 통행 불가나 거리 오류를 확정한 것은 아닙니다. 아래 값은 진단용으로 보존합니다.</p></div>' : '';
+    const review = r.route_review_status === 'needs_review' ? '<div class="walk-review-warning"><b>' + reviewLabel + '</b><p>' + reviewNote + '</p>' + qualityReasons(r, true) + '<p>기하상 위험과 연결 의심을 표시한 것으로 실제 통행 불가나 거리 오류를 확정한 것은 아닙니다. 아래 값은 진단용으로 보존합니다.</p></div>' : '';
     const notes = r.route_review_notes.map(n => '<p class="walk-small">' + esc(n) + '</p>').join('');
     const saved = '<p><b>저장된 경로 목적지</b><br>' + esc(r.destination) + (d.total_m === null ? '' : '<br>기존 거리 합계 ' + number(d.total_m) + 'm · 시간 ' + number(t.base_min) + '분') + '</p>';
     return '<div class="walk-detail-content">' + review + saved + distances + notes + timing + terrain + facility + reported + '<p class="walk-small">단지·지도 2026.10.17–20 관측 · 학교 2026.10.01 기준 · 지형 파일 2025.03.20 수정(측량일 미확인). 수집 범위 안의 경로이며 전역 최단·최근접 보행 목적지는 미확인입니다.</p></div>';
@@ -126,8 +128,8 @@ const WalkReview = (() => {
       '<strong>약 ' + number(r.distance.total_m, 0) + 'm</strong><small>약 ' + number(r.time.base_min) + '분</small>';
     const hill = missing ? '<strong class="walk-unknown">자료 없음</strong><small>경로 미연결</small>' : review ? '<strong class="walk-unknown">경로와 함께 재검토</strong><small>' + (h.status === 'excluded' ? '원자료 지형 비교 제외' : '원자료 지형 참고') + '</small>' : h.status === 'reference' ? '<strong>갈 때 약 ' + number(h.forward_m) + 'm</strong><small>반대 방향 약 ' + number(h.reverse_m) + 'm</small>' :
       '<strong class="walk-unknown">' + (h.status === 'excluded' ? '비교 제외' : '자료 없음') + '</strong><small>' + (h.status === 'excluded' ? '계산값은 근거에서 확인' : '경로 미연결') + '</small>';
-    const badge = missing ? '미연결' : review ? '연결 확인 필요' : h.status === 'excluded' ? '지형 비교 제외' : '지형 참고';
-    const note = review ? '실제 통행 불가 판정이 아닙니다.' : missing ? r.missing_reason : h.status === 'excluded' ? h.exclusion_reason : '대표점 기준 · 실제 보행면과 다를 수 있음';
+    const badge = review ? reviewLabel : missing ? '미연결' : h.status === 'excluded' ? '지형 비교 제외' : '지형 참고';
+    const note = review ? reviewNote + ' 실제 통행 불가 판정이 아닙니다.' : missing ? r.missing_reason : h.status === 'excluded' ? h.exclusion_reason : '대표점 기준 · 실제 보행면과 다를 수 있음';
     return '<tr data-route-id="' + esc(r.id) + '" data-status="' + esc(r.status) + '" data-review-status="' + esc(r.route_review_status) + '" data-terrain-status="' + esc(h.status) + '">' +
       '<th scope="row" class="walk-name"><strong>' + esc(r.name) + '</strong><small>' + esc(r.address) + '</small></th>' +
       '<td class="walk-destination" data-label="목적지"><span class="walk-purpose">' + purposes[r.purpose] + '</span><strong>' + esc(destinationLabel(r)) + '</strong></td>' +
@@ -174,11 +176,11 @@ const WalkReview = (() => {
     const metric = missing ? '계산 못함' : review ? '거리 비교 보류' : '약 ' + number(r.distance.total_m, 0) + 'm · ' + number(r.time.base_min) + '분';
     const terrain = missing ? '지형 자료 없음 · 연결 근거 부족' : review ? '기존 추정은 근거에서 확인' + (h.status === 'excluded' ? ' · 원자료 지형 비교 제외' : '') :
       h.status === 'excluded' ? '지형 비교 제외 · 계산값은 근거에서 확인' : '지형 참고 · 갈 때 약 ' + number(h.forward_m) + 'm 상승';
-    const badge = (missing ? '<span class="walk-badge is-missing">미연결</span>' : '') + (review ? '<span class="walk-badge is-excluded">연결 확인 필요</span>' : !missing && h.status === 'excluded' ? '<span class="walk-badge is-excluded">지형 비교 제외</span>' : '');
+    const badge = (missing ? '<span class="walk-badge is-missing">미연결</span>' : '') + (review ? '<span class="walk-badge is-excluded">' + reviewLabel + '</span>' : !missing && h.status === 'excluded' ? '<span class="walk-badge is-excluded">지형 비교 제외</span>' : '');
     return '<article class="walk-route" data-summary-route-id="' + esc(r.id) + '" data-purpose="' + r.purpose + '">' +
       '<span class="walk-purpose">' + purposes[r.purpose] + '</span><h4>' + esc(destinationLabel(r)) + '</h4>' +
       '<strong class="walk-route-metric">' + metric + '</strong><p class="walk-small">' + terrain + '</p>' +
-      badge + qualityReasons(r) + (review ? '<p class="walk-small">실제 통행 불가 판정은 아닙니다.</p>' : r.route_review_notes.length ? '<p class="walk-small">출입 동선·직선 연결 가정은 근거에서 확인하세요.</p>' : '') + (r.purpose === 'bus_stop' ? '<p class="walk-small">운영 노선·방향 미확인</p>' : '') +
+      badge + qualityReasons(r) + (review ? '<p class="walk-small">' + reviewNote + ' 실제 통행 불가 판정은 아닙니다.</p>' : r.route_review_notes.length ? '<p class="walk-small">출입 동선·직선 연결 가정은 근거에서 확인하세요.</p>' : '') + (r.purpose === 'bus_stop' ? '<p class="walk-small">운영 노선·방향 미확인</p>' : '') +
       '<details class="walk-route-detail"><summary>경로·가정·근거</summary>' + detail(r) + '</details></article>';
   }
   function complexHtml(group) {

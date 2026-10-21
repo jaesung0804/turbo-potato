@@ -74,6 +74,8 @@ for(const r of held){
   assert.equal(ui.sortValue(r,'distance'),null);assert.equal(ui.sortValue(r,'time'),null);assert.equal(ui.sortValue(r,'forward'),null);
   const main=ui.rowHtml(r).split('</tr>')[0];
   assert.match(main,/실제 통행 불가 판정이 아닙니다/);
+  assert.match(main,/보행 경로 미검증 · 비교 보류/);
+  assert.match(main,/출입구·횡단보도·보행로 연결 확인이 필요해 거리·시간 비교에서 제외했습니다/);
   if(r.status==='disconnected'){assert.equal(r.distance.total_m,null);assert.match(main,/계산 못함/);}
   else {assert.ok(r.distance.total_m>0);assert.match(main,/거리 비교 보류/);assert.match(ui.rowHtml(r),/기존 거리 합계/);assert.doesNotMatch(main,/약 [\d,.]+(?:m|분)/);}
   for(const reason of r.route_review_reasons)assert.ok(main.includes(reason.label));

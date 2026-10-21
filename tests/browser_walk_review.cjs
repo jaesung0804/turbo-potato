@@ -84,6 +84,8 @@ async function run(){
       if(r.route_review_status==='needs_review'){
         for(const reason of r.route_review_reasons)assert.ok((await row.innerText()).includes(reason.label));
         assert.match(await row.innerText(),/실제 통행 불가 판정이 아닙니다/);
+        assert.match(await row.innerText(),/보행 경로 미검증 · 비교 보류/);
+        assert.match(await row.innerText(),/출입구·횡단보도·보행로 연결 확인이 필요해 거리·시간 비교에서 제외했습니다/);
         if(r.status!=='disconnected'){assert.match(await row.innerText(),/거리 비교 보류/);assert.doesNotMatch(await row.locator('.walk-distance').innerText(),/약 [\d,.]+/);}
       }
     }
