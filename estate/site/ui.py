@@ -5,6 +5,7 @@ import zipfile
 from pathlib import Path
 
 UI_FILES = ['index.html', 'model.html', 'quantile-validation.html', 'potential-validation.html', 'potential.html', 'research.html', 'research.css',
+            'static-location.html', 'static-location.css', 'walk-review.js', 'walk-review.json',
             'research.js', 'release-status.js', 'product.css', 'product.js',
             'styles.css', 'filter-select.js', 'app.js', 'potential.js', 'data-store.js', 'result-pages.js',
             'xlsx-export.js', 'estate-export.js', 'downloads/estate-excel-helper.zip',
@@ -27,7 +28,7 @@ def copy_ui(output, source=Path('web')):
                         archive.writestr(info, body)
         else:
             shutil.copy2(source / name, output / name)
-    for page in ['index.html', 'model.html', 'potential.html', 'research.html',
+    for page in ['index.html', 'model.html', 'potential.html', 'research.html', 'static-location.html',
                  'quantile-validation.html', 'potential-validation.html']:
         html = (output / page).read_text(encoding='utf-8')
         for name in UI_FILES:

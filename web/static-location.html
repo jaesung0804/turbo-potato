@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>문래 도보·지형 비교 · 수도권 아파트 리서치</title><link rel="icon" href="data:,"><link rel="stylesheet" href="static-location.css"></head>
+<body><a class="skip" href="#static-main">본문 바로가기</a>
+<nav class="static-nav" aria-label="주요 메뉴"><a href="index.html">수도권 아파트 리서치</a><div><a href="index.html">실거래 비교</a><a href="research.html">리서치</a></div></nav>
+<main id="static-main">
+<section id="walk-review" class="walk-review" aria-labelledby="walk-title">
+  <header class="walk-heading"><div><p class="eyebrow">생활 편의 비교 · 문래 14개 단지</p><h1 id="walk-title">걸어서 생활하기, 어디까지 알 수 있을까?</h1><p>역·초등학교·버스까지의 예상 거리와 주변 지형을 함께 살펴보세요.</p></div><span class="walk-review-tag">검토용 · 가격 모델 미반영</span></header>
+  <p id="walk-load-status" role="status" class="walk-small">저장된 도보·지형 자료를 읽고 있습니다.</p>
+  <div id="walk-body" hidden>
+    <div class="walk-summary" aria-label="전체 14개 단지 자료 상태">
+      <article><span>도보 추정</span><strong>31<small> / 42 경로</small></strong></article>
+      <article><span>경로 미연결</span><strong>11<small> / 42 경로</small></strong></article>
+      <article><span>지형 비교 참고</span><strong>27<small> / 31 추정 경로</small></strong></article>
+      <article><span>지형 비교 제외</span><strong>4<small> / 31 추정 경로</small></strong></article>
+    </div>
+    <div class="walk-reading"><p><b>대표 지점 기준의 예상 거리·시간</b><br>양 끝을 직선으로 이어 지도 보행 구간에 더했습니다. 실제 출입구·교문까지의 길과 다를 수 있습니다.</p><p><b>높이는 지형 기반 추정</b><br>표고점·등고선으로 계산했습니다. 실측 보행 경사가 아니며 예상 시간에 반영하지 않았습니다.</p></div>
+    <div class="walk-filters" aria-label="도보·지형 비교 조건">
+      <label>시설 종류<select id="walk-purpose"><option value="all">모든 시설</option><option value="station">역</option><option value="school">초등학교</option><option value="bus_stop">버스 정류장</option></select></label>
+      <label>같은 목적지 비교<select id="walk-destination"><option value="all">모든 목적지</option></select></label>
+      <label>단지명·주소<input id="walk-query" type="search" placeholder="예: 국화맨션"></label>
+      <label>정렬 기준<select id="walk-sort" aria-describedby="walk-sort-note"><option value="name">단지명</option><option value="distance">예상 거리</option><option value="time">예상 시간</option><option value="forward" disabled>갈 때 오르는 높이</option><option value="reverse" disabled>반대 방향 오르는 높이</option></select></label>
+      <label>정렬 방향<select id="walk-direction"><option value="asc">오름차순</option><option value="desc">내림차순</option></select></label>
+    </div>
+    <div class="walk-results-heading"><p id="walk-selected" role="status" aria-live="polite"></p><button type="button" id="walk-reset">조건 초기화</button></div>
+    <p id="walk-sort-note" class="walk-small"></p>
+    <div id="walk-table" class="walk-table-wrap"><table class="walk-table"><caption class="walk-sr-only">문래 단지별 예상 도보거리·시간과 지형 기반 높이 추정 비교</caption><thead><tr><th scope="col">단지</th><th scope="col">목적지</th><th scope="col">예상 거리·시간</th><th scope="col">오르는 높이<br><small>지형 기반 추정</small></th><th scope="col">확인 상태</th><th scope="col">상세</th></tr></thead><tbody id="walk-rows"></tbody></table></div>
+    <p id="walk-empty" class="walk-empty" hidden>조건에 맞는 경로가 없습니다. 시설·목적지·검색어를 바꾸거나 조건을 초기화해 주세요.</p>
+    <details class="walk-method"><summary>추정값을 읽는 법과 자료 출처</summary>
+      <p>시간은 분당 80m 기준입니다. 신호·계단·경사·버스 대기 시간은 포함하지 않습니다. 미연결은 실제 통행 불가라는 뜻이 아니라 현재 자료로 연결을 계산하지 못했다는 뜻입니다.</p>
+      <p>오르는 높이는 경로를 따라 높아지는 부분을 더한 값입니다. ‘반대 방향’은 같은 선을 되짚는 가정이며 실제 귀가 경로를 확인한 값은 아닙니다. 5m 간격 등고선·표고점을 보간하고 최대 25m 간격으로 살폈습니다. 25m는 실제 지형의 정확도나 해상도가 아닙니다.</p>
+      <p>교량·지하도·계단의 실제 보행면과 주변 지면은 다를 수 있습니다. 원자료나 교량 영향이 큰 4개는 지형 비교·정렬에서 제외하고 계산값은 개별 근거에 남겼습니다. 27개 참고값도 작은 차이로 단지 순위를 확정하지 마세요.</p>
+      <ul id="walk-sources"></ul><a href="walk-review.json" download>이 화면의 검토 데이터 받기</a>
+    </details>
+  </div>
+</section>
+</main><script src="walk-review.js"></script></body></html>

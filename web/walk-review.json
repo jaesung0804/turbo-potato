@@ -1,0 +1,1809 @@
+{
+  "schema_version": "mullae-walk-review-v1",
+  "review_only": true,
+  "operating_model_changed": false,
+  "source_contract_sha256": "3b2397abc325ae1396eefce61279f3780800552786dd89b08ac50e2e652a48ca",
+  "source_computed_at_utc": "2026-10-20T08:19:53.804364+00:00",
+  "counts": {
+    "complexes": 14,
+    "routes": 42,
+    "estimated": 31,
+    "disconnected": 11,
+    "terrain_reference": 27,
+    "terrain_excluded": 4
+  },
+  "sources": [
+    {
+      "label": "단지 대표점 · 서울시 공개 원장",
+      "date": "2026-10-17 관측",
+      "url": "https://data.seoul.go.kr/dataList/OA-15818/S/1/datasetView.do"
+    },
+    {
+      "label": "보행망·역·버스 · OpenStreetMap",
+      "date": "2026-10-17·19·20 관측",
+      "url": "https://www.openstreetmap.org/copyright",
+      "attribution": "© OpenStreetMap contributors · ODbL-1.0"
+    },
+    {
+      "label": "학교 중심점 · 한국교육시설안전원",
+      "date": "2026-10-01 자료 기준",
+      "url": "https://schoolzone.emac.kr/publicData/publicDataView.do?nttId=2967"
+    },
+    {
+      "label": "표고점·등고선 · 서울시",
+      "date": "파일 수정일 2025-03-20 · 측량일 미확인",
+      "url": "https://data.seoul.go.kr/dataList/OA-22241/F/1/datasetView.do",
+      "attribution": "서울특별시, 서울시 경사도 / 서울시 등고선.zip, 파일 수정일 2025-03-20, 공공누리 제1유형(출처표시)"
+    }
+  ],
+  "rows": [
+    {
+      "id": "expanded:6982fad62c8088cb3a2debd1",
+      "complex_id": "provisional-complex:088d605e93032f2110988b0e",
+      "name": "남성",
+      "address": "문래동2가 35",
+      "purpose": "station",
+      "destination_id": "osm:node:5344219250",
+      "destination": "신도림역 6번 출구",
+      "destination_map_ref": "6",
+      "status": "assumed_connector_total",
+      "missing_reason": null,
+      "distance": {
+        "origin_m": 59.039705955694394,
+        "network_m": 446.29826982152474,
+        "destination_m": 22.76687693043142,
+        "total_m": 528.1048527076506
+      },
+      "time": {
+        "base_min": 6.601310658845632,
+        "fast_min": 5.867831696751673,
+        "slow_min": 8.80174754512751
+      },
+      "terrain": {
+        "status": "excluded",
+        "forward_m": 23.80438239068897,
+        "reverse_m": 19.457279848608138,
+        "height_range_m": 12.793188567761026,
+        "forward_range_m": [
+          8.007873686780538,
+          32.066528688882364
+        ],
+        "reverse_range_m": [
+          4.140227020629931,
+          26.309370220192513
+        ],
+        "exclusion_reason": "교량·원자료의 영향을 받아 비교에서 제외했습니다.",
+        "missing_reason": null,
+        "is_measured_walk": false,
+        "used_in_duration": false
+      },
+      "bus_reported": null,
+      "school_reference_date": null
+    },
+    {
+      "id": "expanded:ffc3ded8089bfe87371a4560",
+      "complex_id": "provisional-complex:088d605e93032f2110988b0e",
+      "name": "남성",
+      "address": "문래동2가 35",
+      "purpose": "school",
+      "destination_id": "B000002001",
+      "destination": "서울영등포초등학교",
+      "destination_map_ref": null,
+      "status": "assumed_connector_total",
+      "missing_reason": null,
+      "distance": {
+        "origin_m": 59.039705955694394,
+        "network_m": 982.8929391331623,
+        "destination_m": 17.574506989164405,
+        "total_m": 1059.507152078021
+      },
+      "time": {
+        "base_min": 13.243839400975261,
+        "fast_min": 11.772301689755787,
+        "slow_min": 17.658452534633682
+      },
+      "terrain": {
+        "status": "excluded",
+        "forward_m": 8.139658902140757,
+        "reverse_m": 5.644791396620285,
+        "height_range_m": 7.523501005846223,
+        "forward_range_m": [
+          6.226458595087793,
+          19.07954395268582
+        ],
+        "reverse_range_m": [
+          3.714409961194498,
+          16.584340398897734
+        ],
+        "exclusion_reason": "검토 대상 표고점의 영향을 받아 비교에서 제외했습니다.",
+        "missing_reason": null,
+        "is_measured_walk": false,
+        "used_in_duration": false
+      },
+      "bus_reported": null,
+      "school_reference_date": "2026-10-01"
+    },
+    {
+      "id": "expanded:74683d102881b74ef7cbe298",
+      "complex_id": "provisional-complex:088d605e93032f2110988b0e",
+      "name": "남성",
+      "address": "문래동2가 35",
+      "purpose": "bus_stop",
+      "destination_id": "osm:node:11695717890",
+      "destination": "신도림역",
+      "destination_map_ref": "17834",
+      "status": "assumed_connector_total",
+      "missing_reason": null,
+      "distance": {
+        "origin_m": 59.039705955694394,
+        "network_m": 385.8583856062181,
+        "destination_m": 10.029196262346264,
+        "total_m": 454.92728782425877
+      },
+      "time": {
+        "base_min": 5.686591097803235,
+        "fast_min": 5.054747642491764,
+        "slow_min": 7.582121463737646
+      },
+      "terrain": {
+        "status": "excluded",
+        "forward_m": 18.016051459546176,
+        "reverse_m": 13.43619495162637,
+        "height_range_m": 10.793961427336196,
+        "forward_range_m": [
+          13.770683701509169,
+          20.943722465387307
+        ],
+        "reverse_range_m": [
+          9.277768745463396,
+          17.444918408068787
+        ],
+        "exclusion_reason": "교량·원자료의 영향을 받아 비교에서 제외했습니다.",
+        "missing_reason": null,
+        "is_measured_walk": false,
+        "used_in_duration": false
+      },
+      "bus_reported": null,
+      "school_reference_date": null
+    },
+    {
+      "id": "expanded:25479068d1dfd8eb3431f0b5",
+      "complex_id": "provisional-complex:10a0bd0119d7f1f21caf71ae",
+      "name": "한신",
+      "address": "문래동6가 43",
+      "purpose": "station",
+      "destination_id": "osm:node:3404807927",
+      "destination": "도림천역 2번출구",
+      "destination_map_ref": "2",
+      "status": "disconnected",
+      "missing_reason": "보행 가능 여부나 연결 구간의 근거가 부족합니다.",
+      "distance": {
+        "origin_m": 59.08753752346316,
+        "network_m": null,
+        "destination_m": 5.9145279993968005,
+        "total_m": null
+      },
+      "time": {
+        "base_min": null,
+        "fast_min": null,
+        "slow_min": null
+      },
+      "terrain": {
+        "status": "missing",
+        "forward_m": null,
+        "reverse_m": null,
+        "height_range_m": null,
+        "forward_range_m": null,
+        "reverse_range_m": null,
+        "exclusion_reason": null,
+        "missing_reason": "no_mapped_route_geometry",
+        "is_measured_walk": false,
+        "used_in_duration": false
+      },
+      "bus_reported": null,
+      "school_reference_date": null
+    },
+    {
+      "id": "expanded:f64d019fe68d3e7bb8174237",
+      "complex_id": "provisional-complex:10a0bd0119d7f1f21caf71ae",
+      "name": "한신",
+      "address": "문래동6가 43",
+      "purpose": "school",
+      "destination_id": "B000002002",
+      "destination": "서울영문초등학교",
+      "destination_map_ref": null,
+      "status": "assumed_connector_total",
+      "missing_reason": null,
+      "distance": {
+        "origin_m": 59.08753752346316,
+        "network_m": 384.70664976509664,
+        "destination_m": 47.85443304544833,
+        "total_m": 491.6486203340081
+      },
+      "time": {
+        "base_min": 6.145607754175101,
+        "fast_min": 5.462762448155646,
+        "slow_min": 8.19414367223347
+      },
+      "terrain": {
+        "status": "reference",
+        "forward_m": 2.2307584781968117,
+        "reverse_m": 1.3972346099795523,
+        "height_range_m": 1.8590744956069107,
+        "forward_range_m": [
+          2.0724363423877543,
+          2.445436107528465
+        ],
+        "reverse_range_m": [
+          1.083172044665485,
+          1.79042038092126
+        ],
+        "exclusion_reason": null,
+        "missing_reason": null,
+        "is_measured_walk": false,
+        "used_in_duration": false
+      },
+      "bus_reported": null,
+      "school_reference_date": "2026-10-01"
+    },
+    {
+      "id": "expanded:4b7dcc84d89197ed5f1e34ef",
+      "complex_id": "provisional-complex:10a0bd0119d7f1f21caf71ae",
+      "name": "한신",
+      "address": "문래동6가 43",
+      "purpose": "bus_stop",
+      "destination_id": "osm:node:357853470",
+      "destination": "문래중학교",
+      "destination_map_ref": null,
+      "status": "assumed_connector_total",
+      "missing_reason": null,
+      "distance": {
+        "origin_m": 59.08753752346316,
+        "network_m": 29.681292661929206,
+        "destination_m": 5.564988385616955,
+        "total_m": 94.33381857100933
+      },
+      "time": {
+        "base_min": 1.1791727321376166,
+        "fast_min": 1.0481535396778814,
+        "slow_min": 1.5722303095168222
+      },
+      "terrain": {
+        "status": "reference",
+        "forward_m": 0.0412341231879747,
+        "reverse_m": 0.8523001475698422,
+        "height_range_m": 0.8523001475698422,
+        "forward_range_m": [
+          0.00801679751031159,
+          0.12000785303230277
+        ],
+        "reverse_range_m": [
+          0.5519472466962991,
+          0.9522525156391257
+        ],
+        "exclusion_reason": null,
+        "missing_reason": null,
+        "is_measured_walk": false,
+        "used_in_duration": false
+      },
+      "bus_reported": null,
+      "school_reference_date": null
+    },
+    {
+      "id": "expanded:03246a60e3740070339a5f00",
+      "complex_id": "provisional-complex:38fbde3ddb8b341010e6b4fa",
+      "name": "현대1차",
+      "address": "문래동6가 46",
+      "purpose": "station",
+      "destination_id": "osm:node:3404807927",
+      "destination": "도림천역 2번출구",
+      "destination_map_ref": "2",
+      "status": "disconnected",
+      "missing_reason": "보행 가능 여부나 연결 구간의 근거가 부족합니다.",
+      "distance": {
+        "origin_m": 56.65725858473593,
+        "network_m": null,
+        "destination_m": 5.9145279993968005,
+        "total_m": null
+      },
+      "time": {
+        "base_min": null,
+        "fast_min": null,
+        "slow_min": null
+      },
+      "terrain": {
+        "status": "missing",
+        "forward_m": null,
+        "reverse_m": null,
+        "height_range_m": null,
+        "forward_range_m": null,
+        "reverse_range_m": null,
+        "exclusion_reason": null,
+        "missing_reason": "no_mapped_route_geometry",
+        "is_measured_walk": false,
+        "used_in_duration": false
+      },
+      "bus_reported": null,
+      "school_reference_date": null
+    },
+    {
+      "id": "expanded:0907287ae7c9ddd18a33968d",
+      "complex_id": "provisional-complex:38fbde3ddb8b341010e6b4fa",
+      "name": "현대1차",
+      "address": "문래동6가 46",
+      "purpose": "school",
+      "destination_id": "B000002002",
+      "destination": "서울영문초등학교",
+      "destination_map_ref": null,
+      "status": "assumed_connector_total",
+      "missing_reason": null,
+      "distance": {
+        "origin_m": 56.65725858473593,
+        "network_m": 665.9913079425105,
+        "destination_m": 47.85443304544833,
+        "total_m": 770.5029995726948
+      },
+      "time": {
+        "base_min": 9.631287494658684,
+        "fast_min": 8.561144439696609,
+        "slow_min": 12.841716659544913
+      },
+      "terrain": {
+        "status": "reference",
+        "forward_m": 2.961749405519014,
+        "reverse_m": 3.0510856372635358,
+        "height_range_m": 2.189517541413398,
+        "forward_range_m": [
+          2.6980162629998103,
+          5.261905735459521
+        ],
+        "reverse_range_m": [
+          2.6133908345720576,
+          7.456375818343738
+        ],
+        "exclusion_reason": null,
+        "missing_reason": null,
+        "is_measured_walk": false,
+        "used_in_duration": false
+      },
+      "bus_reported": null,
+      "school_reference_date": "2026-10-01"
+    },
+    {
+      "id": "expanded:be532420e8933a73b6605452",
+      "complex_id": "provisional-complex:38fbde3ddb8b341010e6b4fa",
+      "name": "현대1차",
+      "address": "문래동6가 46",
+      "purpose": "bus_stop",
+      "destination_id": "osm:node:357853470",
+      "destination": "문래중학교",
+      "destination_map_ref": null,
+      "status": "assumed_connector_total",
+      "missing_reason": null,
+      "distance": {
+        "origin_m": 56.65725858473593,
+        "network_m": 310.965950839343,
+        "destination_m": 5.564988385616955,
+        "total_m": 373.1881978096959
+      },
+      "time": {
+        "base_min": 4.664852472621199,
+        "fast_min": 4.146535531218843,
+        "slow_min": 6.219803296828265
+      },
+      "terrain": {
+        "status": "reference",
+        "forward_m": 0.7608697450595265,
+        "reverse_m": 2.494795869403175,
+        "height_range_m": 2.0436883193269253,
+        "forward_range_m": [
+          0.5041450523759128,
+          2.9984535477137957
+        ],
+        "reverse_range_m": [
+          2.375952748517024,
+          6.537678397758853
+        ],
+        "exclusion_reason": null,
+        "missing_reason": null,
+        "is_measured_walk": false,
+        "used_in_duration": false
+      },
+      "bus_reported": null,
+      "school_reference_date": null
+    },
+    {
+      "id": "expanded:16aef4b47aee977916feaafb",
+      "complex_id": "provisional-complex:3e8aee27aa9a855fbc6b7244",
+      "name": "현대2차",
+      "address": "문래동6가 45",
+      "purpose": "station",
+      "destination_id": "osm:node:3403327408",
+      "destination": "양평역 2번출구",
+      "destination_map_ref": "2",
+      "status": "disconnected",
+      "missing_reason": "수집한 지도 범위에서 연결 구간이 빠져 있습니다.",
+      "distance": {
+        "origin_m": 43.91235058162605,
+        "network_m": null,
+        "destination_m": 26.527872528105696,
+        "total_m": null
+      },
+      "time": {
+        "base_min": null,
+        "fast_min": null,
+        "slow_min": null
+      },
+      "terrain": {
+        "status": "missing",
+        "forward_m": null,
+        "reverse_m": null,
+        "height_range_m": null,
+        "forward_range_m": null,
+        "reverse_range_m": null,
+        "exclusion_reason": null,
+        "missing_reason": "no_mapped_route_geometry",
+        "is_measured_walk": false,
+        "used_in_duration": false
+      },
+      "bus_reported": null,
+      "school_reference_date": null
+    },
+    {
+      "id": "expanded:4e587c43cc80c4c9de1e0206",
+      "complex_id": "provisional-complex:3e8aee27aa9a855fbc6b7244",
+      "name": "현대2차",
+      "address": "문래동6가 45",
+      "purpose": "school",
+      "destination_id": "B000002002",
+      "destination": "서울영문초등학교",
+      "destination_map_ref": null,
+      "status": "assumed_connector_total",
+      "missing_reason": null,
+      "distance": {
+        "origin_m": 43.91235058162605,
+        "network_m": 459.19784604948114,
+        "destination_m": 47.85443304544833,
+        "total_m": 550.9646296765555
+      },
+      "time": {
+        "base_min": 6.887057870956944,
+        "fast_min": 6.121829218628395,
+        "slow_min": 9.182743827942593
+      },
+      "terrain": {
+        "status": "reference",
+        "forward_m": 2.3479208764085797,
+        "reverse_m": 1.0302442666594995,
+        "height_range_m": 1.7028024327158011,
+        "forward_range_m": [
+          2.122085860831838,
+          2.854217492904729
+        ],
+        "reverse_range_m": [
+          0.7786673918568372,
+          2.4554901918841434
+        ],
+        "exclusion_reason": null,
+        "missing_reason": null,
+        "is_measured_walk": false,
+        "used_in_duration": false
+      },
+      "bus_reported": null,
+      "school_reference_date": "2026-10-01"
+    },
+    {
+      "id": "expanded:9187eec7225c1a22f728dde7",
+      "complex_id": "provisional-complex:3e8aee27aa9a855fbc6b7244",
+      "name": "현대2차",
+      "address": "문래동6가 45",
+      "purpose": "bus_stop",
+      "destination_id": "osm:node:357853470",
+      "destination": "문래중학교",
+      "destination_map_ref": null,
+      "status": "assumed_connector_total",
+      "missing_reason": null,
+      "distance": {
+        "origin_m": 43.91235058162605,
+        "network_m": 240.87328614730717,
+        "destination_m": 5.564988385616955,
+        "total_m": 290.3506251145502
+      },
+      "time": {
+        "base_min": 3.6293828139318776,
+        "fast_min": 3.226118056828336,
+        "slow_min": 4.839177085242503
+      },
+      "terrain": {
+        "status": "reference",
+        "forward_m": 0.6952721529839945,
+        "reverse_m": 1.0221854358340412,
+        "height_range_m": 0.8619003148834121,
+        "forward_range_m": [
+          0.45639816163560987,
+          0.9448451613546096
+        ],
+        "reverse_range_m": [
+          0.7804392302123198,
+          2.1902110925512606
+        ],
+        "exclusion_reason": null,
+        "missing_reason": null,
+        "is_measured_walk": false,
+        "used_in_duration": false
+      },
+      "bus_reported": null,
+      "school_reference_date": null
+    },
+    {
+      "id": "expanded:d106da0e4982c6c29e3a2e5c",
+      "complex_id": "provisional-complex:69e164f0fce187e1da87611e",
+      "name": "문래현대5차",
+      "address": "문래동5가 23-1",
+      "purpose": "station",
+      "destination_id": "osm:node:3404807927",
+      "destination": "도림천역 2번출구",
+      "destination_map_ref": "2",
+      "status": "disconnected",
+      "missing_reason": "보행 가능 여부나 연결 구간의 근거가 부족합니다.",
+      "distance": {
+        "origin_m": 56.693917052346826,
+        "network_m": null,
+        "destination_m": 5.9145279993968005,
+        "total_m": null
+      },
+      "time": {
+        "base_min": null,
+        "fast_min": null,
+        "slow_min": null
+      },
+      "terrain": {
+        "status": "missing",
+        "forward_m": null,
+        "reverse_m": null,
+        "height_range_m": null,
+        "forward_range_m": null,
+        "reverse_range_m": null,
+        "exclusion_reason": null,
+        "missing_reason": "no_mapped_route_geometry",
+        "is_measured_walk": false,
+        "used_in_duration": false
+      },
+      "bus_reported": null,
+      "school_reference_date": null
+    },
+    {
+      "id": "expanded:3dc99fc313b27af614e63b1d",
+      "complex_id": "provisional-complex:69e164f0fce187e1da87611e",
+      "name": "문래현대5차",
+      "address": "문래동5가 23-1",
+      "purpose": "school",
+      "destination_id": "B000002002",
+      "destination": "서울영문초등학교",
+      "destination_map_ref": null,
+      "status": "assumed_connector_total",
+      "missing_reason": null,
+      "distance": {
+        "origin_m": 56.693917052346826,
+        "network_m": 663.2995532127275,
+        "destination_m": 47.85443304544833,
+        "total_m": 767.8479033105226
+      },
+      "time": {
+        "base_min": 9.598098791381533,
+        "fast_min": 8.531643370116917,
+        "slow_min": 12.797465055175376
+      },
+      "terrain": {
+        "status": "reference",
+        "forward_m": 2.572445906875169,
+        "reverse_m": 1.3689592991016006,
+        "height_range_m": 1.861045557469593,
+        "forward_range_m": [
+          2.216625816734349,
+          3.218520778815482
+        ],
+        "reverse_range_m": [
+          0.8835050070499202,
+          2.1572052666631123
+        ],
+        "exclusion_reason": null,
+        "missing_reason": null,
+        "is_measured_walk": false,
+        "used_in_duration": false
+      },
+      "bus_reported": null,
+      "school_reference_date": "2026-10-01"
+    },
+    {
+      "id": "expanded:ac074b0474024f6e13876e5d",
+      "complex_id": "provisional-complex:69e164f0fce187e1da87611e",
+      "name": "문래현대5차",
+      "address": "문래동5가 23-1",
+      "purpose": "bus_stop",
+      "destination_id": "osm:node:357853992",
+      "destination": "현대6차아파트",
+      "destination_map_ref": null,
+      "status": "assumed_connector_total",
+      "missing_reason": null,
+      "distance": {
+        "origin_m": 56.693917052346826,
+        "network_m": 116.34073174613128,
+        "destination_m": 4.971268160283086,
+        "total_m": 178.0059169587612
+      },
+      "time": {
+        "base_min": 2.225073961984515,
+        "fast_min": 1.9778435217640131,
+        "slow_min": 2.96676528264602
+      },
+      "terrain": {
+        "status": "reference",
+        "forward_m": 0.30112804602913634,
+        "reverse_m": 0.7565623360145635,
+        "height_range_m": 0.5705844360873176,
+        "forward_range_m": [
+          0.0011871728709911267,
+          0.8464232571864825
+        ],
+        "reverse_range_m": [
+          0.515608410927503,
+          1.3191759192777504
+        ],
+        "exclusion_reason": null,
+        "missing_reason": null,
+        "is_measured_walk": false,
+        "used_in_duration": false
+      },
+      "bus_reported": null,
+      "school_reference_date": null
+    },
+    {
+      "id": "expanded:e03218787a72e06950f179d4",
+      "complex_id": "provisional-complex:7df10a04b8002e314ac18b00",
+      "name": "문래미원",
+      "address": "문래동6가 54",
+      "purpose": "station",
+      "destination_id": "osm:node:3403327408",
+      "destination": "양평역 2번출구",
+      "destination_map_ref": "2",
+      "status": "disconnected",
+      "missing_reason": "수집한 지도 범위에서 연결 구간이 빠져 있습니다.",
+      "distance": {
+        "origin_m": 56.07257898322653,
+        "network_m": null,
+        "destination_m": 26.527872528105696,
+        "total_m": null
+      },
+      "time": {
+        "base_min": null,
+        "fast_min": null,
+        "slow_min": null
+      },
+      "terrain": {
+        "status": "missing",
+        "forward_m": null,
+        "reverse_m": null,
+        "height_range_m": null,
+        "forward_range_m": null,
+        "reverse_range_m": null,
+        "exclusion_reason": null,
+        "missing_reason": "no_mapped_route_geometry",
+        "is_measured_walk": false,
+        "used_in_duration": false
+      },
+      "bus_reported": null,
+      "school_reference_date": null
+    },
+    {
+      "id": "expanded:0aed907a4a7adf7848626162",
+      "complex_id": "provisional-complex:7df10a04b8002e314ac18b00",
+      "name": "문래미원",
+      "address": "문래동6가 54",
+      "purpose": "school",
+      "destination_id": "B000002002",
+      "destination": "서울영문초등학교",
+      "destination_map_ref": null,
+      "status": "assumed_connector_total",
+      "missing_reason": null,
+      "distance": {
+        "origin_m": 56.07257898322653,
+        "network_m": 170.9573822375587,
+        "destination_m": 47.85443304544833,
+        "total_m": 274.8843942662336
+      },
+      "time": {
+        "base_min": 3.43605492832792,
+        "fast_min": 3.0542710474025956,
+        "slow_min": 4.581406571103893
+      },
+      "terrain": {
+        "status": "reference",
+        "forward_m": 1.3597077007248242,
+        "reverse_m": 0.37549647439389133,
+        "height_range_m": 1.3597077007248242,
+        "forward_range_m": [
+          1.3291961050532013,
+          1.405455344581645
+        ],
+        "reverse_range_m": [
+          0.37511307478234635,
+          0.45359371337681686
+        ],
+        "exclusion_reason": null,
+        "missing_reason": null,
+        "is_measured_walk": false,
+        "used_in_duration": false
+      },
+      "bus_reported": null,
+      "school_reference_date": "2026-10-01"
+    },
+    {
+      "id": "expanded:b52fcaf01dd23ea1820375ba",
+      "complex_id": "provisional-complex:7df10a04b8002e314ac18b00",
+      "name": "문래미원",
+      "address": "문래동6가 54",
+      "purpose": "bus_stop",
+      "destination_id": "osm:node:11684169423",
+      "destination": "e편한세상문래에듀플라츠",
+      "destination_map_ref": null,
+      "status": "assumed_connector_total",
+      "missing_reason": null,
+      "distance": {
+        "origin_m": 56.07257898322653,
+        "network_m": 9.94872482921109,
+        "destination_m": 19.546176954415298,
+        "total_m": 85.56748076685292
+      },
+      "time": {
+        "base_min": 1.0695935095856615,
+        "fast_min": 0.9507497862983658,
+        "slow_min": 1.4261246794475488
+      },
+      "terrain": {
+        "status": "reference",
+        "forward_m": 0.0,
+        "reverse_m": 0.5637861311966468,
+        "height_range_m": 0.5637861311966468,
+        "forward_range_m": [
+          0.0,
+          0.0
+        ],
+        "reverse_range_m": [
+          0.563786131196645,
+          0.5637861311966468
+        ],
+        "exclusion_reason": null,
+        "missing_reason": null,
+        "is_measured_walk": false,
+        "used_in_duration": false
+      },
+      "bus_reported": null,
+      "school_reference_date": null
+    },
+    {
+      "id": "expanded:c1e246b31d26e90796741945",
+      "complex_id": "provisional-complex:7e92fd42bb6661b8d321ee35",
+      "name": "문래두산위브",
+      "address": "문래동5가 14",
+      "purpose": "station",
+      "destination_id": "osm:node:3404807927",
+      "destination": "도림천역 2번출구",
+      "destination_map_ref": "2",
+      "status": "disconnected",
+      "missing_reason": "보행 가능 여부나 연결 구간의 근거가 부족합니다.",
+      "distance": {
+        "origin_m": 49.10154357364058,
+        "network_m": null,
+        "destination_m": 5.9145279993968005,
+        "total_m": null
+      },
+      "time": {
+        "base_min": null,
+        "fast_min": null,
+        "slow_min": null
+      },
+      "terrain": {
+        "status": "missing",
+        "forward_m": null,
+        "reverse_m": null,
+        "height_range_m": null,
+        "forward_range_m": null,
+        "reverse_range_m": null,
+        "exclusion_reason": null,
+        "missing_reason": "no_mapped_route_geometry",
+        "is_measured_walk": false,
+        "used_in_duration": false
+      },
+      "bus_reported": null,
+      "school_reference_date": null
+    },
+    {
+      "id": "expanded:9ac51a876a8092419c9bec8c",
+      "complex_id": "provisional-complex:7e92fd42bb6661b8d321ee35",
+      "name": "문래두산위브",
+      "address": "문래동5가 14",
+      "purpose": "school",
+      "destination_id": "B000002002",
+      "destination": "서울영문초등학교",
+      "destination_map_ref": null,
+      "status": "assumed_connector_total",
+      "missing_reason": null,
+      "distance": {
+        "origin_m": 49.10154357364058,
+        "network_m": 455.99788681579275,
+        "destination_m": 47.85443304544833,
+        "total_m": 552.9538634348817
+      },
+      "time": {
+        "base_min": 6.911923292936021,
+        "fast_min": 6.143931815943129,
+        "slow_min": 9.215897723914695
+      },
+      "terrain": {
+        "status": "reference",
+        "forward_m": 1.79843516659382,
+        "reverse_m": 0.5976317211374012,
+        "height_range_m": 1.7484813365661234,
+        "forward_range_m": [
+          1.4566495590643296,
+          1.902539755091711
+        ],
+        "reverse_range_m": [
+          0.28111226502871745,
+          0.7118082873006868
+        ],
+        "exclusion_reason": null,
+        "missing_reason": null,
+        "is_measured_walk": false,
+        "used_in_duration": false
+      },
+      "bus_reported": null,
+      "school_reference_date": "2026-10-01"
+    },
+    {
+      "id": "expanded:4bd7fca6a196da13bfae2254",
+      "complex_id": "provisional-complex:7e92fd42bb6661b8d321ee35",
+      "name": "문래두산위브",
+      "address": "문래동5가 14",
+      "purpose": "bus_stop",
+      "destination_id": "osm:node:4631210841",
+      "destination": "두산위브진주아파트",
+      "destination_map_ref": null,
+      "status": "assumed_connector_total",
+      "missing_reason": null,
+      "distance": {
+        "origin_m": 49.10154357364058,
+        "network_m": 196.82082676401367,
+        "destination_m": 1.589576384932284,
+        "total_m": 247.51194672258654
+      },
+      "time": {
+        "base_min": 3.093899334032332,
+        "fast_min": 2.750132741362073,
+        "slow_min": 4.125199112043109
+      },
+      "terrain": {
+        "status": "reference",
+        "forward_m": 0.7579079767968864,
+        "reverse_m": 1.0442690077855783,
+        "height_range_m": 0.6190136464892948,
+        "forward_range_m": [
+          0.39337574617998605,
+          1.0893341422214515
+        ],
+        "reverse_range_m": [
+          0.5999858092925159,
+          1.3314899473384116
+        ],
+        "exclusion_reason": null,
+        "missing_reason": null,
+        "is_measured_walk": false,
+        "used_in_duration": false
+      },
+      "bus_reported": null,
+      "school_reference_date": null
+    },
+    {
+      "id": "expanded:e7eb6ee49fd7823b98840b5e",
+      "complex_id": "provisional-complex:80eeee74b64e8e2dd9c0a44c",
+      "name": "문래베어스타운",
+      "address": "문래동6가 38-1",
+      "purpose": "station",
+      "destination_id": "osm:node:3404807927",
+      "destination": "도림천역 2번출구",
+      "destination_map_ref": "2",
+      "status": "disconnected",
+      "missing_reason": "보행 가능 여부나 연결 구간의 근거가 부족합니다.",
+      "distance": {
+        "origin_m": 53.933853411760865,
+        "network_m": null,
+        "destination_m": 5.9145279993968005,
+        "total_m": null
+      },
+      "time": {
+        "base_min": null,
+        "fast_min": null,
+        "slow_min": null
+      },
+      "terrain": {
+        "status": "missing",
+        "forward_m": null,
+        "reverse_m": null,
+        "height_range_m": null,
+        "forward_range_m": null,
+        "reverse_range_m": null,
+        "exclusion_reason": null,
+        "missing_reason": "no_mapped_route_geometry",
+        "is_measured_walk": false,
+        "used_in_duration": false
+      },
+      "bus_reported": null,
+      "school_reference_date": null
+    },
+    {
+      "id": "expanded:6c03669ea34e7da948810441",
+      "complex_id": "provisional-complex:80eeee74b64e8e2dd9c0a44c",
+      "name": "문래베어스타운",
+      "address": "문래동6가 38-1",
+      "purpose": "school",
+      "destination_id": "B000002002",
+      "destination": "서울영문초등학교",
+      "destination_map_ref": null,
+      "status": "assumed_connector_total",
+      "missing_reason": null,
+      "distance": {
+        "origin_m": 53.933853411760865,
+        "network_m": 368.9337045824474,
+        "destination_m": 47.85443304544833,
+        "total_m": 470.7219910396566
+      },
+      "time": {
+        "base_min": 5.884024887995707,
+        "fast_min": 5.230244344885073,
+        "slow_min": 7.8453665173276095
+      },
+      "terrain": {
+        "status": "reference",
+        "forward_m": 2.2246946795822318,
+        "reverse_m": 0.8499417583671605,
+        "height_range_m": 1.8247911722138648,
+        "forward_range_m": [
+          2.084844527312974,
+          2.450788154661205
+        ],
+        "reverse_range_m": [
+          0.6965708877400534,
+          1.0859142805254782
+        ],
+        "exclusion_reason": null,
+        "missing_reason": null,
+        "is_measured_walk": false,
+        "used_in_duration": false
+      },
+      "bus_reported": null,
+      "school_reference_date": "2026-10-01"
+    },
+    {
+      "id": "expanded:5a813b2fd17548225f0311e7",
+      "complex_id": "provisional-complex:80eeee74b64e8e2dd9c0a44c",
+      "name": "문래베어스타운",
+      "address": "문래동6가 38-1",
+      "purpose": "bus_stop",
+      "destination_id": "osm:node:357948498",
+      "destination": "문래중학교",
+      "destination_map_ref": null,
+      "status": "assumed_connector_total",
+      "missing_reason": null,
+      "distance": {
+        "origin_m": 53.933853411760865,
+        "network_m": 29.06072166601164,
+        "destination_m": 8.345149117949996,
+        "total_m": 91.33972419572251
+      },
+      "time": {
+        "base_min": 1.1417465524465313,
+        "fast_min": 1.0148858243969168,
+        "slow_min": 1.5223287365953753
+      },
+      "terrain": {
+        "status": "reference",
+        "forward_m": 0.0,
+        "reverse_m": 0.45526521922158825,
+        "height_range_m": 0.45526521922158825,
+        "forward_range_m": [
+          0.0,
+          0.19501289809920141
+        ],
+        "reverse_range_m": [
+          0.33842588447508337,
+          0.47187269692381406
+        ],
+        "exclusion_reason": null,
+        "missing_reason": null,
+        "is_measured_walk": false,
+        "used_in_duration": false
+      },
+      "bus_reported": null,
+      "school_reference_date": null
+    },
+    {
+      "id": "expanded:6dada71ceecf0aa354d5cf6e",
+      "complex_id": "provisional-complex:a1b33c7e2078bfc13dae4234",
+      "name": "문래대림",
+      "address": "문래동5가 1",
+      "purpose": "station",
+      "destination_id": "osm:node:3404807927",
+      "destination": "도림천역 2번출구",
+      "destination_map_ref": "2",
+      "status": "disconnected",
+      "missing_reason": "보행 가능 여부나 연결 구간의 근거가 부족합니다.",
+      "distance": {
+        "origin_m": 47.34467978903524,
+        "network_m": null,
+        "destination_m": 5.9145279993968005,
+        "total_m": null
+      },
+      "time": {
+        "base_min": null,
+        "fast_min": null,
+        "slow_min": null
+      },
+      "terrain": {
+        "status": "missing",
+        "forward_m": null,
+        "reverse_m": null,
+        "height_range_m": null,
+        "forward_range_m": null,
+        "reverse_range_m": null,
+        "exclusion_reason": null,
+        "missing_reason": "no_mapped_route_geometry",
+        "is_measured_walk": false,
+        "used_in_duration": false
+      },
+      "bus_reported": null,
+      "school_reference_date": null
+    },
+    {
+      "id": "expanded:49b7b01a882b20a71318bd09",
+      "complex_id": "provisional-complex:a1b33c7e2078bfc13dae4234",
+      "name": "문래대림",
+      "address": "문래동5가 1",
+      "purpose": "school",
+      "destination_id": "B000002002",
+      "destination": "서울영문초등학교",
+      "destination_map_ref": null,
+      "status": "assumed_connector_total",
+      "missing_reason": null,
+      "distance": {
+        "origin_m": 47.34467978903524,
+        "network_m": 447.6722315370825,
+        "destination_m": 47.85443304544833,
+        "total_m": 542.871344371566
+      },
+      "time": {
+        "base_min": 6.785891804644575,
+        "fast_min": 6.031903826350733,
+        "slow_min": 9.047855739526101
+      },
+      "terrain": {
+        "status": "reference",
+        "forward_m": 2.2988953045224854,
+        "reverse_m": 1.1977102022010406,
+        "height_range_m": 1.5053801352985356,
+        "forward_range_m": [
+          1.2432911857829456,
+          2.5058735347905294
+        ],
+        "reverse_range_m": [
+          0.19637508406046322,
+          1.357863368183036
+        ],
+        "exclusion_reason": null,
+        "missing_reason": null,
+        "is_measured_walk": false,
+        "used_in_duration": false
+      },
+      "bus_reported": null,
+      "school_reference_date": "2026-10-01"
+    },
+    {
+      "id": "expanded:3e4b22784be985d926f8efb9",
+      "complex_id": "provisional-complex:a1b33c7e2078bfc13dae4234",
+      "name": "문래대림",
+      "address": "문래동5가 1",
+      "purpose": "bus_stop",
+      "destination_id": "osm:node:12299122332",
+      "destination": "동양볼링",
+      "destination_map_ref": null,
+      "status": "assumed_connector_total",
+      "missing_reason": null,
+      "distance": {
+        "origin_m": 47.34467978903524,
+        "network_m": 82.97457749318124,
+        "destination_m": 14.50274915336995,
+        "total_m": 144.82200643558645
+      },
+      "time": {
+        "base_min": 1.8102750804448307,
+        "fast_min": 1.6091334048398493,
+        "slow_min": 2.413700107259774
+      },
+      "terrain": {
+        "status": "reference",
+        "forward_m": 0.3857204764038933,
+        "reverse_m": 0.3910082173963527,
+        "height_range_m": 0.3062483204210249,
+        "forward_range_m": [
+          0.2648549393417241,
+          0.46102619778621623
+        ],
+        "reverse_range_m": [
+          0.17404715325677422,
+          0.43551742974196017
+        ],
+        "exclusion_reason": null,
+        "missing_reason": null,
+        "is_measured_walk": false,
+        "used_in_duration": false
+      },
+      "bus_reported": {
+        "name": "동양볼링장",
+        "stop_number": "19392",
+        "direction": "KT&G영등포지사·문래동종점 방면",
+        "routes": [
+          "6625",
+          "8671"
+        ],
+        "naver_map_id": "112252",
+        "source_ref": "naver_map_report",
+        "source_label": "네이버 지도 확인(전달 근거)",
+        "official_operator_verified": false,
+        "exact_boarding_sign_coordinates": null,
+        "reproduction_url": "https://map.naver.com/p/bus/bus-station/%EB%8F%99%EC%96%91%EB%B3%BC%EB%A7%81%EC%9E%A5/bus-station/112252?c=14.00,0,0,0,adh&p=ZjyLRjoGrxAeWHB9S_750A,-37.5,0,55.94,Float"
+      },
+      "school_reference_date": null
+    },
+    {
+      "id": "expanded:69560090e84637f3e672fc00",
+      "complex_id": "provisional-complex:b70d5ba38f68aac063ab3170",
+      "name": "현대6차",
+      "address": "문래동6가 55-1",
+      "purpose": "station",
+      "destination_id": "osm:node:3404807927",
+      "destination": "도림천역 2번출구",
+      "destination_map_ref": "2",
+      "status": "disconnected",
+      "missing_reason": "보행 가능 여부나 연결 구간의 근거가 부족합니다.",
+      "distance": {
+        "origin_m": 49.09044188760543,
+        "network_m": null,
+        "destination_m": 5.9145279993968005,
+        "total_m": null
+      },
+      "time": {
+        "base_min": null,
+        "fast_min": null,
+        "slow_min": null
+      },
+      "terrain": {
+        "status": "missing",
+        "forward_m": null,
+        "reverse_m": null,
+        "height_range_m": null,
+        "forward_range_m": null,
+        "reverse_range_m": null,
+        "exclusion_reason": null,
+        "missing_reason": "no_mapped_route_geometry",
+        "is_measured_walk": false,
+        "used_in_duration": false
+      },
+      "bus_reported": null,
+      "school_reference_date": null
+    },
+    {
+      "id": "expanded:ab71d814038e9710f2f14420",
+      "complex_id": "provisional-complex:b70d5ba38f68aac063ab3170",
+      "name": "현대6차",
+      "address": "문래동6가 55-1",
+      "purpose": "school",
+      "destination_id": "B000002002",
+      "destination": "서울영문초등학교",
+      "destination_map_ref": null,
+      "status": "assumed_connector_total",
+      "missing_reason": null,
+      "distance": {
+        "origin_m": 49.09044188760543,
+        "network_m": 508.9387776305917,
+        "destination_m": 47.85443304544833,
+        "total_m": 605.8836525636455
+      },
+      "time": {
+        "base_min": 7.573545657045568,
+        "fast_min": 6.732040584040505,
+        "slow_min": 10.098060876060758
+      },
+      "terrain": {
+        "status": "reference",
+        "forward_m": 2.346608411374027,
+        "reverse_m": 1.2607513518951086,
+        "height_range_m": 1.851469535935344,
+        "forward_range_m": [
+          2.1549107438253063,
+          2.4744209559233905
+        ],
+        "reverse_range_m": [
+          0.6344589958624889,
+          1.5830315002651112
+        ],
+        "exclusion_reason": null,
+        "missing_reason": null,
+        "is_measured_walk": false,
+        "used_in_duration": false
+      },
+      "bus_reported": null,
+      "school_reference_date": "2026-10-01"
+    },
+    {
+      "id": "expanded:e59c869a082e1a19bbd8401d",
+      "complex_id": "provisional-complex:b70d5ba38f68aac063ab3170",
+      "name": "현대6차",
+      "address": "문래동6가 55-1",
+      "purpose": "bus_stop",
+      "destination_id": "osm:node:357853992",
+      "destination": "현대6차아파트",
+      "destination_map_ref": null,
+      "status": "assumed_connector_total",
+      "missing_reason": null,
+      "distance": {
+        "origin_m": 49.09044188760543,
+        "network_m": 38.020043836004525,
+        "destination_m": 4.971268160283086,
+        "total_m": 92.08175388389304
+      },
+      "time": {
+        "base_min": 1.151021923548663,
+        "fast_min": 1.0231305987099226,
+        "slow_min": 1.5346958980648842
+      },
+      "terrain": {
+        "status": "reference",
+        "forward_m": 0.032922805754927786,
+        "reverse_m": 0.6059866440350046,
+        "height_range_m": 0.6059866440350046,
+        "forward_range_m": [
+          0.011653588271984816,
+          0.03981700814337419
+        ],
+        "reverse_range_m": [
+          0.3154473345850848,
+          0.6652619290979711
+        ],
+        "exclusion_reason": null,
+        "missing_reason": null,
+        "is_measured_walk": false,
+        "used_in_duration": false
+      },
+      "bus_reported": null,
+      "school_reference_date": null
+    },
+    {
+      "id": "expanded:2bddbae6dbc4f4b258dbfc96",
+      "complex_id": "provisional-complex:bb1dcde115141bf3d1fdd44f",
+      "name": "국화맨션",
+      "address": "문래동3가 76-1",
+      "purpose": "station",
+      "destination_id": "osm:node:3408458089",
+      "destination": "문래역 1번출구",
+      "destination_map_ref": "1",
+      "status": "assumed_connector_total",
+      "missing_reason": null,
+      "distance": {
+        "origin_m": 13.615214069348212,
+        "network_m": 609.9935824009617,
+        "destination_m": 24.168362909976903,
+        "total_m": 647.7771593802868
+      },
+      "time": {
+        "base_min": 8.097214492253585,
+        "fast_min": 7.197523993114298,
+        "slow_min": 10.796285989671446
+      },
+      "terrain": {
+        "status": "reference",
+        "forward_m": 1.1258359861263347,
+        "reverse_m": 1.114349188947564,
+        "height_range_m": 0.523188871444658,
+        "forward_range_m": [
+          0.660283186658507,
+          1.2281496727208037
+        ],
+        "reverse_range_m": [
+          0.8780805491210675,
+          1.2524224017617769
+        ],
+        "exclusion_reason": null,
+        "missing_reason": null,
+        "is_measured_walk": false,
+        "used_in_duration": false
+      },
+      "bus_reported": null,
+      "school_reference_date": null
+    },
+    {
+      "id": "expanded:7cfe3a7db9302bdcd3e2e708",
+      "complex_id": "provisional-complex:bb1dcde115141bf3d1fdd44f",
+      "name": "국화맨션",
+      "address": "문래동3가 76-1",
+      "purpose": "school",
+      "destination_id": "B000002009",
+      "destination": "서울문래초등학교",
+      "destination_map_ref": null,
+      "status": "assumed_connector_total",
+      "missing_reason": null,
+      "distance": {
+        "origin_m": 13.615214069348212,
+        "network_m": 626.3113420055453,
+        "destination_m": 10.46364978503298,
+        "total_m": 650.3902058599265
+      },
+      "time": {
+        "base_min": 8.12987757324908,
+        "fast_min": 7.226557842888072,
+        "slow_min": 10.839836764332109
+      },
+      "terrain": {
+        "status": "reference",
+        "forward_m": 0.9301449648076492,
+        "reverse_m": 0.887556533196932,
+        "height_range_m": 0.9124224305854867,
+        "forward_range_m": [
+          0.5240082049201487,
+          2.1856550812464484
+        ],
+        "reverse_range_m": [
+          0.5240082049201487,
+          2.236904404304351
+        ],
+        "exclusion_reason": null,
+        "missing_reason": null,
+        "is_measured_walk": false,
+        "used_in_duration": false
+      },
+      "bus_reported": null,
+      "school_reference_date": "2026-10-01"
+    },
+    {
+      "id": "expanded:0561a007d494de51713cbdc9",
+      "complex_id": "provisional-complex:bb1dcde115141bf3d1fdd44f",
+      "name": "국화맨션",
+      "address": "문래동3가 76-1",
+      "purpose": "bus_stop",
+      "destination_id": "osm:node:11684169434",
+      "destination": "문래역,문래자이아파트",
+      "destination_map_ref": null,
+      "status": "assumed_connector_total",
+      "missing_reason": null,
+      "distance": {
+        "origin_m": 13.615214069348212,
+        "network_m": 528.5482757843305,
+        "destination_m": 27.917216283862707,
+        "total_m": 570.0807061375414
+      },
+      "time": {
+        "base_min": 7.126008826719267,
+        "fast_min": 6.334230068194904,
+        "slow_min": 9.501345102292357
+      },
+      "terrain": {
+        "status": "reference",
+        "forward_m": 0.9251662367690354,
+        "reverse_m": 0.8825778051583164,
+        "height_range_m": 0.523188871444658,
+        "forward_range_m": [
+          0.5215706357710648,
+          1.0538533789581361
+        ],
+        "reverse_range_m": [
+          0.7207802214074803,
+          1.0340166704065084
+        ],
+        "exclusion_reason": null,
+        "missing_reason": null,
+        "is_measured_walk": false,
+        "used_in_duration": false
+      },
+      "bus_reported": null,
+      "school_reference_date": null
+    },
+    {
+      "id": "expanded:cb2d6b6cea602e4b360a02b2",
+      "complex_id": "provisional-complex:d1a7d25a2e2d33475712093d",
+      "name": "문래공원한신",
+      "address": "문래동3가 77-2",
+      "purpose": "station",
+      "destination_id": "osm:node:3408458089",
+      "destination": "문래역 1번출구",
+      "destination_map_ref": "1",
+      "status": "assumed_connector_total",
+      "missing_reason": null,
+      "distance": {
+        "origin_m": 31.62732886296935,
+        "network_m": 926.5961030035473,
+        "destination_m": 24.168362909976903,
+        "total_m": 982.3917947764935
+      },
+      "time": {
+        "base_min": 12.279897434706168,
+        "fast_min": 10.915464386405484,
+        "slow_min": 16.373196579608226
+      },
+      "terrain": {
+        "status": "reference",
+        "forward_m": 1.753767848938308,
+        "reverse_m": 1.9011714579311718,
+        "height_range_m": 1.0363158138310133,
+        "forward_range_m": [
+          1.3164128591179374,
+          1.8038379877042772
+        ],
+        "reverse_range_m": [
+          1.688783403368845,
+          2.097746169515334
+        ],
+        "exclusion_reason": null,
+        "missing_reason": null,
+        "is_measured_walk": false,
+        "used_in_duration": false
+      },
+      "bus_reported": null,
+      "school_reference_date": null
+    },
+    {
+      "id": "expanded:0097a5f60711a297b318ffe4",
+      "complex_id": "provisional-complex:d1a7d25a2e2d33475712093d",
+      "name": "문래공원한신",
+      "address": "문래동3가 77-2",
+      "purpose": "school",
+      "destination_id": "B000002009",
+      "destination": "서울문래초등학교",
+      "destination_map_ref": null,
+      "status": "assumed_connector_total",
+      "missing_reason": null,
+      "distance": {
+        "origin_m": 31.62732886296935,
+        "network_m": 592.192757471657,
+        "destination_m": 10.46364978503298,
+        "total_m": 634.2837361196594
+      },
+      "time": {
+        "base_min": 7.928546701495742,
+        "fast_min": 7.047597067996215,
+        "slow_min": 10.571395601994322
+      },
+      "terrain": {
+        "status": "reference",
+        "forward_m": 0.9579305211556637,
+        "reverse_m": 1.074232495716581,
+        "height_range_m": 0.5355861261537278,
+        "forward_range_m": [
+          0.5967007089205101,
+          2.0947569897424874
+        ],
+        "reverse_range_m": [
+          0.6544116774687811,
+          2.5006267385977576
+        ],
+        "exclusion_reason": null,
+        "missing_reason": null,
+        "is_measured_walk": false,
+        "used_in_duration": false
+      },
+      "bus_reported": null,
+      "school_reference_date": "2026-10-01"
+    },
+    {
+      "id": "expanded:83d06c837404f34a21993d8d",
+      "complex_id": "provisional-complex:d1a7d25a2e2d33475712093d",
+      "name": "문래공원한신",
+      "address": "문래동3가 77-2",
+      "purpose": "bus_stop",
+      "destination_id": "osm:node:11684169434",
+      "destination": "문래역,문래자이아파트",
+      "destination_map_ref": null,
+      "status": "assumed_connector_total",
+      "missing_reason": null,
+      "distance": {
+        "origin_m": 31.62732886296935,
+        "network_m": 845.150796386916,
+        "destination_m": 27.917216283862707,
+        "total_m": 904.695341533748
+      },
+      "time": {
+        "base_min": 11.30869176917185,
+        "fast_min": 10.052170461486089,
+        "slow_min": 15.078255692229133
+      },
+      "terrain": {
+        "status": "reference",
+        "forward_m": 1.526744730888982,
+        "reverse_m": 1.6430467054498976,
+        "height_range_m": 1.0363158138310133,
+        "forward_range_m": [
+          1.1613760046293429,
+          1.6100075516052197
+        ],
+        "reverse_range_m": [
+          1.3686467695217495,
+          1.9300828276165216
+        ],
+        "exclusion_reason": null,
+        "missing_reason": null,
+        "is_measured_walk": false,
+        "used_in_duration": false
+      },
+      "bus_reported": null,
+      "school_reference_date": null
+    },
+    {
+      "id": "expanded:f9d03ce3fde6cc0eee329365",
+      "complex_id": "provisional-complex:e237ae651a2d268af5fbb8bb",
+      "name": "문래모아미래도",
+      "address": "문래동5가 67",
+      "purpose": "station",
+      "destination_id": "osm:node:3404807927",
+      "destination": "도림천역 2번출구",
+      "destination_map_ref": "2",
+      "status": "disconnected",
+      "missing_reason": "보행 가능 여부나 연결 구간의 근거가 부족합니다.",
+      "distance": {
+        "origin_m": 37.63442312971961,
+        "network_m": null,
+        "destination_m": 5.9145279993968005,
+        "total_m": null
+      },
+      "time": {
+        "base_min": null,
+        "fast_min": null,
+        "slow_min": null
+      },
+      "terrain": {
+        "status": "missing",
+        "forward_m": null,
+        "reverse_m": null,
+        "height_range_m": null,
+        "forward_range_m": null,
+        "reverse_range_m": null,
+        "exclusion_reason": null,
+        "missing_reason": "no_mapped_route_geometry",
+        "is_measured_walk": false,
+        "used_in_duration": false
+      },
+      "bus_reported": null,
+      "school_reference_date": null
+    },
+    {
+      "id": "expanded:e5332329c677b262e7cbafb2",
+      "complex_id": "provisional-complex:e237ae651a2d268af5fbb8bb",
+      "name": "문래모아미래도",
+      "address": "문래동5가 67",
+      "purpose": "school",
+      "destination_id": "B000002002",
+      "destination": "서울영문초등학교",
+      "destination_map_ref": null,
+      "status": "assumed_connector_total",
+      "missing_reason": null,
+      "distance": {
+        "origin_m": 37.63442312971961,
+        "network_m": 365.3314853129248,
+        "destination_m": 47.85443304544833,
+        "total_m": 450.82034148809277
+      },
+      "time": {
+        "base_min": 5.63525426860116,
+        "fast_min": 5.009114905423253,
+        "slow_min": 7.51367235813488
+      },
+      "terrain": {
+        "status": "reference",
+        "forward_m": 1.7741442670778218,
+        "reverse_m": 0.1347226186815771,
+        "height_range_m": 1.7418438329975467,
+        "forward_range_m": [
+          1.6529303656167667,
+          1.854062079590884
+        ],
+        "reverse_range_m": [
+          0.025512014562876217,
+          0.26260453120386895
+        ],
+        "exclusion_reason": null,
+        "missing_reason": null,
+        "is_measured_walk": false,
+        "used_in_duration": false
+      },
+      "bus_reported": null,
+      "school_reference_date": "2026-10-01"
+    },
+    {
+      "id": "expanded:e10df35716aedb8a25727fee",
+      "complex_id": "provisional-complex:e237ae651a2d268af5fbb8bb",
+      "name": "문래모아미래도",
+      "address": "문래동5가 67",
+      "purpose": "bus_stop",
+      "destination_id": "osm:node:12299122332",
+      "destination": "동양볼링",
+      "destination_map_ref": null,
+      "status": "assumed_connector_total",
+      "missing_reason": null,
+      "distance": {
+        "origin_m": 37.63442312971961,
+        "network_m": 272.542132237368,
+        "destination_m": 14.50274915336995,
+        "total_m": 324.67930452045755
+      },
+      "time": {
+        "base_min": 4.0584913065057195,
+        "fast_min": 3.607547828005084,
+        "slow_min": 5.411321742007626
+      },
+      "terrain": {
+        "status": "reference",
+        "forward_m": 1.0146841870622216,
+        "reverse_m": 0.4817353819798811,
+        "height_range_m": 0.8900848470645721,
+        "forward_range_m": [
+          0.8992523185235273,
+          1.2071074944084295
+        ],
+        "reverse_range_m": [
+          0.29890551302537816,
+          0.6027132751149189
+        ],
+        "exclusion_reason": null,
+        "missing_reason": null,
+        "is_measured_walk": false,
+        "used_in_duration": false
+      },
+      "bus_reported": {
+        "name": "동양볼링장",
+        "stop_number": "19392",
+        "direction": "KT&G영등포지사·문래동종점 방면",
+        "routes": [
+          "6625",
+          "8671"
+        ],
+        "naver_map_id": "112252",
+        "source_ref": "naver_map_report",
+        "source_label": "네이버 지도 확인(전달 근거)",
+        "official_operator_verified": false,
+        "exact_boarding_sign_coordinates": null,
+        "reproduction_url": "https://map.naver.com/p/bus/bus-station/%EB%8F%99%EC%96%91%EB%B3%BC%EB%A7%81%EC%9E%A5/bus-station/112252?c=14.00,0,0,0,adh&p=ZjyLRjoGrxAeWHB9S_750A,-37.5,0,55.94,Float"
+      },
+      "school_reference_date": null
+    },
+    {
+      "id": "expanded:400be5b5b689f4fe901ae535",
+      "complex_id": "provisional-complex:f7ee7fb4f2f01ff5d4b5156e",
+      "name": "문래동삼환",
+      "address": "문래동4가 43",
+      "purpose": "station",
+      "destination_id": "osm:node:5344219250",
+      "destination": "신도림역 6번 출구",
+      "destination_map_ref": "6",
+      "status": "assumed_connector_total",
+      "missing_reason": null,
+      "distance": {
+        "origin_m": 66.93809529572903,
+        "network_m": 727.3068193609292,
+        "destination_m": 22.76687693043142,
+        "total_m": 817.0117915870896
+      },
+      "time": {
+        "base_min": 10.212647394838621,
+        "fast_min": 9.077908795412107,
+        "slow_min": 13.61686319311816
+      },
+      "terrain": {
+        "status": "excluded",
+        "forward_m": 23.237421144730533,
+        "reverse_m": 18.601136923093932,
+        "height_range_m": 12.134725402929359,
+        "forward_range_m": [
+          10.2945723008678,
+          37.69327609229657
+        ],
+        "reverse_range_m": [
+          7.324232654475644,
+          31.38569432091686
+        ],
+        "exclusion_reason": "교량·원자료의 영향을 받아 비교에서 제외했습니다.",
+        "missing_reason": null,
+        "is_measured_walk": false,
+        "used_in_duration": false
+      },
+      "bus_reported": null,
+      "school_reference_date": null
+    },
+    {
+      "id": "expanded:dcd211f2645b4c334abaabfa",
+      "complex_id": "provisional-complex:f7ee7fb4f2f01ff5d4b5156e",
+      "name": "문래동삼환",
+      "address": "문래동4가 43",
+      "purpose": "school",
+      "destination_id": "B000001972",
+      "destination": "서울신도림초등학교",
+      "destination_map_ref": null,
+      "status": "disconnected",
+      "missing_reason": "학교 중심점에서 실제 교문까지의 연결을 확인하지 못했습니다.",
+      "distance": {
+        "origin_m": 66.93809529572903,
+        "network_m": null,
+        "destination_m": 46.74380828972855,
+        "total_m": null
+      },
+      "time": {
+        "base_min": null,
+        "fast_min": null,
+        "slow_min": null
+      },
+      "terrain": {
+        "status": "missing",
+        "forward_m": null,
+        "reverse_m": null,
+        "height_range_m": null,
+        "forward_range_m": null,
+        "reverse_range_m": null,
+        "exclusion_reason": null,
+        "missing_reason": "no_mapped_route_geometry",
+        "is_measured_walk": false,
+        "used_in_duration": false
+      },
+      "bus_reported": null,
+      "school_reference_date": "2026-10-01"
+    },
+    {
+      "id": "expanded:4c34b1ea8279b5e74f79ccd9",
+      "complex_id": "provisional-complex:f7ee7fb4f2f01ff5d4b5156e",
+      "name": "문래동삼환",
+      "address": "문래동4가 43",
+      "purpose": "bus_stop",
+      "destination_id": "osm:node:12299122331",
+      "destination": "KT&G영등포지사.문래동종점",
+      "destination_map_ref": null,
+      "status": "assumed_connector_total",
+      "missing_reason": null,
+      "distance": {
+        "origin_m": 66.93809529572903,
+        "network_m": 328.3164168272008,
+        "destination_m": 21.88510083889766,
+        "total_m": 417.1396129618274
+      },
+      "time": {
+        "base_min": 5.214245162022843,
+        "fast_min": 4.634884588464749,
+        "slow_min": 6.952326882697124
+      },
+      "terrain": {
+        "status": "reference",
+        "forward_m": 0.3076688262638241,
+        "reverse_m": 1.4451617856268104,
+        "height_range_m": 1.2499738608597495,
+        "forward_range_m": [
+          0.22560206210854084,
+          1.3213867198498424
+        ],
+        "reverse_range_m": [
+          1.3665170729174418,
+          3.5089638360667514
+        ],
+        "exclusion_reason": null,
+        "missing_reason": null,
+        "is_measured_walk": false,
+        "used_in_duration": false
+      },
+      "bus_reported": null,
+      "school_reference_date": null
+    }
+  ]
+}
